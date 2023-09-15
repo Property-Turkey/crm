@@ -252,9 +252,9 @@ Configure::write('sale_priorities', [ 1=>'Insignificant', 2=>'Very Low Significa
 Configure::write('sale_current_stage', [ 1=>'Source', 2=>'CC Supervisor', 3=>'CC', 4=>'Field Supervisor', 5=>'Field', 6=>'Accountant', 7=>'Aftersale']);
 Configure::write('rec_stateSale', [
     2 => [1 => 'New', 2 => 'Nosale(archived)'],
-    3 => [1 => 'New', 2 => 'ongoing', 3 => 'Nosale'],
-    4 => [1 => 'New', 2 => 'Nosale'],
-    5 => [1 => 'New', 2 => 'Ongoing', 3 => 'Nosale'],
+    3 => [1 => 'New', 2 => 'ongoing', 3 => 'Nosale', 4 =>'Reservation', 5 => 'Comission Collected', 6=> 'To Fix'],
+    4 => [1 => 'New', 2 => 'Nosale', 3 => 'To Fix'],
+    5 => [1 => 'New', 2 => 'Ongoing', 3 => 'Nosale', 4 =>'Reservation', 5 => 'Comission Collected'],
     6 => [1 => 'New', 2 => 'Deposit', 3 => 'Invoiced', 4 => 'Commission collected'],
     7 => [1 => 'New', 2 => 'Ongoing']
 ]);

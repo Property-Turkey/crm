@@ -104,39 +104,41 @@ class BooksController extends AppController
     public function save($id = -1)
     {
         $dt = json_decode(file_get_contents('php://input'), true);
-        
 
-        //edit mode
+        // edit mode
         if ($this->request->is(['patch', 'put'])) {
-            $rec = $this->Books->get($dt['id'], [
-                'contain' => []
-            ]);
-
-            //debug($rec);
+            
+            $rec = $this->Books->get($dt['id']);
+            
+            $rec = $this->Books->patchEntity($rec, $dt); 
+            
         }
-        
 
         // add mode
         if ($this->request->is(['post'])) {
             $dt['id'] = null;
-            $dt['stat_created'] = date('Y-m-d H:i:s');   
-              
+            $dt['stat_created'] = date('Y-m-d H:i:s');
+           
+            $rec = $this->Books->newEntity($dt);
+          debug(1);
+            // $rec->sale_tags = json_encode($dt['sale_tags']);
         }
 
         if ($this->request->is(['post', 'patch', 'put'])) {
             $this->autoRender = false;
-
-            $rec = $this->Books->newEntity($dt, ['associated' => []]);
+            
             if ($newRec = $this->Books->save($rec)) {
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
                 die();
             }
 
+
             echo json_encode(["status" => "FAIL", "data" => $rec->getErrors()]);
             die();
         }
-    }
 
+    }
+  
 	public function delimage() 
     {
         $this->request->allowMethod(['delete']);

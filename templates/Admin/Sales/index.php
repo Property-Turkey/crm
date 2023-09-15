@@ -30,6 +30,7 @@
                     </a>
                 </span>
             </div>
+          
            
 
         </div>
@@ -184,8 +185,10 @@
                                     {{ itm.sale_budget }}
                                 </div>
 
-                                <div class="col-4 hideWeb grid_header"><?=__('rec_state')?></div>
-                                <div class="col-md-1 col-8">{{DtSetter('rec_stateSale', itm.sale_current_stage, itm.rec_state)}}</div>
+                                <div class="col-4 hideWeb grid_header">{{'rec_state'}}</div>
+                                <!-- <div class="col-md-1 col-8" ng-repeat="state in DtSetter('rec_stateSale', itm.sale_current_stage)">
+                                    {{state}}
+                                </div> -->
 
 
                                 <div class="col-4 hideWeb grid_header"><?=__('actions')?></div>
@@ -214,8 +217,8 @@
     </div>
 </div>
 <?php echo $this->element('Modals/search')?>
+<?php echo $this->element('Modals/addEditBook')?>
 <?php echo $this->element('Modals/addEditSale')?>
 <?php echo $this->element('Modals/viewSale')?>
 <?php echo $this->element('Modals/addEditReport')?>
 <?php echo $this->element('Modals/viewReport')?>
-<?php echo $this->element('Modals/viewBook')?>

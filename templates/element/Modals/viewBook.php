@@ -14,7 +14,7 @@
                     <div class="view_page">
                         <div class="grid">
 
-                        <div ng-repeat="itm in rec.sale.book">
+                         <div ng-repeat="itm in rec.sale.book">
 
                             <div class="grid_row row">
                                 <h4 class="col-12 pt-2">
@@ -30,7 +30,7 @@
 
                             <div class="grid_row row">
                                 <div class="col-md-3 grid_header2"><?=__('sale_id')?></div>
-                                <div class="col-md-9 notwrapped">{{rec.book.sale_id}}</div>
+                                <div class="col-md-9 notwrapped">{{itm.book.sale_id}}</div>
                             </div>
 
                             <div class="grid_row row">
@@ -74,11 +74,11 @@
                                 </h5>
                             </div>
 
-                        </div>
+                        </div> 
 
 
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="book_btn"
-                        ng-click="doGet('/admin/sales?id='+rec.sale.id, 'sale', 'rec')"></button>
+                        ng-click="doGet('/admin/books?id='+rec.sale.id, 'book', 'rec')"></button>
 
 
                         <!-- Book form -->
@@ -88,16 +88,16 @@
 
 
 
-                        <div class="col-md-6 col-sm-6 form-group has-feedback">
+                        <!-- <div class="col-md-6 col-sm-6 form-group has-feedback">
                             <label set-required><?=__('book_arrivedate')?></label>
                                 <div class="div">
-                                <!-- Sadece tarih input alanı -->
+                                 Sadece tarih input alanı 
                                 <input type="date" class="form-control has-feedback-left"
                                 ng-model="rec.book.book_arrivedate"
                                 placeholder="<?=__('book_arrivedate')?>">
                             <span class="fa fa-book form-control-feedback left" aria-hidden="true"></span>
                             </div>
-                        </div>
+                        </div> -->
 
 
 
@@ -107,14 +107,14 @@
                                 <?=$this->Form->control('book_current_stay', [
                                 'class'=>'form-control has-feedback-left',
                                 'label'=>false,
-                                'type'=>'tel',
+                                'type'=>'text',
                                 'ng-model'=>'rec.book.book_current_stay',
                                 'placeholder'=>__('book_current_stay'),
                                 ])?>
                             <span class="fa fa-book form-control-feedback left" aria-hidden="true"></span>
                             </div>
                         </div>
-
+<!-- 
                         <div class="col-md-6 col-sm-6  form-group has-feedback">
                             <label><?=__('book_meetdate ')?></label>
                                 <div class="div">
@@ -128,7 +128,7 @@
                                 ])?>
                             <span class="fa fa-book form-control-feedback left" aria-hidden="true"></span>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="col-md-6 col-sm-6  form-group has-feedback">
                             <label ><?=__('book_meetperiod ')?></label>
@@ -139,7 +139,7 @@
                                 'type'=>'number',
                                 'ng-model'=>'rec.book.book_meetperiod ',
                                 'placeholder'=>__('book_meetperiod '),
-                                'max'=>'2',
+                                'max'=>'99',
                                 'min'=>'1'
                                 ])?>
                             <span class="fa fa-book form-control-feedback left" aria-hidden="true"></span>

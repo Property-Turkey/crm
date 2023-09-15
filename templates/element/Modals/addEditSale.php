@@ -48,9 +48,12 @@
                                 <auto-complete min-length="1" highlightMatchedText="true" source="loadTags($query, 'clients')"></auto-complete>
                             </tags-input>
 
+                            <a href ><?__('add_client')?></a>
                             <span ng-if="rec.sale.client || rec.sale.id" ng-click="rec.sale.client = ''; rec.sale.id = undefined;" class="fa fa-times" style="cursor: pointer; position: absolute; top: 50%; right: 10px; transform: translateY(-50%);"></span>
                         </div>
                     </div>
+
+                    
 
                     <div class="col-md-6 col-sm-6 form-group has-feedback">
                         <label set-required><?= __('source_id') ?></label>
@@ -124,35 +127,28 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6 col-sm-6  form-group has-feedback">
-                        <label><?=__('sale_current_stage')?></label>
-                        <div class="div">
-                            <?=$this->Form->control('sale_current_stage', [
-                                'class'=>'form-control has-feedback-left',
-                                'label'=>false,
-                                'type'=>'select',
-                                'ng-model'=>'rec.sale.sale_current_stage',
-                                'options'=>$this->Do->lcl( $this->Do->get('sale_current_stage') ),
-                                // 'ng-change'=>''
-                                'empty'=>'Select Sale Cuurent Stage',
-                            ])?>
-                            <span class="fa fa-flash form-control-feedback left" aria-hidden="true"></span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-6 form-group has-feedback" ng-if="rec.sale.id">
-                        <label set-required><?= __('rec_state') ?></label>
-                        <div class="div">
-                            <!-- Client select input -->
-                            <select class="form-control has-feedback-left"
-                                    ng-model="rec.sale.rec_state"
-                                    ng-change="onClientSelectionChange()"
-                                    >
-                                <option value="">Select rec_state</option>
-                                <option ng-repeat="(stateId, stateName) in DtSetter('rec_stateSale', rec.sale.sale_current_stage)" value="{{stateId}}">{{stateName}}</option>
-                            </select>
-                            <span class="fa fa-address-book form-control-feedback left" aria-hidden="true"></span>
-                        </div>
+                    <div class="col-md-6 col-sm-12 form-group has-feedback">
+                        <label><?=__('rec_state')?> : </label> 
+                        <button data-toggle="modal" data-target="#addEditBook_mdl" data-dismiss="modal" ng-if="rec.sale.sale_current_stage == 3"  class="btn btn-success"><span></span>
+                            <?=__('add_book')?>
+                        </button>
+                        <button ng-if="rec.sale.sale_current_stage == 4" class="btn btn-success"><span></span>
+                            <?=__('to_fix')?>
+                        </button>
+                        
+                        <button ng-if="rec.sale.sale_current_stage == 5" class="btn btn-success"><span></span>
+                            <?=__('reservation')?>
+                        </button>
+                        <button ng-if="rec.sale.sale_current_stage == 5" class="btn btn-success"><span></span>
+                            <?=__('commision_collected')?>
+                        </button>
+                        <button class="btn btn-success" ng-click="updateSaleCurrentStage()" ng-if="rec.sale.sale_current_stage == 2 || rec.sale.sale_current_stage == 4">
+                            <span></span>
+                            <?=__('assign')?>
+                        </button>
+                        <button class="btn btn-success" ng-click="updateRecState()"><span></span>
+                            <?=__('no_sale')?>
+                        </button>
                     </div>
 
                     <div class="col-md-6 col-sm-6  form-group has-feedback">
@@ -226,42 +222,50 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6 col-sm-12 form-group has-feedback" ng-if="rec.sale.id">
-                        <button type="submit" class="btn btn-info" id="" ng-click="updateSaleCurrentStage()"><span></span> 
-                        <i class="fa fa-book"></i> <?=__('assign to another stage')?></button>
-                    </div>
+                   
                     
                     <div class="col-md-6 col-sm-12 form-group has-feedback">
                         <button type="submit" class="btn btn-info" id="sale_preloader"><span></span> 
                         <i class="fa fa-save"></i> <?=__('save')?></button>
                     </div>
 
-                    <div class="ROW" ng-if="rec.sale.id">
-                        <div class="col-md-6 col-sm-12 form-group has-feedback" ng-if="rec.sale.id">
-                            <button type="submit" class="btn btn-info" id="" ng-click="updateSaleCurrentStage()"><span></span> 
-                            <i class="fa fa-book"></i> <?=__('assign this sale to another person(s)')?></button>
-                        </div>
-
-                        <div class="col-md-6 col-sm-6 form-group has-feedback">
-                            <label><?= __('user_id') ?></label>
-                            <div class="div">
-                                <tags-input 
-                                    ng-model="rec.usersale.user" 
-                                    add-from-autocomplete-only="true" 
-                                    placeholder="<?= __('user_id') ?>" 
-                                    display-property="text"
-                                    key-property="value"
-                                >
-                                    <auto-complete min-length="1" highlightMatchedText="true" source="loadTags($query, 'users')"></auto-complete>
-                                </tags-input>
-
-                            </div>
-                        </div>
-                    </div>
-                   
                 </form>
 
+                <!-- Assign to User_sale form -->
+                    <button  type="button" 
+                            class="close" data-dismiss="modal" 
+                            aria-hidden="true" id="usersale_btn"
+                            ng-click="doGet('/admin/sales/index?list=1', 'list', 'sales');   rec.sales = {};"></button>
+                        
+                        
+                            <form  ng-if="rec.sale.id" class="row" id="usersale_form" ng-submit="
+                                rec.usersale.lead_id = rec.sale.id; 
+                                doSave(rec.usersale, 'usersale', 'usersale', '#usersale_btn', '#usersale_preloader');">
 
+                                <!-- Existing form fields ... -->
+                                <h2 class="col-12"><?=__('assign_sale')?></h2>
+                               
+                            <div class="col-md-6 col-sm-6 form-group has-feedback">
+                                <label><?= __('user_id') ?></label>
+                                <div class="div">
+                                    <tags-input 
+                                        ng-model="rec.usersale.user" 
+                                        add-from-autocomplete-only="true" 
+                                        placeholder="<?= __('user_id') ?>" 
+                                        display-property="text"
+                                        key-property="value"
+                                    >
+                                        <auto-complete min-length="1" highlightMatchedText="true" source="loadTags($query, 'users')"></auto-complete>
+                                    </tags-input>
+
+                                </div>
+                            </div>
+                             <div class="col-md-12 col-sm-12 form-group has-feedback">
+                                    <button type="submit" class="btn btn-info" id="usersale_preloader"><span></span> 
+                                    <i class="fa fa-save"></i> <?=__('assign')?></button>
+                                </div>
+                            
+                            </form>
                 <!-- Client form -->
                  <button type="button" id="client_btn" class="hideIt" ng-click="
                 doGet('/admin/clients/index?list=1', 'list', 'clients');   rec.client = {};
@@ -432,3 +436,17 @@
     </div>
 </div>
 
+<script>
+$(document).ready(function(){
+    // İkinci Modal'ı Açma
+    $("#buton").click(function(){
+        $("#addEditReport_mdl").modal();
+    });
+    $("#butonBook").click(function(){
+        $("#viewBook_mdl").modal();
+    });
+    $("#butonshowReport").click(function(){
+        $("#viewReport_mdl").modal();
+    });
+});
+</script>

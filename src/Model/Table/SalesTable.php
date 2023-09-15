@@ -52,12 +52,7 @@ class SalesTable extends Table
             'foreignKey' => 'report_type',    
             'className' => 'Categories',        
         ]);
-        
-        $this->hasMany('SaleSpecs', [
-            'foreignKey' => 'sale_id',
-            'className' => 'SaleSpecs',      
-        ]);
-
+       
         $this->hasMany('Reports', [
             'foreignKey' => 'tar_id',
 			'dependent' => true,
@@ -65,6 +60,18 @@ class SalesTable extends Table
         ])->setConditions(['Reports.tar_tbl'=>'Sales']);
 
         $this->hasMany('Books', [
+            'foreignKey' => 'sale_id',
+			'dependent' => true,
+			'cascadeCallbacks' => true
+        ]);
+
+        $this->hasMany('Usersale', [
+            'foreignKey' => 'lead_id',
+			'dependent' => true,
+			'cascadeCallbacks' => true
+        ]);
+
+        $this->hasMany('SaleSpecs', [
             'foreignKey' => 'sale_id',
 			'dependent' => true,
 			'cascadeCallbacks' => true

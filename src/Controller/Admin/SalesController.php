@@ -148,7 +148,6 @@ class SalesController extends AppController
                         "Pools",
                         "Tags",
                         
-                        
                     ],
                 ]);
                 // $data = $this->Sales->find('all', [
@@ -276,12 +275,16 @@ class SalesController extends AppController
         // edit mode
         if ($this->request->is(['patch', 'put'])) {
             
-            $rec = $this->Sales->get($dt['id'], ['contain'=>['Sources','Reports','SaleSpecs']]);
+            $rec = $this->Sales->get($dt['id'], ['contain'=>['Sources','Reports','SaleSpecs','Usersale','Books']]);
             $dt['sale_tags'] = json_encode( $dt['sale_tags'] );
             if(isset($dt['client'][0]['value'])){
                 $rec->client_id = $dt['client'][0]['value'];
             }
-            
+
+            $saleSpecsData = $rec->sale_specs;
+            $saleSpecsData = $dt['sale_specs'];
+            $rec->sale_specs = $saleSpecsData;
+    
             $rec = $this->Sales->patchEntity($rec, $dt); 
             // $rec->sale_tags = json_encode($dt['sale_tags']);
             
@@ -292,7 +295,7 @@ class SalesController extends AppController
             $dt['id'] = null;
             $dt['stat_created'] = date('Y-m-d H:i:s');
             $dt['tar_tbl'] = $this->Do->get('targetTables')[$this->request->getParam('controller')];
-            $dt['sale_current_stage'] = 1;
+            $dt['sale_current_stage'] = 2;
             $dt['sale_tags'] = json_encode( $dt['sale_tags'] );
             $rec = $this->Sales->newEntity($dt,[
                 'contain' => ['SaleSpecs','Usersale']
@@ -301,6 +304,9 @@ class SalesController extends AppController
                 $rec->client_id = $dt['client'][0]['value'];
             }
             
+            $saleSpecsData = $dt['sale']['sale_specs'];
+            $rec->sale_specs = $saleSpecsData;
+
             // $rec->sale_tags = json_encode($dt['sale_tags']);
         }
 
@@ -313,7 +319,7 @@ class SalesController extends AppController
             unset($rec['report']);
             unset($rec['book']);
 
-            if ($newRec = $this->Sales->save($rec)) {
+            if ($newRec = $this->Sales->save($rec, ['contain' => ['SaleSpecs']])) {
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
                 die();
             }

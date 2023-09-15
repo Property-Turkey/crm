@@ -649,9 +649,35 @@
 
                 };
 
+                
                 $scope.updateSaleCurrentStage = function() {
-                    $scope.rec.sale.sale_current_stage++;
+                    if ($scope.rec.sale.sale_current_stage < 7) 
+                    {
+                        $scope.rec.sale.sale_current_stage++;
+                    }
+                    else{
+                        alert('Last Stage');
+                    }
                 };
+                $scope.updateRecState = function() {
+
+                    if ($scope.rec.sale.sale_current_stage == 2) {// 2 => [2 => 'Nosale(archived)']
+                        $scope.rec.sale.rec_state = 2; 
+                    } else if ($scope.rec.sale.sale_current_stage == 3) {// 3 => [1 => 'New', 2 => 'ongoing', 3 => 'Nosale', 4 =>'Reservation', 5 => 'Comission Collected', 6=> 'To Fix']
+                        $scope.rec.sale.rec_state = 3; 
+                    } else if ($scope.rec.sale.sale_current_stage == 4) {// 4 => [1 => 'New', 2 => 'Nosale', 3 => 'To Fix']
+                        $scope.rec.sale.rec_state = 2; 
+                    } else if ($scope.rec.sale.sale_current_stage == 5) {// 5 => [1 => 'New', 2 => 'Ongoing', 3 => 'Nosale', 4 =>'Reservation', 5 => 'Comission Collected']
+                        $scope.rec.sale.rec_state = 3; 
+                    } else {
+                        
+                        $scope.rec.sale.rec_state = 1; 
+                    }
+                                      
+                };
+
+
+
                 
                 
                 $scope.loadTags = function(query, target) {
