@@ -99,7 +99,7 @@
 
     <?= $this->element('footer'); ?>
 
-    <div> <?php //echo $this->element('modal'); ?> </div>
+    <div> <?php echo $this->element('Modals/login'); ?> </div>
 
 
     <div id="flash"></div>
@@ -586,6 +586,11 @@
                     $scope.doLogin();
                 }
                 
+                
+                if (window.location.href.indexOf('login=1') > -1) {
+                    $("#login_mdl")[0].click();
+                    
+                }
 
         });
         
@@ -747,9 +752,6 @@
         }, 500);
     }
 
-    // if (window.location.href.indexOf('login=1') > -1) {
-    //     $("#login_mdl_btn")[0].click();
-    // }
     
     $(document).bind('keyup', function(e) {
         if (e.keyCode==39) {

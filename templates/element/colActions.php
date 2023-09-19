@@ -83,7 +83,7 @@
                 'name'=>false,
                 'ng-model'=>'filter.kword',
                 'ng-change' => "
-                    doGetDelay('/admin/logs/index/?from=".@$from."&to=".@$to."&k='+filter.kword+'&col=".$search."&method=".$method."&list=1' , 'list', '".$ctrl."');
+                    doGetDelay('/admin/logs/index?from=".@$from."&to=".@$to."&k='+filter.kword+'&col=".$search."&method=".$method."&list=1' , 'list', '".$ctrl."');
                 ",
                 
             ]) ?>

@@ -120,7 +120,7 @@ class BooksController extends AppController
             $dt['stat_created'] = date('Y-m-d H:i:s');
            
             $rec = $this->Books->newEntity($dt);
-          debug(1);
+          
             // $rec->sale_tags = json_encode($dt['sale_tags']);
         }
 

@@ -107,7 +107,8 @@ class ClientsController extends AppController
                         'Reports.Status',
                         'Reports.Type',
                         "Sources",
-                    ]]);
+                ]])->toArray();
+
                 //dd( $data);
                 echo json_encode(["status"=>"SUCCESS",  "data"=>$this->Do->convertJson( $data )], JSON_UNESCAPED_UNICODE); die();
                 
@@ -123,7 +124,9 @@ class ClientsController extends AppController
                         'Reports.Status',
                         'Reports.Type',
                         "Sources",
+                        
                     ]]);
+                    
 
             }
              
@@ -196,22 +199,39 @@ class ClientsController extends AppController
         if ($this->request->is(['patch', 'put'])) {
 
             $rec = $this->Clients->get($dt['id'], ['contain'=>['Sources','Reports']]);
-            $rec = $this->Clients->patchEntity( $rec,$dt);
-// dd($rec);
+            // if(isset($dt['city'][0]['value'])){
+            //     $rec->adrs_city = $dt['city'][0]['value'];
+            // }
+            // if(isset($dt['country'][0]['value'])){
+            //     $rec->adrs_city = $dt['country'][0]['value'];
+            // }
+            // if(isset($dt['region'][0]['value'])){
+            //     $rec->adrs_city = $dt['region'][0]['value'];
+            // }
+            $rec = $this->Clients->patchEntity($rec, $dt);
+ 
 
         }
         // add mode
         if ($this->request->is(['post'])) {
             $dt['id'] = null;
             $dt['stat_created'] = date('Y-m-d H:i:s');
-
+            
             $rec = $this->Clients->newEntity($dt);
+            
+            if(isset($dt['city'][0]['value'])){
+                $rec->adrs_city = $dt['city'][0]['value'];
+            }
+            if(isset($dt['country'][0]['value'])){
+                $rec->adrs_city = $dt['country'][0]['value'];
+            }
+            if(isset($dt['region'][0]['value'])){
+                $rec->adrs_city = $dt['region'][0]['value'];
+            }
         }
-
         if ($this->request->is(['post', 'patch', 'put'])) {
             $this->autoRender = false;
-            if ($newRec = $this->Clients->save($rec)) {           
-
+            if ($newRec = $this->Clients->save($rec)) {
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
                 die();
             }

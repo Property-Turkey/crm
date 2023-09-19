@@ -64,14 +64,7 @@ $admin_menu=[
                ["name"=>"all", "url" => ["permissions", "index", ""]],
            ]
        ],
-       ["name"=>"usersale",
-        "icon"=>"user-secret",
-        "roles"=>["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content"],
-        "active"=>"/usersale/index,/usersale/save,/usersale/view",
-        "sub" => [
-               ["name"=>"all", "url" => ["usersale", "index", ""]],
-           ]
-       ],
+       
        
        
     ];

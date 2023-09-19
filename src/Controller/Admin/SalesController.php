@@ -139,16 +139,19 @@ class SalesController extends AppController
                     "order" => [$_col => $_dir],
                     "conditions" => $conditions,
                     "contain" => [
+                        "Reports",
                         "Clients",
                         "Categories",
                         "Sources",
                         'Reports.Status',
                         'Reports.Type',
+                        'Reports.Text',
                         "Books",
                         "Pools",
                         "Tags",
                         
                     ],
+                    
                 ]);
                 // $data = $this->Sales->find('all', [
                 //     "order" => [$_col => $_dir],
@@ -247,10 +250,21 @@ class SalesController extends AppController
             $optionsReport[$category->id] = $category->category_name;
         }
 
+        //list for noSale Type(for Report)
+        $parentnoSaleIds = [163];
+        $categoriesnoSale = $this->getTableLocator()->get('Categories')->find('all')
+            ->where(['parent_id IN' => $parentnoSaleIds])
+            ->toArray();
+
+        $optionsnoSale = [];
+        foreach ($categoriesnoSale as $category) {
+            $optionsnoSale[$category->id] = $category->category_name;
+        }
+
 
        
 
-        $this->set(compact('optionsType', 'optionsSource', 'optionsPool', 'optionsStatus', 'optionsReport'));
+        $this->set(compact('optionsType', 'optionsSource', 'optionsPool', 'optionsStatus', 'optionsReport','optionsnoSale'));
 
 
     }
@@ -280,12 +294,8 @@ class SalesController extends AppController
             if(isset($dt['client'][0]['value'])){
                 $rec->client_id = $dt['client'][0]['value'];
             }
-
-            $saleSpecsData = $rec->sale_specs;
-            $saleSpecsData = $dt['sale_specs'];
-            $rec->sale_specs = $saleSpecsData;
-    
             $rec = $this->Sales->patchEntity($rec, $dt); 
+           
             // $rec->sale_tags = json_encode($dt['sale_tags']);
             
         }
@@ -304,9 +314,7 @@ class SalesController extends AppController
                 $rec->client_id = $dt['client'][0]['value'];
             }
             
-            $saleSpecsData = $dt['sale']['sale_specs'];
-            $rec->sale_specs = $saleSpecsData;
-
+            
             // $rec->sale_tags = json_encode($dt['sale_tags']);
         }
 

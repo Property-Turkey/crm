@@ -53,7 +53,6 @@ class UsersaleTable extends Table
             'joinType' => 'INNER',
         ]);
 
-
     }
 
     /**

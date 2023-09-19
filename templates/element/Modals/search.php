@@ -170,19 +170,16 @@ $prefix = $this->request->getParam('controller') == 'Properties' ? 'PROP' : 'PRO
                                         <div class="col-md-6 col-sm-6 form-group has-feedback">
                                             <label><?= __('sale_tags') ?></label>
                                             <div class="div">
-                                                <tags-input ng-model="rec.search.sale_tags" 
-                                                            ng-change="doSearch()"
-                                                            add-from-autocomplete-only="true" 
-                                                            display-property="text"
-                                                            >
-                                                    <auto-complete source="loadTags($query, 'categories')"></auto-complete>
+                                                
+                                                <tags-input ng-model="rec.search.sale_tags" ng-change="doSearch()" add-from-autocomplete-only="true" display-property="text" >
+                                                    <auto-complete min-length="1" highlightMatchedText="true" source="loadTags($query, 'categories')"></auto-complete>
                                                 </tags-input>
+
                                                 <span class="fa fa-tag form-control-feedback left" aria-hidden="true"></span>
                                                 <button ng-click="doClick('#submit_btn')" class="onfly_btn"><i class="fa fa-search"></i></button>
 
                                             </div>
                                         </div>
-
                                         <div class="col-md-6 col-sm-6 form-group has-feedback center d-flex justify-content-center">
                                             
                                             <button ng-click="clearSearchFields()" class="btn btn-danger"> Clear All<i class="fa fa-clear"></i></button>

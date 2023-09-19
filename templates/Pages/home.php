@@ -18,7 +18,7 @@ $this->assign('title', __('sitemoto'));
                         <?= __('register') ?>
                     </a>
 
-                    <a href class="" data-toggle="modal" data-target="#login_mdl" data-dismiss="modal">
+                    <a href ng-click="openModal('#login_mdl');" class="" >
                         <?= __('login') ?>
                     </a>
 

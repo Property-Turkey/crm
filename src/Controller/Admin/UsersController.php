@@ -217,12 +217,13 @@ class UsersController extends AppController
 
         // find client by name
         if (!empty($_user)) {
-            // $saleCondition = [
-            //     'client_name LIKE' => '%' . $_keyword . '%'
-            // ];
+            $userCondition = [
+                'user_fullname LIKE' => '%' . $_keyword . '%'
+            ];
             $data = $this->Users
                 ->find('all')
-                ->select(['text' => 'user_fullname',  'value'=>'id']);
+                ->select(['text' => 'user_fullname',  'value'=>'id'])
+                ->where($userCondition);
 
             echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
             die();
