@@ -30,23 +30,23 @@ class ClientsTable extends Table
 			'cascadeCallbacks' => true
         ])->setConditions(['Reports.tar_tbl'=>'Clients']);
         
-        $this->hasMany('Cities', [
-            'foreignKey' => 'id',
-			'dependent' => true,
-			'cascadeCallbacks' => true
-        ]);
+        // $this->hasMany('Cities', [
+        //     'foreignKey' => 'id',
+		// 	'dependent' => true,
+		// 	'cascadeCallbacks' => true
+        // ]);
 
-        $this->hasMany('Countries', [
-            'foreignKey' => 'id',
-			'dependent' => true,
-			'cascadeCallbacks' => true
-        ]);
+        // $this->hasMany('Countries', [
+        //     'foreignKey' => 'id',
+		// 	'dependent' => true,
+		// 	'cascadeCallbacks' => true
+        // ]);
 
-        $this->hasMany('Regions', [
-            'foreignKey' => 'id',
-			'dependent' => true,
-			'cascadeCallbacks' => true
-        ]);
+        // $this->hasMany('Regions', [
+        //     'foreignKey' => 'id',
+		// 	'dependent' => true,
+		// 	'cascadeCallbacks' => true
+        // ]);
 		$this->addBehavior('Log');
     }
 

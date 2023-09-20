@@ -449,7 +449,7 @@
                 'sale_priorities': JSON.parse('<?= json_encode($this->Do->get('sale_priorities')) ?>'),
                 'sale_current_stage': JSON.parse('<?= json_encode($this->Do->get('sale_current_stage')) ?>'),
                 'rec_stateSale': JSON.parse('<?= json_encode($this->Do->get('rec_stateSale')) ?>'),
-
+                'report_priorities': JSON.parse('<?= json_encode($this->Do->get('report_priorities')) ?>'),
                 
 
             }
@@ -590,14 +590,7 @@
                     content: {},
                     category: {category_priority:99},
                     client: {},
-                    sale: {
-                        sale_tags:
-                        [
-                            
-                        ],
-                        
-
-                    },
+                    sale: {},
                     permission:{
                         permission_c: 0, 
                         permission_r: 0,
@@ -615,20 +608,18 @@
                     sale: rec_origin.sale,
                     book: rec_origin.book,
                     
-
                 };
 
-                $scope.updateDate = function() {
-                    // "book_arrivedate" değerini "yyyy-MM-dd" biçimine dönüştürün
-                    var date = new Date($scope.rec.book.book_arrivedate);
-                    var year = date.getFullYear();
-                    var month = (date.getMonth() + 1).toString().padStart(2, '0'); // Ay 0-11 arasında olduğundan 1 ekliyoruz ve 2 haneli yapmak için padStart kullanıyoruz
-                    var day = date.getDate().toString().padStart(2, '0'); // 2 haneli yapmak için padStart kullanıyoruz
 
-                    $scope.rec.book.book_arrivedate = year + '-' + month + '-' + day;
+                $scope.parseDateTime = function(dateTimeString) {
+                    var dateTimeParts = dateTimeString.split(' ');
+                    return {
+                        date: dateTimeParts[0],
+                        time: dateTimeParts[1]
+                    };
                 };
 
-                
+
 
         // Toggle Mobile Sidebar
                     $scope.toggleSidebar = function () {
@@ -637,8 +628,11 @@
 
                     // TAG INPUT
                     $scope.tags = ["Investment"];
-                    $scope.loadTags = function (query) {
-                        return $http.get("/tags?query=" + query);
+                    $scope.loadTags = function(query, target) {
+                    return $http.get('<?=$app_folder?>/admin/'+target+'?tags=1&keyword='+query)
+                        .then(function(response, status) {
+                            return response.data.data;
+                        });
                     };
                     $scope.loadAdvisors = function (query) {
                         return $http.get("/advisors?query=" + query);

@@ -142,7 +142,7 @@
             <div class="priority"><em class="low"></em> {{ itm.id }}</div>
             <a href="#" ng-click="
 				openModal('#viewSale_mdl');
-				doGet('/admin/sales?id='+itm.id, 'rec', 'sales');
+				doGet('/admin/sales?id='+itm.id, 'rec', 'sale');
 			" class="btn-link"> {{ itm.client.client_name }} </a>
             <p><i class="fas-mail"></i> {{ itm.client.client_email }}</p>
             <p><img src="\crm\webroot\img\phone.svg" alt="" /> {{ itm.client.client_mobile }}</p>
@@ -202,7 +202,7 @@
        </div>
        <!-- Client row End -->
        <!-- Client Preview Start -->
-       <div class="lead-preview">
+       <!-- <div class="lead-preview">
         <div class="modal-header">
          <button class="btn-exit">
           <img src="\crm\webroot\img\export-svgrepo-com.svg" alt="" width="30" />
@@ -1048,7 +1048,7 @@
           </div>
          </div>
         </div>
-       </div>
+       </div> -->
        <!-- Client Preview end -->
       </div>
       
@@ -1076,7 +1076,7 @@
    </section>
    <!-- Dashboard End -->
   </main>
-    <div class="">
+    <!-- <div class="">
         <div class="page-title">
             <div class=" col-6 col-sm-6 col-md-6 side_div1">
                 <h3><?=__('sales_list')?></h3>
@@ -1122,7 +1122,7 @@
                         
                         <ul class="nav navbar-right panel_toolbox">
                             <!-- <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li> -->
+                            </li> 
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                     aria-expanded="false"><i class="fa fa-wrench"></i></a>
@@ -1139,7 +1139,7 @@
                                 </div>
                             </li>
                             <!-- <li><a class="close-link"><i class="fa fa-close"></i></a> 
-                            </li>-->
+                            </li>
                         </ul>
 
                         <div class="clearfix"></div>
@@ -1255,7 +1255,7 @@
                                 <div class="col-4 hideWeb grid_header">{{'rec_state'}}</div>
                                 <!-- <div class="col-md-1 col-8" ng-repeat="state in DtSetter('rec_stateSale', itm.sale_current_stage)">
                                     {{state}}
-                                </div> -->
+                                </div> 
 
 
                                 <div class="col-4 hideWeb grid_header"><?=__('actions')?></div>
@@ -1281,12 +1281,12 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
-<?php echo $this->element('Modals/search')?>
+<?php echo $this->element('Modals/search')?><?php echo $this->element('Modals/viewSale')?>
 <?php echo $this->element('Modals/addEditBook')?>
 <?php echo $this->element('Modals/addEditSale')?>
-<?php echo $this->element('Modals/viewSale')?>
+
 <?php echo $this->element('Modals/addEditReport')?>
 <?php echo $this->element('Modals/viewReport')?>
 <?php echo $this->element('Modals/addEditUsersale')?>

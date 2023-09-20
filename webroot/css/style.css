@@ -599,6 +599,7 @@ input[type="checkbox"]:checked:after {
   padding: 4px 10px;
   font-size: 14px;
   margin-bottom: 10px;
+  width: 100%;
 }
 
 .dash-content .client-row .wb-ele img {
@@ -609,7 +610,7 @@ input[type="checkbox"]:checked:after {
   font-size: 8px;
 }
 
- .modal-trigger {
+.modal-trigger {
   cursor: pointer;
 }
 
@@ -631,7 +632,7 @@ input[type="checkbox"]:checked:after {
   pointer-events: none;
 }
 
-.dash-content .lead-preview.active {
+.dash-content .lead-preview .active {
   pointer-events: all;
   opacity: 1;
   max-height: -moz-fit-content;

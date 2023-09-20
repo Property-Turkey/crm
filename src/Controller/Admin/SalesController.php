@@ -117,15 +117,9 @@ class SalesController extends AppController
                         "Tags",
                         "SaleSpecs",
                     ],
-                    
                 ])->toArray();
                 
-                $data["client"] = [
-                    [
-                    "text"=>$data['client']['client_name'],
-                    "value"=>$data['client_id']
-                    ]
-                ];
+                
                 // dd($data["SaleSpecs"]);
 
 
@@ -261,10 +255,21 @@ class SalesController extends AppController
             $optionsnoSale[$category->id] = $category->category_name;
         }
 
+        //list for noSale Type(for Report)
+        $parentpropertyTypeIds = [159];
+        $categoriespropertyType = $this->getTableLocator()->get('Categories')->find('all')
+            ->where(['parent_id IN' => $parentpropertyTypeIds])
+            ->toArray();
+
+        $optionspropertyType = [];
+        foreach ($categoriespropertyType as $category) {
+            $optionspropertyType[$category->id] = $category->category_name;
+        }
+
 
        
 
-        $this->set(compact('optionsType', 'optionsSource', 'optionsPool', 'optionsStatus', 'optionsReport','optionsnoSale'));
+        $this->set(compact('optionsType', 'optionsSource', 'optionsPool', 'optionsStatus', 'optionsReport','optionsnoSale','optionspropertyType'));
 
 
     }
@@ -327,7 +332,7 @@ class SalesController extends AppController
             unset($rec['report']);
             unset($rec['book']);
 
-            if ($newRec = $this->Sales->save($rec, ['contain' => ['SaleSpecs']])) {
+            if ($newRec = $this->Sales->save($rec)) {
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
                 die();
             }
