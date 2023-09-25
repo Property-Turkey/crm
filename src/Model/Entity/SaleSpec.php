@@ -34,6 +34,10 @@ class SaleSpec extends Entity
      */
     protected $_accessible = [
         'sale_id' => true,
+        'salespec_currency' => true,
+        'salespec_finance' => true,
+        'salespec_buyerpersona' => true,
+        'salespec_socialstyle' => true,
         'salespec_current_location' => true,
         'salespec_propertytype' => true,
         'salespec_beds' => true,

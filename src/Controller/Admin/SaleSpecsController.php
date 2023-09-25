@@ -12,6 +12,8 @@ class SaleSpecsController extends AppController
 
     public function index($_pid = null)
     {
+
+        
         if ($this->request->is('post')) {
 
             $this->autoRender = false;
@@ -52,7 +54,11 @@ class SaleSpecsController extends AppController
 
             // ONE RECORD
             if (!empty($_id)) {
-                $data = $this->SaleSpecs->get($_id, [])->toArray();
+                $data = $this->SaleSpecs->get($_id, [
+                    'contain' => [
+                        "Currency",
+                    ],
+                ])->toArray();
                
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
                 die();

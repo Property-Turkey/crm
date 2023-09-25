@@ -23,6 +23,22 @@ class SaleSpecsTable extends Table
             'joinType' => 'INNER',
         ]);
 
+        
+        $this->belongsTo('Currency', [
+            'foreignKey' => 'salespec_currency',
+            'className' => 'Categories',
+        ]);
+
+        $this->belongsTo('Persona', [
+            'foreignKey' => 'salespec_buyerpersona',
+            'className' => 'Categories',
+        ]);
+
+        $this->belongsTo('Style', [
+            'foreignKey' => 'salespec_socialstyle',
+            'className' => 'Categories',
+        ]);
+
     }
    
     public function validationDefault(Validator $validator): Validator

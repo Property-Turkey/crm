@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\SalesTable;
+use App\Model\Table\AddressCategoriesTable;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\SalesTable Test Case
+ * App\Model\Table\AddressCategoriesTable Test Case
  */
-class SalesTableTest extends TestCase
+class AddressCategoriesTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\SalesTable
+     * @var \App\Model\Table\AddressCategoriesTable
      */
-    protected $Sales;
+    protected $AddressCategories;
 
     /**
      * Fixtures
@@ -24,18 +24,7 @@ class SalesTableTest extends TestCase
      * @var array<string>
      */
     protected $fixtures = [
-        'app.Sales',
-        'app.Clients',
-        'app.Tags',
-        'app.Categories',
-        'app.Sources',
-        'app.Pools',
-        'app.Status',
-        'app.Type',
-        'app.Reports',
-        'app.Books',
-        'app.Usersale',
-        'app.SaleSpecs',
+        'app.AddressCategories',
     ];
 
     /**
@@ -46,8 +35,8 @@ class SalesTableTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('Sales') ? [] : ['className' => SalesTable::class];
-        $this->Sales = $this->getTableLocator()->get('Sales', $config);
+        $config = $this->getTableLocator()->exists('AddressCategories') ? [] : ['className' => AddressCategoriesTable::class];
+        $this->AddressCategories = $this->getTableLocator()->get('AddressCategories', $config);
     }
 
     /**
@@ -57,7 +46,7 @@ class SalesTableTest extends TestCase
      */
     protected function tearDown(): void
     {
-        unset($this->Sales);
+        unset($this->AddressCategories);
 
         parent::tearDown();
     }
@@ -66,7 +55,7 @@ class SalesTableTest extends TestCase
      * Test validationDefault method
      *
      * @return void
-     * @uses \App\Model\Table\SalesTable::validationDefault()
+     * @uses \App\Model\Table\AddressCategoriesTable::validationDefault()
      */
     public function testValidationDefault(): void
     {
@@ -77,7 +66,7 @@ class SalesTableTest extends TestCase
      * Test buildRules method
      *
      * @return void
-     * @uses \App\Model\Table\SalesTable::buildRules()
+     * @uses \App\Model\Table\AddressCategoriesTable::buildRules()
      */
     public function testBuildRules(): void
     {

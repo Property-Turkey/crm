@@ -5,7 +5,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 
-class CategoriesController extends AppController
+class AddressCategoriesController extends AppController
 {
     
     public function index($_pid=null)
@@ -24,7 +24,7 @@ class CategoriesController extends AppController
                 'category_name LIKE' => '%' . $_keyword . '%' 
             ];
             
-            $data = $this->Categories
+            $data = $this->AddressCategories
                 ->find('all')
                 ->select(['text' => 'category_name', 'value'=>'id'])
                 ->where($tagsCondition);
@@ -56,7 +56,7 @@ class CategoriesController extends AppController
 
 
             if(isset($_pid)){
-                $conditions['Categories.parent_id'] = $_pid;
+                $conditions['AddressCategories.parent_id'] = $_pid;
             }
             if(strlen($_k) > 0){
                 if( $_method == 'like'){
@@ -90,15 +90,15 @@ class CategoriesController extends AppController
             $this->paginate = [ 
                 'order'=>[ $_col => $_dir ],
                 'conditions' => $conditions,
-                'contain' => ['ParentCategories'=>['fields'=>['category_name']]]
+                'contain' => ['ParentAddressCategories'=>['fields'=>['category_name']]]
             ];
 
-            $categories = $this->paginate($this->Categories);
+            $categories = $this->paginate($this->AddressCategories);
             
             echo json_encode([
                     "status"=>"SUCCESS", 
                     "data"=>$this->Do->convertJson($categories), 
-                    "paging"=>$this->Paginator->getPagingParams()["Categories"]
+                    "paging"=>$this->Paginator->getPagingParams()["AddressCategories"]
                 ], JSON_UNESCAPED_UNICODE);  die();
             
         }
@@ -107,7 +107,7 @@ class CategoriesController extends AppController
     
     public function view($id = null)
     {
-        $rec = $this->Categories->get($id, [
+        $rec = $this->AddressCategories->get($id, [
             'contain' => [],
         ]);
 
@@ -126,20 +126,20 @@ class CategoriesController extends AppController
         $dt = json_decode( file_get_contents('php://input'), true);
 
         if ($this->request->is(['patch', 'put'])) {
-            $rec = $this->Categories->get($dt['id']);
+            $rec = $this->AddressCategories->get($dt['id']);
         }
 
         if ($this->request->is(['post'])) {
-            $rec = $this->Categories->newEmptyEntity();
+            $rec = $this->AddressCategories->newEmptyEntity();
             $dt['id'] = null;
         }
 
 
         $dt['category_configs'] = json_encode( !empty($dt['category_configs']) ? $dt['category_configs'] : ['icon'=>'', 'isProtected'=>''] );
         
-        $rec = $this->Categories->patchEntity($rec, $dt);
+        $rec = $this->AddressCategories->patchEntity($rec, $dt);
 		
-        if ($newRec = $this->Categories->save($rec)) {
+        if ($newRec = $this->AddressCategories->save($rec)) {
             echo json_encode(["status"=>"SUCCESS", "data"=>$newRec]); die();
         }
         echo json_encode(["status"=>"FAIL", "data"=>$rec->getErrors()]); die();
@@ -157,7 +157,7 @@ class CategoriesController extends AppController
         if(!$this->_isAuthorized(true)){
             echo json_encode( ["status"=>"FAIL", "msg"=>__("no-auth"), "data"=>[]] ); die();
         }
-        $delRec = $this->Categories->deleteAll(['id IN ' => explode(",", $id)]);
+        $delRec = $this->AddressCategories->deleteAll(['id IN ' => explode(",", $id)]);
         
         if ($delRec) {
             $res = ["status"=>"SUCCESS", "data"=>$delRec];
@@ -183,10 +183,10 @@ class CategoriesController extends AppController
         $errors = [];
         foreach($records as $rec){
             if(!is_numeric($rec)){continue;}
-            $dt= $this->Categories->newEmptyEntity();;
+            $dt= $this->AddressCategories->newEmptyEntity();;
             $dt["id"] = $rec;
             $dt["rec_state"] = $val;
-            if(!$this->Categories->save($dt)){
+            if(!$this->AddressCategories->save($dt)){
                 $errors[] = $dt->getErrors();
             }
         }

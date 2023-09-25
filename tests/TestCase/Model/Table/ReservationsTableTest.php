@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\SalesTable;
+use App\Model\Table\ReservationsTable;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\SalesTable Test Case
+ * App\Model\Table\ReservationsTable Test Case
  */
-class SalesTableTest extends TestCase
+class ReservationsTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\SalesTable
+     * @var \App\Model\Table\ReservationsTable
      */
-    protected $Sales;
+    protected $Reservations;
 
     /**
      * Fixtures
@@ -24,18 +24,8 @@ class SalesTableTest extends TestCase
      * @var array<string>
      */
     protected $fixtures = [
+        'app.Reservations',
         'app.Sales',
-        'app.Clients',
-        'app.Tags',
-        'app.Categories',
-        'app.Sources',
-        'app.Pools',
-        'app.Status',
-        'app.Type',
-        'app.Reports',
-        'app.Books',
-        'app.Usersale',
-        'app.SaleSpecs',
     ];
 
     /**
@@ -46,8 +36,8 @@ class SalesTableTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('Sales') ? [] : ['className' => SalesTable::class];
-        $this->Sales = $this->getTableLocator()->get('Sales', $config);
+        $config = $this->getTableLocator()->exists('Reservations') ? [] : ['className' => ReservationsTable::class];
+        $this->Reservations = $this->getTableLocator()->get('Reservations', $config);
     }
 
     /**
@@ -57,7 +47,7 @@ class SalesTableTest extends TestCase
      */
     protected function tearDown(): void
     {
-        unset($this->Sales);
+        unset($this->Reservations);
 
         parent::tearDown();
     }
@@ -66,7 +56,7 @@ class SalesTableTest extends TestCase
      * Test validationDefault method
      *
      * @return void
-     * @uses \App\Model\Table\SalesTable::validationDefault()
+     * @uses \App\Model\Table\ReservationsTable::validationDefault()
      */
     public function testValidationDefault(): void
     {
@@ -77,7 +67,7 @@ class SalesTableTest extends TestCase
      * Test buildRules method
      *
      * @return void
-     * @uses \App\Model\Table\SalesTable::buildRules()
+     * @uses \App\Model\Table\ReservationsTable::buildRules()
      */
     public function testBuildRules(): void
     {

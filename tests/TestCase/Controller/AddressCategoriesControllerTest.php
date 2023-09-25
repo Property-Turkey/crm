@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\SalesController;
+use App\Controller\AddressCategoriesController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Controller\SalesController Test Case
+ * App\Controller\AddressCategoriesController Test Case
  *
- * @uses \App\Controller\SalesController
+ * @uses \App\Controller\AddressCategoriesController
  */
-class SalesControllerTest extends TestCase
+class AddressCategoriesControllerTest extends TestCase
 {
     use IntegrationTestTrait;
 
@@ -22,25 +22,14 @@ class SalesControllerTest extends TestCase
      * @var array<string>
      */
     protected $fixtures = [
-        'app.Sales',
-        'app.Clients',
-        'app.Tags',
-        'app.Categories',
-        'app.Sources',
-        'app.Pools',
-        'app.Status',
-        'app.Type',
-        'app.Reports',
-        'app.Books',
-        'app.Usersale',
-        'app.SaleSpecs',
+        'app.AddressCategories',
     ];
 
     /**
      * Test index method
      *
      * @return void
-     * @uses \App\Controller\SalesController::index()
+     * @uses \App\Controller\AddressCategoriesController::index()
      */
     public function testIndex(): void
     {
@@ -51,7 +40,7 @@ class SalesControllerTest extends TestCase
      * Test view method
      *
      * @return void
-     * @uses \App\Controller\SalesController::view()
+     * @uses \App\Controller\AddressCategoriesController::view()
      */
     public function testView(): void
     {
@@ -62,7 +51,7 @@ class SalesControllerTest extends TestCase
      * Test add method
      *
      * @return void
-     * @uses \App\Controller\SalesController::add()
+     * @uses \App\Controller\AddressCategoriesController::add()
      */
     public function testAdd(): void
     {
@@ -73,7 +62,7 @@ class SalesControllerTest extends TestCase
      * Test edit method
      *
      * @return void
-     * @uses \App\Controller\SalesController::edit()
+     * @uses \App\Controller\AddressCategoriesController::edit()
      */
     public function testEdit(): void
     {
@@ -84,7 +73,7 @@ class SalesControllerTest extends TestCase
      * Test delete method
      *
      * @return void
-     * @uses \App\Controller\SalesController::delete()
+     * @uses \App\Controller\AddressCategoriesController::delete()
      */
     public function testDelete(): void
     {

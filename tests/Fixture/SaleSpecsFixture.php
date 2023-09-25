@@ -27,6 +27,11 @@ class SaleSpecsFixture extends TestFixture
                 'salespec_loction_target' => 'Lorem ipsum dolor sit amet',
                 'salespec_isowner' => 1,
                 'salespec_isready' => 1,
+                'salespec_finance' => 1,
+                'salespec_buyerpersona' => 1,
+                'salespec_socialstyle' => 1,
+                'salespec_currency' => 1,
+
             ],
         ];
         parent::init();

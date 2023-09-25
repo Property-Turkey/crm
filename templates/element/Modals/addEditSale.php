@@ -109,7 +109,9 @@
                         <label><?= __('sale_tags') ?></label>
                         <div class="div">
                             
-                            <tags-input ng-model="rec.sale.sale_tags" add-from-autocomplete-only="true" display-property="text" >
+                            <tags-input ng-model="rec.sale.sale_tags" 
+                            add-from-autocomplete-only="true" 
+                            display-property="text" >
                                 <auto-complete min-length="1" highlightMatchedText="true" source="loadTags($query, 'categories')"></auto-complete>
                             </tags-input>
 

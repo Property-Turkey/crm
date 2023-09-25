@@ -23,6 +23,16 @@ class ClientsTable extends Table
             'className' => 'Categories',
         ]);
         
+        $this->belongsTo('City', [
+            'foreignKey' => 'adrs_city',    
+            'className' => 'Categories',        
+        ]);
+
+        $this->belongsTo('Region', [
+            'foreignKey' => 'adrs_region',    
+            'className' => 'Categories',        
+        ]);
+
         $this->hasMany('Reports', [
             'foreignKey' => 'tar_id',
             'joinType' => 'INNER',
@@ -47,6 +57,7 @@ class ClientsTable extends Table
 		// 	'dependent' => true,
 		// 	'cascadeCallbacks' => true
         // ]);
+        
 		$this->addBehavior('Log');
     }
 

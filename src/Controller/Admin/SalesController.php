@@ -12,7 +12,6 @@ class SalesController extends AppController
 
     public function index($_pid = null)
     {
-
         
         $_sale = isset($_GET['tags']) ? $_GET['tags'] : false;
         $_keyword = isset($_GET['keyword']) ? $_GET['keyword'] : false;
@@ -116,8 +115,12 @@ class SalesController extends AppController
                         "Pools",
                         "Tags",
                         "SaleSpecs",
+                        "SaleSpecs.Currency",
+                        "SaleSpecs.Persona",
+                        "SaleSpecs.Style",
                     ],
                 ])->toArray();
+                
                 
                 
                 // dd($data["SaleSpecs"]);
@@ -146,7 +149,7 @@ class SalesController extends AppController
                         
                     ],
                     
-                ]);
+                ]); 
                 // $data = $this->Sales->find('all', [
                 //     "order" => [$_col => $_dir],
                 //     "conditions" => $conditions,
@@ -188,90 +191,49 @@ class SalesController extends AppController
             );
             die();
         }
+        $categories = [
+            'Type' => [37],
+            'Source' => [33],
+            'Report Type' => [53],
+            'Property Type' => [159],
+            'Buyer Persona' => [170],
+            'Social Style' => [171]
+        ];
+        
+        // $categoriesLocation = [
+        //     'City' => [],
+        // ];
 
-        //list for category
-        $parentTypeIds = [37]; //when another category named segments is added, to add it here as well.
-        $categoriesType = $this->getTableLocator()->get('Categories')->find('all')
-            ->where(['parent_id IN' => $parentTypeIds])
-            ->toArray();
-
-        $optionsType = [];
-        foreach ($categoriesType as $category) {
-            $optionsType[$category->id] = $category->category_name;
+        
+        $options = [];
+        $optionsLoc = [];
+        
+        foreach ($categories as $categoryName => $parentIds) {
+            $categoriesList = $this->getTableLocator()->get('Categories')->find('all')
+                ->where(['parent_id IN' => $parentIds])
+                ->toArray();
+        
+            $options[$categoryName] = [];
+        
+            foreach ($categoriesList as $category) {
+                $options[$categoryName][$category->id] = $category->category_name;
+            }
         }
 
-        //list for sources
-        $parentSourceIds = [33];
-        $categoriesSource = $this->getTableLocator()->get('Categories')->find('all')
-            ->where(['parent_id IN' => $parentSourceIds])
-            ->toArray();
-
-        $optionsSource = [];
-        foreach ($categoriesSource as $category) {
-            $optionsSource[$category->id] = $category->category_name;
-        }
-
-        //list for pools
-        $parentPoolIds = [28];
-        $categoriesPool = $this->getTableLocator()->get('Categories')->find('all')
-            ->where(['parent_id IN' => $parentPoolIds])
-            ->toArray();
-
-        $optionsPool = [];
-        foreach ($categoriesPool as $category) {
-            $optionsPool[$category->id] = $category->category_name;
-        }
-
-        //list for Status(for Report)
-        $parentStatusIds = [73];
-        $categoriesStatus = $this->getTableLocator()->get('Categories')->find('all')
-            ->where(['parent_id IN' => $parentStatusIds])
-            ->toArray();
-
-        $optionsStatus = [];
-        foreach ($categoriesStatus as $category) {
-            $optionsStatus[$category->id] = $category->category_name;
-        }
-
-        //list for Report Type(for Report)
-        $parentReportIds = [53];
-        $categoriesReport = $this->getTableLocator()->get('Categories')->find('all')
-            ->where(['parent_id IN' => $parentReportIds])
-            ->toArray();
-
-        $optionsReport = [];
-        foreach ($categoriesReport as $category) {
-            $optionsReport[$category->id] = $category->category_name;
-        }
-
-        //list for noSale Type(for Report)
-        $parentnoSaleIds = [163];
-        $categoriesnoSale = $this->getTableLocator()->get('Categories')->find('all')
-            ->where(['parent_id IN' => $parentnoSaleIds])
-            ->toArray();
-
-        $optionsnoSale = [];
-        foreach ($categoriesnoSale as $category) {
-            $optionsnoSale[$category->id] = $category->category_name;
-        }
-
-        //list for noSale Type(for Report)
-        $parentpropertyTypeIds = [159];
-        $categoriespropertyType = $this->getTableLocator()->get('Categories')->find('all')
-            ->where(['parent_id IN' => $parentpropertyTypeIds])
-            ->toArray();
-
-        $optionspropertyType = [];
-        foreach ($categoriespropertyType as $category) {
-            $optionspropertyType[$category->id] = $category->category_name;
-        }
-
-
-       
-
-        $this->set(compact('optionsType', 'optionsSource', 'optionsPool', 'optionsStatus', 'optionsReport','optionsnoSale','optionspropertyType'));
-
-
+        // foreach ($categoriesLocation as $categoryName => $parentIds) {
+        //     $categoriesList = $this->getTableLocator()->get('AddressCategories')->find('all')
+        //         ->where(['parent_id IN' => $parentIds])
+        //         ->toArray();
+        
+        //     $optionsLoc[$categoryName] = [];
+        
+        //     foreach ($categoriesList as $category) {
+        //         $optionsLoc[$categoryName][$category->id] = $category->category_name;
+        //     }
+        // }
+        
+        $this->set(compact('options'));
+        
     }
 
 
@@ -302,7 +264,7 @@ class SalesController extends AppController
             $rec = $this->Sales->patchEntity($rec, $dt); 
            
             // $rec->sale_tags = json_encode($dt['sale_tags']);
-            
+            // dd($rec);
         }
 
         // add mode

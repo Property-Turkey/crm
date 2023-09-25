@@ -627,9 +627,8 @@
                     };
 
                     // TAG INPUT
-                    $scope.tags = ["Investment"];
-                    $scope.loadTags = function(query, target) {
-                    return $http.get('<?=$app_folder?>/admin/'+target+'?tags=1&keyword='+query)
+                    $scope.loadTags = function(query, target, parent) {
+                        return $http.get('<?=$app_folder?>/admin/'+target+'?tags=1&keyword='+query+'&parent='+parent)
                         .then(function(response, status) {
                             return response.data.data;
                         });
@@ -696,27 +695,32 @@
                         `)($scope);
                             } else if (element === "contact-setting") {
                                 elementsCreated = $compile(`
-                    
-                    <form action="" class="row  inlineElement">
+                                <button type="button" id="client_btn" class="hideIt" 
+                ng-click="doGet('/admin/clients/index?list=1', 'list', 'clients');   
+                rec.client = {}; doClick('.close');">
+                </button>
+                    <form action="" class="row  inlineElement" ng-submit="
+                    doSave(rec.client, 'client', 'clients', '#client_btn', 
+                '#client_preloader');">
                     <label for="" class="col-md-6 col-12 col-lg-3">
                         <span class="sm-txt"> ID </span>
-                        <input type="text" class="wb-txt-inp" name="" id=""  />
+                        <input ng-readonly="true" type="text"  ng-model="rec.sale.id"class="wb-txt-inp" name="" id=""  />
                     </label>
                     <label for="" class="col-md-6 col-12 col-lg-3">
                         <span class="sm-txt"> Name </span>
-                        <input type="text" class="wb-txt-inp" name="" id=""  />
+                        <input type="text" ng-model="rec.client.client_name" class="wb-txt-inp" name="" id=""  />
                     </label>
                     <label for="" class="col-md-6 col-12 col-lg-3">
                         <span class="sm-txt"> Phone </span>
-                        <input type="text" class="wb-txt-inp" name="" id=""  />
+                        <input type="text" ng-model="rec.sale.client.client_mobile" class="wb-txt-inp" name="" id=""  />
                     </label>
                     <label for="" class="col-md-6 col-12 col-lg-3">
                         <span class="sm-txt"> Email </span>
-                        <input type="text" class="wb-txt-inp" name="" id=""  />
+                        <input type="text" ng-model="rec.sale.client.client_email" class="wb-txt-inp" name="" id=""  />
                     </label>
                     <label for="" class="col-md-6 col-12 col-lg-3">
                         <span class="sm-txt"> Country </span>
-                        <input type="text" class="wb-txt-inp" name="" id=""  />
+                        <input type="text" ng-model="rec.sale.client.adrs_country" class="wb-txt-inp" name="" id=""  />
                     </label>
                     <label for="" class="col-md-6 col-12 col-lg-3">
                         <span class="sm-txt"> Inquiry </span>
@@ -724,12 +728,17 @@
                     </label>
                         <label for="" class="col-md-6 col-12 col-lg-3">
                             <span class="sm-txt"> Source </span>
-                            <input type="text" class="wb-txt-inp" name="" id=""  />
+                            
+                            <input type="text" ng-model="rec.sale.source_id" class="wb-txt-inp"   />
                         </label>
                         <label for="" class="col-md-6 col-12 col-lg-3">
                             <span class="sm-txt"> Last Activity </span>
                             <input type="text" class="wb-txt-inp" name="" id=""  />
                         </label>
+                        <div class="col-md-12 col-sm-12 form-group has-feedback">
+                        <button type="submit" class="btn btn-info" id="client_preloader"><span></span> 
+                        <i class="fa fa-save"></i> <?=__('save')?></button>
+                    </div>
                         </form>
                         `)($scope);
                             } else if (element === "assign") {
@@ -785,27 +794,44 @@
                         `)($scope);
                             } else if (element === "notes") {
                                 elementsCreated = $compile(`
-                    <form action="" class="   inlineElement note">
+
+                                <button type="button" 
+                            class="close" data-dismiss="modal" 
+                            aria-hidden="true" id="report_btn"
+
+                            ng-click="doGet('/admin/sales/index?list=1', 'list', 'sales');"></button>
+                        
+                    <form action="" class="   inlineElement note" 
+                    
+                    ng-submit="
+                    rec.report.tar_id = rec.sale.id; 
+                    rec.report.tar_tbl = 'Sales'; 
+                    <!--rec.report.status_id = '';-->
+                    doSave(rec.report, 'report', 'reports', '#report_btn', '#report_preloader');">
+
+
                     <div class='row'>
-                    <label for="" class=" col-md-3 col-12 ">
+                    <!--<label for="" class=" col-md-3 col-12 ">
                     <span class="sm-txt"> Name </span>
                     <input
                         class="wb-txt-inp"
                         type='text'
+                        
                         placeholder="Name"
                     / >
-                    </label>
+                    </label>-->
                     <label for="" class=" col-md-3 col-12 ">
                     <span class="sm-txt"> Type </span>
-                    <select class="wb-ele" id="">
-                    <option value="" disabled selected hidden>
-                        Please Select
-                    </option>
-                    <option value="option">Note</option>
-                    <option value="option">Profile</option>
-                    </select>
+                    <?= $this->Form->control('category_id', [
+                    'class' => 'form-control has-feedback-left wb-ele',
+                    'label' => false,
+                    'type' => 'select', 
+                    'options' => $options['Report Type'],
+                    'empty' => 'Please Select', 
+                    'ng-model' => 'rec.report.report_type',
+                    ]) ?> 
                     </label>
-                    <label for="" class=" col-md-3 col-12 ">
+                    <!-- <label for="" class=" col-md-3 col-12 ">
                     <span class="sm-txt"> Time </span>
                     <input
                         class="wb-txt-inp pt-1"
@@ -818,11 +844,12 @@
                         class="wb-txt-inp"
                         type='date'
                     / >
-                    </label>
+                    </label>-->
 
                     <label for="" class=" col-12 ">
                     <span class="sm-txt"> Note </span>
                     <textarea
+                        ng-model = "rec.report.report_text"
                         class="wb-txt-inp"
                         name=""
                         id=""
@@ -833,6 +860,10 @@
                     </label>
             
                     </div>
+                    <div class="col-md-12 col-sm-12 form-group has-feedback" ng-click="updateRecState()">
+                                    <button type="submit" class="btn btn-info"  id="report_preloader"><span></span> 
+                                    <i class="fa fa-save"></i> <?=__('save')?></button>
+                                </div>
 
                         </form>
                         `)($scope);
@@ -848,6 +879,8 @@
                     <span class="sm-txt"> Booking Date </span>
                     <input type="time" class="wb-ele" id="" />
                 </label>
+
+                
             
                         </form>
                         `)($scope);
@@ -890,6 +923,210 @@
                     </label>
                 
                     </form>
+                        `)
+                        ($scope);
+                            } else if (element === "finance") {
+                                elementsCreated = $compile(`
+                                <button type="button" id="sale_btn" class="hideIt" 
+                                    ng-click="doGet('/admin/sales/index?list=1', 'list', 'sales');   
+                                    rec.sale = {}; doClick('.close');">
+                                </button>
+                                <form class="row" ng-submit="
+                                doSave(rec.sale, 'sale', 'sales', '#sale_btn', '#sale_preloader');">
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <div class="flex-center text-center">
+                                                <label class="switch">
+                                                    <input 
+                                                    ng-model="rec.sale.sale_finance" 
+                                                    name="finance" 
+                                                    ng-value = "'187'" 
+                                                    name="finance" 
+                                                    id="finance-client1" 
+                                                    type="radio" />
+                                                    <span class="slider round"></span>
+                                                </label>
+                                                <label for="finance-client1"> Finances in Place </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <div class="flex-center text-center">
+                                                <label class="switch">
+                                                    <input 
+                                                    ng-model="rec.sale.sale_finance" 
+                                                    name="finance" 
+                                                    ng-value = "'188'" 
+                                                    id="payment-client1" 
+                                                    type="radio" />
+                                                    <span class="slider round"></span>
+                                                </label>
+                                                <label for="payment-client1"> All cash payment </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <div class="flex-center text-center">
+                                                <label class="switch">
+                                                    <input 
+                                                    ng-model="rec.sale.sale_finance" 
+                                                    name="finance" 
+                                                    ng-value = "'189'" 
+                                                    name="finance" 
+                                                    id="Ready-client1" 
+                                                    type="radio" />
+                                                    <span class="slider round"></span>
+                                                </label>
+                                                <label for="Ready-client1"> Ready to buy now </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <div class="flex-center text-center">
+                                                <label class="switch">
+                                                    <input 
+                                                    ng-model="rec.sale.sale_finance" 
+                                                    name="finance" 
+                                                    ng-value = "'190'" 
+                                                    name="finance" 
+                                                    id="present-client1" 
+                                                    type="radio" />
+                                                    <span class="slider round"></span>
+                                                </label>
+                                                <label for="present-client1"> Decision maker is present </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-sm-12 form-group has-feedback" ng-click="updateRecState()">
+                                            <button type="submit" class="btn btn-info"  id="sale_preloader"><span></span> 
+                                            <i class="fa fa-save"></i> <?=__('save')?></button>
+                                        </div>
+                                    </form>
+                        `)
+                        ($scope);
+                            } else if (element === "info") {
+                                elementsCreated = $compile(`
+                                <form class="row">
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> Segment </span> 
+                                            <?= $this->Form->control('category_id', [
+                                                'class' => 'form-control has-feedback-left wb-ele',
+                                                'label' => false,
+                                                'type' => 'select', 
+                                                'options' => $options['Type'],
+                                                'empty' => 'Please Select', 
+                                                'ng-model' => 'rec.sale.category_id',
+                                                ]) ?> 
+                                        </label>
+                                        
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?=__('sale_tags')?> </span>
+                                            <tags-input ng-model="rec.sale.sale_tags" class="wb-txt-inp" tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
+                                                <auto-complete min-length="1" source="loadTags($query, 'categories', 40)"></auto-complete>
+                                            </tags-input>
+                                        </label>
+                                        
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?=__('sale_budget')?> </span>
+                                            <div class="input-group">
+                                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas-dollar"></i>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a class="dropdown-item text-center text-dark" href="#">
+                                                            <i class="fas-lira-sign"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-center text-dark" href="#">
+                                                            <i class="fas-try"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-center text-dark" href="#">
+                                                            <i class="fas-euro"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <input ng-model="rec.sale.sale_budget" class="form-control" value="400k" type="text" />
+                                            </div>
+                                            </label>
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?=__('salespec_propertytype')?> </span> 
+                                            <tags-input ng-model="rec.sale.sale_specs[0].salespec_propertytype" display-property="text" key-property="value" class="wb-txt-inp" tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
+                                                    <auto-complete min-length="1" source="loadTags($query, 'categories', 159)"></auto-complete>
+                                                </tags-input>
+                                        </label>
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"><?=__('salespec_beds')?></span>
+                                            <tags-input ng-model="rec.sale.sale_specs[0].salespec_beds" display-property="text" key-property="value" class="wb-txt-inp" tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
+                                                <auto-complete min-length="1" source="loadTags($query, 'categories', 183)"></auto-complete>
+                                            </tags-input>
+                                        </label>
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"><?=__('place_of_stay')?></span>
+                                            <div class="row" >
+                                                <div class="col-6 place_1">
+                                                <?= $this->Form->control('category_id', [
+                                                'class' => 'form-control has-feedback-left wb-txt-inp',
+                                                'label' => false,
+                                                'type' => 'select', 
+                                                // 'options' => $optionsLoc['City'],
+                                                'empty' => 'Please Select', 
+                                                'ng-model' => '',
+                                                ]) ?>
+                                                </div>
+                                                <div class="col-6 place_2">
+                                                <?= $this->Form->control('category_id', [
+                                                'class' => 'form-control has-feedback-left wb-txt-inp',
+                                                'label' => false,
+                                                'type' => 'Budgetselect', 
+                                                // 'options' => $optionsLoc['Region'],
+                                                'empty' => 'Please Select', 
+                                                'ng-model' => '',
+                                                ]) ?>
+                                                </div>
+                                            </div>
+                                        </label>
+
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?=__('book_arrivedate')?> </span>
+                                            <input type="text" ng-model="rec.sale.books[0].book_arrivedate" class="wb-txt-inp" placeholder="Enter" />
+                                        </label>
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?=__('target_location')?>  </span>
+                                            <input type="text" ng-model="rec.sale.sale_specs[0].salespec_location_target" class="wb-txt-inp" placeholder="Enter" />
+                                        </label>
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"><?=__('buyer_persona')?> </span>
+                                            <?= $this->Form->control('category_id', [
+                                                'class' => 'form-control has-feedback-left wb-ele',
+                                                'label' => false,
+                                                'type' => 'select', 
+                                                'options' => array_map(function($option) {
+                                                    return $option . ' <i class="fa fa-period"></i>';
+                                                }, $options['Buyer Persona']),
+                                                'escape' => false, // Bu önemlidir, HTML'i kaçırmamak için escape özelliğini devre dışı bırakmalısınız.
+                                                'empty' => 'Please Select', 
+                                                'ng-model' => 'rec.sale.sale_specs[0].salespec_buyerpersona',
+                                            ]) ?>
+                                        </label>
+
+
+
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?=__('social_style_model')?> </span>
+                                            
+                                            <?= $this->Form->control('category_id', [
+                                            'class' => 'form-control has-feedback-left wb-ele',
+                                            'label' => false,
+                                            'type' => 'select', 
+                                            'options' => $options['Social Style'],
+                                            'empty' => 'Please Select', 
+                                            'ng-model' => 'rec.sale.sale_specs[0].salespec_socialstyle',
+                                            ]) ?>
+                                        </label> 
+                                        
+
+
+                                    </form>
                         `)($scope);
                             } else {
                                 console.log("object");
@@ -1010,14 +1247,14 @@
 
                 
                 
-                $scope.loadTags = function(query, target) {
-                    // return $http.get('/tags?query=' + query);
-                    return $http.get('<?=$app_folder?>/admin/'+target+'?tags=1&keyword='+query)
-                        .then(function(response, status) {
-                            return response.data.data;
-                        });
-                    // return $http.get('<?=$app_folder?>/admin/'+target+'?tags=1&keyword='+query);
-                };
+                // $scope.loadTags = function(query, target) {
+                //     // return $http.get('/tags?query=' + query);
+                //     return $http.get('<?=$app_folder?>/admin/'+target+'?tags=1&keyword='+query)
+                //         .then(function(response, status) {
+                //             return response.data.data;
+                //         });
+                //     // return $http.get('<?=$app_folder?>/admin/'+target+'?tags=1&keyword='+query);
+                // };
                 // $scope.loadTags = function(query, target) {
                 //     return $http.get('<?=$app_folder?>/admin/'+target+'?tags=1&keyword='+query);
                 //     //  return _doRequest('/admin/'+target+'?tags=1', {keyword: query}, 'post')

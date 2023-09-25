@@ -156,7 +156,7 @@
             <p><i class="fas-clock"></i> Inquire Today @ 13:00</p>
             <p>
              <i class="fas-asterisk"></i> Source:
-             <a href="#" class="btn-link"> Link</a>
+             <a href="#" class="btn-link"> {{ itm.source.category_name }}</a>
             </p>
            </div>
           </div>

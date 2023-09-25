@@ -30,17 +30,17 @@ html,
 }
 
 .form-control {
-  border: 1px solid #292929;
+  border: 1px solid #c7c7c7;
 }
 
 .form-control:focus {
-  border-color: #292929;
+  border-color: #c7c7c7;
   box-shadow: none;
   outline: none;
 }
 
 .btn-outline-secondary {
-  --bs-btn-border-color: #212529;
+  --bs-btn-border-color: #c7c7c7;
 }
 
 /* Bootstrap Edits End */
@@ -117,17 +117,31 @@ a {
 .wb-txt-inp {
   position: relative;
   width: 100%;
-  border: 1px solid #292929;
+  border: 1px solid #c7c7c7;
   border-radius: 10px;
   color: #000;
   padding: 7px 10px;
+}
+.place_1{
+  padding-right: 0;
+}.place_2{
+  padding-left: 0;
+}
+.place_1 .wb-txt-inp {
+  border-radius: 10px 0px 0px 10px;
+}
+.place_2 .wb-txt-inp {
+  border-radius: 0px 10px 10px 0px; 
+}
+.place_1 input {
+  padding-left: 30px; /* İstediğiniz sol iç boşluğu ayarlayın */
 }
 
 /* input with span */
 
 .wb-ele {
   background-color: white;
-  border: 1px solid #292929;
+  border: 1px solid #c7c7c7;
   display: flex;
   font-weight: bold;
   align-items: center;
@@ -623,7 +637,7 @@ input[type="checkbox"]:checked:after {
   border-radius: 6px;
   overflow: hidden;
   position: absolute;
-  z-index: 999;
+  z-index: 99999999999;
   left: 100%;
   top: 100px;
   transition: 0.6s;
@@ -918,6 +932,7 @@ tags-input .tags .even.selected {
   display: inline-block;
   width: 45px;
   height: 23px;
+  padding-left: 32px;
 }
 
 .switch input {
@@ -1131,3 +1146,9 @@ input:checked+.slider:before {
 [class*=" fas-"]:before {
   margin: 0;
 }
+
+/* Açıklamaları gizle */
+#social-style-select + .tooltip {
+  display: none;
+}
+
