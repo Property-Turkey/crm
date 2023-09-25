@@ -108,9 +108,8 @@
     <?php echo $this->Html->script('angular-animate.min') ?>
     <!-- Bootstrap -->
     <?php echo $this->Html->script('bootstrap.bundle.min.js') ?>
+    <!-- Template Scripts-->
     <?php
-    echo $this->Html->script('jquery-3.7.0.min');
-    echo $this->Html->script('angular.min');
     echo $this->Html->script('main');
     ?>
     <!-- FastClick -->
@@ -621,7 +620,7 @@
 
 
 
-        // Toggle Mobile Sidebar
+                    // Toggle Mobile Sidebar
                     $scope.toggleSidebar = function () {
                         document.querySelector(".sidebar").classList.toggle("active");
                     };
@@ -696,9 +695,9 @@
                             } else if (element === "contact-setting") {
                                 elementsCreated = $compile(`
                                 <button type="button" id="client_btn" class="hideIt" 
-                ng-click="doGet('/admin/clients/index?list=1', 'list', 'clients');   
-                rec.client = {}; doClick('.close');">
-                </button>
+                                ng-click="doGet('/admin/clients/index?list=1', 'list', 'clients');   
+                                rec.client = {}; doClick('.close');">
+                                </button>
                     <form action="" class="row  inlineElement" ng-submit="
                     doSave(rec.client, 'client', 'clients', '#client_btn', 
                 '#client_preloader');">
@@ -708,8 +707,17 @@
                     </label>
                     <label for="" class="col-md-6 col-12 col-lg-3">
                         <span class="sm-txt"> Name </span>
-                        <input type="text" ng-model="rec.client.client_name" class="wb-txt-inp" name="" id=""  />
-                    </label>
+                        <tags-input 
+                                ng-model="rec.sale.client.client_name" 
+                                add-from-autocomplete-only="true" 
+                                max-tags="1" 
+                                placeholder="<?= __('client_id') ?>" 
+                                display-property="text"
+                                key-property="value"
+                            >
+                                <auto-complete min-length="1" highlightMatchedText="true" source="loadTags($query, 'clients', 0)"></auto-complete>
+                            </tags-input>                   
+                        </label>
                     <label for="" class="col-md-6 col-12 col-lg-3">
                         <span class="sm-txt"> Phone </span>
                         <input type="text" ng-model="rec.sale.client.client_mobile" class="wb-txt-inp" name="" id=""  />
@@ -871,15 +879,28 @@
                                 elementsCreated = $compile(`
 
                             <form action="" class="row inlineElement">
-                    <label for="" class="col-md-6 col-12 col-lg-3">
-                    <span class="sm-txt"> Booking Date </span>
-                        <input type="date" class="wb-ele p-2 ps-3" id="" />
-                    </label>
-                    <label for="" class="col-md-6 col-12 col-lg-3">
-                    <span class="sm-txt"> Booking Date </span>
-                    <input type="time" class="wb-ele" id="" />
-                </label>
-
+                            
+                            
+                            <label for="" class="col-md-6 col-12 col-lg-4">
+                                <span class="sm-txt"> Booking Meet Place </span>
+                                <input type="text" max ng-model="rec.sale.books[0].book_meetplace" class="wb-ele" id="" />
+                            </label>
+                            <label for="" class="col-md-6 col-12 col-lg-4">
+                                <span class="sm-txt"> Booking Meet Period </span>
+                                <input type="text" max="99" min="1" ng-model="rec.sale.books[0].book_meetperiod" class="wb-ele" id="" />
+                            </label>
+                            <label for="" class="col-md-6 col-12 col-lg-4">
+                                <span class="sm-txt"> Client Current Stay </span>
+                                <input type="text" ng-model="rec.sale.books[0].book_current_stay" class="wb-ele" id="" />
+                            </label>
+                            <label for="" class="col-md-6 col-12 col-lg-4">
+                                <span class="sm-txt"> Booking Time </span>
+                                <input type="time" ng-model="rec.sale.books[0].book_meetdate"  class="wb-ele" id="" />
+                            </label>
+                            <label for="" class="col-md-6 col-12 col-lg-4">
+                                <span class="sm-txt"> Booking Date </span>
+                                <input type="date" ng-model="rec.sale.books[0].stat_created.split(' ')[0]" class="wb-ele p-2 ps-3" id="" />
+                            </label>
                 
             
                         </form>
@@ -1002,7 +1023,7 @@
                         ($scope);
                             } else if (element === "info") {
                                 elementsCreated = $compile(`
-                                <form class="row">
+                                <form class="row" >
                                         <label class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt"> Segment </span> 
                                             <?= $this->Form->control('category_id', [
@@ -1100,9 +1121,7 @@
                                                 'class' => 'form-control has-feedback-left wb-ele',
                                                 'label' => false,
                                                 'type' => 'select', 
-                                                'options' => array_map(function($option) {
-                                                    return $option . ' <i class="fa fa-period"></i>';
-                                                }, $options['Buyer Persona']),
+                                                'options' => $options['Buyer Persona'],
                                                 'escape' => false, // Bu önemlidir, HTML'i kaçırmamak için escape özelliğini devre dışı bırakmalısınız.
                                                 'empty' => 'Please Select', 
                                                 'ng-model' => 'rec.sale.sale_specs[0].salespec_buyerpersona',
@@ -1186,10 +1205,6 @@
                         $(".lead-preview").removeClass("active");
                         $(".overlay").removeClass("active");
                     });
-
-
-
-
 
 
                 $scope.updateSaleCurrentStage = function() {

@@ -118,6 +118,7 @@ class SalesController extends AppController
                         "SaleSpecs.Currency",
                         "SaleSpecs.Persona",
                         "SaleSpecs.Style",
+                        "Offers",
                     ],
                 ])->toArray();
                 
@@ -146,6 +147,7 @@ class SalesController extends AppController
                         "Books",
                         "Pools",
                         "Tags",
+                        "Offers",
                         
                     ],
                     

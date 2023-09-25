@@ -62,6 +62,11 @@ class ReportsTable extends Table
             'className' => 'Categories',        
         ]);
 
+        $this->belongsTo('User', [
+            'foreignKey' => 'user_id',    
+            'className' => 'Users',        
+        ]);
+
         $this->belongsTo('Text', [
             'foreignKey' => 'report_text',  
             'className' => 'Sales',       

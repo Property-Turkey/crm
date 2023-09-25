@@ -62,10 +62,6 @@
                                 <div class="white-box">
                                     <div class="row">
                                         <div class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"> ID </span>
-                                            <div class="wb-ele">{{rec.sale.id}}</div>
-                                        </div>
-                                        <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt"> Name </span>
                                             <div class="wb-ele">{{rec.sale.client.client_name}}</div>
                                         </div>
@@ -136,7 +132,7 @@
                                 <div class="heading">
                                     <div class="title">Info</div>
                                     <div class="flex-gap-10">
-                                        <button class="btn" data-ng-click="inlineElement('#elementsContainer', 1, 'info')" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        <button class="btn"data-ng-click="inlineElement('#elementsContainer', 1, 'info')" data-bs-toggle="modal" data-bs-target="#exampleModal" id="icModalAcBtn" >
                                             <i class="fas-plus"></i> Edit assigned </button>
                                         <button class="btn"> View all assigned <i class="fas-right-open"></i>
                                         </button>
@@ -232,7 +228,10 @@
                                 <div class="heading">
                                     <div class="title">Empathy Mapping</div>
                                     <div class="flex-gap-10">
-                                        <button class="btn" data-ng-click="inlineElement('#elementsContainer', 1, 'empathy')" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        <button class="btn" 
+                                        data-ng-click="inlineElement('#elementsContainer', 1, 'empathy')" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#exampleModal">
                                             <i class="fas-plus"></i> Add assigned </button>
                                         <button class="btn"> View all assigned <i class="fas-right-open"></i>
                                         </button>
@@ -258,46 +257,58 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div class="heading">
-                                    <div class="title">Notes</div>
-                                    <div class="flex-gap-10">
-                                        <button class="btn" ng-click="
-                                        doGet('/admin/sales?id='+rec.sale.id, 'rec', 'sale'); 
-                                        inlineElement('#elementsContainer', 1, 'notes');" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                            <i class="fas-plus"></i> Add Note </button>
-                                        <button class="btn"> View all (4) notes <i class="fas-right-open"></i>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button m-2 p-2" type="button" data-bs-toggle="collapse" data-bs-target="#client1-collapseFour" aria-expanded="true" aria-controls="client1-collapseFour">
+                                            <span class="title">Notes</span>
                                         </button>
-                                    </div>
-                                </div>
-                                <div class="note" ng-repeat="itm in rec.sale.reports track by $index">
-                                    <div class="box-heading">
-                                        <h5>
-                                            <i class="fas-sticky-note"></i> {{itm.type.category_name}} <b>Noor Hasan</b>
-                                        </h5>
-                                        <div class="flex-center flex-gap-10">
-                                            <b> {{itm.stat_created.split(' ')[1]}} </b>
-                                            <div class="dropdown">
-                                                <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="fas-ellipsis"></i>
+                                    </h2>
+                                    <div id="client1-collapseFour" class="accordion-collapse collapse show">
+                                        <div class="accordion-body p-0">
+                                            <div class="heading">
+                                            <div class="title"></div>
+                                            <div class="flex-gap-10">
+                                                <button class="btn" ng-click="
+                                                doGet('/admin/sales?id='+rec.sale.id, 'rec', 'sale'); 
+                                                inlineElement('#elementsContainer', 1, 'notes');" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                    <i class="fas-plus"></i> Add Note </button>
+                                                <button class="btn"> View all (4) notes <i class="fas-right-open"></i>
                                                 </button>
-                                                <ul class="dropdown-menu">
-                                                    <li>
-                                                        <a class="dropdown-item" href="#">Action</a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item" href="#">Another action</a>
-                                                    </li>
-                                                </ul>
                                             </div>
                                         </div>
-                                    </div>
-                                    <span class="spoken">Spoken Today @ 11:45</span>
-                                    <div class="text">
-                                        <p>{{itm.report_text}}</p>
+                                        <div class="note" ng-repeat="itm in rec.sale.reports track by $index">
+                                            <div class="box-heading">
+                                                <h5>
+                                                    <i class="fas-sticky-note"></i> {{itm.type.category_name}} <b> {{itm.user.user_fullname}}</b>
+                                                </h5>
+                                                <div class="flex-center flex-gap-10">
+                                                    <b> {{itm.stat_created.split(' ')[1]}} </b>
+                                                    <div class="dropdown">
+                                                        <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fas-ellipsis"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a class="dropdown-item" href="#">Action</a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item" href="#">Another action</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span class="spoken">Spoken Today @ 11:45</span>
+                                            <div class="text">
+                                                <p>{{itm.report_text}}</p>
+                                            </div>
+                                        </div>
+                                            
+                                        </div>
                                     </div>
                                 </div>
-                              
+                                
                                 <div class="heading">
                                     <div class="title">Booking</div>
                                     <div class="flex-gap-10">
@@ -321,11 +332,38 @@
                                             <div class="wb-ele">
                                                 <img src="\crm\webroot\img\icons_60284.svg" alt="" />
                                                 <div class="line-height-10">
-                                                    <span class="sm-txt">Next Call Time</span> 12:30
+                                                {{ rec.sale.books[0].stat_created.split(' ')[1] }}
                                                 </div>
                                             </div>
                                         </div>
-                                        
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> Booking Meet Place </span>
+                                            <div class="wb-ele">
+                                                <i class="fa fa-map-o"></i>
+                                                <div class="line-height-10">
+                                                {{ rec.sale.books[0].book_meetplace }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> Booking Meet Period </span>
+                                            <div class="wb-ele">
+                                                <i class="fa fa-bookmark"></i>
+                                                <div class="line-height-10">
+                                                {{ rec.sale.books[0].book_meetperiod }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt">Client Current Stay </span>
+                                            <div class="wb-ele">
+                                                <i class="fa fa-home "></i>
+                                            
+                                                <div class="line-height-10">
+                                                {{ rec.sale.books[0].book_current_stay }}
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="dropdown">
                                             <button class="sm-btn float" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="fas-ellipsis"></i>
@@ -346,7 +384,6 @@
                                     <div class="flex-gap-10">
                                         <button class="btn" data-ng-click="inlineElement('#elementsContainer', 1, 'finance')" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                             <i class="fas-plus"></i> Edit Finances </button>
-                                        <button class="btn"> View all (4) Offers <i class="fas-right-open"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -413,49 +450,18 @@
                                             </div>
                                         </div>
                                     </form>
-
-                                    <!-- <form class="row">
-                                        <div class="col-md-6 col-12 col-lg-3">
-                                            <div class="flex-center">
-                                            <label class="switch">
-                                                <input type="radio" name="finance" id="finance-client1" />
-                                                <span class="slider round"></span> Finances in Place
-                                            </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12 col-lg-3">
-                                            <div class="flex-center">
-                                            <label class="switch">
-                                                <input type="radio" name="finance" id="payment-client1" />
-                                                <span class="slider round"></span> All cash payment
-                                            </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12 col-lg-3">
-                                            <div class="flex-center">
-                                            <label class="switch">
-                                                <input type="radio" name="finance" id="Ready-client1" />
-                                                <span class="slider round"></span> Ready to buy now
-                                            </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12 col-lg-3">
-                                            <div class="flex-center text-center">
-                                            <label class="switch">
-                                                <input type="radio" name="finance" id="present-client1" />
-                                                <span class="slider round"></span> Decision maker is present
-                                            </label>
-                                            </div>
-                                        </div>
-                                        
-                                    </form> -->
-
-                                    
-
-
                                 </div>
-                                <div class="heading">
-                                    <div class="title">Offers</div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button m-2 p-2" type="button" data-bs-toggle="collapse" data-bs-target="#client1-collapseThree" aria-expanded="true" aria-controls="client1-collapseThree">
+                                            <span class="title">Offers</span>
+                                        </button>
+                                    </h2>
+                                    <div id="client1-collapseThree" class="accordion-collapse collapse show">
+                                        <div class="accordion-body p-0">
+                                            <div class="heading">
+                                    <div class="title"></div>
                                     <div class="flex-gap-10">
                                         <button class="btn">
                                             <i class="fas-plus"></i> Add Offer </button>
@@ -463,11 +469,11 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="white-box">
+                                <div class="white-box mb-2" ng-repeat="itm in rec.sale.offers">
                                     <div>
                                         <span class="sm-txt"> Property shared with client </span>
-                                        <div class="white-box flex-between">
-                                            <a href="#" class="btn-link"> PTFS1234 </a>
+                                        <div class="white-box flex-between mb-2">
+                                            <a href="#" class="btn-link"> {{ itm.property_id }}</a>
                                             <div class="d-flex">
                                                 <div class="h-line hideMob"></div>
                                                 <label class="switch">
@@ -476,6 +482,13 @@
                                                 </label>
                                                 <label for="interested-client1" class="ps-md-5 ps-3 pe-3 pe-md-5"> Interested </label>
                                             </div>
+                                        </div>
+                                        <div class="white-box flex-between">
+                                            <div> {{ itm.offer_desc }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -722,14 +735,3 @@
         </div>
     </div>
 </div>
-<!-- <script>
-$(document).ready(function(){
-    // İkinci Modal'ı Açma
-    $("#buton").click(function(){
-        $("#addEditReport_mdl").modal();
-    });
-    $("#butonshowReport").click(function(){
-        $("#viewReport_mdl").modal();
-    });
-});
-</script> -->
