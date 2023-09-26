@@ -44,8 +44,8 @@
        <option value="option">Option</option>
       </select>
     
-    	<button class="btn btn-danger" ng-click="
-				openModal('#addEditSale_mdl');
+    	<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addEditSale_mdl" 
+        ng-click="
 				doGet('/admin/sales?id='+itm.id, 'rec', 'sales');
 			"><i class="fas-plus"></i> 			
 			<span class="hideMob"><?=__('add_sale')?></span>
@@ -135,10 +135,11 @@
            <div class="col-4 title hideWeb">Lead content</div>
            <div class="col-6 p-0 col-lg-12">
             <div class="priority"><em class="low"></em> {{ itm.id }}</div>
-            <a href="#" ng-click="
-				openModal('#viewSale_mdl');
-				doGet('/admin/sales?id='+itm.id, 'rec', 'sale');
-			" class="btn-link"> {{ itm.client.client_name }} </a>
+            <a href="#" 
+                data-bs-toggle="modal" 
+                data-bs-target="#viewSale_mdl" 
+                ng-click="doGet('/admin/sales?id='+itm.id, 'rec', 'sale');" class="btn-link"> 
+                {{ itm.client.client_name }} </a>
             <p><i class="fas-mail"></i> {{ itm.client.client_email }}</p>
             <p><img src="\crm\webroot\img\phone.svg" alt="" /> {{ itm.client.client_mobile }}</p>
            </div>
@@ -231,5 +232,7 @@
   <div class="overlay"></div>
   
 </div>
-<?php echo $this->element('Modals/search')?>
 <?php echo $this->element('Modals/viewSale')?>
+<?php echo $this->element('Modals/search')?>
+<?php echo $this->element('Modals/addEditSale')?>
+

@@ -119,6 +119,7 @@ class SalesController extends AppController
                         "SaleSpecs.Persona",
                         "SaleSpecs.Style",
                         "Offers",
+                        "Reservations",
                     ],
                 ])->toArray();
                 
@@ -199,7 +200,8 @@ class SalesController extends AppController
             'Report Type' => [53],
             'Property Type' => [159],
             'Buyer Persona' => [170],
-            'Social Style' => [171]
+            'Social Style' => [171],
+            'Payment Type' => [198],
         ];
         
         // $categoriesLocation = [

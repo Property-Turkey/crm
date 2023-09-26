@@ -31,7 +31,7 @@
     // }else{
     echo $this->Html->css('bootstrap.min.css');
     // }
-
+    
     ?>
     <!-- Font Awesome -->
     <?php echo $this->Html->css('font-awesome.min') ?>
@@ -60,8 +60,8 @@
     <!-- bootstrap-daterangepicker -->
     <!-- <?php echo $this->Html->css('/gentela/vendors/bootstrap-daterangepicker/daterangepicker.css') ?> -->
     <!-- NG Tags Input-->
-    <?php echo $this->Html->css('ng-tags-input') 
-    ?>
+    <?php echo $this->Html->css('ng-tags-input')
+        ?>
     <!-- Bootstrap Multiple Select -->
     <?php //echo $this->Html->css('bootstrap-select.min') 
     ?>
@@ -100,8 +100,8 @@
     <!-- Angular -->
     <?php echo $this->Html->script('angular') ?>
     <!-- NG Tags Input-->
-    <?php echo $this->Html->script('ng-tags-input.min') 
-    ?>
+    <?php echo $this->Html->script('ng-tags-input.min')
+        ?>
     <!-- Angular Sanitize -->
     <?php echo $this->Html->script('angular-sanitize.min') ?>
     <!-- Angular Animate -->
@@ -197,7 +197,7 @@
     
 
     <?php if (@$isMap == 1) { ?>
-        <script src="https://maps.googleapis.com/maps/api/js?key=<?= $gmapKey ?>&sensor=false&libraries=places&language=en"></script>
+            <script src="https://maps.googleapis.com/maps/api/js?key=<?= $gmapKey ?>&sensor=false&libraries=places&language=en"></script>
     <?php } ?>
     <!-- Google Maps Directive -->
     <?php //echo $this->Html->script('gm') 
@@ -627,7 +627,7 @@
 
                     // TAG INPUT
                     $scope.loadTags = function(query, target, parent) {
-                        return $http.get('<?=$app_folder?>/admin/'+target+'?tags=1&keyword='+query+'&parent='+parent)
+                        return $http.get('<?= $app_folder ?>/admin/'+target+'?tags=1&keyword='+query+'&parent='+parent)
                         .then(function(response, status) {
                             return response.data.data;
                         });
@@ -638,6 +638,7 @@
 
                     // This function creates or removes Elements based on stat, element, and tar
                     $scope.inlineElement = function (tar, stat, element) {
+                        
                         $(".inlineElement").parent().html("");
                         if (stat === 1) {
                             let elementsCreated = "";
@@ -689,7 +690,11 @@
                         ></textarea>
                     </label>
                 
-            
+                    <div class="down-btns mt-4 d-flex justify-content-end">
+                            <div class="flex-gap-10 ">
+                                <button class="btn btn-danger" id="" type="button"> Save Changes </button>
+                            </div>
+                        </div>
                         </form>
                         `)($scope);
                             } else if (element === "contact-setting") {
@@ -701,12 +706,9 @@
                     <form action="" class="row  inlineElement" ng-submit="
                     doSave(rec.client, 'client', 'clients', '#client_btn', 
                 '#client_preloader');">
+                    
                     <label for="" class="col-md-6 col-12 col-lg-3">
-                        <span class="sm-txt"> ID </span>
-                        <input ng-readonly="true" type="text"  ng-model="rec.sale.id"class="wb-txt-inp" name="" id=""  />
-                    </label>
-                    <label for="" class="col-md-6 col-12 col-lg-3">
-                        <span class="sm-txt"> Name </span>
+                        <span class="sm-txt"> <?= __('client_id') ?> </span>
                         <tags-input 
                                 ng-model="rec.sale.client.client_name" 
                                 add-from-autocomplete-only="true" 
@@ -743,10 +745,11 @@
                             <span class="sm-txt"> Last Activity </span>
                             <input type="text" class="wb-txt-inp" name="" id=""  />
                         </label>
-                        <div class="col-md-12 col-sm-12 form-group has-feedback">
-                        <button type="submit" class="btn btn-info" id="client_preloader"><span></span> 
-                        <i class="fa fa-save"></i> <?=__('save')?></button>
-                    </div>
+                         <div class="down-btns mt-4 d-flex justify-content-end">
+                                                <div class="flex-gap-10 ">
+                                                    <button class="btn btn-danger" id="client_preloader"type="button"> Save Changes </button>
+                                                </div>
+                                            </div>
                         </form>
                         `)($scope);
                             } else if (element === "assign") {
@@ -797,6 +800,11 @@
                         <label for="snoose1"> Snoose </label>
                         </div>
                     </div>
+                    <div class="down-btns mt-4 d-flex justify-content-end">
+                                                <div class="flex-gap-10 ">
+                                                    <button class="btn btn-danger" type="button"> Save Changes </button>
+                                                </div>
+                                            </div>
             
                         </form>
                         `)($scope);
@@ -831,12 +839,12 @@
                     <label for="" class=" col-md-3 col-12 ">
                     <span class="sm-txt"> Type </span>
                     <?= $this->Form->control('category_id', [
-                    'class' => 'form-control has-feedback-left wb-ele',
-                    'label' => false,
-                    'type' => 'select', 
-                    'options' => $options['Report Type'],
-                    'empty' => 'Please Select', 
-                    'ng-model' => 'rec.report.report_type',
+                        'class' => 'form-control has-feedback-left wb-ele',
+                        'label' => false,
+                        'type' => 'select',
+                        'options' => $options['Report Type'],
+                        'empty' => 'Please Select',
+                        'ng-model' => 'rec.report.report_type',
                     ]) ?> 
                     </label>
                     <!-- <label for="" class=" col-md-3 col-12 ">
@@ -868,10 +876,11 @@
                     </label>
             
                     </div>
-                    <div class="col-md-12 col-sm-12 form-group has-feedback" ng-click="updateRecState()">
-                                    <button type="submit" class="btn btn-info"  id="report_preloader"><span></span> 
-                                    <i class="fa fa-save"></i> <?=__('save')?></button>
-                                </div>
+                        <div class="down-btns mt-4 d-flex justify-content-end">
+                            <div class="flex-gap-10 ">
+                                <button class="btn btn-danger" id="report_preloader" type="button"> Save Changes </button>
+                            </div>
+                        </div>
 
                         </form>
                         `)($scope);
@@ -902,6 +911,11 @@
                                 <input type="date" ng-model="rec.sale.books[0].stat_created.split(' ')[0]" class="wb-ele p-2 ps-3" id="" />
                             </label>
                 
+                            <div class="down-btns mt-4 d-flex justify-content-end">
+                            <div class="flex-gap-10 ">
+                                <button class="btn btn-danger" id="" type="button"> Save Changes </button>
+                            </div>
+                        </div>
             
                         </form>
                         `)($scope);
@@ -925,9 +939,10 @@
                         <span class="sm-txt"> Booking Time </span>
                         <input type="time" class="wb-ele" name="" id="" />
                         </label>
-                        <div class='mt-2' >
-                    
-                        
+                        <div class="down-btns mt-4 d-flex justify-content-end">
+                            <div class="flex-gap-10 ">
+                                <button class="btn btn-danger" id="" type="button"> Save Changes </button>
+                            </div>
                         </div>
                         </form>
                         `)($scope);
@@ -942,15 +957,169 @@
                     <span class="sm-txt"> Address </span>
                     <input type="text" class="wb-txt-inp" id="" placeholder="Enter" />
                     </label>
-                
+                    <div class="down-btns mt-4 d-flex justify-content-end">
+                            <div class="flex-gap-10 ">
+                                <button class="btn btn-danger" id="" type="button"> Save Changes </button>
+                            </div>
+                        </div>
                     </form>
+                        `)
+                        ($scope);
+                            } else if (element === "reservation") {
+                                elementsCreated = $compile(`
+                                <form class="row inlineElement">
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt"> Reservation </span>
+                                                <div class="input-group">
+                                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fas-dollar"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a class="dropdown-item text-center text-dark" href="#">
+                                                                <i class="fas-lira-sign"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item text-center text-dark" href="#">
+                                                                <i class="fas-try"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item text-center text-dark" href="#">
+                                                                <i class="fas-euro"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <input type="text"  class="form-control" ng-model="rec.sale.reservations[0].reservation_amount" aria-label="Text input with dropdown button" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt"> Sale Price </span>
+                                                <div class="input-group">
+                                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fas-dollar"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a class="dropdown-item text-center text-dark" href="#">
+                                                                <i class="fas-lira-sign"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item text-center text-dark" href="#">
+                                                                <i class="fas-try"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item text-center text-dark" href="#">
+                                                                <i class="fas-euro"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <input type="text"  ng-model="rec.sale.reservations[0].reservation_price" class="form-control" aria-label="Text input with dropdown button" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt"> Payment Type </span>
+                                                    <?= $this->Form->control('category_id', [
+                                                        'class' => 'form-control has-feedback-left wb-ele',
+                                                        'label' => false,
+                                                        'type' => 'select',
+                                                        'options' => $options['Payment Type'],
+                                                        'empty' => 'Please specify',
+                                                        'ng-model' => 'rec.sale.reservations[0].reservation_paytype',
+                                                    ]) ?>
+                                            </div>
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt"> Developer Name </span>
+                                                <input type="text"   class="wb-txt-inp" placeholder="Enter" />
+                                            </div>
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt"> Unit Type </span>
+                                                <input type="text"   class="wb-txt-inp" placeholder="Please specify" />
+                                            </div>
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt"> Unit Information </span>
+                                                <input type="text"  ng-model="rec.sale.sale_units" class="wb-txt-inp" placeholder="Please specify" />
+                                            </div>
+                                             
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt"> Commission </span>
+                                                <div type="text"  ng-model="rec.sale.reservations[0].reservation_comission" class="wb-txt-inp" placeholder="% Please specify">{{rec.sale.reservations[0].reservation_comission}}</div>
+                                            </div>
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt"> Down Payment </span>
+                                                <div class="input-group">
+                                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fas-dollar"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a class="dropdown-item text-center text-dark" href="#">
+                                                                <i class="fas-lira-sign"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item text-center text-dark" href="#">
+                                                                <i class="fas-try"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item text-center text-dark" href="#">
+                                                                <i class="fas-euro"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <input type="text"  ng-model="rec.sale.reservations[0].reservation_downpayment" class="form-control" aria-label="Text input with dropdown button" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt"> Downpaymnet Date </span>
+                                                <div class="wb-ele">
+                                                    <img src="\crm\webroot\img\datepicker.png" alt="" /> 
+                                                    <div   ng-model="">{{rec.sale.reservations[0].reservation_downpayment_date.split(' ')[0]}}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt"> Installments </span>
+                                                <div class="input-group">
+                                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fas-dollar"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a class="dropdown-item text-center text-dark" href="#">
+                                                                <i class="fas-lira-sign"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item text-center text-dark" href="#">
+                                                                <i class="fas-try"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item text-center text-dark" href="#">
+                                                                <i class="fas-euro"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <input type="text"  class="form-control" aria-label="Text input with dropdown button" />
+                                                </div>
+                                            </div>
+                                            <div class="down-btns mt-4 d-flex justify-content-end">
+                                                <div class="flex-gap-10 ">
+                                                    <button class="btn btn-danger" type="button"> Save Changes </button>
+                                                </div>
+                                            </div>
+                                        </form>
                         `)
                         ($scope);
                             } else if (element === "finance") {
                                 elementsCreated = $compile(`
                                 <button type="button" id="sale_btn" class="hideIt" 
                                     ng-click="doGet('/admin/sales/index?list=1', 'list', 'sales');   
-                                    rec.sale = {}; doClick('.close');">
+                                    ">
                                 </button>
                                 <form class="row" ng-submit="
                                 doSave(rec.sale, 'sale', 'sales', '#sale_btn', '#sale_preloader');">
@@ -1014,10 +1183,12 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12 col-sm-12 form-group has-feedback" ng-click="updateRecState()">
-                                            <button type="submit" class="btn btn-info"  id="sale_preloader"><span></span> 
-                                            <i class="fa fa-save"></i> <?=__('save')?></button>
+                                        <div class="down-btns mt-4 d-flex justify-content-end">
+                                            <div class="flex-gap-10 ">
+                                                <button class="btn btn-danger" id="sale_preloader" type="button"> Save Changes </button>
+                                            </div>
                                         </div>
+                                        
                                     </form>
                         `)
                         ($scope);
@@ -1029,22 +1200,22 @@
                                             <?= $this->Form->control('category_id', [
                                                 'class' => 'form-control has-feedback-left wb-ele',
                                                 'label' => false,
-                                                'type' => 'select', 
+                                                'type' => 'select',
                                                 'options' => $options['Type'],
-                                                'empty' => 'Please Select', 
+                                                'empty' => 'Please Select',
                                                 'ng-model' => 'rec.sale.category_id',
-                                                ]) ?> 
+                                            ]) ?> 
                                         </label>
                                         
                                         <label class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"> <?=__('sale_tags')?> </span>
+                                            <span class="sm-txt"> <?= __('sale_tags') ?> </span>
                                             <tags-input ng-model="rec.sale.sale_tags" class="wb-txt-inp" tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
                                                 <auto-complete min-length="1" source="loadTags($query, 'categories', 40)"></auto-complete>
                                             </tags-input>
                                         </label>
                                         
                                         <label class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"> <?=__('sale_budget')?> </span>
+                                            <span class="sm-txt"> <?= __('sale_budget') ?> </span>
                                             <div class="input-group">
                                                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="fas-dollar"></i>
@@ -1070,60 +1241,61 @@
                                             </div>
                                             </label>
                                         <label class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"> <?=__('salespec_propertytype')?> </span> 
+                                            <span class="sm-txt"> <?= __('salespec_propertytype') ?> </span> 
                                             <tags-input ng-model="rec.sale.sale_specs[0].salespec_propertytype" display-property="text" key-property="value" class="wb-txt-inp" tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
                                                     <auto-complete min-length="1" source="loadTags($query, 'categories', 159)"></auto-complete>
                                                 </tags-input>
                                         </label>
                                         <label class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"><?=__('salespec_beds')?></span>
+                                            <span class="sm-txt"><?= __('salespec_beds') ?></span>
                                             <tags-input ng-model="rec.sale.sale_specs[0].salespec_beds" display-property="text" key-property="value" class="wb-txt-inp" tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
                                                 <auto-complete min-length="1" source="loadTags($query, 'categories', 183)"></auto-complete>
                                             </tags-input>
                                         </label>
                                         <label class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"><?=__('place_of_stay')?></span>
+                                            <span class="sm-txt"><?= __('place_of_stay') ?></span>
                                             <div class="row" >
                                                 <div class="col-6 place_1">
                                                 <?= $this->Form->control('category_id', [
-                                                'class' => 'form-control has-feedback-left wb-txt-inp',
-                                                'label' => false,
-                                                'type' => 'select', 
-                                                // 'options' => $optionsLoc['City'],
-                                                'empty' => 'Please Select', 
-                                                'ng-model' => '',
+                                                    'class' => 'form-control has-feedback-left wb-txt-inp',
+                                                    'label' => false,
+                                                    'type' => 'select',
+                                                    // 'options' => $optionsLoc['City'],
+                                                    'empty' => 'Please Select',
+                                                    'ng-model' => '',
                                                 ]) ?>
                                                 </div>
                                                 <div class="col-6 place_2">
                                                 <?= $this->Form->control('category_id', [
-                                                'class' => 'form-control has-feedback-left wb-txt-inp',
-                                                'label' => false,
-                                                'type' => 'Budgetselect', 
-                                                // 'options' => $optionsLoc['Region'],
-                                                'empty' => 'Please Select', 
-                                                'ng-model' => '',
+                                                    'class' => 'form-control has-feedback-left wb-txt-inp',
+                                                    'label' => false,
+                                                    'type' => 'Budgetselect',
+                                                    // 'options' => $optionsLoc['Region'],
+                                                    'empty' => 'Please Select',
+                                                    'ng-model' => '',
                                                 ]) ?>
                                                 </div>
                                             </div>
                                         </label>
 
                                         <label class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"> <?=__('book_arrivedate')?> </span>
+                                            <span class="sm-txt"> <?= __('book_arrivedate') ?> </span>
                                             <input type="text" ng-model="rec.sale.books[0].book_arrivedate" class="wb-txt-inp" placeholder="Enter" />
                                         </label>
                                         <label class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"> <?=__('target_location')?>  </span>
+                                            <span class="sm-txt"> <?= __('target_location') ?>  </span>
                                             <input type="text" ng-model="rec.sale.sale_specs[0].salespec_location_target" class="wb-txt-inp" placeholder="Enter" />
                                         </label>
                                         <label class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"><?=__('buyer_persona')?> </span>
+                                            <span class="sm-txt"><?= __('buyer_persona') ?> </span>
                                             <?= $this->Form->control('category_id', [
                                                 'class' => 'form-control has-feedback-left wb-ele',
                                                 'label' => false,
-                                                'type' => 'select', 
+                                                'type' => 'select',
                                                 'options' => $options['Buyer Persona'],
-                                                'escape' => false, // Bu önemlidir, HTML'i kaçırmamak için escape özelliğini devre dışı bırakmalısınız.
-                                                'empty' => 'Please Select', 
+                                                'escape' => false,
+                                                // Bu önemlidir, HTML'i kaçırmamak için escape özelliğini devre dışı bırakmalısınız.
+                                                'empty' => 'Please Select',
                                                 'ng-model' => 'rec.sale.sale_specs[0].salespec_buyerpersona',
                                             ]) ?>
                                         </label>
@@ -1131,18 +1303,22 @@
 
 
                                         <label class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"> <?=__('social_style_model')?> </span>
+                                            <span class="sm-txt"> <?= __('social_style_model') ?> </span>
                                             
                                             <?= $this->Form->control('category_id', [
-                                            'class' => 'form-control has-feedback-left wb-ele',
-                                            'label' => false,
-                                            'type' => 'select', 
-                                            'options' => $options['Social Style'],
-                                            'empty' => 'Please Select', 
-                                            'ng-model' => 'rec.sale.sale_specs[0].salespec_socialstyle',
+                                                'class' => 'form-control has-feedback-left wb-ele',
+                                                'label' => false,
+                                                'type' => 'select',
+                                                'options' => $options['Social Style'],
+                                                'empty' => 'Please Select',
+                                                'ng-model' => 'rec.sale.sale_specs[0].salespec_socialstyle',
                                             ]) ?>
                                         </label> 
-                                        
+                                        <div class="down-btns mt-4 d-flex justify-content-end">
+                            <div class="flex-gap-10 ">
+                                <button class="btn btn-danger" id="" type="button"> Save Changes </button>
+                            </div>
+                        </div>
 
 
                                     </form>
@@ -1264,14 +1440,14 @@
                 
                 // $scope.loadTags = function(query, target) {
                 //     // return $http.get('/tags?query=' + query);
-                //     return $http.get('<?=$app_folder?>/admin/'+target+'?tags=1&keyword='+query)
+                //     return $http.get('<?= $app_folder ?>/admin/'+target+'?tags=1&keyword='+query)
                 //         .then(function(response, status) {
                 //             return response.data.data;
                 //         });
-                //     // return $http.get('<?=$app_folder?>/admin/'+target+'?tags=1&keyword='+query);
+                //     // return $http.get('<?= $app_folder ?>/admin/'+target+'?tags=1&keyword='+query);
                 // };
                 // $scope.loadTags = function(query, target) {
-                //     return $http.get('<?=$app_folder?>/admin/'+target+'?tags=1&keyword='+query);
+                //     return $http.get('<?= $app_folder ?>/admin/'+target+'?tags=1&keyword='+query);
                 //     //  return _doRequest('/admin/'+target+'?tags=1', {keyword: query}, 'post')
                 //      //.then(function(res){
                 //     //     console.log('res.data', res.data);
@@ -1863,7 +2039,7 @@
                         elm.bind("input", onChange);
 
                         function onChange() {
-                            $http.get('<?=$app_folder?>/webroot/js/fa4.json').then((data) => {
+                            $http.get('<?= $app_folder ?>/webroot/js/fa4.json').then((data) => {
                                 var html = '';
                                 for(var i=0; i<data.data.length; i++){
                                     if(data.data[i].indexOf( $scope.rec.category.category_configs.icon ) > -1|| $scope.rec.category.category_configs.icon.length == 0){
