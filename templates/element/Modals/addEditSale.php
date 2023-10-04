@@ -21,7 +21,7 @@
 
                 <button type="button" id="sale_btn" class="hideIt" ng-click=
                     "doGet('/admin/sales/index?list=1', 'list', 'sales');   rec.sale = {}; doClick('.close');
-                     newEntity('category');">
+                    newEntity('category');">
                 </button>
 
                 <!-- Sale form -->

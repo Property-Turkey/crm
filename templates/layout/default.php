@@ -91,13 +91,28 @@
 
     <div class="main-cover"></div>
 
-    <?php echo $this->element('header') ?>
+    <?php if($authUser){?>
+    
+        <?= $this->element("header"); ?>
+            
+    <?php }?>
+
+    <?php if(!$authUser){?>
+    
+    <?= $this->element("headerLog"); ?>
+        
+<?php }?>
 
     <div class="main-content">
         <?= $this->fetch('content'); ?>
     </div>
-
-    <?= $this->element('footer'); ?>
+    
+    <?php if($authUser){?>
+    
+        <?= $this->element('footer'); ?>
+            
+    <?php }?>
+    
 
     <div> <?php echo $this->element('Modals/login'); ?> </div>
 
@@ -524,7 +539,7 @@
                     if (res.data.status == 'SUCCESS') {
                         _opAlert(res.data.msg || '<?= __("login-success") ?>', "success");
                         $timeout(function(){
-                            window.location.href = res.data.redirect || $scope.app_folder + '/<?=$currlang?>';
+                            window.location.href = res.data.redirect || $scope.app_folder + '/admin/sales';
                         },500);
                     } else {
                         if (res.data.status == "NOT_ACTIVE") {

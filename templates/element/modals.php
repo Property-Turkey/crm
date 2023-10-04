@@ -30,8 +30,14 @@
       var viewSaleModal = $("#viewSale_mdl");
         viewSaleModal.css("z-index", "");
     }
+    
     $("#closeModal").on("click", function() {
         setCZIndex();
+    });
+
+    // Remove z-index when modal is hidden
+    $("#subModal").on("hidden.bs.modal", function () {
+      setCZIndex();
     });
 
   });

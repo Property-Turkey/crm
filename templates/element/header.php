@@ -85,7 +85,7 @@
       <a href="#" class="notifications">
        <i class="fas-bell-alt"></i>
       </a>
-      <a href="#" class="profile">
+      <a href="#" class="profile" >
        <img src="\crm\webroot\img\user.png" alt="" />
       </a>
      </div>

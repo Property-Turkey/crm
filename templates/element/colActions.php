@@ -56,7 +56,7 @@
     if($ctrl != 'results'){
 ?>
 
-<div style="min-width: 80px;">
+<div>
 
     <?php if(isset($col)){ // Sort by column?>
         
@@ -67,7 +67,7 @@
                     rec.search.direction = sort['<?=$col?>'];
                     doGetDelay('/admin/<?=$url?>?from=<?=@$from?>&to=<?=@$to?>&direction='+sort['<?=$col?>']+'&col=<?=$col?>&list=1', 'list', '<?=$ctrl?>');
                 "> 
-                    <i class="fa fa-{{sort['<?=$col?>']=='ASC' ? 'sort-amount-asc' : 'sort-amount-desc'}}"></i> 
+                    <i style="color: black"class="fa fa-{{sort['<?=$col?>']=='ASC' ? 'sort-amount-asc' : 'sort-amount-desc'}}"></i> 
                 </a>
             </span>
     <?php } ?>

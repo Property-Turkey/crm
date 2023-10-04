@@ -45,8 +45,7 @@ class BooksTable extends Table
 
         $this->belongsTo('Sales', [
             'foreignKey' => 'sale_id',
-            'className' => 'Sales',
-
+            'joinType' => 'INNER',
         ]);
     }
 
@@ -72,11 +71,11 @@ class BooksTable extends Table
             ->allowEmptyString('book_current_stay');
 
         $validator
-            ->dateTime('book_meetdate')
-            ->allowEmptyDateTime('book_meetdate');
+            ->allowEmptyString('book_meetperiod');
 
         $validator
-            ->allowEmptyString('book_meetperiod');
+            ->dateTime('book_meetdate')
+            ->allowEmptyDateTime('book_meetdate');
 
         $validator
             ->scalar('book_meetplace')

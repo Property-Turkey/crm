@@ -12,8 +12,8 @@ use Cake\ORM\Entity;
  * @property int $sale_id
  * @property \Cake\I18n\FrozenTime|null $book_arrivedate
  * @property string|null $book_current_stay
- * @property \Cake\I18n\FrozenTime|null $book_meetdate
  * @property int|null $book_meetperiod
+ * @property \Cake\I18n\FrozenTime|null $book_meetdate
  * @property string|null $book_meetplace
  * @property \Cake\I18n\FrozenTime $stat_created
  * @property int $rec_state
@@ -35,8 +35,8 @@ class Book extends Entity
         'sale_id' => true,
         'book_arrivedate' => true,
         'book_current_stay' => true,
-        'book_meetdate' => true,
         'book_meetperiod' => true,
+        'book_meetdate' => true,
         'book_meetplace' => true,
         'stat_created' => true,
         'rec_state' => true,

@@ -21,12 +21,12 @@ class BooksFixture extends TestFixture
             [
                 'id' => 1,
                 'sale_id' => 1,
-                'book_arrivedate' => '2023-08-15 13:14:24',
+                'book_arrivedate' => '2023-10-03 14:29:34',
                 'book_current_stay' => 'Lorem ipsum dolor sit amet',
-                'book_meetdate' => '2023-08-15 13:14:24',
                 'book_meetperiod' => 1,
+                'book_meetdate' => '2023-10-03 14:29:34',
                 'book_meetplace' => 'Lorem ipsum dolor sit amet',
-                'stat_created' => '2023-08-15 13:14:24',
+                'stat_created' => '2023-10-03 14:29:34',
                 'rec_state' => 1,
             ],
         ];

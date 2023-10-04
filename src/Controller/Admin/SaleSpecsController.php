@@ -102,12 +102,17 @@ class SaleSpecsController extends AppController
         // edit mode
         if ($this->request->is(['patch', 'put'])) {
             $rec = $this->SaleSpecs->get($dt['id']);
+            $dt['salespec_propertytype'] = json_encode( $dt['salespec_propertytype'] );
+            $dt['salespec_beds'] = json_encode( $dt['salespec_beds'] );
             $rec = $this->SaleSpecs->patchEntity($rec, $dt); 
+            dd('adsasdas');
         }
 
         // add mode
         if ($this->request->is(['post'])) {
             $dt['id'] = null;
+            $dt['salespec_propertytype'] = json_encode( $dt['salespec_propertytype'] );
+            $dt['salespec_beds'] = json_encode( $dt['salespec_beds'] );
             $rec = $this->SaleSpecs->newEntity($dt);
             // dd($rec);
             

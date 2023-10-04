@@ -199,19 +199,14 @@ class ClientsController extends AppController
         if ($this->request->is(['patch', 'put'])) {
 
             $rec = $this->Clients->get($dt['id'], ['contain'=>['Sources','Reports']]);
-            // if(isset($dt['city'][0]['value'])){
-            //     $rec->adrs_city = $dt['city'][0]['value'];
-            // }
-            // if(isset($dt['country'][0]['value'])){
-            //     $rec->adrs_city = $dt['country'][0]['value'];
-            // }
-            // if(isset($dt['region'][0]['value'])){
-            //     $rec->adrs_city = $dt['region'][0]['value'];
-            // }
+            
             $rec = $this->Clients->patchEntity($rec, $dt);
- 
+
 
         }
+
+
+        
         // add mode
         if ($this->request->is(['post'])) {
             $dt['id'] = null;
@@ -219,16 +214,11 @@ class ClientsController extends AppController
             
             $rec = $this->Clients->newEntity($dt);
             
-            if(isset($dt['city'][0]['value'])){
-                $rec->adrs_city = $dt['city'][0]['value'];
-            }
-            if(isset($dt['country'][0]['value'])){
-                $rec->adrs_city = $dt['country'][0]['value'];
-            }
-            if(isset($dt['region'][0]['value'])){
-                $rec->adrs_city = $dt['region'][0]['value'];
-            }
+            dd($rec);
         }
+
+
+
         if ($this->request->is(['post', 'patch', 'put'])) {
             $this->autoRender = false;
             if ($newRec = $this->Clients->save($rec)) {

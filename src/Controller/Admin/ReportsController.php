@@ -65,10 +65,17 @@ class ReportsController extends AppController
                 $data = $this->Do->convertJson($data);
             }
 
-            // dd($data);
-            echo json_encode( 
-                [ "status"=>"SUCCESS",  "data"=>$data, "paging"=>$this->Paginator->getPagingParams()["Reports"]], 
-                JSON_UNESCAPED_UNICODE); die();
+            // Check if 'Reports' key exists before accessing it
+            $pagingParams = $this->Paginator->getPagingParams();
+            $reportsData = isset($pagingParams['Reports']) ? $pagingParams['Reports'] : [];
+
+            echo json_encode([
+                "status" => "SUCCESS",
+                "data" => $data,
+                "paging" => $reportsData, // Use the checked value here
+            ], JSON_UNESCAPED_UNICODE);
+            die();
+
         }
 
 

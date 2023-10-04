@@ -120,14 +120,18 @@ class SalesController extends AppController
                         "SaleSpecs.Style",
                         "Offers",
                         "Reservations",
+                        "Reservations.Payment",
                     ],
                 ])->toArray();
                 
-                
-                
-                // dd($data["SaleSpecs"]);
+                $data["name"] = [
+                    [
+                    "text"=>$data['client']['client_name'],
+                    "value"=>$data['client_id']
+                    ]
+                ];
 
-
+                
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
                 die();
             }
@@ -149,41 +153,11 @@ class SalesController extends AppController
                         "Pools",
                         "Tags",
                         "Offers",
-                        
+                        "Usersale",                 
                     ],
-                    
                 ]); 
-                // $data = $this->Sales->find('all', [
-                //     "order" => [$_col => $_dir],
-                //     "conditions" => $conditions,
-                //     "contain" => [
-                //         "Clients",
-                //         "Categories",
-                //         "Sources",
-                //         'Reports.Status',
-                //         'Reports.Type',
-                //         "Books",
-                //         "Pools",
-                //         "Tags",
-                //     ],
-                // ]);
-
             }
 
-            // // CLIENTS LIST
-            // if (!empty($_clientsList)) {
-            //     $clientListCond = [];
-            //     if (!empty($_clientsList)) {
-            //         $clientListCond = ["client_name LIKE" => '%' . $_clientsList . '%'];
-            //     }
-            //     $clients = $this->Clients->find('list', ["order" => ["client_name" => "ASC"], "conditions" => $clientListCond]);
-            //     echo json_encode(
-            //         ["status" => "SUCCESS", "data" => $this->Do->convertJson($clients)],
-            //         JSON_UNESCAPED_UNICODE
-            //     );
-            //     die();
-            // }
-            
             echo json_encode(
                 [
                     "status" => "SUCCESS",
@@ -194,6 +168,9 @@ class SalesController extends AppController
             );
             die();
         }
+
+
+
         $categories = [
             'Type' => [37],
             'Source' => [33],
@@ -202,15 +179,11 @@ class SalesController extends AppController
             'Buyer Persona' => [170],
             'Social Style' => [171],
             'Payment Type' => [198],
+            'Pool' => [28],
+            'Status' => [73],
         ];
         
-        // $categoriesLocation = [
-        //     'City' => [],
-        // ];
-
-        
         $options = [];
-        $optionsLoc = [];
         
         foreach ($categories as $categoryName => $parentIds) {
             $categoriesList = $this->getTableLocator()->get('Categories')->find('all')
@@ -224,18 +197,6 @@ class SalesController extends AppController
             }
         }
 
-        // foreach ($categoriesLocation as $categoryName => $parentIds) {
-        //     $categoriesList = $this->getTableLocator()->get('AddressCategories')->find('all')
-        //         ->where(['parent_id IN' => $parentIds])
-        //         ->toArray();
-        
-        //     $optionsLoc[$categoryName] = [];
-        
-        //     foreach ($categoriesList as $category) {
-        //         $optionsLoc[$categoryName][$category->id] = $category->category_name;
-        //     }
-        // }
-        
         $this->set(compact('options'));
         
     }
@@ -259,16 +220,30 @@ class SalesController extends AppController
 
         // edit mode
         if ($this->request->is(['patch', 'put'])) {
-            
             $rec = $this->Sales->get($dt['id'], ['contain'=>['Sources','Reports','SaleSpecs','Usersale','Books']]);
-            $dt['sale_tags'] = json_encode( $dt['sale_tags'] );
-            if(isset($dt['client'][0]['value'])){
-                $rec->client_id = $dt['client'][0]['value'];
+            
+            // Dönüşüm işlemi için salespecs dizisini alın
+            $saleSpecs = $dt['sale_specs'];
+            
+            // salespecs dizisini dönerek özel alanları dönüştürün
+            foreach ($saleSpecs as &$saleSpec) {
+                if (isset($saleSpec['salespec_propertytype'])) {
+                    $saleSpec['salespec_propertytype'] = json_encode($saleSpec['salespec_propertytype']);
+                }
+                if (isset($saleSpec['salespec_beds'])) {
+                    $saleSpec['salespec_beds'] = json_encode($saleSpec['salespec_beds']);
+                }
             }
-            $rec = $this->Sales->patchEntity($rec, $dt); 
-           
-            // $rec->sale_tags = json_encode($dt['sale_tags']);
-            // dd($rec);
+            
+            // Dönüştürülmüş salespecs dizisini geriye yerleştirin
+            $dt['sale_specs'] = $saleSpecs;
+            
+            // Diğer işlemleri yapmaya devam edin
+            $dt['sale_tags'] = json_encode($dt['sale_tags']);
+            if (isset($dt['name'][0]['value'])) {
+                $rec->client_id = $dt['name'][0]['value'];
+            }
+            $rec = $this->Sales->patchEntity($rec, $dt);
         }
 
         // add mode
@@ -284,7 +259,7 @@ class SalesController extends AppController
             if(isset($dt['client'][0]['value'])){
                 $rec->client_id = $dt['client'][0]['value'];
             }
-            
+            // dd($rec);
             
             // $rec->sale_tags = json_encode($dt['sale_tags']);
         }
@@ -296,7 +271,7 @@ class SalesController extends AppController
             unset($rec['source']);
             unset($rec['tag']);
             unset($rec['report']);
-            unset($rec['book']);
+            unset($rec['books']);
 
             if ($newRec = $this->Sales->save($rec)) {
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);

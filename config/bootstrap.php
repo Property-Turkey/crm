@@ -259,6 +259,7 @@ Configure::write('rec_stateSale', [
     6 => [1 => 'New', 2 => 'Deposit', 3 => 'Invoiced', 4 => 'Commission collected'],
     7 => [1 => 'New', 2 => 'Ongoing']
 ]);
+Configure::write('emphaty_heads', [ 1=>'Verbal Expressions', 2=>'Inner Thoughts', 3=>'Observable Actions', 4=>'Emotional Responses']);
 
 
 Configure::write('ROLES', [

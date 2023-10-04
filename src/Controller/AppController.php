@@ -33,7 +33,7 @@ class AppController extends Controller
         $this->loadComponent('Paginator');
 		$this->loadComponent('Auth',[
             // 'authorize' => ['Controller'],
-            'authError' => __('not_allowed'),
+            // 'authError' => __('not_allowed'),
             'storage' => 'Session',
             'loginAction' => [
                 'controller' => 'Users',
@@ -52,7 +52,7 @@ class AppController extends Controller
                 ],
             'loginAction' => '/?login=1',
             'logoutRedirect' => '/',
-            'authError' => __('not_allowed'), 
+            // 'authError' => __('not_allowed'), 
 		]);
 
         $this->Auth->deny();

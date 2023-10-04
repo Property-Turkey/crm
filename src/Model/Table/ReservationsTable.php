@@ -28,6 +28,14 @@ class ReservationsTable extends Table
             'foreignKey' => 'sale_id',
             'joinType' => 'INNER',
         ]);
+
+        $this->belongsTo('Payment', [
+            'foreignKey' => 'reservation_paytype',
+            'className' => 'Categories',
+        ]);
+
+
+
     }
 
     /**

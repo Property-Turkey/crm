@@ -8,25 +8,6 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-/**
- * Usersale Model
- *
- * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
- *
- * @method \App\Model\Entity\Usersale newEmptyEntity()
- * @method \App\Model\Entity\Usersale newEntity(array $data, array $options = [])
- * @method \App\Model\Entity\Usersale[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Usersale get($primaryKey, $options = [])
- * @method \App\Model\Entity\Usersale findOrCreate($search, ?callable $callback = null, $options = [])
- * @method \App\Model\Entity\Usersale patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Usersale[] patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\Usersale|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Usersale saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Usersale[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\Usersale[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \App\Model\Entity\Usersale[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\Usersale[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
- */
 class UsersaleTable extends Table
 {
     /**
