@@ -88,7 +88,8 @@ class LogsController extends AppController
             }
 
             echo json_encode( 
-                [ "status"=>"SUCCESS",  "data"=>$data, "paging"=>$this->Paginator->getPagingParams()["Logs"]], 
+                [ "status"=>"SUCCESS",  "data"=>$data, 
+                "paging" => $this->request->getAttribute('paging')['Logs']], 
                 JSON_UNESCAPED_UNICODE); die();
         }
 

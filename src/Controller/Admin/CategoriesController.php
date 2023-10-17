@@ -98,7 +98,8 @@ class CategoriesController extends AppController
             echo json_encode([
                     "status"=>"SUCCESS", 
                     "data"=>$this->Do->convertJson($categories), 
-                    "paging"=>$this->Paginator->getPagingParams()["Categories"]
+                    "paging" => $this->request->getAttribute('paging')['Categories']
+
                 ], JSON_UNESCAPED_UNICODE);  die();
             
         }

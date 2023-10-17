@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\UsersaleController;
+use App\Controller\UserSaleController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Controller\UsersaleController Test Case
+ * App\Controller\UserSaleController Test Case
  *
- * @uses \App\Controller\UsersaleController
+ * @uses \App\Controller\UserSaleController
  */
-class UsersaleControllerTest extends TestCase
+class UserSaleControllerTest extends TestCase
 {
     use IntegrationTestTrait;
 
@@ -22,15 +22,16 @@ class UsersaleControllerTest extends TestCase
      * @var array<string>
      */
     protected $fixtures = [
-        'app.Usersale',
+        'app.UserSale',
         'app.Users',
+        'app.Sales',
     ];
 
     /**
      * Test index method
      *
      * @return void
-     * @uses \App\Controller\UsersaleController::index()
+     * @uses \App\Controller\UserSaleController::index()
      */
     public function testIndex(): void
     {
@@ -41,7 +42,7 @@ class UsersaleControllerTest extends TestCase
      * Test view method
      *
      * @return void
-     * @uses \App\Controller\UsersaleController::view()
+     * @uses \App\Controller\UserSaleController::view()
      */
     public function testView(): void
     {
@@ -52,7 +53,7 @@ class UsersaleControllerTest extends TestCase
      * Test add method
      *
      * @return void
-     * @uses \App\Controller\UsersaleController::add()
+     * @uses \App\Controller\UserSaleController::add()
      */
     public function testAdd(): void
     {
@@ -63,7 +64,7 @@ class UsersaleControllerTest extends TestCase
      * Test edit method
      *
      * @return void
-     * @uses \App\Controller\UsersaleController::edit()
+     * @uses \App\Controller\UserSaleController::edit()
      */
     public function testEdit(): void
     {
@@ -74,7 +75,7 @@ class UsersaleControllerTest extends TestCase
      * Test delete method
      *
      * @return void
-     * @uses \App\Controller\UsersaleController::delete()
+     * @uses \App\Controller\UserSaleController::delete()
      */
     public function testDelete(): void
     {

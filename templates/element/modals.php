@@ -23,7 +23,8 @@
   </div>
 </div>
 
-<script>
+
+<script> 
   $(document).ready(function() {
 
     function setCZIndex() {
@@ -42,3 +43,4 @@
 
   });
 </script>
+

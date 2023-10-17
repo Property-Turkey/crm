@@ -30,7 +30,7 @@ class AppController extends Controller
 
         $this->loadComponent('Images');
         $this->loadComponent('Do');
-        $this->loadComponent('Paginator');
+        // $this->loadComponent('Paginator');
 		$this->loadComponent('Auth',[
             // 'authorize' => ['Controller'],
             // 'authError' => __('not_allowed'),

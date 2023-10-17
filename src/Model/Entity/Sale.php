@@ -34,7 +34,7 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\Category $type
  * @property \App\Model\Entity\Report[] $reports
  * @property \App\Model\Entity\Book[] $books
- * @property \App\Model\Entity\Usersale[] $usersale
+ * @property \App\Model\Entity\UserSale[] $usersale
  * @property \App\Model\Entity\SaleSpec[] $sale_specs
  */
 class Sale extends Entity

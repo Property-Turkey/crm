@@ -132,7 +132,10 @@ class ClientsController extends AppController
              
             echo json_encode( 
                 [ "status"=>"SUCCESS",  "data"=>$this->Do->convertJson( $data), 
-                "paging"=>$this->Paginator->getPagingParams()["Clients"]], 
+                "paging" => $this->request->getAttribute('paging')['Clients']
+
+            
+            ], 
                 JSON_UNESCAPED_UNICODE); die();
         }
 
@@ -191,47 +194,55 @@ class ClientsController extends AppController
     
     public function save($id = -1) 
     {
-
-
         $dt = json_decode(file_get_contents('php://input'), true);
         
-        // edit mode
+        // Edit mode
         if ($this->request->is(['patch', 'put'])) {
-
-            $rec = $this->Clients->get($dt['id'], ['contain'=>['Sources','Reports']]);
-            
+            $rec = $this->Clients->get($dt['id'], ['contain' => ['Sources', 'Reports']]);
+    
+            //Remove spaces and symbols from the number
+            $clientMobile = $dt['client_mobile'];
+            $clientMobile = preg_replace("/[^0-9]/", "", $clientMobile);
+            $dt['client_mobile'] = $clientMobile;
+    
+            $clientPhone = $dt['client_phone'];
+            $clientPhone = preg_replace("/[^0-9]/", "", $clientPhone);
+            $dt['client_phone'] = $clientPhone;
+    
             $rec = $this->Clients->patchEntity($rec, $dt);
-
-
         }
-
-
-        
-        // add mode
+    
+        // Add mode
         if ($this->request->is(['post'])) {
             $dt['id'] = null;
             $dt['stat_created'] = date('Y-m-d H:i:s');
-            
+    
+            //Remove spaces and symbols from the number
+            $clientMobile = $dt['client_mobile'];
+            $clientMobile = preg_replace("/[^0-9]/", "", $clientMobile);
+            $dt['client_mobile'] = $clientMobile;
+    
+            $clientPhone = $dt['client_phone'];
+            $clientPhone = preg_replace("/[^0-9]/", "", $clientPhone);
+            $dt['client_phone'] = $clientPhone;
+    
             $rec = $this->Clients->newEntity($dt);
-            
-            dd($rec);
         }
-
-
-
+    
         if ($this->request->is(['post', 'patch', 'put'])) {
             $this->autoRender = false;
+            
             if ($newRec = $this->Clients->save($rec)) {
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
                 die();
             }
-
-
+    
             echo json_encode(["status" => "FAIL", "data" => $rec->getErrors()]);
             die();
         }
-        
     }
+    
+    
     
 	
     public function delete($id = null)

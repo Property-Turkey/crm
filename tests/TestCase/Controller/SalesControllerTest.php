@@ -32,7 +32,7 @@ class SalesControllerTest extends TestCase
         'app.Type',
         'app.Reports',
         'app.Books',
-        'app.Usersale',
+        'app.UserSale',
         'app.SaleSpecs',
     ];
 

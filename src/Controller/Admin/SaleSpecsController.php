@@ -77,7 +77,7 @@ class SaleSpecsController extends AppController
                 [
                     "status" => "SUCCESS",
                     "data" => $this->Do->convertJson($data),
-                    "paging" => $this->Paginator->getPagingParams()["SaleSpecs"]
+                    "paging" => $this->request->getAttribute('paging')['SaleSpecs']
                 ],
                 JSON_UNESCAPED_UNICODE
             );

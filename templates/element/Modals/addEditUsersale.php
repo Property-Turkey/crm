@@ -24,7 +24,7 @@
                         
                         
                             <form  ng-if="rec.sale.id" class="row" id="usersale_form" ng-submit="
-                                rec.usersale.lead_id = rec.sale.id; 
+                                rec.usersale.sale_id = rec.sale.id; 
                                 doSave(rec.usersale, 'usersale', 'usersale', '#usersale_btn', '#usersale_preloader');">
 
                                 <!-- Existing form fields ... -->

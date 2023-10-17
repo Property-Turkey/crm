@@ -22,8 +22,15 @@
                                 "templates" => [ "inputContainer" => "{{content}}"]
                             ]) ?>
     </label>
+
+    <label>
+    <input type="checkbox" name="remember_me" ng-model="userdt.rememberMe">
+    Remember Me
+</label>
+
+
     <div class="btn-container">
-        <button class="btn btn-danger" id="login_btn">
+        <button class="btn btn-danger-login" id="login_btn">
                                 <span><i class="icon-login"></i></span> <?= __('login') ?>
                             </button>
     </div>

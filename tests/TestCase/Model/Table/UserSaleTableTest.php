@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\UsersaleTable;
+use App\Model\Table\UserSaleTable;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\UsersaleTable Test Case
+ * App\Model\Table\UserSaleTable Test Case
  */
-class UsersaleTableTest extends TestCase
+class UserSaleTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\UsersaleTable
+     * @var \App\Model\Table\UserSaleTable
      */
-    protected $Usersale;
+    protected $UserSale;
 
     /**
      * Fixtures
@@ -24,8 +24,9 @@ class UsersaleTableTest extends TestCase
      * @var array<string>
      */
     protected $fixtures = [
-        'app.Usersale',
+        'app.UserSale',
         'app.Users',
+        'app.Sales',
     ];
 
     /**
@@ -36,8 +37,8 @@ class UsersaleTableTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('Usersale') ? [] : ['className' => UsersaleTable::class];
-        $this->Usersale = $this->getTableLocator()->get('Usersale', $config);
+        $config = $this->getTableLocator()->exists('UserSale') ? [] : ['className' => UserSaleTable::class];
+        $this->UserSale = $this->getTableLocator()->get('UserSale', $config);
     }
 
     /**
@@ -47,8 +48,30 @@ class UsersaleTableTest extends TestCase
      */
     protected function tearDown(): void
     {
-        unset($this->Usersale);
+        unset($this->UserSale);
 
         parent::tearDown();
+    }
+
+    /**
+     * Test validationDefault method
+     *
+     * @return void
+     * @uses \App\Model\Table\UserSaleTable::validationDefault()
+     */
+    public function testValidationDefault(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     * @uses \App\Model\Table\UserSaleTable::buildRules()
+     */
+    public function testBuildRules(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
     }
 }

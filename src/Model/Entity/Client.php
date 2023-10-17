@@ -11,8 +11,8 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property int|null $source_id
  * @property string $client_name
- * @property int|null $client_phone
- * @property int|null $client_mobile
+ * @property string|null $client_phone
+ * @property string|null $client_mobile
  * @property string|null $client_email
  * @property string|null $client_address
  * @property string|null $client_nationality
@@ -23,7 +23,10 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $stat_created
  * @property int $rec_state
  *
- * @property \App\Model\Entity\ClientSpec[] $client_specs
+ * @property \App\Model\Entity\Category $source
+ * @property \App\Model\Entity\Category $country
+ * @property \App\Model\Entity\Category $city
+ * @property \App\Model\Entity\Category $region
  * @property \App\Model\Entity\Report[] $reports
  */
 class Client extends Entity
@@ -51,6 +54,10 @@ class Client extends Entity
         'adrs_region' => true,
         'stat_created' => true,
         'rec_state' => true,
+        'source' => true,
+        'country' => true,
+        'city' => true,
+        'region' => true,
         'reports' => true,
     ];
 }

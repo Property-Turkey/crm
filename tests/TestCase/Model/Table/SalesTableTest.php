@@ -34,7 +34,7 @@ class SalesTableTest extends TestCase
         'app.Type',
         'app.Reports',
         'app.Books',
-        'app.Usersale',
+        'app.UserSale',
         'app.SaleSpecs',
     ];
 

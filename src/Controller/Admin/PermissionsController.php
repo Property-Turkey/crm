@@ -81,7 +81,9 @@ class PermissionsController extends AppController
             }
              
             echo json_encode( 
-                [ "status"=>"SUCCESS",  "data"=>$this->Do->convertJson( $data, $permissions ), "paging"=>$this->Paginator->getPagingParams()["Permissions"]], 
+                [ "status"=>"SUCCESS",  "data"=>$this->Do->convertJson( $data, $permissions ),
+                 "paging" => $this->request->getAttribute('paging')['Permissions']
+                ], 
                 JSON_UNESCAPED_UNICODE); die();
         }
 

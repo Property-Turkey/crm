@@ -6,7 +6,7 @@ use Cake\Database\Driver\Mysql;
 use Cake\Log\Engine\FileLog;
 use Cake\Mailer\Transport\MailTransport;
 
-$isLocal = env('SERVER_NAME') == 'localhost' ? true : true;
+$isLocal = env('SERVER_NAME') == 'localhost' ? true : false;
 $isDebug = empty($_GET['debug']) ? $isLocal : true;
 
 return [
@@ -367,10 +367,10 @@ return [
              */
             //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
             
-            'username' => 'root' ,
-            'password' => '',
-            
-            'database' => 'ptcrm',
+            'username' => $isLocal ? 'root' : 'ptdev_crm',
+            'password' => $isLocal ? '' : '--Password--',
+
+            'database' => $isLocal ? 'ptcrm' : 'ptdev_crm',
         ],
 
         /*

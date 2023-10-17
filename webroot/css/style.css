@@ -52,14 +52,15 @@ a {
   text-decoration: none;
 }
 
-.btn-danger {
+.btn-danger-login {
   padding: 12px 35px;
   font-size: var(--fs_18);
   border-radius: 10px;
   background-color: #ef3c3c;
+  color: white;
 }
 
-.btn-danger:hover {
+.btn-danger-login:hover {
   background-color: #ef3c3c;
 }
 
@@ -341,8 +342,38 @@ header .logo img {
 .login label {
   margin-bottom: 20px;
 }
+.step-container {
+  position: relative;
+  text-align: center;
+  transform: translateY(-43%);
+  margin-top: -10px;
+}
+.step-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50px;
+  padding: 10px;
+  background-color: #e0ffe4;
+  border: 2px solid #3bc14a;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  cursor: pointer;
+  color: #59cc65;
+  font-size: 12px;
+}
+
+
+#multi-step-form{
+overflow-x: hidden;
+}
 
 /* --------------------------- Login Page End -------------------- */
+
+
+
 @media (max-width: 992px) {
   :root {
     --fs_18: 14px;
@@ -397,6 +428,15 @@ header .logo img {
 
 .form-control {
   border: 1px solid #c7c7c7;
+}
+
+/* Currency Select Input */
+.input-group .input{
+  width: 28%;
+
+}
+.input-group .cur-inp {
+  border-radius: 10px 0px 0px 10px;
 }
 
 .form-control:focus {
@@ -479,15 +519,25 @@ a {
   gap: 10px;
 }
 
+/* For Finance chekcs color */
+.greenText {
+  color: #28B293;
+}
+
+.redText {
+  color: #e63e3e;
+}
+
 /* Inputs And Buttons */
 .wb-txt-inp {
-  position: relative;
   width: 100%;
   border: 1px solid #000000;
   border-radius: 10px;
   color: #000;
   padding: 7px 10px;
+  position: relative;
 }
+
 .place_1{
   padding-right: 0;
 }
@@ -520,10 +570,23 @@ a {
   align-items: center;
   gap: 10px;
   border-radius: 7px;
-  padding: 7px 10px;
+  padding: 12px 10px;
   font-size: 15px;
 }
 
+
+
+.wb-ele-select {
+  background-color: white;
+  border: 1px solid #171717;
+  display: flex;
+  font-weight: bold;
+  align-items: center;
+  gap: 10px;
+  border-radius: 7px;
+  padding: 10px 22px;
+  font-size: 15px;
+}
 .wb-ele img {
   width: 20px;
 }
@@ -654,14 +717,20 @@ input[type="checkbox"]:checked:after {
 }
 
 .sidebar {
-  z-index: 99999;
-  height: 100vh;
-  right: 100%;
-  transition: 0.3s;
+  width: 0;
+  height: 100%; 
   position: fixed;
   top: 0;
-  width: 100%;
-  background-color: #fff;
+  right: -300px; 
+  background-color: #fff; 
+  overflow-x: hidden;
+  transition: 0.5s; 
+  z-index: 1;
+}
+
+.sidebar.active {
+  width: 30%; 
+  right: 0; 
 }
 
 .sidebar .btn-exit {
@@ -677,10 +746,7 @@ input[type="checkbox"]:checked:after {
 
 .sidebar .btn-exit button {
   border: none;
-}
-
-.sidebar.active {
-  right: 0;
+  background: #eeeeee;
 }
 
 .sidebar .side-list {
@@ -734,7 +800,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .navbar .navbar-brand {
-  width: 80px;
+  width: 170px;
 }
 
 .navbar .nav-btns {
@@ -757,6 +823,10 @@ input[type="checkbox"]:checked:after {
   font-size: 35px;
 }
 
+
+auto-complete .autocomplete{
+  width: 120px;
+}
 /* pt dashbord */
 .client-num {
   font-size: 20px;
@@ -782,6 +852,7 @@ input[type="checkbox"]:checked:after {
   height: -moz-fit-content;
   height: -webkit-fit-content;
   height: fit-content;
+  padding: 12px 10px;
 }
 
 .dashboard {
@@ -1092,7 +1163,7 @@ input[type="checkbox"]:checked:after {
   background-color: white;
   color: rgba(0, 0, 0, 0.3);
   min-width: 26px;
-  height: 26px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1124,9 +1195,34 @@ input[type="checkbox"]:checked:after {
   width: 100%;
 }
 
-/* .modal .wb-ele {
-  width: 100%;
-} */
+
+.horizontal-scroll {
+  display: flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  padding-top: 5px;
+  padding-left: 5px;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/*Actions Section buttons */
+.white-box {
+  text-align: center; 
+}
+
+.button-container {
+  display: inline-block; 
+}
+
+.action-btn{
+  background-color: #fcfaf6dc;
+  margin: 5px;
+  flex: 1;
+}
+
 
 .inline-container>.row {
   margin: 0;
@@ -1182,9 +1278,9 @@ a.view-more {
   margin: 3px 0;
 }
 
-tags-input {
+/* tags-input {
   padding: 4px 6px !important;
-}
+} */
 
 tags-input .tags {
   border-radius: 5px !important;
@@ -1263,11 +1359,13 @@ tags-input .tags .even.selected {
   background-color: #e0ffe4;
   border: #3bc14a solid 2px;
   width: 170px;
-  padding: 6px 10px;
   border-radius: 11px;
-
   color: #3bc14a;
   text-align: center;
+  font-size: 12px;
+  padding: 14px;
+  margin:8px;
+  font-weight: 600;
 }
 
 .green-btn span {
@@ -1287,6 +1385,13 @@ tags-input .tags .even.selected {
   font-size: 15px;
 }
 
+.green-btn:hover {
+  background-color: #3bc14a; /* Koyu yeşil renk */
+  box-shadow: 15px 15px 20px rgba(0, 0, 0, 0.2); /* Gölge efekti */
+  transform: scale(1.05); /* Buton büyütme */
+  transition: all 0.3s; /* Daha pürüzsüz geçiş */
+  color: #e0ffe4;
+}
  .lead-preview .down-btns {
   padding-top: 20px;
   display: flex;
@@ -1501,6 +1606,16 @@ input:checked+.slider:before {
 
   .navbar {
     padding: 10px 0;
+  }
+  .sidebar {
+    z-index: 99999;
+    height: 100vh;
+    right: 100%;
+    transition: 0.3s;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #fff;
   }
 }
 

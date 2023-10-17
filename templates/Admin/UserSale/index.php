@@ -129,7 +129,7 @@
                                 
                                 <div class="col-4 hideWeb grid_header"><?=__('lead_id')?></div>
                                 <div class="col-md-2 col-8">
-                                    <a href="<?=$app_folder?>/admin/sales/index/{{itm.sale.id}}">[{{ itm.lead_id }}]</a></div>
+                                    <a href="<?=$app_folder?>/admin/sales/index/{{itm.sale.id}}">[{{ itm.sale_id }}]</a></div>
 
                                 
                                 <div class="col-4 hideWeb grid_header"><?=__('stat_created')?></div>

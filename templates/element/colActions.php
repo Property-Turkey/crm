@@ -67,8 +67,10 @@
                     rec.search.direction = sort['<?=$col?>'];
                     doGetDelay('/admin/<?=$url?>?from=<?=@$from?>&to=<?=@$to?>&direction='+sort['<?=$col?>']+'&col=<?=$col?>&list=1', 'list', '<?=$ctrl?>');
                 "> 
-                    <i style="color: black"class="fa fa-{{sort['<?=$col?>']=='ASC' ? 'sort-amount-asc' : 'sort-amount-desc'}}"></i> 
+                    <i style="color: black"class="fa fa-{{sort['<?=$col?>']=='ASC' ? 'sort-amount-asc' : 'sort-amount-desc'}}"></i>
+                    <span class="ml-1 text-dark" >Sort By </span>
                 </a>
+                
             </span>
     <?php } ?>
 

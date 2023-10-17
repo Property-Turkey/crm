@@ -104,9 +104,6 @@ class OffersController extends AppController
             if(!empty($_id)){
                 $data = $this->Offers-> get( $_id, [
                     'contain' => [
-                        'Reports.Status',
-                        'Reports.Type',
-                        "Sources",
                 ]])->toArray();
 
                 //dd( $data);
@@ -121,9 +118,6 @@ class OffersController extends AppController
                     "conditions"=>$conditions,
                     "limit"=>12,
                     'contain' => [
-                        'Reports.Status',
-                        'Reports.Type',
-                        "Sources",
                         
                     ]]);
                     
@@ -132,47 +126,12 @@ class OffersController extends AppController
              
             echo json_encode( 
                 [ "status"=>"SUCCESS",  "data"=>$this->Do->convertJson( $data), 
-                "paging"=>$this->Paginator->getPagingParams()["Offers"]], 
+                "paging" => $this->request->getAttribute('paging')['Offers']
+            ], 
                 JSON_UNESCAPED_UNICODE); die();
         }
 
        
-        //for list sources
-        $parentSourceIds = [33];
-        $categoriesSource = $this->getTableLocator()->get('Categories')->find('all')
-            ->where(['parent_id IN' => $parentSourceIds])
-            ->toArray();
-        
-        $optionsSource = [];
-        foreach ($categoriesSource as $category) {
-            $optionsSource[$category->id] = $category->category_name;
-        }
-     
-        //list for Status(for Report)
-        $parentStatusIds = [73];
-        $categoriesStatus = $this->getTableLocator()->get('Categories')->find('all')
-            ->where(['parent_id IN' => $parentStatusIds])
-            ->toArray();
-
-        $optionsStatus = [];
-        foreach ($categoriesStatus as $category) {
-            $optionsStatus[$category->id] = $category->category_name;
-        }
-
-        //list for Report Type(for Report)
-        $parentReportIds = [53];
-        $categoriesReport = $this->getTableLocator()->get('Categories')->find('all')
-            ->where(['parent_id IN' => $parentReportIds])
-            ->toArray();
-
-        $optionsReport = [];
-        foreach ($categoriesReport as $category) {
-            $optionsReport[$category->id] = $category->category_name;
-        }
-
-        $this->set(compact('optionsSource','optionsStatus','optionsReport'));
-
-
     }
     
     public function view($id = null)
@@ -198,7 +157,7 @@ class OffersController extends AppController
         // edit mode
         if ($this->request->is(['patch', 'put'])) {
 
-            $rec = $this->Offers->get($dt['id'], ['contain'=>['Sources','Reports']]);
+            $rec = $this->Offers->get($dt['id']);
             
             $rec = $this->Offers->patchEntity($rec, $dt);
 

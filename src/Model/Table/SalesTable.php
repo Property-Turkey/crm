@@ -70,7 +70,7 @@ class SalesTable extends Table
             'foreignKey' => 'sale_tags',
             'className' => 'Categories',
         ]);
-
+        
         $this->belongsTo('Categories', [
             'foreignKey' => 'category_id',
             'className' => 'Categories',
@@ -80,8 +80,7 @@ class SalesTable extends Table
             'foreignKey' => 'source_id',
             'className' => 'Categories',
         ]);
-
-
+        
         $this->belongsTo('Pools', [
             'foreignKey' => 'pool_id',
             'className' => 'Categories',
@@ -103,14 +102,14 @@ class SalesTable extends Table
 			'cascadeCallbacks' => true
         ])->setConditions(['Reports.tar_tbl'=>'Sales']);
 
-        $this->hasMany('Books', [
+        $this->hasOne('Books', [
             'foreignKey' => 'sale_id',
 			'dependent' => true,
 			'cascadeCallbacks' => true
         ]);
 
-        $this->hasMany('Usersale', [
-            'foreignKey' => 'lead_id',
+        $this->hasMany('UserSale', [
+            'foreignKey' => 'sale_id',
 			'dependent' => true,
 			'cascadeCallbacks' => true
         ]);

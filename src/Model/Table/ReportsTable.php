@@ -83,45 +83,45 @@ class ReportsTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator
-            ->integer('user_id')
-            ->notEmptyString('user_id');
+        // $validator
+        //     ->integer('user_id')
+        //     ->notEmptyString('user_id');
 
-        $validator
-            ->integer('tar_id')
-            ->requirePresence('tar_id', 'create')
-            ->notEmptyString('tar_id');
+        // $validator
+        //     ->integer('tar_id')
+        //     ->requirePresence('tar_id', 'create')
+        //     ->notEmptyString('tar_id');
 
-        $validator
-            ->scalar('tar_tbl')
-            ->maxLength('tar_tbl', 255)
-            ->requirePresence('tar_tbl', 'create')
-            ->notEmptyString('tar_tbl');
+        // $validator
+        //     ->scalar('tar_tbl')
+        //     ->maxLength('tar_tbl', 255)
+        //     ->requirePresence('tar_tbl', 'create')
+        //     ->notEmptyString('tar_tbl');
 
-        $validator
-            ->integer('status_id')
-            ->requirePresence('status_id', 'create')
-            ->notEmptyString('status_id');
+        // $validator
+        //     ->integer('status_id')
+        //     ->requirePresence('status_id', 'create')
+        //     ->notEmptyString('status_id');
 
-        $validator
-            ->integer('report_type')
-            ->allowEmptyString('report_type');
+        // $validator
+        //     ->integer('report_type')
+        //     ->allowEmptyString('report_type');
 
-        $validator
-            ->notEmptyString('report_priority');
+        // $validator
+        //     ->notEmptyString('report_priority');
 
-        $validator
-            ->scalar('report_text')
-            ->requirePresence('report_text', 'create')
-            ->notEmptyString('report_text');
+        // $validator
+        //     ->scalar('report_text')
+        //     ->requirePresence('report_text', 'create')
+        //     ->notEmptyString('report_text');
 
-        $validator
-            ->dateTime('stat_created')
-            ->requirePresence('stat_created', 'create')
-            ->notEmptyDateTime('stat_created');
+        // $validator
+        //     ->dateTime('stat_created')
+        //     ->requirePresence('stat_created', 'create')
+        //     ->notEmptyDateTime('stat_created');
 
-        $validator
-            ->notEmptyString('rec_state');
+        // $validator
+        //     ->notEmptyString('rec_state');
 
         return $validator;
     }

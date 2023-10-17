@@ -18,6 +18,7 @@ declare(strict_types=1);
 /*
  * Configure paths required to find CakePHP + general filepath constants
  */
+ob_start(); 
 require __DIR__ . DIRECTORY_SEPARATOR . 'paths.php';
 
 /*
@@ -45,6 +46,9 @@ use Cake\Mailer\Mailer;
 use Cake\Mailer\TransportFactory;
 use Cake\Routing\Router;
 use Cake\Utility\Security;
+use Cake\Error\ConsoleErrorHandler;
+use Cake\Error\ErrorHandler;
+
 
 /*
  * See https://github.com/josegonzalez/php-dotenv for API details.
@@ -188,6 +192,18 @@ ServerRequest::addDetector('tablet', function ($request) {
 });
 
 /*
+ * Register application error and exception handlers.
+ */
+$isCli = PHP_SAPI === 'cli';
+
+if ($isCli) { 
+    //(new ConsoleErrorHandler(Configure::read('Error')))->register(); 
+    (new ErrorTrap(Configure::read('Error')))->register(); 
+} else { 
+    //(new ErrorHandler(Configure::read('Error')))->register();
+    (new ExceptionTrap(Configure::read('Error')))->register(); 
+} 
+/*
  * You can enable default locale format parsing by adding calls
  * to `useLocaleParser()`. This enables the automatic conversion of
  * locale specific date formats. For details see
@@ -252,14 +268,49 @@ Configure::write('sale_priorities', [ 1=>'Insignificant', 2=>'Very Low Significa
 Configure::write('report_priorities', [ 1=>'top', 5=>'normal', 10=>'last']);
 Configure::write('sale_current_stage', [ 1=>'Source', 2=>'CC Supervisor', 3=>'CC', 4=>'Field Supervisor', 5=>'Field', 6=>'Accountant', 7=>'Aftersale']);
 Configure::write('rec_stateSale', [
-    2 => [1 => 'New', 2 => 'Nosale(archived)'],
-    3 => [1 => 'New', 2 => 'ongoing', 3 => 'Nosale', 4 =>'Reservation', 5 => 'Comission Collected', 6=> 'To Fix'],
-    4 => [1 => 'New', 2 => 'Nosale', 3 => 'To Fix'],
-    5 => [1 => 'New', 2 => 'Ongoing', 3 => 'Nosale', 4 =>'Reservation', 5 => 'Comission Collected'],
-    6 => [1 => 'New', 2 => 'Deposit', 3 => 'Invoiced', 4 => 'Commission collected'],
-    7 => [1 => 'New', 2 => 'Ongoing']
+	// admin, call center admin
+	2 => [
+		1 => 'New',
+		2 => 'Nosale(archived)'
+	],
+	// call center (sales advisor)
+	3 => [
+		1 => 'New',
+		2 => 'Attempt to call', 
+		3 => 'No Response 1', 
+		4 => 'No Response 2', 
+		5 => 'No Response 3', 
+		6 => 'Not Interested', 
+		7 => 'Interested', 
+		8 => 'Offers Sent', 
+		9 => 'Negotiation', 
+		10 => 'Offer Accepted', 
+		11 => 'Booked', 
+		12 => 'Reserved', 
+		13 => 'Nosale'
+	],
+	// field admin
+	4 => [
+		1 => 'New', 
+		2 => 'To Fix', 
+	],
+	// field
+	5 => [
+		1 => 'New', 
+		2 => 'Ongoing'
+	],
+	// accountant
+	6 => [
+		1 => 'New', 
+		2 => 'Invoice issued', 
+		3 => 'Commission collected'
+	],
+	// after sale
+	7 => [
+		1 => 'New', 
+		2 => 'Ongoing'
+	],
 ]);
-Configure::write('emphaty_heads', [ 1=>'Verbal Expressions', 2=>'Inner Thoughts', 3=>'Observable Actions', 4=>'Emotional Responses']);
 
 
 Configure::write('ROLES', [
@@ -274,6 +325,7 @@ Configure::write('ROLES', [
         'permissions'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
         'usersale'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
         'books'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
+        'reports'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
 
 
 	],

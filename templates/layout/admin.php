@@ -84,12 +84,18 @@
 
 
 <body class="nav-md" ng-app="app" ng-controller="ctrl as ctrl">
-    <?php if ($authUser) { ?>
-
+    <?php if($authUser){?>
+        
         <?= $this->element("header"); ?>
             
-    <?php } ?>
-    
+    <?php }?>
+
+    <?php if(!$authUser){?>
+
+        <?= $this->element("headerLog"); ?>
+            
+    <?php }?>
+        
     <!--  -->
     <?= $this->fetch("content"); ?>
     <!--  -->
@@ -315,6 +321,8 @@
         }
 
         var _setDate = function(dt, p, flag) {
+
+            console.log(dt)
             !dt ? dt = '' : dt;
             !p ? p = [0, 0, 0, 0, 0, 0] : p;
 
@@ -357,6 +365,25 @@
             }
             return res;
         }
+
+        function convertToAngularDateFormat(dateString) {
+            if (!dateString) {
+                return ''; // Boş bir string döndür
+            }
+
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+
+
+
+     
 
         var _filter = function(val) {
             if (typeof(val) != "string") return val;
@@ -441,6 +468,7 @@
                     1: '<?= __('yes') ?>'
                 },
                 
+
                 'roles': JSON.parse('<?= json_encode($this->Do->lcl($this->Do->get('roles'))) ?>'),
                 'langs': JSON.parse('<?= json_encode($this->Do->lcl($this->Do->get('langs'))) ?>'),
                 'currencies': JSON.parse('<?= json_encode($this->Do->get('currencies')) ?>'),
@@ -532,10 +560,10 @@
                     console.log("my new value array: ["+nwAr.join(',')+"]");
                 };
     
-                $scope._formatDate = function(dt) {
-                    var formattedDate = _setDate(dt, [0, 0, 0, 0, 0, 0], 'onlydate');
-                    $scope.rec.book.book_meetdate = formattedDate;
-                };
+                // $scope._formatDate = function(dt) {
+                //     var formattedDate = _setDate(dt, [0, 0, 0, 0, 0, 0], 'onlydate');
+                //     $scope.rec.book.book_meetdate = formattedDate;
+                // };
                 $scope.filesInfo = {
                     project_photos: []
                 };
@@ -615,6 +643,15 @@
                     
                 };
 
+                $scope.setDate = function(dt, p, flag) {
+                    return _setDate (dt, p, flag) 
+                }
+
+                $scope.convertToAngularDateFormat = function(dateString) {
+                    return _convertToAngularDateFormat (dateString) 
+                }
+
+                
 
                 $scope.parseDateTime = function(dateTimeString) {
                     var dateTimeParts = dateTimeString.split(' ');
@@ -631,7 +668,7 @@
 
                     // TAG INPUT
                     $scope.loadTags = function(query, target, parent) {
-                        if (target === 'categories') {
+                        if (target === 'categories' || target === 'addresses') {
                             return $http.get('<?= $app_folder ?>/admin/' + target + '?tags=1&keyword=' + query + '&parent=' + parent)
                                 .then(function (response, status) {
                                     return response.data.data;
@@ -644,10 +681,6 @@
                         }
                     };
 
-                    $scope.loadAdvisors = function (query) {
-                        return $http.get("/advisors?query=" + query);
-                    };
-
                     // This function creates or removes Elements based on stat, element, and tar
                     $scope.inlineElement = function (tar, stat, element) {
                         
@@ -656,13 +689,12 @@
                             let elementsCreated = "";
                             if (element === "empathy") {
                                 elementsCreated = $compile(`
-                                <form class="row inlineElement" ng-submit="
-                                rec.reports.tar.id = rec.sale.id;
-
-                                    doSave(rec.report, 'report', 'reports', '#report_btn', 
-                                '#report_preloader');">
-                                
-                                    <label for="" class="mr-2 col-md-6 col-12 col-lg-3" ng-repeat="report in rec.reports" ng-if="report.report_type == '61'">
+                                <form class="row inlineElement" 
+                                    ng-submit="
+                                    rec.report.tar_id = rec.sale.id; 
+                                    rec.report.tar_tbl = 'Sales'; 
+                                    doSave(rec.report, 'report', 'reports', '#report_btn', '#report_preloader');">
+                                    <label for="" class="mr-2 col-md-6 col-12 col-lg-3">
                                         <span class="sm-txt"><?= __('verbal_expressions') ?></span>
                                         <textarea
                                             class="wb-txt-inp"
@@ -670,444 +702,359 @@
                                             id=""
                                             cols="30"
                                             rows="3"
-                                            ng-model="report.report_text"
+                                            ng-model="rec.report[0].report_text"
                                             placeholder="What The Client Says"
                                         ></textarea>
                                     </label>
 
-                                <div class="down-btns mt-4 d-flex justify-content-end">
-                                    <div class="flex-gap-10">
-                                        <button class="btn btn-danger" id="report_preloader" type="submit"><?= __('save_changes') ?></button>
-                                    </div>
-                                </div>
+                                    <label for="" class="mr-2 col-md-6 col-12 col-lg-3">
+                                        <span class="sm-txt"><?= __('verbal_expressions') ?></span>
+                                        <textarea
+                                            class="wb-txt-inp"
+                                            name=""
+                                            id=""
+                                            cols="30"
+                                            rows="3"
+                                            ng-model="rec.report[1].report_text"
+                                            placeholder="What The Client Says"
+                                        ></textarea>
+                                    </label>
 
-                                   <!-- <div ng-repeat="report in rec.sale.reports" ng-if="report.report_type == '61'">
-                                        <label for="" class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"> <?= __('verbal_expressions') ?> </span>
-                                            <textarea
-                                                class="wb-txt-inp"
-                                                name=""
-                                                id=""
-                                                cols="30"
-                                                rows="3"
-                                                ng-model="report.report_text"
-                                                placeholder=" What The Client Says "
-                                            ></textarea>
-                                        </label>
-                                        <label for="" class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"> <?= __('inner_thoughts') ?>Inner Thoughts </span>
-                                            <textarea
-                                                class="wb-txt-inp"
-                                                name=""
-                                                id=""
-                                                cols="30"
-                                                rows="3"
-                                                ng-model="report.report_text"
-                                                placeholder="What the client thinks"
-                                            ></textarea>
-                                        </label>
-                                        <label for="" class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"> <?= __('obs_actions') ?> </span>
-                                            <textarea
-                                                class="wb-txt-inp"
-                                                name=""
-                                                id=""
-                                                cols="30"
-                                                rows="3"
-                                                ng-model="report.report_text"
-                                                placeholder="What the client does"
-                                            ></textarea>
-                                        </label>
-                                        <label for="" class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"> <?= __('emotional_res') ?> </span>
-                                            <textarea
-                                                class="wb-txt-inp"
-                                                name=""
-                                                id=""
-                                                cols="30"
-                                                rows="3"
-                                                ng-model="report.report_text"
-                                                placeholder="What the client feels"
-                                            ></textarea>
-                                        </label>
-                                    </div>
+                                    <label for="" class="mr-2 col-md-6 col-12 col-lg-3">
+                                        <span class="sm-txt"><?= __('verbal_expressions') ?></span>
+                                        <textarea
+                                            class="wb-txt-inp"
+                                            name=""
+                                            id=""
+                                            cols="30"
+                                            rows="3"
+                                            ng-model="rec.report[2].report_text"
+                                            placeholder="What The Client Says"
+                                        ></textarea>
+                                    </label>
+
+                                    <label for="" class="mr-2 col-md-6 col-12 col-lg-3">
+                                        <span class="sm-txt"><?= __('verbal_expressions') ?></span>
+                                        <textarea
+                                            class="wb-txt-inp"
+                                            name=""
+                                            id=""
+                                            cols="30"
+                                            rows="3"
+                                            ng-model="rec.report[3].report_text"
+                                            placeholder="What The Client Says"
+                                        ></textarea>
+                                    </label>
+
                                     <div class="down-btns mt-4 d-flex justify-content-end">
-                                                <div class="flex-gap-10 ">
-                                                    <button class="btn btn-danger" id="report_preloader" type="submit"> <?= __('save_changes') ?> </button>
-                                                </div>
-                                            </div>-->
+                                        <div class="flex-gap-10">
+                                            <button class="btn btn-danger" id="report_preloader" type="submit"><?= __('save_changes') ?></button>
+                                        </div>
+                                    </div>
                                 </form>
 
                         `)($scope);
                             } else if (element === "contact-setting") {
                                 elementsCreated = $compile(`
                                 
-                                <form class="row  inlineElement"  id="client_form" ng-submit="
-                                    doSave(rec.client, 'client', 'clients', '#client_btn', 
-                                '#client_preloader');">
+                                <form class="row inlineElement" id="client_form" ng-submit="doSave(rec.client, 'client', 'clients', '#client_btn', '#client_preloader');">
+                                    <label for="" class="col-md-6 col-12 col-lg-3">
+                                        <span class="sm-txt"><?= __('client_name') ?></span>
+                                        <input type="text" ng-model="rec.client.client_name" class="wb-txt-inp" name="" id="" />
+                                    </label>
 
+                                    <label for="" class="col-md-6 col-12 col-lg-3">
+                                        <span class="sm-txt"><?= __('client_phone') ?></span>
+                                        <input type="text" ng-model="rec.client.client_mobile" class="wb-txt-inp" name="" id="" />
+                                    </label>
 
-                                <label for="" class="col-md-6 col-12 col-lg-3">
-                                    <span class="sm-txt"> <?= __('client_name') ?> </span>
-                                    <input type="text" ng-model="rec.client.client_name" class="wb-txt-inp" name="" id=""  />
-                                </label>
-            
-                                <label for="" class="col-md-6 col-12 col-lg-3">
-                                    <span class="sm-txt"> <?= __('client_phone') ?> </span>
-                                    <input type="text" ng-model="rec.client.client_mobile" class="wb-txt-inp" name="" id=""  />
-                                </label>
-                                
-                                <label for="" class="col-md-6 col-12 col-lg-3">
-                                    <span class="sm-txt"> <?= __('client_email') ?> </span>
-                                    <input type="text" ng-model="rec.client.client_email" class="wb-txt-inp" name="" id=""  />
-                                </label>
+                                    <label for="" class="col-md-6 col-12 col-lg-3">
+                                        <span class="sm-txt"><?= __('client_email') ?></span>
+                                        <input type="text" ng-model="rec.client.client_email" class="wb-txt-inp" name="" id="" />
+                                    </label>
 
-                                <label for="" class="col-md-6 col-12 col-lg-3">
-                                    <span class="sm-txt"> <?= __('adrs_country') ?> </span>
-                                    <input type="text" ng-model="rec.client.adrs_country" class="wb-txt-inp" name="" id=""  />
-                                </label>
+                                    <label for="" class="col-md-6 col-12 col-lg-3">
+                                        <span class="sm-txt"><?= __('adrs_country') ?></span>
+                                        <select class="wb-ele-select" ng-model="rec.client.adrs_country">
+                                            <option value="" selected>Please Select</option>
+                                            <?php foreach ($optionsLoc['Country'] as $key => $value) : ?>
+                                                <option value="<?= $key ?>"><?= h($value) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </label>
 
-                                <label for="" class="col-md-6 col-12 col-lg-3">
-                                    <span class="sm-txt"> <?= __('emotional_res') ?> </span>
-                                    <input type="text" class="wb-txt-inp" name="" id=""  />
-                                </label>
+                                    <label for="" class="col-md-6 col-12 col-lg-3">
+                                        <span class="sm-txt"><?= __('source_id') ?></span>
+                                        <select class="wb-ele-select" ng-model="rec.client.source_id">
+                                            <option value="" selected>Please Select</option>
+                                            <?php foreach ($options['Source'] as $key => $value) : ?>
+                                                <option value="<?= $key ?>"><?= h($value) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </label>
 
-                                <label for="" class="col-md-6 col-12 col-lg-3">
-                                    <span class="sm-txt"> <?= __('source_id') ?> </span>
-                                    <?= $this->Form->control('source_id', [
-                                        'class' => 'form-control has-feedback-left wb-txt-inp',
-                                        'label' => false,
-                                        'type' => 'select',
-                                        'options' => $options['Source'],
-                                        'empty' => 'Please Select',
-                                        'ng-model' => 'rec.client.source_id',
-                                    ]) ?> 
-                                </label>
+                                    <div class="down-btns mt-4 d-flex justify-content-end">
+                                        <div class="flex-gap-10">
+                                            <button type="submit" class="btn btn-danger" id="client_preloader"><?= __('save_changes') ?></button>
+                                        </div>
+                                    </div>
+                                </form>
 
-                                <label for="" class="col-md-6 col-12 col-lg-3">
-                                    <span class="sm-txt"> <?= __('last_activity') ?> </span>
-                                    <input type="text" class="wb-txt-inp" name="" id=""  />
-                                </label>
-                                    
-                                <div class="down-btns mt-4 d-flex justify-content-end">
-                                                <div class="flex-gap-10 ">
-                                                    <button type="submit" class="btn btn-danger" id="client_preloader"> <?= __('save_changes') ?> </button>
-                                                </div>
-                                            </div>
-                            </form>
                         `)($scope);
                             } else if (element === "assign") {
                                 elementsCreated = $compile(`
-                                <form  class="row inlineElement" 
-                                ng-submit="
-                                    rec.usersale.lead_id = rec.sale.id; 
-                                    doSave(rec.usersale, 'usersale', 'usersale', '#usersale_btn', '#usersale_preloader');"
-                                >
-                                
-                                
-                                <label for="" class="col-12 col-sm-3">
-                                    <span class="sm-txt"> Advisor </span>
-                                    <tags-input 
-                                        ng-model="rec.usersale.user" 
-                                        add-from-autocomplete-only="true" 
-                                        placeholder="<?= __('user_id') ?>" 
-                                        display-property="text"
-                                        key-property="value"
-                                        tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
+                                <form class="row inlineElement" ng-submit="rec.user_sale.sale_id = rec.sale.id; 
+                                    doSave(rec.user_sale, 'user_sale', 'usersale', '#usersale_btn', '#usersale_preloader');
+                                    doSave(rec.sale, 'sale', 'sales', '#usersale_btn', '#usersale_preloader');">
+                                    <label for="" class="col-12 col-sm-3">
+                                        <span class="sm-txt"> Advisor </span>
+                                        <tags-input 
+                                            ng-model="rec.user_sale.user" 
+                                            add-from-autocomplete-only="true" 
+                                            placeholder="<?= __('user_id') ?>" 
+                                            display-property="text"
+                                            key-property="value"
+                                            class="wb-txt-inp"
+                                        >
+                                            <auto-complete min-length="1" highlightMatchedText="true" source="loadTags($query, 'users')"></auto-complete>
+                                        </tags-input>
+                                    </label>
 
-                                        class="wb-txt-inp"
-                                    >
-                                        <auto-complete min-length="1" highlightMatchedText="true" source="loadTags($query, 'users')"></auto-complete>
-                                    </tags-input>
-                                </label>
-                                
-                                <label for="" class="col-12 col-sm-3">
-                                    <span class="sm-txt"> <?= __('lead_priority') ?> </span>
-                                    <?= $this->Form->control('sale_priority', [
-                                        'class' => 'form-control has-feedback-left wb-txt-inp',
-                                        'label' => false,
-                                        'type' => 'select',
-                                        'ng-model' => 'rec.sale.sale_priority',
-                                        'options' => $this->Do->lcl($this->Do->get('sale_priorities')),
-                                        'empty' => 'Sale Priority',
-                                    ]) ?>
-                                </label>
-                               
-                                <div class="down-btns mt-4 d-flex justify-content-end">
-                                                <div class="flex-gap-10 ">
-                                                    <button class="btn btn-danger" id="usersale_preloader" type="submit"> <?= __('save_changes') ?> </button>
-                                                </div>
-                                            </div>
-                             
+                                    <div class="down-btns mt-4 d-flex justify-content-end">
+                                        <div class="flex-gap-10 ">
+                                            <button class="btn btn-danger" id="usersale_preloader" type="submit"><?= __('save_changes') ?></button>
+                                        </div>
+                                    </div>
                                 </form>
+
                     
                         `)($scope);
                             } else if (element === "notes") {
                                 elementsCreated = $compile(`
-
-                                <form class="row inlineElement" 
-                                ng-submit="rec.report.tar_id = rec.sale.id; 
+                                <form class="row inlineElement" ng-submit="rec.report.tar_id = rec.sale.id; 
                                     rec.report.tar_tbl = 'Sales'; 
-                                    doSave(rec.report, 'report', 'reports', '#report_btn', 
-                                    '#report_preloader');">
-                               
-                                  
-                                    <div class='row'>
-                                    <!--<label for="" class=" col-md-3 col-12 ">
-                                    <span class="sm-txt"> Name </span>
-                                    <input
-                                        class="wb-txt-inp"
-                                        type='text'
-                                        
-                                        placeholder="Name"
-                                    / >
-                                    </label>-->
-                                    <label for="" class=" col-md-3 col-12 ">
-                                        <span class="sm-txt"> <?= __('rec_state') ?> </span>
-                                        <?= $this->Form->control('status_id', [
-                                            'class' => 'form-control has-feedback-left wb-txt-inp',
-                                            'label' => false,
-                                            'type' => 'select',
-                                            'options' => $options['Status'],
-                                            'empty' => 'Please Select',
-                                            'ng-model' => 'rec.report.status_id',
-                                        ]) ?> 
-                                    </label>
-                                    <label for="" class=" col-md-3 col-12 ">
-                                        <span class="sm-txt"> <?= __('report_type') ?> </span>
-                                        <?= $this->Form->control('report_type', [
-                                            'class' => 'form-control has-feedback-left wb-txt-inp',
-                                            'label' => false,
-                                            'type' => 'select',
-                                            'options' => $options['Report Type'],
-                                            'empty' => 'Please Select',
-                                            'ng-model' => 'rec.report.report_type',
-                                        ]) ?> 
-                                    </label>
-                                    <!-- <label for="" class=" col-md-3 col-12 ">
-                                    <span class="sm-txt"> Time </span>
-                                    <input
-                                        class="wb-txt-inp pt-1"
-                                        type='time'
-                                    / >
-                                    </label>
-                                    <label for="" class=" col-md-3 col-12 ">
-                                    <span class="sm-txt"> Date </span>
-                                    <input
-                                        class="wb-txt-inp"
-                                        type='date'
-                                    / >
-                                    </label>-->
+                                    doSave(rec.report, 'report', 'reports', '#report_btn', '#report_preloader');">
+                                    <div class="row">
+                                        <!--<label for="" class=" col-md-3 col-12 ">
+                                        <span class="sm-txt"> Name </span>
+                                        <input
+                                            class="wb-txt-inp"
+                                            type='text'
+                                            placeholder="Name"
+                                        / >
+                                        </label>-->
+                                        <label for="" class="col-md-3 col-12" ng-hide="value1 == 'isspoken' || value1 == 'iscalled'">
+                                            <span class="sm-txt"><?= __('Select Option') ?></span>
+                                            <?= $this->Form->control('option', [
+                                                'class' => 'form-control has-feedback-left wb-txt-inp',
+                                                'label' => false,
+                                                'type' => 'select',
+                                                'options' => [
+                                                    __('Status') => $options['Status'],
+                                                    __('Report Type') => $options['Report Type'],
+                                                ],
+                                                'empty' => 'Please Select',
+                                                'ng-model' => 'rec.report.status_id',
+                                            ]) ?>
+                                        </label>
 
-                                    <label for="" class=" col-12 ">
-                                    <span class="sm-txt"> Note </span>
-                                    <textarea
-                                        ng-model = "rec.report.report_text"
-                                        class="wb-txt-inp"
-                                        name=""
-                                        id=""
-                                        cols="30"
-                                        rows="3"
-                                        placeholder="The Note"
-                                    ></textarea>
-                                    </label>
-                            
+
+                                        <!-- <label for="" class=" col-md-3 col-12 ">
+                                        <span class="sm-txt"> Time </span>
+                                        <input
+                                            class="wb-txt-inp pt-1"
+                                            type='time'
+                                        / >
+                                        </label>
+                                        <label for="" class=" col-md-3 col-12 ">
+                                        <span class="sm-txt"> Date </span>
+                                        <input
+                                            class="wb-txt-inp"
+                                            type='date'
+                                        / >
+                                        </label>-->
+
+                                        <label for="" class=" col-12">
+                                            <span class="sm-txt"> Note </span>
+                                            <textarea
+                                                ng-model="rec.report.report_text"
+                                                class="wb-txt-inp"
+                                                name=""
+                                                id=""
+                                                cols="30"
+                                                rows="3"
+                                                placeholder="The Note"
+                                            ></textarea>
+                                        </label>
                                     </div>
-                                    
-                                    <div class="down-btns mt-4 d-flex justify-content-end">
-                                                <div class="flex-gap-10 ">
-                                                    <button class="btn btn-danger" id="report_preloader" type="submit"> <?= __('save_changes') ?> </button>
-                                                </div>
-                                            </div>
 
+                                    <div class="down-btns mt-4 d-flex justify-content-end">
+                                        <div class="flex-gap-10">
+                                            <button class="btn btn-danger" id="report_preloader" type="submit"><?= __('save_changes') ?></button>
+                                        </div>
+                                    </div>
                                 </form>
+
                         `)($scope);
                             } else if (element === "booking") {
                                 elementsCreated = $compile(`
 
-                            <form class="row inlineElement" 
-                            ng-submit="
-                                    doSave(rec.books, 'books', 'books', '#book_btn', 
-                                    '#book_preloader');">
-                            
-                            
-                            <label for="" class="col-md-6 col-12 col-lg-4">
-                                <span class="sm-txt"> <?= __('meet_place') ?> </span>
-                                <input type="text" max ng-model="rec.books.book_meetplace" class="wb-txt-inp" id="" />
-                            </label>
-                            <label for="" class="col-md-6 col-12 col-lg-4">
-                                <span class="sm-txt"> <?= __('meet_period') ?> </span>
-                                <input type="text" max="99" min="1" ng-model="rec.books.book_meetperiod" class="wb-txt-inp" id="" />
-                            </label>
-                            <label for="" class="col-md-6 col-12 col-lg-4">
-                                <span class="sm-txt"> <?= __('current_location') ?> </span>
-                                <input type="text" ng-model="rec.books.book_current_stay" class="wb-txt-inp" id="" />
-                            </label>
-                            <label for="" class="col-md-6 col-12 col-lg-4">
-                                <span class="sm-txt"> <?= __('booking_time') ?></span>
-                                <input type="datetime" ng-model="rec.books.book_meetdate"  class="wb-txt-inp" id="" />
-                            </label>
-                            <label for="" class="col-md-6 col-12 col-lg-4">
-                                <span class="sm-txt"> <?= __('booking_date') ?> </span>
-                                <input type="datetime-local" ng-model="rec.books.book_arrivedate" class="wb-txt-inp p-2 ps-3" id="" />
-                            </label>
-                            <div class="down-btns mt-4 d-flex justify-content-end">
-                                                <div class="flex-gap-10 ">
-                                                    <button class="btn btn-danger" id="book_preloader" type="submit"> <?= __('save_changes') ?> </button>
-                                                </div>
-                                            </div>
-            
-                        </form>
+                                <form class="row inlineElement" 
+                                    ng-submit="
+                                        rec.book.sale_id == rec.sale.id;
+                                        rec.book.book_arrivedate = setdate(rec.book.book_arrivedate);
+
+                                        doSave(rec.book, 'book', 'books', '#book_btn', '#book_preloader');
+                                        ">
+
+
+                                    <label for="" class="col-md-6 col-12 col-lg-4">
+                                        <span class="sm-txt"><?= __('meet_place') ?></span>
+                                        <input type="text" max ng-model="rec.book.book_meetplace" class="wb-txt-inp" id="" />
+                                    </label>
+                                    <label for="" class="col-md-6 col-12 col-lg-4">
+                                        <span class="sm-txt"><?= __('meet_period') ?></span>
+                                        <input type="text" max="99" min="1" ng-model="rec.book.book_meetperiod" class="wb-txt-inp" id="" />
+                                    </label>
+                                    <label for="" class="col-md-6 col-12 col-lg-4">
+                                        <span class="sm-txt"><?= __('current_location') ?></span>
+                                        <input type="text" ng-model="rec.book.book_current_stay" class="wb-txt-inp" id="" />
+                                    </label>
+                                    <label for="" class="col-md-6 col-12 col-lg-4">
+                                        <span class="sm-txt"><?= __('booking_time') ?></span>
+                                        <input type="datetime" ng-model="rec.book.book_meetdate" class="wb-txt-inp" id="" />
+                                    </label>
+                                    <label for="" class="col-md-6 col-12 col-lg-4">
+                                        <span class="sm-txt"><?= __('booking_date') ?></span>
+                                        <input type="datetime-local" ng-model="rec.book.book_arrivedate" class="wb-txt-inp p-2 ps-3" id="" />
+                                    </label>
+
+                                    
+                                    <div class="down-btns mt-4 d-flex justify-content-end">
+                                        <div class="flex-gap-10">
+                                            <button class="btn btn-danger" id="book_preloader" type="submit"><?= __('save_changes') ?></button>
+                                        </div>
+                                    </div>
+
+                                    
+                                </form>
+
                         `)($scope);
                             } else if (element === "offers") {
                                 elementsCreated = $compile(`
 
-                            <form class="row inlineElement" ng-submit="
+                                <form class="row inlineElement" ng-submit="
                                     rec.offers.sale_id = rec.sale.id;
                                     doSave(rec.offers, 'offers', 'offers', '#offers_btn', 
                                     '#offers_preloader');">
-                            
-                            
-                            <div class="white-box mb-2">
-                                                <div>
-                                                    <span class="sm-txt"> <?= __('shared_property') ?> </span>
-                                                    <div class="white-box flex-between mb-2">
-                                                    <input type="text" ng-model="rec.offers.property_id" class="wb-txt-inp" id="" placeholder="Enter" />
+                                
+                                
+                                    <div class="white-box mb-2">
+                                        <div>
+                                            <span class="sm-txt"><?= __('shared_property') ?></span>
+                                            <div class="white-box flex-between mb-2">
+                                                <input type="text" ng-model="rec.offers.property_id" class="wb-txt-inp" id="" placeholder="Enter" />
+                                                <div class="d-flex">
+                                                    <div class="h-line hideMob"></div>
+                                                    <label class="switch">
+                                                        <input
+                                                            ng-model="rec.offers.isinterested"
+                                                            ng-true-value="'1'"
+                                                            ng-false-value="'0'"
+                                                            name="finance"
+                                                            id="present-client1"
+                                                            type="radio" />
+                                                        <span class="slider round"></span>
+                                                    </label>
 
-                                                        <div class="d-flex">
-                                                            <div class="h-line hideMob"></div>
-                                                            <label class="switch">
-                                                                <?= $this->Form->checkbox('isinterested', [
-                                                                    'class' => 'form-check-input',
-                                                                    'ng-model' => 'rec.offers.isinterested',
-                                                                    'ng-value' => "'1'"
-                                                                ]) ?>
-                                                                <span class="slider round"></span>
-                                                            </label>
-                                                            <label for="interested-client1"
-                                                                class="ps-md-5 ps-3 pe-3 pe-md-5"> 
-                                                                 </label>
-                                                        </div>
-                                                    </div>
-                                                    <span class="sm-txt"> <?= __('desc_property') ?> </span>
-                                                    <div class="white-box flex-between">
-                                                    <input type="text" ng-model="rec.offers.offer_desc" class="wb-txt-inp" id="" placeholder="Enter" />
-
-                                                    </div>
+                                                <label for="interested-client1" class="ps-md-5 ps-3 pe-3 pe-md-5">
+                                                    <?= __('interest_property') ?>
+                                                </label>
                                                 </div>
                                             </div>
-                            <div class="down-btns mt-4 d-flex justify-content-end">
-                                                <div class="flex-gap-10 ">
-                                                    <button class="btn btn-danger" id="offers_preloader" type="submit"> <?= __('save_changes') ?> </button>
-                                                </div>
+                                            <span class="sm-txt"><?= __('desc_property') ?></span>
+                                            <div class="white-box flex-between">
+                                                <input type="text" ng-model="rec.offers.offer_desc" class="wb-txt-inp" id="" placeholder="Enter" />
                                             </div>
-            
-                        </form>
+                                        </div>
+                                    </div>
+                                    <div class="down-btns mt-4 d-flex justify-content-end">
+                                        <div class="flex-gap-10">
+                                            <button class="btn btn-danger" id="offers_preloader" type="submit"><?= __('save_changes') ?></button>
+                                        </div>
+                                    </div>
+
+                                </form>
                         `)($scope);
                             } else if (element === "deal1") {
                                 elementsCreated = $compile(`
-                        <form class="row   inlineElement">
+                                <form class="row   inlineElement">
 
-                        <label for="" class="col-md-6 col-12 col-lg-3">
-                        <span class="sm-txt"> Field Consultant </span>
-                        <select class="wb-txt-inp" id="">
-                        <option  disabled selected hidden> Please Select </option>
-                        <option value="option">Option</option>
-                        <option value="option">Option</option>
-                        </select>
-                        </label>
-                        <label for="" class="col-md-6 col-12 col-lg-3">
-                        <span class="sm-txt"> <?= __('booking_date') ?> </span>
-                        <input type="date" class="wb-txt-inp" name="" id="" />
-                        </label>
-                        <label for="" class="col-md-6 col-12 col-lg-3">
-                        <span class="sm-txt"> <?= __('booking_time') ?> </span>
-                        <input type="time" class="wb-txt-inp" name="" id="" />
-                        </label>
-                        <div class="down-btns mt-4 d-flex justify-content-end">
-                                                <div class="flex-gap-10 ">
-                                                    <button class="btn btn-danger" id="" type="submit"> <?= __('save_changes') ?> </button>
-                                                </div>
-                                            </div>
-                        </form>
-                        `)($scope);
-                            } else if (element === "region") {
-                                elementsCreated = $compile(`
-                    <form class="row inlineElement">
-                    <label  class="col-md-6 col-12 col-lg-3">
-                    <span class="sm-txt"> <?= __('adrs_region') ?></span>
-                    <input type="text" class="wb-txt-inp" id="" placeholder="Enter" />
-                    </label>
-                    <label  class="col-md-6 col-12 col-lg-3">
-                    <span class="sm-txt"> Address </span>
-                    <input type="text" class="wb-txt-inp" id="" placeholder="Enter" />
-                    </label>
-                
-                    <div class="down-btns mt-4 d-flex justify-content-end">
-                                                <div class="flex-gap-10 ">
-                                                    <button class="btn btn-danger" id="" type="submit"> <?= __('save_changes') ?> </button>
-                                                </div>
-                                            </div>
-                    </form>
+                                    <label for="" class="col-md-6 col-12 col-lg-3">
+                                        <span class="sm-txt"> Field Consultant </span>
+                                        <select class="wb-txt-inp" id="">
+                                            <option  disabled selected hidden> Please Select </option>
+                                            <option value="option">Option</option>
+                                            <option value="option">Option</option>
+                                        </select>
+                                    </label>
+                                    <label for="" class="col-md-6 col-12 col-lg-3">
+                                        <span class="sm-txt"> <?= __('booking_date') ?> </span>
+                                        <input type="date" class="wb-txt-inp" name="" id="" />
+                                    </label>
+                                    <label for="" class="col-md-6 col-12 col-lg-3">
+                                        <span class="sm-txt"> <?= __('booking_time') ?> </span>
+                                        <input type="time" class="wb-txt-inp" name="" id="" />
+                                    </label>
+                                    <div class="down-btns mt-4 d-flex justify-content-end">
+                                        <div class="flex-gap-10 ">
+                                            <button class="btn btn-danger" id="" type="submit"> <?= __('save_changes') ?> </button>
+                                        </div>
+                                    </div>
+                                </form>
                         `)
-                        ($scope);
+                            ($scope);
                             } else if (element === "reservation") {
                                 elementsCreated = $compile(`
                                 <form class="row inlineElement" ng-submit="
+                                    rec.reservations.sale_id = rec.sale.id;
                                     doSave(rec.reservations, 'reservations', 'reservations', '#reservations_btn', 
-                                    '#reservations_preloader');">
+                                    '#reservations_preloader');
+                                    ">
                                             <div class="col-md-6 col-12 col-lg-3">
-                                                <span class="sm-txt"> <?= __('reservation') ?> </span>
+                                                <span class="sm-txt"> <?= __('reservation_amount') ?> </span>
                                                 <div class="input-group">
-                                                    <button class="btn btn-outline-secondary dropdown-toggle" type="submit" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="fas-dollar"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item text-center text-dark" href="#">
-                                                                <i class="fas-lira-sign"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item text-center text-dark" href="#">
-                                                                <i class="fas-try"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item text-center text-dark" href="#">
-                                                                <i class="fas-euro"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                    <input type="text"  class="form-control" ng-model="rec.reservations.reservation_amount" aria-label="Text input with dropdown button" />
+                                                <?= $this->Form->control('', [
+                                                    'class' => 'form-control has-feedback-left cur-inp wb-txt-inp',
+                                                    'label' => false,
+                                                    'type' => 'select',
+                                                    'options' => $options['Currency'],
+                                                    'ng-model' => 'rec.reservations.reservation_currency',
+                                                ]) ?> 
+                                                    
+                                                    <input ng-model="rec.reservations.reservation_amount" class="form-control wb-txt-inp" value="400k" type="text" />
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-12 col-lg-3">
-                                                <span class="sm-txt"> <?= __('sale_price') ?> </span>
+                                                <span class="sm-txt"> <?= __('reservation_price') ?> </span>
                                                 <div class="input-group">
-                                                    <button class="btn btn-outline-secondary dropdown-toggle" type="submit" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="fas-dollar"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item text-center text-dark" href="#">
-                                                                <i class="fas-lira-sign"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item text-center text-dark" href="#">
-                                                                <i class="fas-try"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item text-center text-dark" href="#">
-                                                                <i class="fas-euro"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                    <input type="text"  ng-model="rec.reservations.reservation_price" class="form-control" aria-label="Text input with dropdown button" />
+                                                <?= $this->Form->control('', [
+                                                    'class' => 'form-control has-feedback-left cur-inp wb-txt-inp',
+                                                    'label' => false,
+                                                    'type' => 'select',
+                                                    'options' => $options['Currency'],
+                                                    'ng-model' => 'rec.reservations.reservation_currency',
+                                                ]) ?> 
+                                                    
+                                                    <input ng-model="rec.reservations.reservation_price" class="form-control wb-txt-inp" value="400k" type="text" />
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt"> <?= __('usdprice') ?> </span>
+                                                <div type="text"  ng-model="rec.reservations.reservation_usdprice" class="wb-txt-inp" placeholder="% Please specify"></div>
+                                            </div>
+
                                             <div class="col-md-6 col-12 col-lg-3">
                                                 <span class="sm-txt"> <?= __('pay_type') ?> </span>
                                                     <?= $this->Form->control('category_id', [
@@ -1115,86 +1062,62 @@
                                                         'label' => false,
                                                         'type' => 'select',
                                                         'options' => $options['Payment Type'],
-                                                        'empty' => 'Please specify',
+                                                        'empty' => 'Please Select',
                                                         'ng-model' => 'rec.reservations.reservation_paytype',
                                                     ]) ?>
                                             </div>
-                                            <div class="col-md-6 col-12 col-lg-3">
-                                                <span class="sm-txt"> <?= __('dev_name') ?> </span>
-                                                <input type="text"   class="wb-txt-inp" placeholder="Enter" />
-                                            </div>
-                                            <div class="col-md-6 col-12 col-lg-3">
-                                                <span class="sm-txt"> <?= __('unit_type') ?> </span>
-                                                <input type="text"   class="wb-txt-inp" placeholder="Please specify" />
-                                            </div>
-                                            <div class="col-md-6 col-12 col-lg-3">
-                                                <span class="sm-txt"> <?= __('unit_info') ?> </span>
-                                                <input type="text"  ng-model="rec.sale.sale_units" class="wb-txt-inp" placeholder="Please specify" />
-                                            </div>
-                                             
+
                                             <div class="col-md-6 col-12 col-lg-3">
                                                 <span class="sm-txt"> <?= __('commission') ?> </span>
-                                                <div type="text"  ng-model="rec.reservations.reservation_comission" class="wb-txt-inp" placeholder="% Please specify">{{rec.sale.reservations[0].reservation_comission}}</div>
+                                                <input type="text"  ng-model="rec.reservations.reservation_comission" class="wb-txt-inp" placeholder="% Please specify"></input>
                                             </div>
+
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt"> <?= __('usdcommission') ?> </span>
+                                                <div type="text"  ng-model="rec.reservations.reservation_usdcomission" class="wb-txt-inp" placeholder="% Please specify"></div>
+                                            </div>
+
                                             <div class="col-md-6 col-12 col-lg-3">
                                                 <span class="sm-txt"> <?= __('down_pay') ?> </span>
                                                 <div class="input-group">
-                                                    <button class="btn btn-outline-secondary dropdown-toggle" type="submit" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="fas-dollar"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item text-center text-dark" href="#">
-                                                                <i class="fas-lira-sign"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item text-center text-dark" href="#">
-                                                                <i class="fas-try"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item text-center text-dark" href="#">
-                                                                <i class="fas-euro"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                    <input type="text"  ng-model="rec.reservations.reservation_downpayment" class="form-control" aria-label="Text input with dropdown button" />
+                                                <?= $this->Form->control('', [
+                                                    'class' => 'form-control has-feedback-left cur-inp wb-txt-inp',
+                                                    'label' => false,
+                                                    'type' => 'select',
+                                                    'options' => $options['Currency'],
+                                                    'empty' => 'Please Select',
+                                                    'ng-model' => 'rec.reservations.reservation_currency',
+                                                ]) ?> 
+                                                    
+                                                    <input ng-model="rec.reservations.reservation_downpayment" class="form-control wb-txt-inp" value="400k" type="text" />
                                                 </div>
                                             </div>
+
                                             <div class="col-md-6 col-12 col-lg-3">
-                                                <span class="sm-txt"> <?= __('unit_type') ?> </span>
-                                                <div class="wb-txt-inp">
-                                                    <img src="\crm\webroot\img\datepicker.png" alt="" /> 
-                                                    <div>{{rec.reservations.reservation_downpayment_date.split(' ')[0]}}</div>
-                                                </div>
+                                                <span class="sm-txt"> <?= __('down_paydate') ?> </span>
+                                                <input type="datetime-local"  ng-model="rec.reservations.reservation_downpayment_date" class="wb-txt-inp" placeholder="% Please specify"></input>
                                             </div>
+
                                             <div class="col-md-6 col-12 col-lg-3">
-                                                <span class="sm-txt"> <?= __('down_date') ?> </span>
-                                                <div class="input-group">
-                                                    <button class="btn btn-outline-secondary dropdown-toggle" type="submit" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="fas-dollar"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item text-center text-dark" href="#">
-                                                                <i class="fas-lira-sign"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item text-center text-dark" href="#">
-                                                                <i class="fas-try"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item text-center text-dark" href="#">
-                                                                <i class="fas-euro"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                    <input type="text"  class="form-control" aria-label="Text input with dropdown button" />
+                                                <span class="sm-txt"> <?= __('invoice_date') ?> </span>
+                                                <input type="datetime-local"  ng-model="rec.reservations.reservation_invoice_date" class="wb-txt-inp" ></input>
+                                            </div>
+
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <div class="flex-center text-center">
+                                                    <label class="switch">
+                                                        <input 
+                                                        ng-model="rec.reservations.reservation_isinvoice_sent" 
+                                                        ng-value = "'1'" 
+                                                        name="invoice" 
+                                                        id="finance-client1" 
+                                                        type="radio" />
+                                                        <span class="slider round"></span>
+                                                    </label>
+                                                    <label for="finance-client1"> Is Invoice Send? </label>
                                                 </div>
                                             </div>
+
                                             <div class="down-btns mt-4 d-flex justify-content-end">
                                                 <div class="flex-gap-10 ">
                                                     <button class="btn btn-danger" id="reservations_preloader" type="submit"> <?= __('save_changes') ?> </button>
@@ -1214,7 +1137,6 @@
                                                 <label class="switch">
                                                     <input 
                                                     ng-model="rec.sale.sale_finance" 
-                                                    name="finance" 
                                                     ng-value = "'187'" 
                                                     name="finance" 
                                                     id="finance-client1" 
@@ -1243,7 +1165,6 @@
                                                 <label class="switch">
                                                     <input 
                                                     ng-model="rec.sale.sale_finance" 
-                                                    name="finance" 
                                                     ng-value = "'189'" 
                                                     name="finance" 
                                                     id="Ready-client1" 
@@ -1258,7 +1179,6 @@
                                                 <label class="switch">
                                                     <input 
                                                     ng-model="rec.sale.sale_finance" 
-                                                    name="finance" 
                                                     ng-value = "'190'" 
                                                     name="finance" 
                                                     id="present-client1" 
@@ -1285,6 +1205,119 @@
                                     '#sales_preloader');">
                                 
                                             </div>
+                                        
+
+                                        <label for="" class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"><?= __('category_id') ?></span>
+                                            <select class="wb-ele-select" ng-model="rec.sale.category_id">
+                                                <option value="" selected>Please Select</option>
+                                                <?php foreach ($options['Type'] as $key => $value) : ?>
+                                                    <option value="<?= $key ?>"><?= h($value) ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </label>
+                                        
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?= __('sale_budget') ?> </span>
+                                            <div class="input-group">
+                                            <?= $this->Form->control('', [
+                                                'class' => 'form-control has-feedback-left wb-txt-inp cur-inp',
+                                                'label' => false,
+                                                'type' => 'select',
+                                                'options' => $options['Currency'],
+                                                'empty' => 'Please Select',
+                                                'ng-model' => 'rec.sale.sale_specs[0].salespec_currency',
+                                            ]) ?> 
+                                                
+                                                <input ng-model="rec.sale.sale_budget" class="form-control wb-txt-inp" value="400k" type="text" />
+                                            </div>
+                                        </label>
+
+                                        <label for="" class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"><?= __('sale_priority') ?></span>
+                                            <?=$this->Form->control('sale_priority', [
+                                                'class'=>'form-control has-feedback-left wb-txt-inp',
+                                                'label'=>false,
+                                                'type'=>'select',
+                                                'ng-model'=>'rec.sale.sale_priority',
+                                                'options'=>$this->Do->lcl( $this->Do->get('sale_priorities') ),
+                                                'empty'=>'Select Please',
+                                            ])?>
+                                        </label>
+
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?= __('target_location') ?>  </span>
+                                            <input type="text" ng-model="rec.sale.sale_specs[0].salespec_loction_target" class="wb-txt-inp" placeholder="Enter" />
+                                        </label>
+                                        
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"><?= __('buyer_persona') ?> </span>
+                                            <?= $this->Form->control('category_id', [
+                                                'class' => 'form-control has-feedback-left wb-txt-inp',
+                                                'label' => false,
+                                                'type' => 'select',
+                                                'options' => $options['Buyer Persona'],
+                                                'escape' => false,
+                                                'empty' => 'Please Select',
+                                                'ng-model' => 'rec.sale.sale_specs[0].salespec_buyerpersona',
+                                            ]) ?>
+                                        </label>
+
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?= __('social_style_model') ?> </span>
+                                            
+                                            <?= $this->Form->control('category_id', [
+                                                'class' => 'form-control has-feedback-left wb-txt-inp',
+                                                'label' => false,
+                                                'type' => 'select',
+                                                'options' => $options['Social Style'],
+                                                'empty' => 'Please Select',
+                                                'ng-model' => 'rec.sale.sale_specs[0].salespec_socialstyle',
+                                            ]) ?>
+                                        </label> 
+
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?= __('salespec_propertytype') ?> </span> 
+                                            <tags-input ng-model="rec.sale.sale_specs[0].salespec_propertytype" display-property="text" key-property="value" class="wb-txt-inp" tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
+                                                    <auto-complete min-length="1" source="loadTags($query, 'categories', 159)"></auto-complete>
+                                                </tags-input>
+                                        </label>
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?= __('sale_tags') ?> </span>
+                                            <tags-input ng-model="rec.sale.sale_tags" class="wb-txt-inp" tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
+                                                <auto-complete min-length="1" source="loadTags($query, 'categories', 40)"></auto-complete>
+                                            </tags-input>
+                                        </label>
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"><?= __('salespec_beds') ?></span>
+                                            <tags-input ng-model="rec.sale.sale_specs[0].salespec_beds" display-property="text" key-property="value" class="wb-txt-inp" tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
+                                                <auto-complete min-length="1" source="loadTags($query, 'categories', 183)"></auto-complete>
+                                            </tags-input>
+                                        </label>
+                                        
+                                        <div class="down-btns mt-4 d-flex justify-content-end">
+                                            <div class="flex-gap-10 ">
+                                                <button type="submit" class="btn btn-danger" id="sales_preloader"> <?= __('save_changes') ?> </button>
+                                            </div>
+                                        </div>
+
+
+                                    </form>
+                        `)
+                        ($scope);
+                            } else if (element === "add-sale") {
+                                elementsCreated = $compile(`
+                                <form class="row  inlineElement"  id="client_form" ng-submit="
+                                    doSave(rec.sale, 'sale', 'sales', '#sales_btn', 
+                                    '#sales_preloader');">
+                                
+                                    <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?= __('client_id') ?> </span>
+                                            <tags-input ng-model="rec.sale.name" class="wb-txt-inp" tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
+                                                <auto-complete min-length="1" source="loadTags($query, 'clients')"></auto-complete>
+                                            </tags-input>
+                                        </label>
+
                                         <label class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt"> Segment </span> 
                                             <?= $this->Form->control('category_id', [
@@ -1307,27 +1340,14 @@
                                         <label class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt"> <?= __('sale_budget') ?> </span>
                                             <div class="input-group">
-                                                <button class="btn btn-outline-secondary dropdown-toggle" type="submit" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="fas-dollar"></i>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li>
-                                                        <a class="dropdown-item text-center text-dark" href="#">
-                                                            <i class="fas-lira-sign"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item text-center text-dark" href="#">
-                                                            <i class="fas-try"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item text-center text-dark" href="#">
-                                                            <i class="fas-euro"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                                <input ng-model="rec.sale.sale_budget" class="form-control" value="400k" type="text" />
+                                            <?= $this->Form->control('', [
+                                                    'class' => 'form-control has-feedback-left cur-inp wb-txt-inp',
+                                                    'label' => false,
+                                                    'type' => 'select',
+                                                    'options' => $options['Currency'],
+                                                    'ng-model' => 'rec.sale.sale_specs[0].salespec_currency',
+                                                ]) ?> 
+                                                <input ng-model="rec.sale.sale_budget" class="form-control wb-txt-inp" value="400k" type="text" />
                                             </div>
                                             </label>
                                         <label class="col-md-6 col-12 col-lg-3">
@@ -1341,31 +1361,6 @@
                                             <tags-input ng-model="rec.sale.sale_specs[0].salespec_beds" display-property="text" key-property="value" class="wb-txt-inp" tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
                                                 <auto-complete min-length="1" source="loadTags($query, 'categories', 183)"></auto-complete>
                                             </tags-input>
-                                        </label>
-                                        <label class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt"><?= __('place_of_stay') ?></span>
-                                            <div class="row" >
-                                                <div class="col-6 place_1">
-                                                <?= $this->Form->control('place_of_stay', [
-                                                    'class' => 'form-control has-feedback-left wb-txt-inp',
-                                                    'label' => false,
-                                                    'type' => 'select',
-                                                    // 'options' => $optionsLoc['City'],
-                                                    'empty' => 'Please Select',
-                                                    // 'ng-model' => '',
-                                                ]) ?>
-                                                </div>
-                                                <div class="col-6 place_2">
-                                                <?= $this->Form->control('category_id', [
-                                                    'class' => 'form-control has-feedback-left wb-txt-inp',
-                                                    'label' => false,
-                                                    'type' => 'Budgetselect',
-                                                    // 'options' => $optionsLoc['Region'],
-                                                    'empty' => 'Please Select',
-                                                    // 'ng-model' => '',
-                                                ]) ?>
-                                                </div>
-                                            </div>
                                         </label>
 
                                         <label class="col-md-6 col-12 col-lg-3">
@@ -1387,6 +1382,18 @@
                                             ]) ?>
                                         </label>
 
+                                        <label for="" class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"><?= __('sale_priority') ?></span>
+                                            <?=$this->Form->control('sale_priority', [
+                                                'class'=>'form-control has-feedback-left',
+                                                'label'=>false,
+                                                'type'=>'select',
+                                                'ng-model'=>'rec.sale.sale_priority',
+                                                'options'=>$this->Do->lcl( $this->Do->get('sale_priorities') ),
+                                                'empty'=>'Select Please',
+                                            ])?>
+                                        </label>
+
 
 
                                         <label class="col-md-6 col-12 col-lg-3">
@@ -1402,11 +1409,11 @@
                                             ]) ?>
                                         </label> 
                                         <div class="down-btns mt-4 d-flex justify-content-end">
-                                                <div class="flex-gap-10 ">
-                                                    <button type="submit" class="btn btn-danger" id="sales_preloader"> <?= __('save_changes') ?> </button>
-                                                </div>
-
-
+                                            <div class="flex-gap-10 ">
+                                                <button type="submit" class="btn btn-danger" id="sales_preloader"> <?= __('save_changes') ?> 
+                                                </button>
+                                            </div>
+                                        </div>
                                     </form>
                         `)($scope);
                             } else {
@@ -2027,12 +2034,11 @@
                         });
                     }
                 }
-                $scope.clearSearchFields = function() {
-                    
-                    $scope.rec.search = null;
 
+
+                $scope.clearSearchFields = function() {
+                    $scope.rec.search = null;
                 };
-                
                 
                 var doSearchUpdt;
                 var lastSearch = '';

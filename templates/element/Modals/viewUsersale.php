@@ -26,7 +26,7 @@
 
                             <div class="grid_row row">
                                 <div class="col-md-3 grid_header2"><?=__('source_id')?></div>
-                                <div class="col-md-9 notwrapped">{{rec.usersale.lead_id}}</div>
+                                <div class="col-md-9 notwrapped">{{rec.usersale.sale_id}}</div>
                             </div>
 
                             

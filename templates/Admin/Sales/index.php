@@ -8,9 +8,10 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
         <section class="container-fluid">
             <h2 class="client-num">Sales ({{paging.count}})</h2>
             <form class="dropdowns">
+
                 <div class="flex-gap-10 flex-wrap">
 
-                    <select class="wb-ele">
+                    <!-- <select class="wb-ele">
                         <option value="All Sales">All Sales</option>
                         <option value="option">Option</option>
                         <option value="option">Option</option>
@@ -20,64 +21,83 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                         <option value="Date">Date</option>
                         <option value="option">Option</option>
                         <option value="option">Option</option>
-                    </select>
+                    </select> -->
 
-                    <tags-input class="wb-ele" ng-model="rec.search.sale_tags" add-from-autocomplete-only="true"
-                        display-property="text">
-                        <auto-complete min-length="1" highlightMatchedText="true"
-                            source="loadTags($query, 'categories', 40)"></auto-complete>
-                    </tags-input>
+                    <label for="" class="col-md-6 col-12 col-lg-2">
+                        <tags-input class="wb-ele-tag" style="padding-left:2px; font-size:14px; border:1px solid black;border-radius: 7px;" ng-model="rec.search.sale_tags" add-from-autocomplete-only="true"
+                            display-property="text">
+                            <auto-complete min-length="1" highlightMatchedText="true"
+                                source="loadTags($query, 'categories', 40)"></auto-complete>
+                        </tags-input>
+                    </label>
+                    
                     <!-- <button class="wb-ele"ng-submit="doSearch()"type="submit">Search</button> -->
 
-                    <?= $this->Form->control('source_id', [
-                        'class' => 'form-control has-feedback-left wb-ele',
-                        'label' => false,
-                        'type' => 'select',
-                        'placeholder' => __('source_id'),
-                        'ng-change' => 'doSearch()',
-                        'options' => $options['Source'],
-                        'empty' => __('all_sources'),
-                        'ng-model' => 'rec.search.source_id',
-                    ]) ?>
 
-                    <?= $this->Form->control('sale_current_stage', [
-                        'class' => 'form-control has-feedback-left wb-ele',
-                        'label' => false,
-                        'type' => 'select',
-                        'placeholder' => __('sale_current_stage'),
-                        'ng-change' => 'doSearch()',
-                        'options' => $this->Do->lcl($this->Do->get('sale_current_stage')),
-                        'empty' => __('sale_current_stage'),
-                        'ng-model' => 'rec.search.sale_current_stage',
-                    ]) ?>
+                    <label for="" class="col-md-6 col-12 col-lg-3">
+                        
+                        <select class="wb-ele-select" ng-model="rec.search.source_id">
+                            <option value="" selected>Source</option>
+                            <?php foreach ($options['Source'] as $key => $value): ?>
+                                <option value="<?= $key ?>">
+                                    <?= h($value) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
 
-                    <?= $this->Form->control('pool_id', [
-                        'class' => 'form-control has-feedback-left wb-ele',
-                        'label' => false,
-                        'type' => 'select',
-                        'placeholder' => __('pool_id'),
-                        'ng-change' => 'doSearch()',
-                        'options' => $options['Pool'],
-                        'empty' => __('all_pools'),
-                        'ng-model' => 'rec.search.pool_id',
-                    ]) ?>
+                    
 
-                    <button class="wb-ele">
-                        <?= $this->element('colActions', ['url' => 'sales/index/', 'col' => 'id']) ?>
-                        Sort By 
-                    </button>
+                    <label for="" class="col-md-6 col-12 col-lg-3">
+                        
+                        <select class="wb-ele-select" ng-model="rec.search.pool_id">
+                            <option value="" selected><?=__('pool_id')?></option>
+                            <?php foreach ($options['Pool'] as $key => $value): ?>
+                                <option value="<?= $key ?>">
+                                    <?= h($value) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                    
+                    <label for="" class="col-md-6 col-12 col-lg-3">
+                        
+                        <select class="wb-ele-select" ng-model="rec.search.sale_current_stage">
+                            <option value="" selected><?=__('sale_current_stage')?></option>
+                            <?php foreach ($this->Do->lcl($this->Do->get('sale_current_stage')) as $key => $value): ?>
+                                <option value="<?= $key ?>">
+                                    <?= h($value) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+
+
                 </div>
 
 
                 <div class="flex-gap-10">
 
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addEditSale_mdl" ng-click="
-                doGet('/admin/sales?id='+itm.id, 'rec', 'sales');
-            "><i class="fas-plus"></i>
+                    <button class="btn btn-danger" ng-click="
+                            newEntity('sales');
+                            openModal('#subModal'); 
+                            inlineElement('#elementsContainer', 1, 'add-sale');
+                        "><i class="fas-plus"></i>
                         <span class="hideMob">
+
                             <?= __('add_sale') ?>
                         </span>
                     </button>
+
+                    <button class="wb-ele-select" ng-click="multiHandle('/admin/sales/delete')">
+                        Delete
+                    </button>
+
+                    <select class="wb-ele-select">
+                        <option value="Select" empty="true">Select</option>
+                        <option ng-click="multiHandle('/admin/sales/enable/1')">Enable</option>
+                        <option ng-click="multiHandle('/admin/sales/enable/0')">Disable</option>
+                    </select>
                 </div>
             </form>
         </section>
@@ -92,7 +112,7 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                             <input type="text" ng-change="doSearch()" ng-model="rec.search.client_name"
                                 placeholder="Search Sales" />
                         </form>
-                        <div class="small-btns">
+                        <!-- <div class="small-btns">
                             <div class="row no-gutters">
                                 <div class="col-4">
                                     <a href="#">Filter 1</a>
@@ -107,7 +127,7 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                                     <a href="#">Pool Pool Name</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="dash-nav">
 
@@ -169,8 +189,11 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                         <div class="client-row">
                             <div class="row">
                                 <div class="checkbox col-1">
-                                    <input type="checkbox" id="client-1" name="client-checkbox" />
+                                    <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
+                                        name="client-checkbox" />
                                 </div>
+
+
                                 <div class="col-lg-11 col-12 row">
                                     <div class="previewToggle col-lg-2 col-12 row">
                                         <div class="col-4 title hideWeb">Lead content</div>
@@ -190,10 +213,9 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                                         <div class="col-6 p-0 col-lg-12">
                                             <p><i class="fas-flag"></i> {{ itm.client.client_nationality }}</p>
                                             <p><i class="fas-home"></i> {{ itm.category.category_name }}</p>
-                                            <p><i class="fas-clock"></i> Inquire Today @ 13:00</p>
                                             <p>
                                                 <i class="fas-asterisk"></i> Source:
-                                                <a href="#" class="btn-link"> {{ itm.source.category_name }}</a>
+                                                <a href="#" class="btn-link"> {{ itm.client.source.category_name }}</a>
                                             </p>
                                         </div>
                                     </div>
@@ -206,31 +228,34 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                                     </div>
                                     <div class="col-lg-2 col-12 notes">
                                         <div class="col-4 title hideWeb">Notes</div>
-                                        <div class="col-6 p-0 col-lg-12" ng-if="!report.report_type == '61'">
-                                            {{ itm.reports[itm.reports.length - 1].report_text }}
+                                        <div class="col-6 p-0 col-lg-12"
+                                            ng-if="!(itm.report_type === '201' || itm.report_type === '202' || itm.report_type === '203' || itm.report_type === '204')">
+                                            {{ itm.reports[0].report_text }}
                                         </div>
                                     </div>
 
                                     <div class="col-lg-1 col-12 budget">
                                         <div class="col-4 title hideWeb">Budget</div>
-                                        <div class="col-6 p-0 col-lg-12">$ {{ itm.sale_budget }}</div>
+                                        <div class="col-6 p-0 col-lg-12">{{ itm.sale_specs[0].currency.category_name }}
+                                            {{ itm.sale_budget }}</div>
                                     </div>
                                     <div class="col-lg-2 col-12">
                                         <div class="col-4 title hideWeb">Booking</div>
                                         <div class="col-6 p-0 col-lg-12">
 
                                             <div class="wb-ele">
-                                                <i class="fa fa-calendar-o"></i>
+                                                <img src="\img\datepicker.png" alt="" />
                                                 <div class="line-height-10">
                                                     <span class="sm-txt">Next Call Date</span> {{
-                                                    itm.books[0].stat_created.split(' ')[0] }}
+                                                    itm.reminders[0].reminder_nextcall.split(' ')[0] }}
                                                 </div>
                                             </div>
+
                                             <div class="wb-ele">
-                                                <i class="fas-clock"></i>
+                                                <img src="\img\clock_regular.svg" alt="" />
                                                 <div class="line-height-10">
                                                     <span class="sm-txt">Next Call Time</span> {{
-                                                    itm.books[0].stat_created.split(' ')[1] }}
+                                                    itm.reminders[0].reminder_nextcall.split(' ')[1] }}
                                                 </div>
                                             </div>
                                         </div>

@@ -99,9 +99,9 @@
 
     <?php if(!$authUser){?>
     
-    <?= $this->element("headerLog"); ?>
-        
-<?php }?>
+        <?= $this->element("headerLog"); ?>
+            
+    <?php }?>
 
     <div class="main-content">
         <?= $this->fetch('content'); ?>

@@ -34,7 +34,10 @@ class ReservationsTable extends Table
             'className' => 'Categories',
         ]);
 
-
+        $this->belongsTo('Currency', [
+            'foreignKey' => 'reservation_currency',
+            'className' => 'Categories',
+        ]);
 
     }
 

@@ -188,7 +188,9 @@
 
                                 
                                 <div class="col-4 hideWeb grid_header"><?=__('rec_state')?></div>
-                                <div class=" col-md-1 col-8" ng-bind-html="DtSetter('bool2', itm.rec_state)"></div>
+                                <div class=" col-md-1 col-8" ng-bind-html="DtSetter('bool2', itm.rec_state)">
+                                    
+                                </div>
 
                                 <div class="col-4 hideWeb grid_header"><?=__('actions')?></div>
                                 <div class=" col-md-1 col-8 action">

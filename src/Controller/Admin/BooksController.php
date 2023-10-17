@@ -68,7 +68,7 @@ class BooksController extends AppController
             if(!empty($_id)){
                 $data = $this->Books-> get( $_id , ['contain' => []] )->toArray();
                 echo json_encode(["status"=>"SUCCESS",  "data"=>$this->Do->convertJson( $data )], JSON_UNESCAPED_UNICODE); die();
-                 debug($data);
+                
             }
 
             // LIST
@@ -82,7 +82,9 @@ class BooksController extends AppController
 
             // dd($this->Do->convertJson( $data ));
             echo json_encode( 
-                [ "status"=>"SUCCESS",  "data"=>$this->Do->convertJson( $data ), "paging"=>$this->Paginator->getPagingParams()["Books"]], 
+                [ "status"=>"SUCCESS",  "data"=>$this->Do->convertJson( $data ), 
+                "paging" => $this->request->getAttribute('paging')['Books']],
+
                 JSON_UNESCAPED_UNICODE); die();
         }
 

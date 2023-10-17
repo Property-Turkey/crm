@@ -63,7 +63,10 @@ class ConfigsController extends AppController
             }
 
             echo json_encode( 
-                [ "status"=>"SUCCESS",  "data"=>$data, "paging"=>$this->Paginator->getPagingParams()["Configs"]], 
+                [ "status"=>"SUCCESS",  "data"=>$data, 
+                "paging" => $this->request->getAttribute('paging')['Configs']
+
+            ], 
                 JSON_UNESCAPED_UNICODE); die();
         }
     }

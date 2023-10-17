@@ -57,10 +57,13 @@ class DoComponent extends Component {
 		return $res;
 	}
 	
-	public function cat($key)
+	public function cat($pid)
     {
-        return Configure::read($key);
-	}
+        $cats = TableRegistry::getTableLocator()->get('Categories')
+                    ->find('list')
+                    ->where(['parent_id'=>$pid])->toArray();
+        return ($cats);
+    }
 
 	public function get_last_rec_number($table, $tar='Auto_increment')
     {

@@ -8,7 +8,27 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class UsersaleTable extends Table
+/**
+ * UserSale Model
+ *
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\SalesTable&\Cake\ORM\Association\BelongsTo $Sales
+ *
+ * @method \App\Model\Entity\UserSale newEmptyEntity()
+ * @method \App\Model\Entity\UserSale newEntity(array $data, array $options = [])
+ * @method \App\Model\Entity\UserSale[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\UserSale get($primaryKey, $options = [])
+ * @method \App\Model\Entity\UserSale findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \App\Model\Entity\UserSale patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\UserSale[] patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\UserSale|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\UserSale saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\UserSale[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\UserSale[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
+ * @method \App\Model\Entity\UserSale[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\UserSale[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ */
+class UserSaleTable extends Table
 {
     /**
      * Initialize method
@@ -28,12 +48,10 @@ class UsersaleTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
         ]);
-
         $this->belongsTo('Sales', [
-            'foreignKey' => 'lead_id',
+            'foreignKey' => 'sale_id',
             'joinType' => 'INNER',
         ]);
-
     }
 
     /**
@@ -49,13 +67,8 @@ class UsersaleTable extends Table
             ->notEmptyString('user_id');
 
         $validator
-            ->integer('lead_id')
-            ->requirePresence('lead_id', 'create')
-            ->notEmptyString('lead_id');
-
-        $validator
-            ->scalar('user_lead_configs')
-            ->allowEmptyString('user_lead_configs');
+            ->integer('sale_id')
+            ->notEmptyString('sale_id');
 
         $validator
             ->dateTime('stat_created')
@@ -77,6 +90,7 @@ class UsersaleTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
+        $rules->add($rules->existsIn('sale_id', 'Sales'), ['errorField' => 'sale_id']);
 
         return $rules;
     }

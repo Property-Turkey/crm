@@ -6,18 +6,18 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Usersale Entity
+ * UserSale Entity
  *
  * @property int $id
  * @property int $user_id
- * @property int $lead_id
- * @property string|null $user_lead_configs
+ * @property int $sale_id
  * @property \Cake\I18n\FrozenTime|null $stat_created
  * @property int $rec_state
  *
  * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\Sale $sale
  */
-class Usersale extends Entity
+class UserSale extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -30,10 +30,10 @@ class Usersale extends Entity
      */
     protected $_accessible = [
         'user_id' => true,
-        'lead_id' => true,
-        'user_lead_configs' => true,
+        'sale_id' => true,
         'stat_created' => true,
         'rec_state' => true,
         'user' => true,
+        'sale' => true,
     ];
 }

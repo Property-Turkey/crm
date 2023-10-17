@@ -294,7 +294,8 @@ class UsersController extends AppController
             }
 
             echo json_encode( 
-                [ "status"=>"SUCCESS",  "data"=>$this->Do->convertJson( $data ), "paging"=>$this->Paginator->getPagingParams()["Users"]], 
+                [ "status"=>"SUCCESS",  "data"=>$this->Do->convertJson( $data ), 
+                "paging" => $this->request->getAttribute('paging')['Users']], 
                 JSON_UNESCAPED_UNICODE); die();
         }
     }

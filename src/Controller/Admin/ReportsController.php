@@ -18,7 +18,6 @@ class ReportsController extends AppController
             $this->autoRender = false;
 
             $conditions = [ ];
-
             // Filters and Search
             $_from = !empty($_GET['from']) ? $_GET['from'] : '';
             $_to = !empty($_GET['to']) ? $_GET['to'] : '';
@@ -27,7 +26,7 @@ class ReportsController extends AppController
             $_col = !empty($_GET['col']) ? $_GET['col'] : 'id';
             $_k = (isset($_GET['k']) && strlen($_GET['k'])>0) ? $_GET['k'] : false;
             $_dir = !empty($_GET['direction']) ? $_GET['direction'] : 'DESC';
-    
+            $report_type = isset($_GET['report_type']) ? $_GET['report_type'] : '';
             
             if( !empty($_from) ){ $conditions['Reports.stat_updated > '] = $_from; }
             if( !empty($_to) ){ $conditions['Reports.stat_updated < '] = $_to; }
@@ -41,13 +40,29 @@ class ReportsController extends AppController
 
             // ONE RECORD
             if(!empty($_id)){
+
+                $empathy_cat_ids = $this->Do->cat(61);
+
+
+                  // cheking the report type first
+                if ($report_type == 'empathy') {
+                    $empathy_reports = $this->Reports->find('all' , [
+                        'conditions' => [
+                            'report_type IN ' => array_keys($empathy_cat_ids),
+                            'tar_id' => $_id, 
+                            'tar_tbl' => 'Sales', 
+                        ] , 
+                        'contain' => []
+                    ])->toArray();
+                    echo json_encode( [ "status"=>"SUCCESS",  "data"=>$empathy_reports],  JSON_UNESCAPED_UNICODE); die();
+                }
                 $data = $this->Reports->get( $_id, [
                     'contain' => [
                         "Status",
                         "Type"
                     ]
                 ])->toArray();
-                dd($data);
+              
                 $data = $this->Do->convertJson($data);
                 echo json_encode( [ "status"=>"SUCCESS",  "data"=>$data],  JSON_UNESCAPED_UNICODE); die();
             }
@@ -65,16 +80,12 @@ class ReportsController extends AppController
                 $data = $this->Do->convertJson($data);
             }
 
-            // Check if 'Reports' key exists before accessing it
-            $pagingParams = $this->Paginator->getPagingParams();
-            $reportsData = isset($pagingParams['Reports']) ? $pagingParams['Reports'] : [];
 
-            echo json_encode([
-                "status" => "SUCCESS",
-                "data" => $data,
-                "paging" => $reportsData, // Use the checked value here
-            ], JSON_UNESCAPED_UNICODE);
-            die();
+            echo json_encode( 
+                [ "status"=>"SUCCESS",  "data"=>$this->Do->convertJson( $data)
+                //  "paging" => $this->request->getAttribute('paging')['Reports']
+                ], 
+                JSON_UNESCAPED_UNICODE); die();
 
         }
 
@@ -95,10 +106,16 @@ class ReportsController extends AppController
     public function save($id = -1) 
     {
         $dt = json_decode(file_get_contents('php://input'), true);
-        
         // edit mode
         if ($this->request->is(['patch', 'put'])) {
             $rec = $this->Reports->get($dt['id']);
+            $report_type = $this->request->getQuery('report_type');
+            if ($report_type == 'empathy') {
+
+                dd('324');
+                
+            }
+            
         }
 
         // add mode
@@ -107,6 +124,21 @@ class ReportsController extends AppController
             // dd([$this->request->getParam('controller')]);
             $dt['id'] = null;
             $dt['stat_created'] = date('Y-m-d H:i:s');
+            // $value1 = $this->request->getQuery('status_id');
+            // if($value1 == 'isspoken'){
+            //     $dt['status_id'] = 76;
+            // }
+            // if($value1 == 'iscalled'){
+            //     $dt['status_id'] = 75;
+            // }
+
+            $report_type = $this->request->getQuery('report_type');
+            if ($report_type == 'empathy') {
+
+                dd('324');
+                
+            }
+            
         }
 
         if ($this->request->is(['post', 'patch', 'put'])) {

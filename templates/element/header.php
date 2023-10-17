@@ -1,16 +1,16 @@
  <!-- Header Start -->
  <nav class="navbar navbar-expand-lg">
-   <div class="container-fluid">
+   <div class="container-fluid m-2">
     <a class="navbar-brand" href="#">
-     <img src="\crm\webroot\img\pt-header-logo.svg" alt="logo of website" />
+     <img src="\img\pt-header-logo.svg" alt="logo of website" />
     </a>
-    <button name="menu-toggle" ng-click="toggleSidebar()" class="menu hideWeb">
-     <img src="\crm\webroot\img\burger-menu.svg" alt="menu toggle" />
+    <button name="menu-toggle" ng-click="toggleSidebar()" class="menu">
+     <img src="\img\burger-menu.svg" alt="menu toggle" />
     </button>
 
     <div class="sidebar">
      <div class="btn-exit">
-      <button ng-click="toggleSidebar()"><i class="fas-left"></i> Back</button>
+      <button ng-click="toggleSidebar()">Back<i class="fas-right"></i> </button>
      </div>
      <div class="nav-btns justify-content-center">
       <a href="#" class="search">
@@ -23,22 +23,20 @@
        <i class="fas-bell-alt"></i>
       </a>
       <a href="#" class="profile">
-       <img src="\crm\webroot\img\user.png" alt="" />
+      <img src="\img\user.png" alt="" />
       </a>
      </div>
      <ul class="side-list">
-      <li class="item">
+      <li class="item pt-3">
        <a class="nav-link" aria-current="page" href="#">Dashboard</a>
       </li>
-      <li class="item">
-       <a class="nav-link active" href="#">Clients</a>
+      <li class="item pt-3">
+       <a class="nav-link active" href="#">Sales</a>
       </li>
-      <li class="item">
-       <a class="nav-link" href="#">Field</a>
-      </li>
+      
      </ul>
     </div>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
      <ul class="navbar-nav me-auto">
       <li class="nav-item">
        <a class="nav-link" aria-current="page" href="#">Dashboard</a>
@@ -88,8 +86,8 @@
       <a href="#" class="profile" >
        <img src="\crm\webroot\img\user.png" alt="" />
       </a>
-     </div>
-    </div>
+     </div> 
+    </div>-->
    </div>
   </nav>
  <!-- Header Ends -->

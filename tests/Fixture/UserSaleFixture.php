@@ -6,9 +6,9 @@ namespace App\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * UsersaleFixture
+ * UserSaleFixture
  */
-class UsersaleFixture extends TestFixture
+class UserSaleFixture extends TestFixture
 {
     /**
      * Table name
@@ -27,9 +27,8 @@ class UsersaleFixture extends TestFixture
             [
                 'id' => 1,
                 'user_id' => 1,
-                'lead_id' => 1,
-                'user_lead_configs' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-                'stat_created' => '2023-09-13 09:02:32',
+                'sale_id' => 1,
+                'stat_created' => '2023-10-11 09:58:20',
                 'rec_state' => 1,
             ],
         ];
