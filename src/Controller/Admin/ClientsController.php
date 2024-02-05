@@ -506,7 +506,6 @@ class ClientsController extends AppController
 
     public function kbi()
     {
-        
 
     }
 
