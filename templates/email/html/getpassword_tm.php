@@ -1,6 +1,6 @@
 <?php
 $green = '#e63e3e';
-$pth = $_SERVER['SERVER_NAME'] == 'localhost' ? 'http://localhost/ptpms' : 'https://pms.propertyturkey.com';
+$pth = $_SERVER['SERVER_NAME'] == 'localhost' ? 'http://localhost/crm' : 'https://pms.propertyturkey.com';
 $ctrl = $content['ctrl'];
 ?>
 

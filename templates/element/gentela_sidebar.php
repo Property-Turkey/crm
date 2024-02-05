@@ -48,6 +48,14 @@ $admin_menu=[
                ["name"=>"all", "url" => ["clients", "index", ""]],
            ]
        ],
+       ["name"=>"dashboard",
+        "icon"=>"user-secret",
+        "roles"=>["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content"],
+        "active"=>"/clients/dashboard,/clients/save,/clients/view",
+        "sub" => [
+               ["name"=>"all", "url" => ["clients", "dashboard", ""]],
+           ]
+       ],
        ["name"=>"sales",
         "icon"=>"user-secret",
         "roles"=>["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content"],

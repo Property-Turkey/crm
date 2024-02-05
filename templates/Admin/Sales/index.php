@@ -4,6 +4,8 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
 <div class="right_col" role="main" ng-init="
         doGet('/admin/sales/index/<?= $pid ?>?list=1', 'list', 'sales');
     ">
+
+    
     <main>
         <section class="container-fluid">
             <h2 class="client-num">Sales ({{paging.count}})</h2>
@@ -23,8 +25,8 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                         <option value="option">Option</option>
                     </select> -->
 
-                    <label for="" class="col-md-6 col-12 col-lg-2">
-                        <tags-input class="wb-ele-tag" style="padding-left:2px; font-size:14px; border:1px solid black;border-radius: 7px;" ng-model="rec.search.sale_tags" add-from-autocomplete-only="true"
+                    <label for="" class="">
+                        <tags-input class="wb-ele-tag" ng-change="doSearch()" ng-model="rec.search.sale_tags" add-from-autocomplete-only="true"
                             display-property="text">
                             <auto-complete min-length="1" highlightMatchedText="true"
                                 source="loadTags($query, 'categories', 40)"></auto-complete>
@@ -34,9 +36,9 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                     <!-- <button class="wb-ele"ng-submit="doSearch()"type="submit">Search</button> -->
 
 
-                    <label for="" class="col-md-6 col-12 col-lg-3">
+                    <label for="" class="">
                         
-                        <select class="wb-ele-select" ng-model="rec.search.source_id">
+                        <select class="wb-ele-select" ng-change="doSearch()" ng-model="rec.search.source_id">
                             <option value="" selected>Source</option>
                             <?php foreach ($options['Source'] as $key => $value): ?>
                                 <option value="<?= $key ?>">
@@ -46,11 +48,9 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                         </select>
                     </label>
 
-                    
-
-                    <label for="" class="col-md-6 col-12 col-lg-3">
+                    <label for="" class="">
                         
-                        <select class="wb-ele-select" ng-model="rec.search.pool_id">
+                        <select class="wb-ele-select" ng-change="doSearch()" ng-model="rec.search.pool_id">
                             <option value="" selected><?=__('pool_id')?></option>
                             <?php foreach ($options['Pool'] as $key => $value): ?>
                                 <option value="<?= $key ?>">
@@ -60,11 +60,23 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                         </select>
                     </label>
                     
-                    <label for="" class="col-md-6 col-12 col-lg-3">
+                    <label for="" class="">
                         
-                        <select class="wb-ele-select" ng-model="rec.search.sale_current_stage">
+                        <select class="wb-ele-select" ng-change="doSearch()" ng-model="rec.search.sale_current_stage">
                             <option value="" selected><?=__('sale_current_stage')?></option>
-                            <?php foreach ($this->Do->lcl($this->Do->get('sale_current_stage')) as $key => $value): ?>
+                            <?php foreach ($this->Do->lcl($this->Do->get('client_current_stageSale')) as $key => $value): ?>
+                                <option value="<?= $key ?>">
+                                    <?= h($value) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                    
+                    <label for="" class="">
+                        
+                        <select class="wb-ele-select" ng-change="doSearch()" ng-model="rec.search.client_priority">
+                            <option value="" selected><?=__('client_priority')?></option>
+                            <?php foreach ($this->Do->lcl($this->Do->get('sale_priorities')) as $key => $value): ?>
                                 <option value="<?= $key ?>">
                                     <?= h($value) ?>
                                 </option>
@@ -72,14 +84,13 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                         </select>
                     </label>
 
-
                 </div>
 
 
                 <div class="flex-gap-10">
 
                     <button class="btn btn-danger" ng-click="
-                            newEntity('sales');
+                            newEntity('Sales');
                             openModal('#subModal'); 
                             inlineElement('#elementsContainer', 1, 'add-sale');
                         "><i class="fas-plus"></i>
@@ -89,11 +100,11 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                         </span>
                     </button>
 
-                    <button class="wb-ele-select" ng-click="multiHandle('/admin/sales/delete')">
+                    <button class="btn btn-warning" ng-click="multiHandle('/admin/sales/delete')">
                         Delete
                     </button>
 
-                    <select class="wb-ele-select">
+                    <select class="btn btn-light">
                         <option value="Select" empty="true">Select</option>
                         <option ng-click="multiHandle('/admin/sales/enable/1')">Enable</option>
                         <option ng-click="multiHandle('/admin/sales/enable/0')">Disable</option>
@@ -175,7 +186,7 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                                     <?= __('budget') ?>
                                 </div>
                                 <div class="col-md-2 p-0 title">
-                                    <?= __('booking') ?>
+                                    <?= __('reminders') ?>
                                 </div>
                                 <div class="col-md-1 p-0 title">
                                     <?= __('sale_current_stage') ?>
@@ -204,11 +215,13 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                                                 class="btn-link">
                                                 {{ itm.client.client_name }} </a>
                                             <p><i class="fas-mail"></i> {{ itm.client.client_email }}</p>
-                                            <p><img src="\crm\webroot\img\phone.svg" alt="" /> {{
-                                                itm.client.client_mobile }}</p>
+                                            <p><i class="fas-phone"></i>
+                                                <!-- <?= $this->Html->image('/img/phone.svg', [''=> '']) ?> -->
+                                                {{itm.client.client_mobile }}
+                                            </p>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-12">
+                                    <div class="col-lg-2 col-12 pr-5 mr-5 info">
                                         <div class="col-4 title hideWeb">Lead info</div>
                                         <div class="col-6 p-0 col-lg-12">
                                             <p><i class="fas-flag"></i> {{ itm.client.client_nationality }}</p>
@@ -222,10 +235,12 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                                     <div class="col-lg-1 col-12 status">
                                         <div class="col-4 title hideWeb">Status</div>
                                         <div class="col-6 p-0 col-lg-12">
-                                            <span class="new">New{{ DtSetter('rec_stateSale', itm.sale_current_stage,
-                                                itm.rec_state) }}</span>
+                                            <span class="new">
+                                                {{ DtSetter('rec_stateSale', itm.sale_current_stage, itm.rec_state) }}
+                                            </span>
                                         </div>
                                     </div>
+
                                     <div class="col-lg-2 col-12 notes">
                                         <div class="col-4 title hideWeb">Notes</div>
                                         <div class="col-6 p-0 col-lg-12"
@@ -240,11 +255,11 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                                             {{ itm.sale_budget }}</div>
                                     </div>
                                     <div class="col-lg-2 col-12">
-                                        <div class="col-4 title hideWeb">Booking</div>
+                                        <div class="col-4 title hideWeb">Reminders</div>
                                         <div class="col-6 p-0 col-lg-12">
 
                                             <div class="wb-ele">
-                                                <img src="\img\datepicker.png" alt="" />
+                                                <?= $this->Html->image('/img/datepicker.png', [''=> '']) ?>
                                                 <div class="line-height-10">
                                                     <span class="sm-txt">Next Call Date</span> {{
                                                     itm.reminders[0].reminder_nextcall.split(' ')[0] }}
@@ -252,7 +267,7 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                                             </div>
 
                                             <div class="wb-ele">
-                                                <img src="\img\clock_regular.svg" alt="" />
+                                            <?= $this->Html->image('/img/clock_regular.svg', [''=> '']) ?>
                                                 <div class="line-height-10">
                                                     <span class="sm-txt">Next Call Time</span> {{
                                                     itm.reminders[0].reminder_nextcall.split(' ')[1] }}
@@ -263,8 +278,8 @@ $pid = !isset($this->request->getParam('pass')[0]) ? null : $this->request->getP
                                     <div class="pe-2 ps-2 col-lg-2 col-12">
                                         <div class="col-4 title hideWeb">Adviser</div>
                                         <div class="col-6 p-0 col-lg-12">
-                                            <div class="wb-ele">{{DtSetter('sale_current_stage',
-                                                itm.sale_current_stage)}}</div>
+                                            <div class="wb-ele">{{DtSetter('client_current_stageSale',
+                                                itm.client_current_stage)}}</div>
                                         </div>
                                     </div>
                                 </div>

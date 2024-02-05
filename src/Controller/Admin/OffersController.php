@@ -10,22 +10,22 @@ class OffersController extends AppController
     
     public function index($_pid=null)
     {
-        $_offer = isset($_GET['tags']) ? $_GET['tags'] : false;
-        $_keyword = isset($_GET['keyword']) ? $_GET['keyword'] : false;
+        // $_offer = isset($_GET['tags']) ? $_GET['tags'] : false;
+        // $_keyword = isset($_GET['keyword']) ? $_GET['keyword'] : false;
 
-        // find offer by name
-        if (!empty($_offer)) {
-            $offerCondition = [
-                'offer_name LIKE' => '%' . $_keyword . '%'
-            ];
-            $data = $this->Offers
-                ->find('all')
-                ->select(['text' => 'offer_name',  'value'=>'id'])
-                ->where($offerCondition);
+        // // find offer by name
+        // if (!empty($_offer)) {
+        //     $offerCondition = [
+        //         'offer_name LIKE' => '%' . $_keyword . '%'
+        //     ];
+        //     $data = $this->Offers
+        //         ->find('all')
+        //         ->select(['text' => 'offer_name',  'value'=>'id'])
+        //         ->where($offerCondition);
 
-            echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
-            die();
-        }
+        //     echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
+        //     die();
+        // }
 
         if ($this->request->is('post')) {
 
@@ -158,7 +158,13 @@ class OffersController extends AppController
         if ($this->request->is(['patch', 'put'])) {
 
             $rec = $this->Offers->get($dt['id']);
-            
+            // $client_id = $dt['client_id'];
+            // $dt['offer']['isinterested'] = !empty($dt['offer']['isinterested']) ? 1 : 0;
+
+            if (isset($dt['property'][0]['value'])) {
+                $rec->property_id = $dt['property'][0]['value'];
+            }
+
             $rec = $this->Offers->patchEntity($rec, $dt);
 
 
@@ -170,16 +176,29 @@ class OffersController extends AppController
         if ($this->request->is(['post'])) {
             $dt['id'] = null;
             $dt['stat_created'] = date('Y-m-d H:i:s');
-            
+            // $client_id = $dt['client_id'];
+            // $dt['offer']['isinterested'] = !isset($dt['offer']['isinterested']) ? 1 : 0;
+    // dd($dt);   
+    
+            // debug($dt);
+
             $rec = $this->Offers->newEntity($dt);
+// debug($rec);
+
+            if (isset($dt['property'][0]['value'])) {
+                $rec->property_id = (int)$dt['property'][0]['value'];
+            } 
+            // debug($rec);
             
         }
 
 
 
         if ($this->request->is(['post', 'patch', 'put'])) {
+            
             $this->autoRender = false;
             if ($newRec = $this->Offers->save($rec)) {
+                // dd($newRec);
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
                 die();
             }

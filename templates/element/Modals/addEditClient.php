@@ -4,6 +4,12 @@
 <div class="modal fade" id="addEditClient_mdl" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="listing-modal-1 modal-dialog modal-lg">
         <div class="modal-content">
+
+
+        
+                
+
+
             <!-- Modal header and title -->
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -15,10 +21,13 @@
             <!-- ... (existing code) ... -->
 
             <div class="modal-body">
-                <button type="button" id="client_btn" class="hideIt" 
+
+<!-- 
+                <button type="button" id="clientEnq_btn" class="hideIt" 
                 ng-click="doGet('/admin/clients/index?list=1', 'list', 'clients');   
-                rec.client = {}; doClick('.close');">
-                </button>
+                rec.client = {}; doClick('#subModal');">
+                </button> -->
+
 
                 <!-- Permission form -->
                 <form class="row" id="client_form" ng-submit="

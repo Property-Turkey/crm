@@ -83,16 +83,16 @@ $prefix = $this->request->getParam('controller') == 'Properties' ? 'PROP' : 'PRO
                                         </div>
 
                                         <div class="mb-2  col-sm-8">
-                                            <label><?= __('sale_priority') ?></label>
+                                            <label><?= __('client_priority') ?></label>
                                             <div class="div">
-                                                <?= $this->Form->control('sale_priority', [
+                                                <?= $this->Form->control('client_priority', [
                                                     'class' => 'form-control has-feedback-left', 'label' => false,
                                                     'type' => 'select', 
-                                                    'placeholder' => __('sale_priority'),
+                                                    'placeholder' => __('client_priority'),
                                                     'ng-change'=>'doSearch()',
                                                     'options'=>$this->Do->lcl( $this->Do->get('sale_priorities') ),
                                                     'empty'=>'Select Sale Priority',
-                                                    'ng-model' => 'rec.search.sale_priority',
+                                                    'ng-model' => 'rec.search.client_priority',
                                                 ]) ?>
                                                 <span class="fa fa-level-up form-control-feedback left" aria-hidden="true"></span>
                                                 <button ng-click="doClick('#submit_btn')" class="onfly_btn"><i class="fa fa-search"></i></button>

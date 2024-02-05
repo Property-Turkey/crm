@@ -20,13 +20,13 @@ class BooksFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'sale_id' => 1,
-                'book_arrivedate' => '2023-10-03 14:29:34',
+                'client_id' => 1,
+                'book_arrivedate' => '2023-11-13 11:51:55',
                 'book_current_stay' => 'Lorem ipsum dolor sit amet',
                 'book_meetperiod' => 1,
-                'book_meetdate' => '2023-10-03 14:29:34',
+                'book_meetdate' => '2023-11-13 11:51:55',
                 'book_meetplace' => 'Lorem ipsum dolor sit amet',
-                'stat_created' => '2023-10-03 14:29:34',
+                'stat_created' => '2023-11-13 11:51:55',
                 'rec_state' => 1,
             ],
         ];

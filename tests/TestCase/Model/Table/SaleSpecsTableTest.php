@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\SaleSpecsTable;
+use App\Model\Table\SalespecsTable;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\SaleSpecsTable Test Case
+ * App\Model\Table\SalespecsTable Test Case
  */
-class SaleSpecsTableTest extends TestCase
+class SalespecsTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\SaleSpecsTable
+     * @var \App\Model\Table\SalespecsTable
      */
-    protected $SaleSpecs;
+    protected $Salespecs;
 
     /**
      * Fixtures
@@ -24,10 +24,11 @@ class SaleSpecsTableTest extends TestCase
      * @var array<string>
      */
     protected $fixtures = [
-        'app.SaleSpecs',
+        'app.Salespecs',
         'app.Sales',
-        'app.Clients',
-        'app.Reports',
+        'app.Currency',
+        'app.Persona',
+        'app.Style',
     ];
 
     /**
@@ -38,8 +39,8 @@ class SaleSpecsTableTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('SaleSpecs') ? [] : ['className' => SaleSpecsTable::class];
-        $this->SaleSpecs = $this->getTableLocator()->get('SaleSpecs', $config);
+        $config = $this->getTableLocator()->exists('Salespecs') ? [] : ['className' => SalespecsTable::class];
+        $this->Salespecs = $this->getTableLocator()->get('Salespecs', $config);
     }
 
     /**
@@ -49,30 +50,8 @@ class SaleSpecsTableTest extends TestCase
      */
     protected function tearDown(): void
     {
-        unset($this->SaleSpecs);
+        unset($this->Salespecs);
 
         parent::tearDown();
-    }
-
-    /**
-     * Test validationDefault method
-     *
-     * @return void
-     * @uses \App\Model\Table\SaleSpecsTable::validationDefault()
-     */
-    public function testValidationDefault(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test buildRules method
-     *
-     * @return void
-     * @uses \App\Model\Table\SaleSpecsTable::buildRules()
-     */
-    public function testBuildRules(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
     }
 }

@@ -12,7 +12,6 @@ use Cake\ORM\Entity;
  * @property int $user_id
  * @property int $tar_id
  * @property string $tar_tbl
- * @property int $status_id
  * @property int|null $report_type
  * @property int $report_priority
  * @property string $report_text
@@ -21,6 +20,9 @@ use Cake\ORM\Entity;
  *
  * @property \App\Model\Entity\Sale $sale
  * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\Category $status
+ * @property \App\Model\Entity\Category $type
+ * @property \App\Model\Entity\Sale $text
  */
 class Report extends Entity
 {
@@ -37,7 +39,6 @@ class Report extends Entity
         'user_id' => true,
         'tar_id' => true,
         'tar_tbl' => true,
-        'status_id' => true,
         'report_type' => true,
         'report_priority' => true,
         'report_text' => true,
@@ -45,5 +46,8 @@ class Report extends Entity
         'rec_state' => true,
         'sale' => true,
         'user' => true,
+        'status' => true,
+        'type' => true,
+        'text' => true,
     ];
 }

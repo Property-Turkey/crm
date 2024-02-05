@@ -24,7 +24,7 @@ class RemindersControllerTest extends TestCase
     protected $fixtures = [
         'app.Reminders',
         'app.Users',
-        'app.Sales',
+        'app.Clients',
     ];
 
     /**

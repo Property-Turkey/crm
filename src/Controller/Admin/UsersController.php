@@ -6,6 +6,7 @@ namespace App\Controller\Admin;
 use App\Controller\AppController;
 use Cake\Event\EventInterface;
 use Cake\Datasource\ConnectionManager;
+use Cake\Core\Configure;
 
 class UsersController extends AppController
 {
@@ -22,6 +23,10 @@ class UsersController extends AppController
             ]); die();
 
         }
+
+        $userCount = $this->Users->Clients->find()->count();
+
+        $this->set(compact('clientCount'));
     }
 
     private function statistics()
@@ -211,15 +216,26 @@ class UsersController extends AppController
     
     public function index( )
     {
-
+        // $this->Do->sendEmail(['laralev84@gmail.com'], __('new_account'), [], 'register_tm');
+        // die;
         $_user = isset($_GET['tags']) ? $_GET['tags'] : false;
         $_keyword = isset($_GET['keyword']) ? $_GET['keyword'] : false;
+        $_roleAssign = isset($_GET['role']) ? $_GET['role'] : false;
 
-        // find client by name
+        
+        // find users by name
         if (!empty($_user)) {
-            $userCondition = [
-                'user_fullname LIKE' => '%' . $_keyword . '%'
-            ];
+            
+            if ($_roleAssign == false) {
+                $userCondition = [
+                    'user_fullname LIKE' => '%' . $_keyword . '%'
+                ];
+            } else {
+                $userCondition = [
+                    'user_role' => $_roleAssign,
+                    'user_fullname LIKE' => '%' . $_keyword . '%'
+                ];
+            }
             $data = $this->Users
                 ->find('all')
                 ->select(['text' => 'user_fullname',  'value'=>'id'])
@@ -278,9 +294,12 @@ class UsersController extends AppController
                     // dd($dt['search']);
                 }
             }
+
+
             // ONE RECORD
             if(!empty($_id)){
                 $data = $this->Users->get( $_id )->toArray();
+
                 echo json_encode(["status"=>"SUCCESS",  "data"=>$this->Do->convertJson( $data )], JSON_UNESCAPED_UNICODE); die();
             }
 
@@ -298,6 +317,8 @@ class UsersController extends AppController
                 "paging" => $this->request->getAttribute('paging')['Users']], 
                 JSON_UNESCAPED_UNICODE); die();
         }
+
+       
     }
 
     public function view($id = null)
@@ -310,6 +331,8 @@ class UsersController extends AppController
 
     public function myaccount($id = -1) 
     {
+        
+        // $this->render('myaccount');
     }
 
     public function save($id = -1) 
@@ -320,6 +343,24 @@ class UsersController extends AppController
         if ($this->request->is(['patch', 'put'])) {
             $rec = $this->Users->get($dt['id']);
             $oldEmail = $rec->email;
+            $dt['stat_created'] = date('Y-m-d H:i:s');
+            $dt['stat_lastlogin'] = date('Y-m-d H:i:s');
+            $dt['stat_logins'] = $dt['stat_logins']+1;
+            $dt['stat_ip'] = $this->Do->getIP();
+            
+            if (isset($dt['email']) && $dt['email'] != $oldEmail) {
+                $this->sendActivationEmail($dt['email'], $dt);
+            }
+
+            if (isset($dt['activate'])) {
+                $this->sendActivationEmail($dt['email'], $dt);
+            }
+            
+            if (empty($dt['password'])) {
+                unset($dt['password']);
+            }
+           
+            
         }
 
         // add mode
@@ -327,12 +368,23 @@ class UsersController extends AppController
             $rec = $this->Users->newEmptyEntity();
             $dt['id'] = null;
             $dt['stat_created'] = date('Y-m-d H:i:s');
+            $dt['stat_lastlogin'] = date('Y-m-d H:i:s');
+            $dt['rec_state'] = 0;
+            $dt['stat_logins'] = empty($dt['stat_logins']) ? 1 : $dt['stat_logins'] + 1;
+            $dt['stat_ip'] = $this->Do->getIP();
+
+            $this->sendActivationEmail($dt['email'], $dt);
+        
         }
+ 
         if ($this->request->is(['post', 'patch', 'put'])) {
             
             $this->autoRender  = false;
 
-            $dt['user_configs'] = json_encode($dt['user_configs']);
+            if(isset($dt['user_configs'])){
+                $dt['user_configs'] = json_encode($dt['user_configs']);
+            }
+            
             
             $rec = $this->Users->patchEntity($rec, $dt);
             unset($rec['office']);
@@ -348,6 +400,11 @@ class UsersController extends AppController
             echo json_encode(["status"=>"FAIL", "data"=>$rec->getErrors()]); die();
         }
     }
+
+    public function sendActivationEmail($email, $userData) {
+        $this->Do->sendEmail([$email], __('new_account'), $userData, 'register_tm');
+    }
+    
 
 	public function delimage() 
     {
@@ -421,16 +478,6 @@ class UsersController extends AppController
         echo json_encode($res);die();
     }
     
-    function beforeFilter(EventInterface $event) 
-    {
-        parent::beforeFilter($event);
-        
-        if ($this->request->is(['post', 'patch', 'put', 'delete'])) {
-            if(!$this->_isAuthorized(true, 'read')){
-                echo json_encode(["status" => "FAIL", "redirect" => $this->app_folder.'/?login=1']); die();
-            }
-        }
-    }
     public function login() 
     {
         $this->autoRender = false;
@@ -619,12 +666,21 @@ class UsersController extends AppController
 
         $this->set('user', $user);
 	}
-    
-    
     public function edit() 
     {
         if($this->request->getQuery('changepw')==1){
             $this->Flash->default(__('please_change_your_password'));
         }
     }
+     function beforeFilter(EventInterface $event) 
+    {
+        parent::beforeFilter($event);
+        
+        if ($this->request->is(['post', 'patch', 'put', 'delete'])) {
+            if(!$this->_isAuthorized(true)){
+                echo json_encode(["status" => "FAIL", "redirect" => $this->app_folder.'/?login=1']); die();
+            }
+        }
+    }
+    
 }

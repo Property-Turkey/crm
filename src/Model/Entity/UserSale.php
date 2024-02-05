@@ -10,12 +10,12 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $user_id
- * @property int $sale_id
+ * @property int $client_id
  * @property \Cake\I18n\FrozenTime|null $stat_created
  * @property int $rec_state
  *
  * @property \App\Model\Entity\User $user
- * @property \App\Model\Entity\Sale $sale
+ * @property \App\Model\Entity\Client $client
  */
 class UserSale extends Entity
 {
@@ -30,10 +30,10 @@ class UserSale extends Entity
      */
     protected $_accessible = [
         'user_id' => true,
-        'sale_id' => true,
+        'client_id' => true,
         'stat_created' => true,
         'rec_state' => true,
         'user' => true,
-        'sale' => true,
+        'client' => true,
     ];
 }

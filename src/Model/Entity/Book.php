@@ -9,7 +9,7 @@ use Cake\ORM\Entity;
  * Book Entity
  *
  * @property int $id
- * @property int $sale_id
+ * @property int $client_id
  * @property \Cake\I18n\FrozenTime|null $book_arrivedate
  * @property string|null $book_current_stay
  * @property int|null $book_meetperiod
@@ -18,7 +18,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $stat_created
  * @property int $rec_state
  *
- * @property \App\Model\Entity\Sale $sale
+ * @property \App\Model\Entity\Client $client
  */
 class Book extends Entity
 {
@@ -32,7 +32,7 @@ class Book extends Entity
      * @var array<string, bool>
      */
     protected $_accessible = [
-        'sale_id' => true,
+        'client_id' => true,
         'book_arrivedate' => true,
         'book_current_stay' => true,
         'book_meetperiod' => true,
@@ -40,6 +40,6 @@ class Book extends Entity
         'book_meetplace' => true,
         'stat_created' => true,
         'rec_state' => true,
-        'sale' => true,
+        'client' => true,
     ];
 }

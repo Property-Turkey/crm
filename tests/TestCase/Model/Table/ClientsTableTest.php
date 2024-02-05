@@ -25,11 +25,23 @@ class ClientsTableTest extends TestCase
      */
     protected $fixtures = [
         'app.Clients',
+        'app.Enquires',
         'app.Sources',
         'app.Country',
         'app.City',
+        'app.PoolCategories',
         'app.Region',
+        'app.Users',
         'app.Reports',
+        'app.Actions',
+        'app.Offers',
+        'app.Reminders',
+        'app.Reservations',
+        'app.TagCategories',
+        'app.Categories',
+        'app.Books',
+        'app.UserSale',
+        'app.ClientSpecs',
     ];
 
     /**
@@ -63,17 +75,6 @@ class ClientsTableTest extends TestCase
      * @uses \App\Model\Table\ClientsTable::validationDefault()
      */
     public function testValidationDefault(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test buildRules method
-     *
-     * @return void
-     * @uses \App\Model\Table\ClientsTable::buildRules()
-     */
-    public function testBuildRules(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

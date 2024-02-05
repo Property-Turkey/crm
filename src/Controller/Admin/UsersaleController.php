@@ -73,56 +73,66 @@ class UserSaleController extends AppController
         }
     }
 
-    public function view($id = null)
-    {
-        $rec = $this->UserSale->get($id, [
-            'contain' => ['Reports'],
-        ]);
-
-        $this->set(compact('rec'));
-    }
-
     public function save($id = -1){
-    $dt = json_decode(file_get_contents('php://input'), true);
-    $UserSaleTable =  $this->getTableLocator()->get('UserSale');
-
-    // add mode
-    if ($this->request->is(['post'])) {
-        $dt['stat_created'] = date('Y-m-d H:i:s');
-        $user_id = $dt['user'][0]['value'];
+        $dt = json_decode(file_get_contents('php://input'), true);
         
-        // Kontrol etmek istediğiniz kullanıcının user_id'sini alın
-        // Eğer aynı user_id'ye sahip başka kayıtlar varsa, eklemeyin
-        if (!$this->isUserAlreadyExists($user_id)) {
-            $dt['user_id'] = $user_id;
-            unset($dt['user']);
-            unset($dt['id']);
-            $rec = $UserSaleTable->newEntity($dt);
+        $user_id = $dt['user'][0]['value'];
+        $client_id = $dt['client_id'];
+        $UserClientTable =  $this->getTableLocator()->get('UserSale');
+        $ClientTable = $this->getTableLocator()->get('UserSale')->Clients->get($client_id);
+        
 
-            if ($newRec = $UserSaleTable->save($rec)) {
-                echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
+        // add mode
+        if ($this->request->is(['post'])) {
+            $dt['stat_created'] = date('Y-m-d H:i:s');
+            $client_id = $dt['client_id'];
+            // debug($dt['client_id']);
+            // dd($client_id);
+            if($ClientTable->client_current_stage == 2){
+
+                $ClientTable->client_current_stage = 3;
+                $ClientTable->rec_state = 1;
+
+            }elseif($ClientTable->client_current_stage == 4){
+                
+                $ClientTable->client_current_stage = 5;
+                $ClientTable->rec_state = 1;
+            }
+        
+
+            if (!$this->isUserAlreadyAssigned($client_id, $user_id)) {
+                $dt['user_id'] = $user_id;
+                unset($dt['user']);
+                unset($dt['id']);
+                $rec = $UserClientTable->newEntity($dt);
+
+                if ($newddRec = $this->getTableLocator()->get('UserSale')->Clients->save($ClientTable) && $newRec = $UserClientTable->save($rec)) {
+                    echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec, $newddRec)]);
+                    die();
+                }
+                echo json_encode(["status" => "FAIL", "data" => $rec->getErrors()]);
+                die();
+            } else {
+                echo json_encode(["status" => "FAIL", "msg" => "This user is already assigned to this client.", "data" => []]);
                 die();
             }
-            echo json_encode(["status" => "FAIL", "data" => $rec->getErrors()]);
-            die();
-        } else {
-            echo json_encode(["status" => "FAIL", "msg" => "This user has been assigned before.", "data" => []]);
-            die();
         }
     }
-}
 
-private function isUserAlreadyExists($user_id)
-{
-    $UserSaleTable =  $this->getTableLocator()->get('UserSale');
-    // Daha önce aynı user_id ile kaydedilmiş başka kayıtları kontrol edin
-    $existingRecord = $UserSaleTable->find('all', [
-        'conditions' => ['user_id' => $user_id],
-    ])->first();
-    
-    // Eğer böyle bir kayıt varsa, kullanıcı zaten kayıtlı demektir
-    return !empty($existingRecord);
-}
+    private function isUserAlreadyAssigned($clientId, $userId)
+    {
+        $UserClientTable = $this->getTableLocator()->get('UserSale');
+        
+        $existingRecord = $UserClientTable->find('all', [
+            'conditions' => [
+                'client_id' => $clientId,
+                'user_id' => $userId,
+            ],
+        ])->first();
+        
+        return !empty($existingRecord);
+    }
+
 
 
     public function delete($id = null)

@@ -9,11 +9,11 @@
             </div>
             <div class="modal-body">
 
-                <button type="button" id="client_btn" class="hideIt" ng-click="
+                <!-- <button type="button" id="client_btn" class="hideIt" ng-click="
                     doGet('/admin/clients/index?list=1', 'list', 'clients');
  
                     doClick('.close');
-                "></button>
+                "></button> -->
 
                 <form class="row" ng-submit="searchClients()" id="client_form" ng-submit="
                     rec.client.img = filesInfo.client_photos;

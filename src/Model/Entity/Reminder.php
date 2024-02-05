@@ -10,14 +10,14 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $user_id
- * @property int $sale_id
+ * @property int $client_id
  * @property \Cake\I18n\FrozenTime $reminder_nextcall
- * @property string $reminder_desc
+ * @property string|null $reminder_desc
  * @property \Cake\I18n\FrozenTime $stat_created
  * @property \Cake\I18n\FrozenTime|null $stat_updated
  *
  * @property \App\Model\Entity\User $user
- * @property \App\Model\Entity\Sale $sale
+ * @property \App\Model\Entity\Client $client
  */
 class Reminder extends Entity
 {
@@ -32,12 +32,12 @@ class Reminder extends Entity
      */
     protected $_accessible = [
         'user_id' => true,
-        'sale_id' => true,
+        'client_id' => true,
         'reminder_nextcall' => true,
         'reminder_desc' => true,
         'stat_created' => true,
         'stat_updated' => true,
         'user' => true,
-        'sale' => true,
+        'client' => true,
     ];
 }

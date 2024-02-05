@@ -27,6 +27,10 @@ class ReportsTableTest extends TestCase
         'app.Reports',
         'app.Sales',
         'app.Users',
+        'app.Status',
+        'app.Type',
+        'app.User',
+        'app.Text',
     ];
 
     /**

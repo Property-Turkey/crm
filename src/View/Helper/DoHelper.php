@@ -46,10 +46,13 @@ class DoHelper extends Helper{
 		return $res;
 	}
 	
-	public function cat($key){
-        return Configure::read($key);
-	}
-
+	public function cat($pid)
+    {
+        $cats = TableRegistry::getTableLocator()->get('Categories')
+                    ->find('list')
+                    ->where(['parent_id'=>$pid])->toArray();
+        return ($cats);
+    }
 
 	public function lcl($arr, $isComplex=false, $isKey=true){
 		$res=[];

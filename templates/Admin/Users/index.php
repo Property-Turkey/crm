@@ -1,172 +1,159 @@
-
-<div class="right_col" role="main" ng-init="
-        doGet('/admin/users/index?list=1', 'list', 'users');
+<div id="indxPg" class="right_col" role="main" ng-init="
+doGet('/admin/users/index?list=1', 'list', 'users');
     ">
-    <div class="">
-        <div class="page-title">
-            <div class=" col-6 col-sm-6 col-md-6 side_div1">
-                <h3><?=__('users_list')?></h3>
-            </div>
-            <div class=" col-6 col-sm-6 col-md-6 side_div2" >
-                <span class="icn">
-                    <a href ng-click="rec.user={}" data-toggle="modal" data-target="#addEditUser_mdl" data-dismiss="modal"  class="btn btn-info">
-                        <span class="fa fa-plus"></span> <span class="hideMob"><?=__('add_user')?></span>
-                    </a>
-                </span>
-            </div>
 
-            <div class=" col-6 col-sm-6 col-md-6 side_div2" >
-                <span class="icn">
-                    <a href  data-toggle="modal" data-target="#searchUser_mdl" data-dismiss="modal"  class="btn btn-info">
-                        <span class="fa fa-search"></span> <span class="hideMob"><?=__('search')?></span>
-                    </a>
-                </span>
-            </div>
-        </div>
 
-        <div class="clearfix"></div>
+    <main>
+        <section class="container-fluid">
+            <h2 class="client-num">Users ({{paging.count}})</h2>
+            <form class="dropdowns">
 
-        <div class="row">
-            <div class="col-12">
-                <div class="x_panel">
+                <div class="flex-gap-10 flex-wrap">
+                </div>
 
-                    <div id="main_preloader" class="preloader">
-                        <div>
-                            <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
-                        </div>
-                        <div><?=__('please_wait')?></div>
+
+                <div class="flex-gap-10 mt-3">
+
+                    <button class="btn btn-danger" ng-click="
+                            newEntity('user');
+                            openModal('#subModal'); 
+                            inlineElement('#elementsContainer', 1, 'add-user');
+                        "><i class="fas-plus"></i>
+                        <span class="hideMob">
+
+                            <?= __('add') ?>
+                        </span>
+                    </button>
+
+                    <button class="btn btn-warning" ng-click="multiHandle('/admin/users/delete')">
+                        Delete
+                    </button>
+
+                    <select class="wb-ele-select" style="width: auto;height: 37px;padding: 8px 6px;  border-radius: 6px;">
+                        <option value="Select" empty="true">Select</option>
+                        <option ng-click="multiHandle('/admin/users/enable/1')">Enable</option>
+                        <option ng-click="multiHandle('/admin/users/enable/0')">Disable</option>
+                    </select>
+                </div>
+            </form>
+        </section>
+        <!-- Dashboard Start -->
+        <section class="container-fluid">
+            <div class="dashboard">
+                <!-- Dashboard Header Start -->
+                <div class="dash-head">
+                    <div class="flex-gap-10">
+                        <form class="search-leads-form">
+                            <i class="fas-search"></i>
+                            <input type="text" ng-change="doSearch()" ng-model="rec.search.user_fullname"
+                                placeholder="Search Users" />
+                        </form>
+
                     </div>
-                    
-                    <div class="x_title">
-                        <h2><b><?=__('users_list')?></b> <br>
-                            <span> <?=__('show').' '.__('from')?> 
-                                {{ paging.start  }} <?=__('to')?> 
-                                {{ paging.end }} <?=__('of')?> {{ paging.count }} </span></h2>
-                        
-                        <?php if(in_array($authUser['user_role'], ['admin.root', 'admin.admin'])){?>
-                        <ul class="nav navbar-right panel_toolbox">
-                            <!-- <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li> -->
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                    aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                <div class="dropdown-menu  <?= $currlang!='ar' ? 'dropdown-menu-right' : ''?>">
-                                    <a href ng-click="multiHandle('/admin/users/enable/1')" class="dropdown-item">
-                                        <i class="fa fa-check"></i> <?=__('enable_selected')?>
-                                    </a>
-                                    <a href ng-click="multiHandle('/admin/users/enable/0')" class="dropdown-item">
-                                        <i class="fa fa-times"></i> <?=__('disable_selected')?>
-                                    </a>
-                                    <a href ng-click="multiHandle('/admin/users/delete')" class="dropdown-item">
-                                        <i class="fa fa-trash"></i> <?=__('delete_selected')?>
-                                    </a>
-                                </div>
-                            </li>
-                            <!-- <li><a class="close-link"><i class="fa fa-close"></i></a> 
-                            </li>-->
-                        </ul>
-                        <?php }?>
-
-                        <div class="clearfix"></div>
-                    </div>
-
-                    <div class="x_content">
-
-                        
-                        <div class="grid ">
-
-                            <div class="grid_header row">
-
-                                <?php if(in_array($authUser['user_role'], ['admin.root', 'admin.admin', 'admin.supervisor'])){?>
-                                <div class="col-sm-1 col">
-                                    <?=$this->element('colActions', ['url'=>'users/index/', 'col'=>'id'])?>
-                                    <label class="mycheckbox">
-                                        <input type="checkbox" ng-click="chkAll('.chkb', !selectAll)" ng-model="selectAll">
-                                        <span></span> 
-                                        <?=__('id')?> 
-                                    </label> 
-                                </div>
-                                <?php }?>
-                                
-                                <div class="col-sm-4 col">
-                                    <?=$this->element('colActions', ['url'=>'users/index/', 'col'=>'user_fullname' ])?> 
-                                    <?=__('user_fullname')?> </div>
-
-                                <div class="col-sm-3 col">
-                                    <?=$this->element('colActions', ['url'=>'users/index/', 'col'=>'user_role'])?> 
-                                    <?=__('user_role')?> </div>
-
-
-                                <div class="col-sm-2 col">
-                                    <?=$this->element('colActions', ['url'=>'users/index/', 'col'=>'rec_state'])?> 
-                                    <?=__('rec_state')?> </div>
-
-                                    <div class="col-sm-2 col">
-                                    <?=__('action')?> </div>
-
-                            </div>
-                            
-                            <div class="grid_row row" ng-repeat="itm in lists.users">
-
-                                <?php if(in_array($authUser['user_role'], ['admin.root', 'admin.admin', 'admin.supervisor'])){?>
-                                <div class="col-sm-1 hideMobSm grid_header">
-                                    <label class="mycheckbox chkb">
-                                        <input type="checkbox" ng-model="selected[itm.id]" ng-value="{{itm.id}}">
-                                        <span></span> {{ itm.id }}
-                                    </label>
-                                </div>
-
-                                <div class="col-4 hideWeb grid_header">
-                                    <?=__('id')?> 
-                                    <label class="mycheckbox chkb">
-                                        <input type="checkbox" ng-model="selected[itm.id]" ng-value="{{itm.id}}">
-                                        <span></span>
-                                    </label>
-                                </div>
-                                
-                                <div class="col-md-1 col-8 hideWeb">{{ itm.id }}</div>
-                                <?php }?>
-
-                                <div class="col-4 hideWeb grid_header"><?=__('user_fullname')?></div>
-                                <div class="col-md-4 col-8">
-                                    <a href="javascript:void(0);" title="{{DtSetter('roles', itm.user_role)}}" >
-                                        <img ng-src="<?= $app_folder ?>/img/badges/ptbadge{{roles_badge[itm.user_role]}}.svg" />
-                                    </a>
-                                    {{ itm.user_fullname }} 
-                                </div>
-                                
-                                <div class="col-4 hideWeb grid_header"><?=__('user_role')?></div>
-                                <div class="col-md-3 col-8">{{ DtSetter('roles', itm.user_role) }}</div>
-
-                              
-
-                                <div class="col-4 hideWeb grid_header"><?=__('rec_state')?></div>
-                                <div class="col-md-2 col-8" ng-bind-html="DtSetter('bool2', itm.rec_state)"></div>
-
-                                <div class="col-4 hideWeb grid_header"><?=__('actions')?></div>
-                                <div class="col-md-2 col-8 action">
-                                    <a href="javascript:void(0);" 
-                                        data-toggle="modal" data-target="#viewUser_mdl"  class="inline-btn"
-                                        ng-click="doGet('/admin/users?id='+itm.id, 'rec', 'user');">
-                                        <i class="fa fa-eye"></i> <?=__('view')?>
-                                    </a> &nbsp; 
-                                    <a href="javascript:void(0);" 
-                                        data-toggle="modal" data-target="#addEditUser_mdl"
-                                        ng-click="itm.office_id = itm.office_id+''; rec.user = itm; "  class="inline-btn">
-                                        <i class="fa fa-pencil"></i> <?=__('edit')?>
-                                    </a>
-                                </div>
-                            </div>
-
-                        </div>
-                        <?php echo $this->element('paginator-ng')?>
+                    <div class="dash-nav">
+                        <?php echo $this->element('paginator-ng') ?>
                     </div>
                 </div>
+                <!-- Dashboard Header End -->
+                <!-- Dashboard Content Start -->
+                <div class="dash-content">
+                    <div class="columns-titles">
+                        <div class="row">
+                            <div class="checkbox">
+                                <input type="checkbox" class="all-clients" name="client-checkbox"
+                                    ng-click="checkAll(this)" />
+                            </div>
+
+                            <div class="col-11 hideMob row">
+                                <div class="col-md-5 p-0 title">
+                                    <?= __('user') ?>
+                                </div>
+                                <div class="col-md-5 p-0 title">
+                                    <?= __('user_info') ?>
+                                </div>
+                                <div class="col-md-2 p-0 title">
+                                    <?= __('action') ?>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <!--  -->
+                    <div class="client" ng-repeat="itm in lists.users track by $index">
+                        <!-- Client row Start -->
+                        <div class="client-row">
+                            <div class="row">
+                                <div class="checkbox col-1">
+                                    <input type="checkbox" ng-model="selected[itm.id]" class="mb-3" id="client-1"
+                                        name="client-checkbox" />
+                                </div>
+
+                                <div class="col-lg-11 col-12 row">
+
+                                    <div class="previewToggle col-lg-5 col-12 row">
+                                        <div class="col-4 title hideWeb">
+                                            <?= __('user') ?>
+                                        </div>
+                                        <div class="col-6 col-lg-12">
+                                            <div class="priority">
+                                                <div ng-class="{'low': itm.rec_state == 1, 'high': itm.rec_state == 0}">
+                                                </div>{{itm.id}}
+                                            </div>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#viewUser_mdl"
+                                                ng-click="doGet('/admin/users?id='+itm.id, 'rec', 'user');"
+                                                class="btn-link">
+                                                {{ itm.user_fullname }} 
+                                            </a>
+                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-5 col-12 pr-5 mr-5 info">
+                                        <div class="col-4 title hideWeb"><?= __('user_info') ?></div>
+                                        <div class="col-6 p-0 col-lg-12">
+                                            <p>
+                                                <i class="fa fa-user"></i>
+                                                {{ itm.user_role }}
+                                            </p>
+                                            <p><i class="fa fa-envelope"></i>
+                                                {{itm.email }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-2 col-12 pr-5 mr-5 info">
+                                        <div class="col-4 title hideWeb"><?= __('user_info') ?></div>
+                                        <div class="col-6 p-0 col-lg-12">
+                                        <button id="modalBtn" style="font-size: 13px;" class="btn btn-modal"
+                                            ng-click="setZIndex();
+                                                updateModalElement('User');
+                                                doGet('/admin/users?id='+itm.id, 'rec', 'user');
+                                                openModal('#subModal'); inlineElement('#elementsContainer', 1, 'edit-user')">
+                                            <i class="fa fa-pencil"></i>
+                                            <?= __('edit_user') ?>
+                                        </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Client row End -->
+
+                    </div>
+
+                </div>
+                <!-- Dashboard Content End -->
+                <!-- Dashboard Nav Start -->
+                <div class="dash-nav flex-center p-2">
+                    <?php echo $this->element('paginator-ng') ?>
+                </div>
+                <!-- Dashboard Nav End -->
             </div>
-        </div>
-    </div>
+        </section>
+        <!-- Dashboard End -->
+    </main>
+
 </div>
 
-<?php echo $this->element('Modals/addEditUser')?>
-<?php echo $this->element('Modals/viewUser')?>
-<?php echo $this->element('Modals/searchUser')?>
+<?php echo $this->element('Modals/viewUser') ?>

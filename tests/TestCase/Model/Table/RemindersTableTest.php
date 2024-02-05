@@ -26,7 +26,7 @@ class RemindersTableTest extends TestCase
     protected $fixtures = [
         'app.Reminders',
         'app.Users',
-        'app.Sales',
+        'app.Clients',
     ];
 
     /**

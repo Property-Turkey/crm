@@ -11,7 +11,7 @@ use Cake\Validation\Validator;
 /**
  * Offers Model
  *
- * @property \App\Model\Table\SalesTable&\Cake\ORM\Association\BelongsTo $Sales
+ * @property \App\Model\Table\ClientsTable&\Cake\ORM\Association\BelongsTo $Clients
  *
  * @method \App\Model\Entity\Offer newEmptyEntity()
  * @method \App\Model\Entity\Offer newEntity(array $data, array $options = [])
@@ -43,23 +43,23 @@ class OffersTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('Sales', [
-            'foreignKey' => 'sale_id',
+        $this->belongsTo('Clients', [
+            'foreignKey' => 'client_id',
             'joinType' => 'INNER',
+        ]);
+
+        $this->belongsTo('PropertyRef', [
+            'foreignKey' => 'property_id',    
+            'className' => 'Pmsproperties',        
         ]);
     }
 
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
+    
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->integer('sale_id')
-            ->notEmptyString('sale_id');
+            ->integer('client_id')
+            ->notEmptyString('client_id');
 
         $validator
             ->integer('property_id')
@@ -78,19 +78,16 @@ class OffersTable extends Table
             ->dateTime('stat_updated')
             ->allowEmptyDateTime('stat_updated');
 
+        $validator
+            ->allowEmptyString('isinterested');
+
         return $validator;
     }
 
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
+    
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('sale_id', 'Sales'), ['errorField' => 'sale_id']);
+        $rules->add($rules->existsIn('client_id', 'Clients'), ['errorField' => 'client_id']);
 
         return $rules;
     }

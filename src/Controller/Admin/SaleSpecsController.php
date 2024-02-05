@@ -37,9 +37,9 @@ class SaleSpecsController extends AppController
             $data = [];
             $conditions = [];
 
-            if (isset($_pid)) {
-                $conditions['SaleSpecs.source_id'] = $_pid;
-            }
+            // if (isset($_pid)) {
+            //     $conditions['SaleSpecs.source_id'] = $_pid;
+            // }
             if (strlen($_k.'') > 0) {
                 if ($_method == 'like') {
                     $conditions[$_col . ' LIKE '] = '%' . $_k . '%';

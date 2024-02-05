@@ -1,6 +1,6 @@
 <?php
 $green = '#e63e3e';
-$pth = env('SERVER_NAME') == 'localhost' ? 'http://localhost/ptpms' : 'https://pms.propertyturkey.com';
+$pth = env('SERVER_NAME') == 'localhost' ? 'http://localhost/crm' : 'http://crm.propertyturkey.company/';
 ?>
 
 <style type="text/css">
@@ -174,6 +174,7 @@ $pth = env('SERVER_NAME') == 'localhost' ? 'http://localhost/ptpms' : 'https://p
                                                     <p style="font-size: 15px; line-height: 1.5; text-align: center; word-break: break-word; font-family: inherit; mso-line-height-alt: 23px; margin: 0;">
                                                         <span style="color: #808389; font-size: 15px;">
                                                             <?= __('welcome') . ' ' . $content['user_fullname'] ?><br>
+                                                            <?= __('welcome') . ' ' . $content['id'] ?><br>
                                                             <?= __('activition_email_msg') ?>
                                                         </span>
                                                     </p>

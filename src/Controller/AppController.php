@@ -57,7 +57,7 @@ class AppController extends Controller
 
         $this->Auth->deny();
 		
-		$this->Auth->allow(['login', 'register', 'logout', 'display', 'getpassword', 'activate']);
+		$this->Auth->allow(['login', 'register', 'logout', 'display', 'getpassword', 'activate', 'myaccount']);
 		
 		if(!empty($this->request->getParam('prefix'))){
             if(empty($this->Auth->User('id'))){
@@ -66,7 +66,7 @@ class AppController extends Controller
                 $this->paginate = [ 'limit' => 20 ];
                 $this->viewBuilder()->setLayout('admin');
                 $this->Auth->deny();
-                $this->Auth->allow(['index', 'view', 'logout']);
+                $this->Auth->allow(['index', 'view', 'logout', 'myaccount']);
             }
 		}
         
@@ -93,7 +93,7 @@ class AppController extends Controller
 		$this->currlangid = $this->Do->get('languages_ids')[$langval] ;
         
 		//check and set currency
-        $currencyval=1;
+        $currencyval=2;
         $cookieCurrency = $this->Do->CookiesHandler('currency', 'read');
         if( empty($cookieCurrency) ){
             $this->Do->CookiesHandler(['currency'=>$currencyval], 'write');
@@ -113,8 +113,10 @@ class AppController extends Controller
 			case strpos($act, 'register') !== false :
 				$crud = 'public';
 			break;
+            case strpos($act, 'myaccount') !== false :
 			case strpos($act, 'index') !== false :
 			case strpos($act, 'view') !== false :
+            
 				$crud = 'read';
 			break;
 			case strpos($act, 'add') !== false  :
@@ -123,6 +125,7 @@ class AppController extends Controller
 			case strpos($act, 'edit') !== false  :
 			case strpos($act, 'save') !== false  :
 			case strpos($act, 'wizard') !== false  :
+            case strpos($act, 'myaccount') !== false :
 				$crud = 'update';
 			break;
 			case strpos($act, 'delete') !== false  :
@@ -131,18 +134,22 @@ class AppController extends Controller
 			default :
 				$crud = 'public';
 		}
-		
+        // debug($act);
+		// dd($crud);
 		return $crud;
 	}
 	
 	public function _isAuthorized($bool=false, $action=false)
     {
+        
         if($this->request->getQuery('ajax') == 1){
             $bool=true;
         }
         
 		$crud = !$action ? $this->_getAction() : $action;
+        // dd($this->_getAction());
 		if(!empty($this->Auth->User())){
+            
             $_role = $this->Auth->User('user_role');
 			$_roles = Configure::read('ROLES');
             $_ctrl = strtolower($this->request->getParam('controller'));
@@ -158,8 +165,11 @@ class AppController extends Controller
                 }else{
                     return $this->Flash->error(__('you_not_authorized'));
                 }
+                
 				$this->redirect("/".$this->currlang);
+                
 			}
+            
             if($bool){return true;}
 		}
 	}

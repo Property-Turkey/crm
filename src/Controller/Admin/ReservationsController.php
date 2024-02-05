@@ -75,8 +75,29 @@ class ReservationsController extends AppController
                 }
             }
 
+
             if (!empty($_id)) {
-                $data = $this->Reservations->get($_id)->toArray();
+                $data = $this->Reservations->get($_id, [
+                    'contain' => [
+                        "Property" => ['fields' => ['param_ownertype', 'property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
+                        "Project" => ['fields' => ['project_title', 'project_ref', 'id']],
+                        "Seller" => ['fields' => ['seller_name', 'id']],
+                        "Developer" => ['fields' => ['dev_name', 'id']],
+                        "Pmscategory" => ['fields' => ['category_name', 'id']],
+
+                    ]
+                ])->toArray();
+
+                if (!empty($data['property'])) {
+
+                    $data["property"] = [
+                        [
+                            "text" => $data["property"]["property_ref"],
+                            "value" => $data["property"]['id']
+                        ]
+                    ];
+                }
+
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
                 die();
             }
@@ -101,36 +122,124 @@ class ReservationsController extends AppController
         }
     }
 
-    public function view($id = null)
-    {
-        $rec = $this->Reservations->get($id, [
-            'contain' => [],
-        ]);
-
-        $this->set(compact('rec'));
-    }
-
     public function save($id = -1)
     {
         $dt = json_decode(file_get_contents('php://input'), true);
-       
+
+        $this->autoRender = false;
+        $client_id = $dt['client_id'];
+
+        // edit mode
         if ($this->request->is(['patch', 'put'])) {
+
             $rec = $this->Reservations->get($dt['id']);
+
+            if (empty($dt['reservation_currency'])) {
+                $dt['reservation_currency'] = 2;
+            }
+
+
+            $curCurrency = $this->Do->get('currencies')[$dt['reservation_currency']];
+            $dt['reservation_usdprice'] = $this->Do->currencyConverter($curCurrency, "USD", $dt['reservation_price']);
+            $dt['reservation_usdcomission'] = $this->Do->currencyConverter($curCurrency, "USD", $dt['reservation_comission']);
+
+
+
+            $ddrec = $this->Reservations->Clients->get($dt['client_id']);
+            if (isset($dt['reservation_downpayment']) || !empty($dt['reservation_downpayment'])) {
+                $ddrec->rec_state = 13;
+            }
+
+
             $rec = $this->Reservations->patchEntity($rec, $dt);
+
+
+
+            $propertyId = (int) $dt['property'][0]['value'];
+
+            $property = $this->Reservations->Property->get($propertyId, ['fields' => ['param_ownertype', 'category_id', 'developer_id', 'seller_id', 'project_id',]]);
+
+            if ($property) {
+                $rec->developer_id = $property->developer_id;
+                $rec->seller_id = $property->seller_id;
+                $rec->project_id = $property->project_id;
+                $rec->type_id = $property->category_id;
+                $rec->sellertype_id = $property->param_ownertype;            }
+
+
+        
+            // Eğer reservations tablosundaki rec_state 13, 14 veya 15 ise
+            if (in_array($rec->rec_state, [13, 14, 15])) {
+                $ddrec->rec_state = $rec->rec_state;
+            } elseif (isset($dt['reservation_downpayment']) && !empty($dt['reservation_downpayment'])) {
+                $ddrec->rec_state = 13;
+            }
+            else {
+                $ddrec->rec_state = 12;
+            }
+           
         }
 
+        // add mode
         if ($this->request->is(['post'])) {
             $dt['id'] = null;
             $dt['stat_created'] = date('Y-m-d H:i:s');
+            $dt['rec_state'] = 1;
+
+            if (empty($dt['reservation_currency'])) {
+                $dt['reservation_currency'] = 2;
+            }
+
+            $curCurrency = $this->Do->get('currencies')[$dt['reservation_currency']];
+            $dt['reservation_usdprice'] = $this->Do->currencyConverter($curCurrency, "USD", $dt['reservation_price']);
+            $dt['reservation_usdcomission'] = $this->Do->currencyConverter($curCurrency, "USD", $dt['reservation_comission']);
+
+
+
             $rec = $this->Reservations->newEntity($dt);
+           
+            $propertyId = (int) $dt['property'][0]['value'];
+
+            $property = $this->Reservations->Property->get($propertyId, ['fields' => ['param_ownertype', 'category_id', 'developer_id', 'seller_id', 'project_id',]]);
+
+            if ($property) {
+                $rec->developer_id = $property->developer_id;
+                $rec->seller_id = $property->seller_id;
+                $rec->project_id = $property->project_id;
+                $rec->type_id = $property->category_id;
+                $rec->sellertype_id = $property->param_ownertype; 
+            }
+
+            if (isset($dt['property'][0]['value'])) {
+                $rec->property_id = (int) $dt['property'][0]['value'];
+            }
+
+            $newRec = $this->Reservations->save($rec);
+            $ddrec = $this->Reservations->Clients->get($dt['client_id']);
+
+            
+            if (isset($dt['reservation_downpayment']) && !empty($dt['reservation_downpayment'])) {
+                $ddrec->rec_state = 13;
+                $newRec->rec_state = 13;
+            }
+            else {
+                $ddrec->rec_state = 12;
+            }
+                
+            
+
+            
+
         }
 
         if ($this->request->is(['post', 'patch', 'put'])) {
-            $this->autoRender = false;
-            if ($newRec = $this->Reservations->save($rec)) {
-                echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
+
+
+            if ($newddRec = $this->Reservations->Clients->save($ddrec) && $newRec = $this->Reservations->save($rec)) {
+                echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec, $newddRec)]);
                 die();
             }
+
 
             echo json_encode(["status" => "FAIL", "data" => $rec->getErrors()]);
             die();

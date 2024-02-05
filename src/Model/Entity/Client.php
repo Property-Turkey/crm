@@ -5,30 +5,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 
-/**
- * Client Entity
- *
- * @property int $id
- * @property int|null $source_id
- * @property string $client_name
- * @property string|null $client_phone
- * @property string|null $client_mobile
- * @property string|null $client_email
- * @property string|null $client_address
- * @property string|null $client_nationality
- * @property string|null $client_configs
- * @property int|null $adrs_country
- * @property int|null $adrs_city
- * @property int|null $adrs_region
- * @property \Cake\I18n\FrozenTime $stat_created
- * @property int $rec_state
- *
- * @property \App\Model\Entity\Category $source
- * @property \App\Model\Entity\Category $country
- * @property \App\Model\Entity\Category $city
- * @property \App\Model\Entity\Category $region
- * @property \App\Model\Entity\Report[] $reports
- */
+
 class Client extends Entity
 {
     /**
@@ -41,7 +18,9 @@ class Client extends Entity
      * @var array<string, bool>
      */
     protected $_accessible = [
+        'category_id' => true,
         'source_id' => true,
+        'pool_id' => true,
         'client_name' => true,
         'client_phone' => true,
         'client_mobile' => true,
@@ -49,15 +28,35 @@ class Client extends Entity
         'client_address' => true,
         'client_nationality' => true,
         'client_configs' => true,
+        'client_priority' => true,
+        'client_finance' => true,
+        'client_current_stage' => true,
+        'client_tags' => true,
+        'client_budget' => true,
+        'client_commission' => true,
+        'client_units' => true,
+        'client_shared_roles' => true,
         'adrs_country' => true,
         'adrs_city' => true,
         'adrs_region' => true,
         'stat_created' => true,
         'rec_state' => true,
+        'enquires' => true,
         'source' => true,
         'country' => true,
         'city' => true,
+        'pool_category' => true,
         'region' => true,
+        'user' => true,
         'reports' => true,
+        'actions' => true,
+        'offers' => true,
+        'reminders' => true,
+        'reservation' => true,
+        'tag_category' => true,
+        'category' => true,
+        'book' => true,
+        'user_sale' => true,
+        'client_specs' => true,
     ];
 }

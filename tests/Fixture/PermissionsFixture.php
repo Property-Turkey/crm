@@ -26,6 +26,7 @@ class PermissionsFixture extends TestFixture
                 'permission_r' => 1,
                 'permission_u' => 1,
                 'permission_d' => 1,
+                'permission_a' => 1,
             ],
         ];
         parent::init();

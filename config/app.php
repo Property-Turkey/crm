@@ -6,7 +6,7 @@ use Cake\Database\Driver\Mysql;
 use Cake\Log\Engine\FileLog;
 use Cake\Mailer\Transport\MailTransport;
 
-$isLocal = env('SERVER_NAME') == 'localhost' ? true : false;
+$isLocal = env('SERVER_NAME') == 'localhost' ? true : true;
 $isDebug = empty($_GET['debug']) ? $isLocal : true;
 
 return [
@@ -269,6 +269,7 @@ return [
             // 'log' => true,
             // 'auth' => true,
         ],
+        
         'devzonia' => [
             'className' => 'Smtp',
             'host' => 'ssl://mail.devzonia.com',
@@ -279,6 +280,23 @@ return [
             'client' => null,
             'tls' => false,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+        ],
+        'gmail2' =>[
+            'className' => 'Smtp',
+            'host' => 'smtp.gmail.com',
+            'port' => 587,
+            'timeout' => 30,
+            // 'username' => "osama.qassar@gmail.com",
+            // 'password' => "lglq fzwf jgwq suzw",
+            'username' => "admin@propertyturkey.com",
+            'password' => "--Password--",
+            'client' => null,
+            'tls' => true,
+            'starttls' => true,
+            'context'=>array('ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true)),
         ],
     ],
 
@@ -293,7 +311,7 @@ return [
      */
     'Email' => [
         'default' => [
-            'transport' => 'default',
+            'transport' => 'gmail2' ,
             'from' => 'you@localhost',
             /*
              * Will by default be set to config value of App.encoding, if that exists otherwise to UTF-8.
@@ -301,6 +319,8 @@ return [
             //'charset' => 'utf-8',
             //'headerCharset' => 'utf-8',
         ],
+
+
     ],
 
     /*
@@ -386,6 +406,24 @@ return [
             'cacheMetadata' => true,
             'quoteIdentifiers' => false,
             'log' => false,
+            //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
+        ],
+
+        'Ptpms' => [
+            'className' => Connection::class,
+            'driver' => Mysql::class,
+            'persistent' => false,
+            'timezone' => 'UTC',
+            //'encoding' => 'utf8mb4',
+            'flags' => [],
+            'cacheMetadata' => true,
+            'quoteIdentifiers' => false,
+            'log' => false,
+
+            'username' => $isLocal ? 'root' : 'ptdev_pms',
+            'password' => $isLocal ? '' : '--Password--',
+
+            'database' => $isLocal ? 'ptpms' : 'ptdev_pms',
             //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
         ],
     ],

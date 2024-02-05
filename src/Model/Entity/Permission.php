@@ -15,6 +15,7 @@ use Cake\ORM\Entity;
  * @property int $permission_r
  * @property int $permission_u
  * @property int $permission_d
+ * @property int $permission_a
  */
 class Permission extends Entity
 {
@@ -34,5 +35,6 @@ class Permission extends Entity
         'permission_r' => true,
         'permission_u' => true,
         'permission_d' => true,
+        'permission_a' => true,
     ];
 }

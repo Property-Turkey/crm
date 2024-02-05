@@ -25,7 +25,9 @@ class ReservationsTableTest extends TestCase
      */
     protected $fixtures = [
         'app.Reservations',
-        'app.Sales',
+        'app.Clients',
+        'app.Payment',
+        'app.Currency',
     ];
 
     /**

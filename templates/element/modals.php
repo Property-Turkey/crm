@@ -4,18 +4,19 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">
-          <div ng-if="!rec.sale.id">
-            <?= __('add') ?>
+          <!-- <div ng-if="!rec.client.id || !rec.category.id || !rec.user.id">
+            <?= __('add') ?> {{ modalElement }}
           </div>
-          <div ng-if="rec.sale.id">
-            <?= __('edit') ?>
-          </div>
+          <div ng-if="rec.client.id || rec.category.id || rec.user.id">
+            <?= __('edit') ?> {{ modalElement }}
+          </div> -->
         </h1>
+        
         <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeModal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div id="elementsContainer">
-
+        
           <!-- elements will get appended in here -->
         </div>
       </div>
@@ -28,8 +29,8 @@
   $(document).ready(function() {
 
     function setCZIndex() {
-      var viewSaleModal = $("#viewSale_mdl");
-        viewSaleModal.css("z-index", "");
+      var viewClientModal = $("#viewClient_mdl");
+      viewClientModal.css("z-index", "");
     }
     
     $("#closeModal").on("click", function() {

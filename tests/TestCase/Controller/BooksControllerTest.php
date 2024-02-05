@@ -23,7 +23,7 @@ class BooksControllerTest extends TestCase
      */
     protected $fixtures = [
         'app.Books',
-        'app.Sales',
+        'app.Clients',
     ];
 
     /**

@@ -51,43 +51,41 @@ class UsersTable extends Table
             ->notEmptyString('user_role');
         
         
-        // $validator
-        //     ->scalar('user_token')
-        //     ->maxLength('user_token', 255)
-        //     ->requirePresence('user_token', 'create')
-        //     ->notEmptyString('user_token');
+        $validator
+            ->scalar('user_token')
+            ->maxLength('user_token', 255)
+            ->allowEmptyString('user_token');
 
-        // $validator
-        //     ->scalar('user_configs')
-        //     ->maxLength('user_configs', 255)
-        //     ->requirePresence('user_configs', 'create')
-        //     ->notEmptyString('user_configs');
+        $validator
+            ->scalar('user_configs')
+            ->maxLength('user_configs', 255)
+            ->allowEmptyString('user_configs');
 
-        // $validator
-        //     ->dateTime('stat_lastlogin')
-        //     ->requirePresence('stat_lastlogin', 'create')
-        //     ->notEmptyDateTime('stat_lastlogin');
+        $validator
+            ->dateTime('stat_lastlogin')
+            ->requirePresence('stat_lastlogin', 'create')
+            ->notEmptyDateTime('stat_lastlogin');
 
-        // $validator
-        //     ->dateTime('stat_created')
-        //     ->requirePresence('stat_created', 'create')
-        //     ->notEmptyDateTime('stat_created');
+        $validator
+            ->dateTime('stat_created')
+            ->requirePresence('stat_created', 'create')
+            ->notEmptyDateTime('stat_created');
 
-        // $validator
-        //     ->integer('stat_logins')
-        //     ->requirePresence('stat_logins', 'create')
-        //     ->notEmptyString('stat_logins');
+        $validator
+            ->integer('stat_logins')
+            ->requirePresence('stat_logins', 'create')
+            ->notEmptyString('stat_logins');
 
-        // $validator
-        //     ->scalar('stat_ip')
-        //     ->maxLength('stat_ip', 255)
-        //     ->requirePresence('stat_ip', 'create')
-        //     ->notEmptyString('stat_ip');
+        $validator
+            ->scalar('stat_ip')
+            ->maxLength('stat_ip', 255)
+            ->requirePresence('stat_ip', 'create')
+            ->notEmptyString('stat_ip');
 
-        // $validator
-        //     ->boolean('rec_state')
-        //     ->requirePresence('rec_state', 'create')
-        //     ->notEmptyString('rec_state');
+        $validator
+            ->boolean('rec_state')
+            ->requirePresence('rec_state', 'create')
+            ->notEmptyString('rec_state');
 
         return $validator;
     }

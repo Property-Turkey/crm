@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\SaleSpecsController;
+use App\Controller\SalespecsController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Controller\SaleSpecsController Test Case
+ * App\Controller\SalespecsController Test Case
  *
- * @uses \App\Controller\SaleSpecsController
+ * @uses \App\Controller\SalespecsController
  */
-class SaleSpecsControllerTest extends TestCase
+class SalespecsControllerTest extends TestCase
 {
     use IntegrationTestTrait;
 
@@ -22,17 +22,18 @@ class SaleSpecsControllerTest extends TestCase
      * @var array<string>
      */
     protected $fixtures = [
-        'app.SaleSpecs',
+        'app.Salespecs',
         'app.Sales',
-        'app.Clients',
-        'app.Reports',
+        'app.Currency',
+        'app.Persona',
+        'app.Style',
     ];
 
     /**
      * Test index method
      *
      * @return void
-     * @uses \App\Controller\SaleSpecsController::index()
+     * @uses \App\Controller\SalespecsController::index()
      */
     public function testIndex(): void
     {
@@ -43,7 +44,7 @@ class SaleSpecsControllerTest extends TestCase
      * Test view method
      *
      * @return void
-     * @uses \App\Controller\SaleSpecsController::view()
+     * @uses \App\Controller\SalespecsController::view()
      */
     public function testView(): void
     {
@@ -54,7 +55,7 @@ class SaleSpecsControllerTest extends TestCase
      * Test add method
      *
      * @return void
-     * @uses \App\Controller\SaleSpecsController::add()
+     * @uses \App\Controller\SalespecsController::add()
      */
     public function testAdd(): void
     {
@@ -65,7 +66,7 @@ class SaleSpecsControllerTest extends TestCase
      * Test edit method
      *
      * @return void
-     * @uses \App\Controller\SaleSpecsController::edit()
+     * @uses \App\Controller\SalespecsController::edit()
      */
     public function testEdit(): void
     {
@@ -76,7 +77,7 @@ class SaleSpecsControllerTest extends TestCase
      * Test delete method
      *
      * @return void
-     * @uses \App\Controller\SaleSpecsController::delete()
+     * @uses \App\Controller\SalespecsController::delete()
      */
     public function testDelete(): void
     {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use App\Model\Table\SalespecsTable;
 
 class SalesController extends AppController
 {
@@ -42,14 +43,16 @@ class SalesController extends AppController
             $noneSearchable = ['page', 'keyword'];
             $betweenFields = ['budget_min', 'budget_max', 'keyword', 'page'];
             $likeFields = ['page', 'keyword'];
-            $exactFields = ['source_id', 'sale_priority', 'sale_current_stage', 'category_id', 'pool_id'];
+            $exactFields = ['client_priority', 'sale_current_stage', 'category_id'];
+            $otherCtrl = ['source_id'];
+
 
             $data = [];
             $conditions = [];
 
-            if (isset($_pid)) {
-                $conditions['Sales.source_id'] = $_pid;
-            }
+            // if (isset($_pid)) {
+            //     $conditions['Sales.source_id'] = $_pid;
+            // }
             if (strlen($_k . '') > 0) {
                 if ($_method == 'like') {
                     $conditions[$_col . ' LIKE '] = '%' . $_k . '%';
@@ -73,9 +76,11 @@ class SalesController extends AppController
                     }
                     if (in_array($col, $exactFields)) {
                         $conditions['Sales.' . $col] = $val;
+                    } elseif (in_array($col, $otherCtrl)) {
+                        $conditions['Clients.' . $col] = $val;
                     } elseif ($col == 'sale_tags') {
                         foreach ($val as $tag) {
-                            $conditions['AND'][] = ['Sales.sale_tags LIKE ' => '%"'.$tag['value'].'"%'];
+                            $conditions['AND'][] = ['Sales.sale_tags LIKE ' => '%"' . $tag['value'] . '"%'];
                         }
                     } elseif ($col == $betweenFields) {
                         dd(1);
@@ -83,6 +88,8 @@ class SalesController extends AppController
                     } else {
                         $conditions[$col . ' LIKE '] = '%' . $val . '%';
                     }
+
+
                 }
             }
 
@@ -90,36 +97,31 @@ class SalesController extends AppController
             if (!empty($_id)) {
                 $data = $this->Sales->get($_id, [
                     'contain' => [
-                        'Reports',
-                        "Clients",
-                        "Clients.Sources",
-                        'Clients.Adrscountry',
+                        // 'Reports',
                         "Categories",
-                        "Sources",
-                        'Reports.Status',
-                        'Reports.Type',
+                        "Reports.TypeCategories",
                         "Books",
-                        "Pools",
-                        "Tags",
+                        "TagCategories",
                         "SaleSpecs",
                         "SaleSpecs.Currency",
                         "SaleSpecs.Persona",
                         "SaleSpecs.Style",
-                        "Offers",
                         "Reservations",
                         "Reservations.Payment",
                         "Reservations.Currency",
-                        "UserSale.Users",
-                        "Reminders",
+                        "Actions",
+                        "Actions.Action",
                     ],
                 ])->toArray();
+                // dd($dt);
 
-                $data["name"] = [
-                    [
-                        "text" => $data['client']['client_name'],
-                        "value" => $data['client_id']
-                    ]
-                ];
+
+                // $data["name"] = [
+                //     [
+                //         "text" => $data['client']['client_name'],
+                //         "value" => $data['client_id']
+                //     ]
+                // ];
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
                 die();
             }
@@ -130,26 +132,24 @@ class SalesController extends AppController
                     "order" => [$_col => $_dir],
                     "conditions" => $conditions,
                     "contain" => [
-                        "Reports",
-                        "Clients",
-                        "Clients.Sources",
-                        "Categories",
-                        "Sources",
-                        'Reports.Status',
-                        'Reports.Type',
-                        'Reports.Text',
-                        "Books",
-                        "Pools",
-                        "Tags",
-                        "Offers",
-                        "UserSale",
-                        "SaleSpecs",
-                        "SaleSpecs.Currency",
-                        "Reminders",
+                        // "Reports",
+                        // "Categories",
+                        'Reports.TypeCategories',
+                        'SaleSpecs.Currency',
+                        // 'Reports.Text',
+                        // "Books",
+                        // "TagCategories",
+                        // "Offers",
+                        // "UserSale",
+                        // "SaleSpecs",
+                        // "SaleSpecs.Currency",
+                        // "Reminders",
+
                     ],
                 ]);
             }
 
+            
             echo json_encode(
                 [
                     "status" => "SUCCESS",
@@ -161,64 +161,7 @@ class SalesController extends AppController
             die();
         }
 
-        // For categories table
-        $categories = [
-            'Type' => [37],
-            'Source' => [33],
-            'Report Type' => [53],
-            'Property Type' => [159],
-            'Buyer Persona' => [170],
-            'Social Style' => [178],
-            'Payment Type' => [198],
-            'Pool' => [28],
-            'Status' => [73],
-            'Currency' => [186],
-        ];
-
-        $options = [];
-
-        foreach ($categories as $categoryName => $parentIds) {
-            $categoriesList = $this->getTableLocator()->get('Categories')->find('all')
-                ->where(['parent_id IN' => $parentIds])
-                ->toArray();
-
-            $options[$categoryName] = [];
-
-            foreach ($categoriesList as $category) {
-                $options[$categoryName][$category->id] = $category->category_name;
-            }
-        }
-
-
-        // For Addresses table
-        $categoriesLoc = [
-            'Country' => [0],
-        ];
-
-        $optionsLoc = [];
-
-        foreach ($categoriesLoc as $categoryLocName => $parentLocIds) {
-            $categorieslocList = $this->getTableLocator()->get('Addresses')->find('all')
-                ->where(['parent_id IN' => $parentLocIds])
-                ->toArray();
-
-            $optionsLoc[$categoryLocName] = [];
-
-            foreach ($categorieslocList as $categoryLoc) {
-                $optionsLoc[$categoryLocName][$categoryLoc->id] = $categoryLoc->adrs_name;
-            }
-        }
-
-        $this->set(compact('options', 'optionsLoc'));
-    }
-
-    public function view($id = null)
-    {
-        $rec = $this->Sales->get($id, [
-            'contain' => ['Reports'],
-        ]);
-
-        $this->set(compact('rec'));
+      
     }
 
     public function save($id = -1)
@@ -227,7 +170,25 @@ class SalesController extends AppController
 
         // Edit mode
         if ($this->request->is(['patch', 'put'])) {
-            $rec = $this->Sales->get($dt['id'], ['contain' => ['Sources', 'Reports', 'SaleSpecs', 'UserSale', 'Books']]);
+
+
+            $rec = $this->Sales->get($dt['id'], [
+                'contain' => [
+                    'Actions',
+                    'Reports',
+                    'SaleSpecs',
+                    'UserSale',
+                    'Books',
+                    'Categories',
+                    'Reports.TypeCategories'
+                ]
+            ]);
+
+
+            // if (isset($dt['sale_tags']['value'])) {
+            //         $rec->sale_tags = $dt['sale_tags']['value'];
+            //     }
+            $dt['sale_tags'] = json_encode($dt['sale_tags']);
 
             $saleSpecs = $dt['sale_specs'];
 
@@ -239,21 +200,32 @@ class SalesController extends AppController
                     $saleSpec['salespec_beds'] = json_encode($saleSpec['salespec_beds']);
                 }
             }
+
             $dt['sale_specs'] = $saleSpecs;
 
-            $dt['sale_tags'] = json_encode($dt['sale_tags']);
-            if (isset($dt['name'][0]['value'])) {
-                $rec->client_id = $dt['name'][0]['value'];
-            }
+            // if (isset($dt['sale_tags'][0]['value'])) {
+            //     $rec->client_id = $dt['sale_tags'][0]['value'];
+            // }
 
-            $report_type = $this->request->getQuery('report_type');
-            if ($report_type == 'empathy') {
+            // $dt['actions'] = $dt['actions'][0];
+            // // dd( $dt['actions']);
+            // $dt['actions']['user_id'] = $this->authUser['id'];
+            // $dt['actions']['stat_created'] = date('Y-m-d H:i:s');
 
-                
-                
-            }
+
+            // $rec->actions = $this->Sales->Actions->newEntities([$dt['actions']]);            
+            
 
             $rec = $this->Sales->patchEntity($rec, $dt);
+
+            if ($rec->sale_current_stage == 4 && $rec->rec_state == 2) {
+                $rec->sale_current_stage = 3;
+                $rec->rec_state = 1;
+            }
+            
+            // $newRec = $this->Sales->save($rec);
+
+
         }
 
         // Add mode
@@ -262,7 +234,9 @@ class SalesController extends AppController
             $dt['stat_created'] = date('Y-m-d H:i:s');
             $dt['tar_tbl'] = $this->Do->get('targetTables')[$this->request->getParam('controller')];
             $dt['sale_current_stage'] = 2;
+
             $dt['sale_tags'] = json_encode($dt['sale_tags']);
+
             $saleSpecs = $dt['sale_specs'];
 
             foreach ($saleSpecs as &$saleSpec) {
@@ -274,29 +248,28 @@ class SalesController extends AppController
                 }
             }
             $dt['sale_specs'] = $saleSpecs;
+            $saleSpecsTable = new SalespecsTable();
+            $newSaleSpecsEntity = $saleSpecsTable->newEntity($dt['sale_specs']);
 
-            $report_type = $this->request->getQuery('report_type');
-            if ($report_type == 'empathy') {
+            $rec = $newSaleSpecsEntity;
 
-                
-            }
-            $rec = $this->Sales->newEntity($dt, [
-                'contain' => ['SaleSpecs', 'UserSale'],
-            ]);
-            if (isset($dt['name'][0]['value'])) {
-                $rec->client_id = $dt['name'][0]['value'];
-            }
+            $rec = $this->Sales->newEntity($dt);
+
+
+
+            // if (isset($dt['name'][0]['value'])) {
+            //     $rec->client_id = $dt['name'][0]['value'];
+            // }
+
+
         }
 
         if ($this->request->is(['post', 'patch', 'put'])) {
             $this->autoRender = false;
-            unset($rec['category']);
-            unset($rec['pool']);
-            unset($rec['source']);
-            unset($rec['tag']);
-            unset($rec['report']);
-            unset($rec['books']);
-            unset($rec['client']);
+            // unset($rec['source']);
+            // unset($rec['report']);
+            // unset($rec['client']);
+            // unset($rec['reminders']);
 
             if ($newRec = $this->Sales->save($rec)) {
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);

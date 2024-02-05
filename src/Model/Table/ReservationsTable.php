@@ -8,14 +8,10 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
+
 class ReservationsTable extends Table
 {
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
+
     public function initialize(array $config): void
     {
         parent::initialize($config);
@@ -24,9 +20,13 @@ class ReservationsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('Sales', [
-            'foreignKey' => 'sale_id',
+        $this->belongsTo('Clients', [
+            'foreignKey' => 'client_id',
             'joinType' => 'INNER',
+        ]);
+
+        $this->belongsTo('Categories', [
+            'foreignKey' => 'category_id',
         ]);
 
         $this->belongsTo('Payment', [
@@ -39,19 +39,75 @@ class ReservationsTable extends Table
             'className' => 'Categories',
         ]);
 
+        $this->belongsTo('Type', [
+            'foreignKey' => 'type_id',
+            'className' => 'Categories',
+        ]);
+
+        $this->belongsTo('Property', [
+            'foreignKey' => 'property_id',    
+            'className' => 'Pmsproperties',        
+        ]);
+
+
+        $this->belongsTo('Project', [
+            'foreignKey' => 'project_id',    
+            'className' => 'Pmsprojects',        
+        ]);
+
+        $this->belongsTo('Seller', [
+            'foreignKey' => 'seller_id',    
+            'className' => 'Pmssellers',        
+        ]);
+
+        $this->belongsTo('Developer', [
+            'foreignKey' => 'developer_id',    
+            'className' => 'Pmsdevelopers',        
+        ]);
+
+        $this->belongsTo('Pmscategory', [
+            'foreignKey' => 'type_id',    
+            'className' => 'Pmscategories',        
+        ]);
     }
 
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
     public function validationDefault(Validator $validator): Validator
     {
         // $validator
-        //     ->integer('sale_id')
-        //     ->notEmptyString('sale_id');
+        //     ->integer('client_id')
+        //     ->notEmptyString('client_id');
+
+        // $validator
+        //     ->integer('property_id')
+        //     ->notEmptyString('property_id');
+
+        // $validator
+        //     ->integer('project_id')
+        //     ->allowEmptyString('project_id');
+
+        // $validator
+        //     ->integer('type_id')
+        //     ->allowEmptyString('type_id');
+
+        // $validator
+        //     ->integer('source_id')
+        //     ->allowEmptyString('source_id');
+
+        // $validator
+        //     ->integer('developer_id')
+        //     ->allowEmptyString('developer_id');
+
+        // $validator
+        //     ->integer('category_id')
+        //     ->allowEmptyString('category_id');
+
+        // $validator
+        //     ->integer('sellertype_id')
+        //     ->allowEmptyString('sellertype_id');
+
+        // $validator
+        //     ->integer('seller_id')
+        //     ->allowEmptyString('seller_id');
 
         // $validator
         //     ->integer('reservation_amount')
@@ -63,6 +119,7 @@ class ReservationsTable extends Table
         //     ->allowEmptyString('reservation_price');
 
         // $validator
+        //     ->integer('reservation_currency')
         //     ->allowEmptyString('reservation_currency');
 
         // $validator
@@ -99,6 +156,11 @@ class ReservationsTable extends Table
         //     ->notEmptyString('reservation_usdcomission');
 
         // $validator
+        //     ->scalar('reservation_details')
+        //     ->maxLength('reservation_details', 255)
+        //     ->allowEmptyString('reservation_details');
+
+        // $validator
         //     ->dateTime('stat_created')
         //     ->requirePresence('stat_created', 'create')
         //     ->notEmptyDateTime('stat_created');
@@ -113,16 +175,10 @@ class ReservationsTable extends Table
         return $validator;
     }
 
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('sale_id', 'Sales'), ['errorField' => 'sale_id']);
+        $rules->add($rules->existsIn('client_id', 'Clients'), ['errorField' => 'client_id']);
+        $rules->add($rules->existsIn('category_id', 'Categories'), ['errorField' => 'category_id']);
 
         return $rules;
     }

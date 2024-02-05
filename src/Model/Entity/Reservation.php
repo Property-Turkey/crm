@@ -9,7 +9,15 @@ use Cake\ORM\Entity;
  * Reservation Entity
  *
  * @property int $id
- * @property int $sale_id
+ * @property int $client_id
+ * @property int $property_id
+ * @property int|null $project_id
+ * @property int|null $type_id
+ * @property int|null $source_id
+ * @property int|null $developer_id
+ * @property int|null $category_id
+ * @property int|null $sellertype_id
+ * @property int|null $seller_id
  * @property int $reservation_amount
  * @property int|null $reservation_price
  * @property int|null $reservation_currency
@@ -21,11 +29,14 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $reservation_invoice_date
  * @property int $reservation_comission
  * @property int $reservation_usdcomission
+ * @property string|null $reservation_details
  * @property \Cake\I18n\FrozenTime $stat_created
  * @property \Cake\I18n\FrozenTime|null $stat_updated
  * @property int $rec_state
  *
- * @property \App\Model\Entity\Sale $sale
+ * @property \App\Model\Entity\Client $client
+ * @property \App\Model\Entity\Category $payment
+ * @property \App\Model\Entity\Category $currency
  */
 class Reservation extends Entity
 {
@@ -39,7 +50,15 @@ class Reservation extends Entity
      * @var array<string, bool>
      */
     protected $_accessible = [
-        'sale_id' => true,
+        'client_id' => true,
+        'property_id' => true,
+        'project_id' => true,
+        'type_id' => true,
+        'source_id' => true,
+        'developer_id' => true,
+        'category_id' => true,
+        'sellertype_id' => true,
+        'seller_id' => true,
         'reservation_amount' => true,
         'reservation_price' => true,
         'reservation_currency' => true,
@@ -51,9 +70,12 @@ class Reservation extends Entity
         'reservation_invoice_date' => true,
         'reservation_comission' => true,
         'reservation_usdcomission' => true,
+        'reservation_details' => true,
         'stat_created' => true,
         'stat_updated' => true,
         'rec_state' => true,
-        'sale' => true,
+        'client' => true,
+        'payment' => true,
+        'currency' => true,
     ];
 }

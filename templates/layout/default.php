@@ -535,16 +535,21 @@
             $scope.doLogin = function(dt) {
                 _setCvrBtn("login_btn", 1)
                 _doRequest("/login", dt||$scope.rec.user, "POST").then(function(res) {
+                    
                     _setCvrBtn("login_btn", 0, "sign-in-alt")
                     if (res.data.status == 'SUCCESS') {
                         _opAlert(res.data.msg || '<?= __("login-success") ?>', "success");
+                        
                         $timeout(function(){
-                            window.location.href = res.data.redirect || $scope.app_folder + '/admin/sales';
-                        },500);
+                            window.location.href = res.data.redirect || $scope.app_folder + '/admin/clients/dashboard';
+                        },2500);
                     } else {
                         if (res.data.status == "NOT_ACTIVE") {
+                            console.log((dt || $scope.rec.user).email);
+
                             return _opAlert('<?= __("account_not_active") ?>', "error");
                         }
+                        
                         return _opAlert('<?= __("login-fail") ?>', "error");
                     }
                 }, function(err) {

@@ -1,75 +1,130 @@
-<div class="modal fade" id="viewLog_mdl" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="listing-modal-1 modal-dialog modal-lg">
+<div class="modal fade" id="viewLog_mdl" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: index;">
+    <div class="listing-modal-1 modal-dialog modal-xl modal-dialog-centered view">
+        <!-- {{rec.client.sales[0]}} -->
+
         <div class="modal-content">
+            <div class="lead-preview">
+                <div class="modal-header">
+                    <button type="button" class="btn-exit" data-bs-dismiss="modal">
+                        <?= $this->Html->image('/img/export-svgrepo-com.svg', ['' => '', 'width' => 30]) ?>Log Preview
+                    </button>
+                </div>
 
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">
-                    <?= __('view') ?>
-                </h4>
-            </div>
+                <button type="button" id="log_btn" class="hideIt" ng-click="
+                        doGet('/admin/logs?id='+rec.log.id, 'rec', 'logs');
+                        doGet('/admin/logs/index?list=1', 'list', 'logs'); 
+                        closeModal('#subModal');
+                                        ">
+                </button>
+                <div class="m-3">
+                    <div class="heading">
+                        <div class="title">Log Information</div>
+                        <div class="flex-gap-10">
 
-            <div class="modal-body row">
-                <div class="col-md-12 col-sm-12">
-                    <div class="view_page">
-                        <div class="grid">
+                        </div>
+                    </div>
 
-                            <div class="grid_row row">
-                                <h4 class="col-12">
-                                    <b><?=__('user')?>: </b>{{rec.log.user.user_fullname}}
-                                </h4>
-                            </div>
+                    <div class="white-box mt-2">
+                        <div class="row">
+                            <div class="col-md-6 col-12 col-lg-3">
+                                <span class="sm-txt mt-3" style="font-size: 14px;">
+                                    <b>
+                                        <?= __('user_fullname') ?>:
+                                    </b>
+                                </span>
+                                <div class=""><b style="font-size: 14px;">{{ rec.log.user.user_fullname }} </b></div>
+                                <span class="sm-txt mt-3" style="font-size: 14px;">
+                                    <b>
+                                        <?= __('model') ?>:
+                                    </b>
+                                </span>
+                                <div class=""><b style="font-size: 14px;">{{ rec.log.log_url[5] }}</b></div>
+                                <span class="sm-txt mt-3" style="font-size: 14px;">
+                                    <b>
+                                        <?= __('action') ?>:
+                                    </b>
+                                </span>
+                                <div class=""><b style="font-size: 14px;">{{ DtSetter('actionsName', rec.log.log_url[6])
+                                        }}</b></div>
+                                <span class="sm-txt mt-3" style="font-size: 14px;">
+                                    <b>
+                                        <?= __('stat_created') ?>:
+                                    </b>
+                                </span>
+                                <div class=""><b style="font-size: 14px;">{{rec.log.stat_created}}</b>
+                                </div>
+                                <span class="sm-txt mt-3" style="font-size: 14px;" ng-if="rec.log.log_changes.length > 1">
+                                    <b>
+                                        <?= __('before') ?>:
+                                    </b>
+                                </span>
+                                <div class=" mb-1"  ng-if="rec.log.log_changes.length > 1" ng-repeat="(k, v) in rec.log.log_changes[1]">
+                                    <b style="font-size: 14px;">{{k}}</b>:
+                                    <span ng-if="isArray(v)" style="font-size: 14px;">
+                                        <div ng-repeat="(subKey, subValue) in v">
+                                            <div ng-if="isArray(subValue)">
+                                                <div ng-repeat="(subSubKey, subSubValue) in subValue">
+                                                    <p>{{subSubKey}}: {{subSubValue}}
+                                                </div>
+                                            </div>
+                                            <div ng-if="!isArray(subValue)">
+                                                {{subKey}}: {{subValue}}
+                                            </div>
+                                        </div>
+                                    </span>
+                                    <span ng-if="!isArray(v)" style="font-size: 14px;">
+                                        {{v}}
+                                    </span>
+                                </div>
+                                <span class="sm-txt mt-3"  ng-if="rec.log.log_changes.length > 1" style="font-size: 14px;">
+                                    <b>
+                                        <?= __('after') ?>:
+                                    </b>
+                                </span>
+                                <div class=" mb-1"  ng-if="rec.log.log_changes.length > 1" ng-repeat="(k, v) in rec.log.log_changes[0]">
 
-                            <div class="grid_row row">
-                                <div class="col-md-3 grid_header2"><?=__('log_url')?></div>
-                                <div class="col-md-9 notwrapped">
-                                    <b><?=__('section')?>:</b> {{rec.log.log_url[5]}} / 
-                                    <b><?=__('action')?>:</b> 
-                                    <span  class="badge badge-{{actionsClr[rec.log.log_url[6]]}}">{{DtSetter( 'actionsName', rec.log.log_url[6] )}}</span> / 
-                                    <b><?=__('id')?>:</b> {{rec.log.log_url[7]}}
+                                    <b style="font-size: 14px;">{{k}}</b>:
+                                    <span ng-if="isArray(v)" style="font-size: 14px;">
+                                        <div ng-repeat="(subKey, subValue) in v">
+                                            <div ng-if="isArray(subValue)">
+                                                <div ng-repeat="(subSubKey, subSubValue) in subValue">
+                                                    <p>{{subSubKey}}: {{subSubValue}}
+                                                </div>
+                                            </div>
+                                            <div ng-if="!isArray(subValue)">
+                                                {{subKey}}: {{subValue}}
+                                            </div>
+                                        </div>
+                                    </span>
+                                    <span ng-if="!isArray(v)" style="font-size: 14px;">
+                                        {{v}}
+                                    </span>
                                 </div>
                             </div>
 
-                            <div class="grid_row row">
-                                <div class="col-md-3 grid_header2"><?=__('log_changes')?></div>
-                                <div class="col-md-9 notwrapped">
-                                    
-                                    <div ng-if="rec.log.log_changes.length > 1">
+                            <!-- <div ng-repeat="(k, v) in rec.log.log_changes[1]" value-checker="v"></div>
+<div ng-repeat="(k, v) in rec.log.log_changes[0]" value-checker="v"></div> -->
 
-                                        <h5 class="badge badge-info"><?=__('before')?></h5>
-                                        <div ng-repeat="(k, v) in rec.log.log_changes[1]">
-                                            <b>{{k}}</b>: {{v}}
-                                        </div>
-
-                                        <h5 class="badge badge-warning"><?=__('after')?></h5>
-                                        <div ng-repeat="(k, v) in rec.log.log_changes[0]">
-                                            <b>{{k}}</b>: {{v}}
-                                        </div>
+                                <div class="col-md-6 col-12 col-lg-3" ng-if="!(rec.log.log_changes.length > 1)">
+                                    <span class="sm-txt mt-3">
+                                        <?= __('log_changes') ?>:
+                                    </span>
+                                    <div class=" mb-1" ng-repeat="(k, v) in rec.log.log_changes[0]">
+                                        <b>{{k}}</b>: {{v}}
                                     </div>
-                                    
-                                    <div ng-if="rec.log.log_changes.length < 2">
-                                        <div ng-repeat="(k, v) in rec.log.log_changes[0]">
-                                            <b>{{k}}</b>: {{v}}
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
-                            
-                            <div class="grid_row row">
-                                <div class="col-md-3 grid_header2"><?=__('stat_created')?></div>
-                                <div class="col-md-9 notwrapped">{{rec.log.stat_created}}</div>
-                            </div>
+                        </div>
+                    </div>
 
-                            <div class="grid_row row">
-                                <div class="col-md-3 grid_header2"><?=__('rec_state')?></div>
-                                <div class="col-md-9 notwrapped" ng-bind-html="DtSetter( 'bool2', rec.log.rec_state )"></div>
-                            </div>
 
+                    <div class="down-btns m-3">
+                        <div class="flex-gap-10">
+                            <button class="btn btn-gray" type="button">View History</button>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
-</div>

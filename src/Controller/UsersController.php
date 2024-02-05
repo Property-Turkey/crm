@@ -40,7 +40,7 @@ class UsersController extends AppController
                 
                 // check if account activated  
                 if ($user['rec_state'] == 0 && !isset($dt['autologin'])) {
-                    echo json_encode(['status'=>'NOT_ACTIVE', 'data'=>$user]); die();
+                    echo json_encode(['status'=>'NOT_ACTIVE', 'data'=>$user]); 
                 }
 
                 // update and activate record then do log user in 
@@ -195,6 +195,10 @@ class UsersController extends AppController
         $this->set('user', $user);
 	}
     
+    public function myaccount($id = -1) 
+    {
+        $this->render('myaccount');
+    }
     
     public function edit() 
     {

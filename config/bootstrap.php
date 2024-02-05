@@ -48,6 +48,7 @@ use Cake\Routing\Router;
 use Cake\Utility\Security;
 use Cake\Error\ConsoleErrorHandler;
 use Cake\Error\ErrorHandler;
+use Cake\Error\TableRegistry;
 
 
 /*
@@ -244,11 +245,24 @@ TypeFactory::map('time', StringType::class);
 Configure::write('gmapKey', 'AIzaSyD2EC1RqRSh1Rm6NC4_cMt2CHtrZBKzUTE');
 
 Configure::write('roles', [
-	'admin.root'=>'admin.root', 
+	1=>'admin.root', 
+	2=>'admin.cc',
+	3=> 'admin.admin',
+	4 => 'admin.field',
+	5 => 'cc',
+	6 =>  'field',
+	7 => 'accountant',
+	8 => 'aftersale'
+]);
 
+Configure::write('rolesChart', [
+	'cc' => 'cc',
+	'field' =>  'field',
 ]);
 Configure::write('AdminRoles', [
-	'admin.root'=>'admin.root', 
+	1 =>'admin.root',
+	2=> 'cc',
+	3=> 'field',
 
 ]);
 
@@ -264,9 +278,10 @@ Configure::write('statusID', [ 1=>'isNew', 2=>'isCalled', 3=>'isSpoken', 4=>'isM
 Configure::write('currencies', [4=>'GBP', 1=>'EUR', 2=>'USD', 3=>'TRY']);
 Configure::write('currencies_icons', [4=>'£', 1=>'€', 2=>'$', 3=>'₺']);
 Configure::write('stats', [[0=>__("disabled"), 1=>__("enabled"), 2=>__('sold')]]);
-Configure::write('sale_priorities', [ 1=>'Insignificant', 2=>'Very Low Significance', 3=>'Low Importance', 4=>'Moderate Importance', 5=>'Moderate Significance', 6=>'Medium-High Importance', 7=>'High Importance', 8=>'Very High Importance',9=>'Vital importance',10=>'Urgent']);
+Configure::write('client_priorities', [ 1=>'Insignificant', 2=>'Very Low Significance', 3=>'Low Importance', 4=>'Moderate Importance', 5=>'Moderate Significance', 6=>'Medium-High Importance', 7=>'High Importance', 8=>'Very High Importance',9=>'Vital importance',10=>'Urgent']);
 Configure::write('report_priorities', [ 1=>'top', 5=>'normal', 10=>'last']);
-Configure::write('sale_current_stage', [ 1=>'Source', 2=>'CC Supervisor', 3=>'CC', 4=>'Field Supervisor', 5=>'Field', 6=>'Accountant', 7=>'Aftersale']);
+Configure::write('client_current_stageSale', [ 1=>'Source', 
+2=>'CC Supervisor', 3=>'CC', 4=>'Field Supervisor', 5=>'Field', 6=>'Accountant', 7=>'Aftersale']);
 Configure::write('rec_stateSale', [
 	// admin, call center admin
 	2 => [
@@ -280,14 +295,18 @@ Configure::write('rec_stateSale', [
 		3 => 'No Response 1', 
 		4 => 'No Response 2', 
 		5 => 'No Response 3', 
-		6 => 'Not Interested', 
-		7 => 'Interested', 
+		6 => 'Not Qualified', 
+		7 => 'Pursue', 
 		8 => 'Offers Sent', 
 		9 => 'Negotiation', 
-		10 => 'Offer Accepted', 
-		11 => 'Booked', 
-		12 => 'Reserved', 
-		13 => 'Nosale'
+		10 => 'Positive Matching', 
+		11=> 'Booking',
+		12=> 'Reserved',
+		13 => 'Down Payment', 
+		14 => 'Sold', 
+		15 => 'Sold Online',
+		16 => 'No Sale',
+		17 => 'Cancelled'
 	],
 	// field admin
 	4 => [
@@ -313,24 +332,37 @@ Configure::write('rec_stateSale', [
 ]);
 
 
-Configure::write('ROLES', [
-	'admin.root'=>[//     (technical top level admin) 
-		'categories'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
-		'contents'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
-		'configs'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
-		'users'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
-		'logs'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
-		'clients'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
-        'sales'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
-        'permissions'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
-        'usersale'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
-        'books'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
-        'reports'=>['create'=>1, 'read'=>1, 'update'=>1, 'delete'=>1, 'allids'=>1],
+$DB_ROLES = Cake\ORM\TableRegistry::getTableLocator()->get('Permissions')->find('all')->toArray();
 
 
-	],
-    
-]);
+$modules = array_unique(array_values(array_column($DB_ROLES, 'permission_module'))); 
+$permissionsByRole = [];
+
+foreach ($DB_ROLES as $role) {
+    $permissionsByRole[$role->permission_role][$role->permission_module] = [
+        'create' => $role->permission_c ?? 0,
+        'read' => $role->permission_r ?? 0,
+        'update' => $role->permission_u ?? 0,
+        'delete' => $role->permission_d ?? 0,
+        'allids' => $role->permission_a ?? 0,
+    ];
+}
+
+foreach ($permissionsByRole as &$roleModules) {
+    foreach ($modules as $module) {
+        $roleModules[$module] = $roleModules[$module] ?? [
+            'create' => 0,
+            'read' => 0,
+            'update' => 0,
+            'delete' => 0,
+            'allids' => 0,
+        ];
+    }
+}
+
+
+
+Configure::write('ROLES', $permissionsByRole);
 $features_categories = [
 ];
 Configure::write('FEATURES_CATEGORIES', $features_categories);

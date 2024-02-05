@@ -67,6 +67,8 @@ class BooksController extends AppController
             // ONE RECORD
             if(!empty($_id)){
                 $data = $this->Books-> get( $_id , ['contain' => []] )->toArray();
+
+                // $data['book_meetperiod'] = (int)$data['book_meetperiod'];
                 echo json_encode(["status"=>"SUCCESS",  "data"=>$this->Do->convertJson( $data )], JSON_UNESCAPED_UNICODE); die();
                 
             }
@@ -81,37 +83,47 @@ class BooksController extends AppController
             }
 
             // dd($this->Do->convertJson( $data ));
-            echo json_encode( 
-                [ "status"=>"SUCCESS",  "data"=>$this->Do->convertJson( $data ), 
-                "paging" => $this->request->getAttribute('paging')['Books']],
-
-                JSON_UNESCAPED_UNICODE); die();
+            echo json_encode(
+                [
+                    "status" => "SUCCESS",
+                    "data" => $this->Do->convertJson($data),
+                    "paging" => $this->request->getAttribute('paging')['Books']
+                ],
+                JSON_UNESCAPED_UNICODE
+            );
+            die();
         }
 
-        $sales = $this->getTableLocator()->get('Sales')->find('list')->toArray();
-        $this->set(compact('sales'));
+        $clients = $this->getTableLocator()->get('Clients')->find('list')->toArray();
+        $this->set(compact('clients'));
 
 
     }
 
-    public function view($id = null)
-    {
-        $rec = $this->Books->get($id, [
-            'contain' => []
-        ]);
-
-        $this->set(compact('rec'));
-    }
 
     public function save($id = -1)
     {
         $dt = json_decode(file_get_contents('php://input'), true);
 
+        $this->autoRender = false;
+        $client_id = $dt['client_id'];
+        
         // edit mode
         if ($this->request->is(['patch', 'put'])) {
             
             $rec = $this->Books->get($dt['id']);
             
+            $ddrec = $this->Books->Clients->get($dt['client_id']);
+
+            // if($ddrec->client_current_stage == 3){
+
+            //     $ddrec->client_current_stage = 4;
+            //     $ddrec->rec_state = 1;
+
+            // }
+            
+            $ddrec->rec_state = 11;
+                
             $rec = $this->Books->patchEntity($rec, $dt); 
             
         }
@@ -120,17 +132,25 @@ class BooksController extends AppController
         if ($this->request->is(['post'])) {
             $dt['id'] = null;
             $dt['stat_created'] = date('Y-m-d H:i:s');
+            $client_id = $dt['client_id'];
            
             $rec = $this->Books->newEntity($dt);
-          
-            // $rec->sale_tags = json_encode($dt['sale_tags']);
+            $newRec = $this->Books->save($rec);
+
+            $ddrec = $this->Books->Clients->get($dt['client_id']);
+
+            
+            $ddrec->rec_state = 11;
+
+            
+            // $rec->client_tags = json_encode($dt['client_tags']);
         }
 
         if ($this->request->is(['post', 'patch', 'put'])) {
-            $this->autoRender = false;
+
             
-            if ($newRec = $this->Books->save($rec)) {
-                echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
+            if ($newddRec = $this->Books->Clients->save($ddrec) && $newRec = $this->Books->save($rec)) {
+                echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec, $newddRec)]);
                 die();
             }
 

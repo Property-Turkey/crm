@@ -1,93 +1,322 @@
- <!-- Header Start -->
- <nav class="navbar navbar-expand-lg">
-   <div class="container-fluid m-2">
-    <a class="navbar-brand" href="#">
-     <img src="\img\pt-header-logo.svg" alt="logo of website" />
-    </a>
-    <button name="menu-toggle" ng-click="toggleSidebar()" class="menu">
-     <img src="\img\burger-menu.svg" alt="menu toggle" />
-    </button>
+<?php
+$admin_menu = [
+    [
+        "name" => "Categories",
+        "icon" => "list",
+        "roles" => ["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content"],
+        "active" => "/categories/index,/categories/save,/categories/view",
+        "sub" => [
+            ["name" => "Source", "icon" => "sitemap", "url" => ["Categories", "index", "33"]],
+            ["name" => "Categories Type", "icon" => "home", "url" => ["Categories", "index", "37"]],
+            ["name" => "Report Type", "icon" => "sticky-note-o", "url" => ["Categories", "index", "53"]],
+            ["name" => "Pools", "icon" => "folder-open-o", "url" => ["Categories", "index", "28"]],
+            ["name" => "Tags", "icon" => "tag", "url" => ["Categories", "index", "40"]],
+            ["name" => "Property Type", "icon" => "building-o", "url" => ["Categories", "index", "159"]],
+            ["name" => "Payment Type", "icon" => "bank", "url" => ["Categories", "index", "198"]],
+            ["name" => "Currency", "icon" => "dollar", "url" => ["Categories", "index", "186"]],
+            ["name" => "Beds", "icon" => "bed", "url" => ["Categories", "index", "183"]],
+            ["name" => "Social Style Model", "icon" => "list", "url" => ["Categories", "index", "178"]],
+            ["name" => "Buyer Persona", "icon" => "list", "url" => ["Categories", "index", "170"]],
+            ["name" => "Actions ", "icon" => "mobile-phone", "url" => ["Categories", "index", "73"]],
+            ["name" => " Emphaty ", "icon" => "sticky-note", "url" => ["Categories", "index", "61"]],
+        ]
+    ],
+    [
+        "name" => "dashboard",
+        "icon" => "tachometer",
+        "roles" => ["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content", "admin.cc", "cc", "field", "accountant", "aftersale", "admin.field"],
+        "active" => "/clients/dashboard",
+        "sub" => [
+            ["name" => "all", "url" => ["clients", "dashboard", ""]],
+        ],
+        
+    ],
+    [
+        "name" => "statistic",
+        "icon" => "tachometer",
+        "roles" => ["admin.root", "admin.admin"],
+        "active" => "/clients/statistic",
+        "sub" => [
+            ["name" => "all", "url" => ["clients", "statistic", ""]],
+        ],
+        
+    ],
+    [
+        "name" => "users",
+        "icon" => "users",
+        "roles" => ["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content"],
+        "active" => "/users/index,/users/save,/users/view",
+        "sub" => [
+            ["name" => "all", "url" => ["Users", "index", ""]],
+        ]
+    ],
+    [
+        "name" => "configs",
+        "icon" => "cogs",
+        "roles" => ["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content"],
+        "active" => "/configs/index,/configs/save,/configs/view",
+        "sub" => [
+            ["name" => "all", "url" => ["Configs", "index", ""]],
+        ]
+    ],
+    [
+        "name" => "logs",
+        "icon" => "user-secret",
+        "roles" => ["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content"],
+        "active" => "/logs/index,/logs/save,/logs/view",
+        "sub" => [
+            ["name" => "all", "url" => ["Logs", "index", ""]],
+        ]
+    ],
+    [
+        "name" => "permissions",
+        "icon" => "user-secret",
+        "roles" => ["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content"],
+        "active" => "/permissions/index,/permissions/save,/permissions/view",
+        "sub" => [
+            ["name" => "all", "url" => ["permissions", "index", ""]],
+        ]
+    ],
+    [
+        "name" => "clients",
+        "icon" => "user",
+        "roles" => ["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content", "admin.cc", "cc", "field", "accountant", "aftersale", "admin.field"],
+        "active" => "/clients/index,/clients/save,/clients/view",
+        "sub" => [
+            ["name" => "all", "url" => ["clients", "index", ""]],
+        ],
+        
+    ],
 
-    <div class="sidebar">
-     <div class="btn-exit">
-      <button ng-click="toggleSidebar()">Back<i class="fas-right"></i> </button>
-     </div>
-     <div class="nav-btns justify-content-center">
-      <a href="#" class="search">
-       <i class="fas-search"></i>
-      </a>
-      <a href="#" class="settings">
-       <i class="fas-cog"></i>
-      </a>
-      <a href="#" class="notifications">
-       <i class="fas-bell-alt"></i>
-      </a>
-      <a href="#" class="profile">
-      <img src="\img\user.png" alt="" />
-      </a>
-     </div>
-     <ul class="side-list">
-      <li class="item pt-3">
-       <a class="nav-link" aria-current="page" href="#">Dashboard</a>
-      </li>
-      <li class="item pt-3">
-       <a class="nav-link active" href="#">Sales</a>
-      </li>
-      
-     </ul>
+];
+
+$non_admin_menu = [
+    [
+        "name" => "my_account",
+        "icon" => "user",
+        "roles" => ["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content", "admin.cc", "cc", "field", "accountant", "aftersale", "admin.field"],
+        "active" => "/users/index,/users/save,/users/view",
+        "sub" => [
+            ["name" => "all", "url" => ["users", "myaccount", ""]],
+        ]
+    ],
+    
+
+];
+
+
+$urlparse = explode("/", str_replace('/' . $currlang, '', str_replace($app_folder, '', $_SERVER['REQUEST_URI'])));
+$urlparse[2] = empty($urlparse[2]) ? '' : $urlparse[2];
+$urlparse[3] = empty($urlparse[3]) ? '' : $urlparse[3];
+$urlparse[4] = empty($urlparse[4]) ? '' : $urlparse[4];
+// debug($urlparse);
+?>
+
+
+
+<!-- Header Start -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid m-2">
+        <a class="navbar-brand" href="#">
+            <?= $this->Html->image('/img/pt-header-logo.svg', ['' => '']) ?>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="#"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"></a>
+                </li>
+            </ul>
+
+            <div class="nav-btns">
+                <a href="#" class="notifications">
+                    <div class="notification-icon"><i class="fa fa-bell"></i></div>
+                </a>
+                <?php
+                foreach ($non_admin_menu as $itm) {
+                    $isCategories = $urlparse[2] === 'categories';
+                    $isActive = '';
+
+                    if (!in_array($authUser["user_role"], $itm["roles"])) {
+                        continue;
+                    }
+
+                    if ($isCategories) {
+                        $isActive = 'active';
+                    } else {
+                        if ((strpos($itm["active"], '/' . $urlparse[2] . '/' . $urlparse[3])) || (strpos($itm["active"], '/' . $urlparse[2] . '/' . $urlparse[3] . '' . $urlparse[4])) !== false) {
+                            $isActive = 'active';
+                        }
+                    }
+
+                    if (count($itm['sub']) == 1) {
+                        ?>
+                        <?php
+                        $isSubcActive = $urlparse[2] === $itm['name'];
+                        $subItemcClass = $isSubcActive ? 'active' : '';
+                        ?>
+
+
+                        <div class="dropdown">
+                            <a href="#" class="btn btn-secondary dropdown-toggle" role="button" id="userDropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-user"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="userDropdown">
+                                <li class="item w-100 <?= $subItemcClass ?>">
+                                    <?= $this->Html->link(
+                                        '<i class="fa fa-user"></i> ' . __('my_account'),
+                                        ['controller' => 'Users', 'action' => 'myaccount'],
+                                        ['escape' => false, 'class' => 'dropdown-item']
+                                    ) ?>
+                                </li>
+                                <li class="item w-100 <?= $subItemcClass ?>">
+                                    <?= $this->Html->link(
+                                        '<i class="fa fa-power-off"></i> ' . __('logout'),
+                                        ['controller' => 'Users', 'action' => 'logout'],
+                                        ['escape' => false, 'class' => 'dropdown-item']
+                                    ) ?>
+                                </li>
+                                
+                                
+                            </div>
+                        </div>
+
+                    <?php } ?>
+                <?php } ?>
+                
+            </div>
+        </div>
+        <button name="menu-toggle" id="sideClose" ng-click="toggleSidebar()" class="menu">
+            <?= $this->Html->image('/img/burger-menu.svg', ['alt' => 'menu toggle', 'id' => 'sideClose']) ?>
+        </button>
+
+        <div class="sidebar">
+            <div class="btn-exit">
+                <button ng-click="toggleSidebar()">Back<i class="fas-right"></i> </button>
+            </div>
+
+            <div class="nav-btns justify-content-center">
+                <!--<a href="#" class="search">
+                    {{client}}
+                    <i class="fas-bell-alt"></i>
+                </a>
+                 <a href="#" class="settings">
+                    <i class="fas-cog"></i>
+                </a>
+                <a href="#" class="notifications">
+                    <i class="fas-bell-alt"></i>
+                </a>
+                <a href="#" class="profile">
+                    <?= $this->Html->image('/img/user.png', ["alt" => "..."]) ?>
+                </a> -->
+
+            </div>
+            <ul class="side-list nav side-menu">
+                <?php
+                foreach ($admin_menu as $itm) {
+                    $isCategories = $urlparse[2] === 'categories';
+                    $isActive = '';
+
+                    if (!in_array($authUser["user_role"], $itm["roles"])) {
+                        continue;
+                    }
+
+                    if ($isCategories) {
+                        $isActive = 'active';
+                    } else {
+                        if ((strpos($itm["active"], '/' . $urlparse[2] . '/' . $urlparse[3])) || (strpos($itm["active"], '/' . $urlparse[2] . '/' . $urlparse[3] . '' . $urlparse[4])) !== false) {
+                            $isActive = 'active';
+                        }
+                    }
+
+                    if (count($itm['sub']) == 1) {
+                        ?>
+                        <?php
+                        $isSubcActive = ($itm['name'] === 'dashboard') ? ($urlparse[3] === $itm['name']) : ($urlparse[2] === $itm['name']);
+
+                        $subItemcClass = $isSubcActive ? 'active' : '';
+                        ?>
+
+                        <li class="item w-100 <?= $subItemcClass ?>">
+                            <?= $this->Html->link(
+                                '<i class="fa fa-' . $itm['icon'] . '"></i> ' . ucfirst(__($itm['name'])),
+                                ['lang' => $currlang, 'controller' => $itm['sub'][0]["url"][0], 'action' => $itm['sub'][0]["url"][1], $itm['sub'][0]["url"][2]],
+                                ["escape" => false]
+                            ) ?>
+                        </li>
+
+                    <?php } else { ?>
+
+                        <li class="item w-100 ">
+                            <a type="button" data-bs-toggle="collapse" class="collapse"
+                                data-bs-target="#<?= $itm['name'] ?>-collapseRem"
+                                aria-expanded="<?= $isCategories ? 'true' : 'false' ?>"
+                                aria-controls="<?= $itm['name'] ?>-collapseRem">
+                                <i class="fa fa-<?= $itm['icon'] ?>"></i>
+                                <?= __($itm['name']) ?> <span class="m-1 fa fa-chevron-down"></span>
+                            </a>
+                        </li>
+
+
+                        <div class="accordion-item">
+                            <div id="<?= $itm['name'] ?>-collapseRem"
+                                class="accordion-collapse <?= $isCategories ? 'show' : 'collapse' ?>">
+                                <div class="accordion-body">
+                                    <li class="<?= $isActive ?> w-100">
+                                        <ul class="nav child_menu" style="<?= $isCategories ? 'display: block' : '' ?>;">
+                                            <?php foreach ($itm['sub'] as $subitm) { ?>
+                                                <?php
+                                                $isSubActive = intval($urlparse[4]) === intval($subitm['url'][2]);
+                                                $subItemClass = $isSubActive ? 'text-danger' : 'text-dark';
+                                                ?>
+                                                <li class="w-100  p-3 pt-0 pb-1 ">
+                                                    <i class="<?= $subItemClass ?> fa fa-<?= $subitm['icon'] ?>"></i>
+                                                    <?= $this->Html->link(
+                                                        __($subitm['name']),
+                                                        ['lang' => $currlang, 'controller' => $subitm["url"][0], 'action' => $subitm["url"][1], $subitm["url"][2]],
+                                                        ["class" => "$subItemClass"]
+                                                    )
+                                                        ?>
+                                                </li>
+                                            <?php } ?>
+                                        </ul>
+                                    </li>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    <?php } ?>
+                <?php } ?>
+
+                <li class="item w-100 ">
+                    <?= $this->Html->link(
+                        '<i class="fa fa-user"></i> ' . __('my_account'),
+                        ['controller' => 'Users', 'action' => 'myaccount'],
+                        ['escape' => false, 'class' => 'dropdown-item']
+                    ) ?>
+                </li>
+                <li class="item w-100 ">
+                    <?= $this->Html->link(
+                        '<i class="fa fa-power-off"></i> ' . __('logout'),
+                        ['controller' => 'Users', 'action' => 'logout'],
+                        ['escape' => false, 'class' => 'smallBtn']
+                    ) ?>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-bg">
+            <div>
+                <button class="hideIt" ng-click="toggleSidebar()"></button>
+            </div>
+        </div>
     </div>
-    <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
-     <ul class="navbar-nav me-auto">
-      <li class="nav-item">
-       <a class="nav-link" aria-current="page" href="#">Dashboard</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link" href="#">Clients</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link active" href="#">Sales</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link " href="#">Books</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link " href="#">Reports</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link " href="#">UserSale</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link " href="#">Users</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link " href="#">Permmisions</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link " href="#">Logs</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link " href="#">Categories</a>
-      </li>
-      <li class="nav-item">
-       <a class="nav-link " href="#">Configs</a>
-      </li>
-
-     </ul>
-     <div class="nav-btns">
-      <a href="#" class="search">
-       <i class="fas-search"></i>
-      </a>
-      <a href="#" class="settings">
-       <i class="fas-cog"></i>
-      </a>
-      <a href="#" class="notifications">
-       <i class="fas-bell-alt"></i>
-      </a>
-      <a href="#" class="profile" >
-       <img src="\crm\webroot\img\user.png" alt="" />
-      </a>
-     </div> 
-    </div>-->
-   </div>
-  </nav>
- <!-- Header Ends -->
+</nav>
+<!-- Header Ends -->

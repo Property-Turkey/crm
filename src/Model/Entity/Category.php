@@ -12,12 +12,14 @@ use Cake\ORM\Entity;
  * @property int $language_id
  * @property int $parent_id
  * @property string $category_name
- * @property string|null $category_configs
- * @property int|null $category_priority
- * @property int|null $rec_state
+ * @property string $category_configs
+ * @property int $category_priority
+ * @property int $rec_state
  *
- * @property \App\Model\Entity\Category $parent_category
- * @property \App\Model\Entity\Category[] $child_categories
+ * @property \App\Model\Entity\ParentCategory $parent_category
+ * @property \App\Model\Entity\ChildCategory[] $child_categories
+ * @property \App\Model\Entity\Client[] $clients
+ * @property \App\Model\Entity\Reservation[] $reservations
  */
 class Category extends Entity
 {
@@ -34,13 +36,12 @@ class Category extends Entity
         'language_id' => true,
         'parent_id' => true,
         'category_name' => true,
-        'category_configs' => [
-            'icon' => true,
-            'isProtected' => true,
-        ],
+        'category_configs' => true,
         'category_priority' => true,
         'rec_state' => true,
         'parent_category' => true,
         'child_categories' => true,
+        'clients' => true,
+        'reservations' => true,
     ];
 }

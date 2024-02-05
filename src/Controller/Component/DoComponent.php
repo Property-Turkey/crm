@@ -426,25 +426,32 @@ class DoComponent extends Component {
         return $isJson ? json_encode($info) : $info;
     }
 
-	public function lcl($arr, $isComplex=false, $isKey=true){
-		$res=[];
-		foreach($arr as $k=>$v){
-            if(is_array($v)){
-                if($isComplex){
-                    $res[$k] = $this->lcl( $v ); 
-                }else{
-                    foreach($v as $k2=>$v2){
-                        $res[$isKey ? $k2 : $v2] = __($v2.'', true);
+    public function lcl($arr, $isComplex = false, $isKey = true)
+    {
+        $res = [];
+    
+        
+        $arr = is_array($arr) ? $arr : [$arr];
+    
+        foreach($arr as $k=>$v){
+            if (is_array($v)) {
+                if ($isComplex) {
+                    $res[$k] = $this->lcl($v);
+                } else {
+                    foreach ($v as $k2 => $v2) {
+                        $res[$isKey ? $k2 : $v2] = __($v2 . '', true);
                     }
                 }
                 continue;
             }
-			$res[$isKey ? $k : $v] = __($v.'', true);
-		}
+            $res[$isKey ? $k : $v] = __($v . '', true);
+        }
+    
         asort($res);
-		return $res;
-	}
-	
+        return $res;
+    }
+    
+
 	public function setPW($length = 8, $type=1){
         $chrs = ["abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789", "0123456789"];
 		$pass = array(); 
@@ -466,8 +473,9 @@ class DoComponent extends Component {
 		}
 	}
 	
-	public function adder($dt, $mdl){
+	public function adder($dt, $mdl, $forceId = false){
 
+        
 		$model = TableRegistry::getTableLocator()->get($mdl);
 		$record = $model->newEmptyEntity();
         $errors = [];
@@ -475,9 +483,10 @@ class DoComponent extends Component {
         $newRecs = $saveNewRecs = [];
         $existRecs = $saveExistRecs = [];
         if(is_array(@$dt[0])){//save or update multiple records
-            
+            // dd('sssss');
             for($i=0; $i<count($dt); $i++){
-                if(isset($dt[$i]['id'])){
+                // dd('sssss');
+                if(isset($dt[$i]['id']) && !$forceId){
                     $record = $model->get($dt[$i]['id']);
                     $existRecs[] = $model->patchEntity($record, $dt[$i]);
                 }else{
@@ -497,16 +506,27 @@ class DoComponent extends Component {
 
             return false;
         }else{//save or update one record
-            if(isset($dt['id'])){
+            
+            if($forceId){
+                if($newRec = $model->save($record)){
+                    return $newRec;
+                }
+            }
+            if(!$forceId && isset($dt['id'])){
+                
                 $record = $model->get($dt['id']);
             }
+            
             foreach($dt as $k => $v){
+                
                 if($v == "--escape"){continue;}
+                
                 $record[$k] = $v;
             }
             if($newRec = $model->save($record)){
                 return $newRec;
             }
+            
             return false;
         }
 	}

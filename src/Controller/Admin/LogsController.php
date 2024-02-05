@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use Cake\Event\EventInterface;
+use Cake\ORM\TableRegistry;
 
 class LogsController extends AppController
 {
@@ -12,6 +13,7 @@ class LogsController extends AppController
     public function index( )
     {
 
+       
         if ($this->request->is('post')) {
             $dt = json_decode(file_get_contents('php://input'), true);
 
@@ -41,26 +43,31 @@ class LogsController extends AppController
 
             $noneSearchable = ['page'];
             $likeFields = ['log_url[6]'];
-            $exactFields = ['source_id', 'client_nationality', 'adrs_country', 'adrs_city', 'adrs_region', 'client_address'];
+            
 
-
-             //Search
-             if (!empty($dt['search'])) {
+             
+            // Search
+            if (!empty($dt['search'])) {
                 foreach ($dt['search'] as $col => $val) {
                     if (empty($val)) {
                         continue; // Skip this column if input is empty
                     }
                     if (in_array($col, $noneSearchable)) {
-                        continue; 
+                        continue;
                     }
-                    if(in_array($col, $likeFields)){
+                    if ($col == 'log_changes') {
+                        if(is_array($val)){
+                            foreach ($val as $tag) {
+                                $conditions['AND'][] = ['log_changes LIKE ' => '%"' . $tag['value'] . '"%'];
+                            } 
+                        }
+                    } 
+                    else {
                         $conditions[$col . ' LIKE '] = '%' . $val . '%';
                     }
-                    // $conditions[$col . ' LIKE '] = '%' . $val . '%';
-                    
-                    // dd($dt['search']);
                 }
             }
+
 
 
             // ONE RECORD
@@ -95,6 +102,40 @@ class LogsController extends AppController
 
     }
 
+
+    public function recover($id = null)
+    {
+        $log = $this->Logs->get($id);
+
+
+        $this->autoRender = false;
+        if ($log) {
+            $logChanges = json_decode($log->log_changes, true);
+            $logurl = json_decode($log->log_url, true);
+
+
+            if (!empty($logChanges) && is_array($logChanges)) {
+
+                if($logurl[6] == "update"){
+                    
+                    $aaa = $this->Do->adder($logChanges[1], $logurl[5]); 
+                }else{
+                    $aaa = $this->Do->adder($logChanges[0], $logurl[5], true);
+                }
+
+                
+            } else {
+
+                dd('2');
+            }
+        } else {
+            $this->Flash->error('Log not found.');
+        }
+
+    }
+
+    
+    
     public function view($id = null)
     {
         $rec = $this->Logs->get( $id, [

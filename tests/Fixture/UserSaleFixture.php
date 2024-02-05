@@ -27,8 +27,8 @@ class UserSaleFixture extends TestFixture
             [
                 'id' => 1,
                 'user_id' => 1,
-                'sale_id' => 1,
-                'stat_created' => '2023-10-11 09:58:20',
+                'client_id' => 1,
+                'stat_created' => '2023-11-13 11:49:19',
                 'rec_state' => 1,
             ],
         ];

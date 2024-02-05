@@ -7,44 +7,43 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Core\Configure;
 
-/**
- * Clients Model
- *
- * @method \App\Model\Entity\Client newEmptyEntity()
- * @method \App\Model\Entity\Client newEntity(array $data, array $options = [])
- * @method \App\Model\Entity\Client[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Client get($primaryKey, $options = [])
- * @method \App\Model\Entity\Client findOrCreate($search, ?callable $callback = null, $options = [])
- * @method \App\Model\Entity\Client patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Client[] patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\Client|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Client saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Client[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\Client[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \App\Model\Entity\Client[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\Client[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
- */
+
 class ClientsTable extends Table
 {
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
     public function initialize(array $config): void
     {
+
         parent::initialize($config);
+        $isLocal = Configure::read('isLocal');
+        $this->setTable($isLocal ? 'ptcrm.clients' :  'ptdev_crm.clients');
 
         $this->setTable('clients');
         $this->setDisplayField('client_name');
         $this->setPrimaryKey('id');
 
+        $this->addBehavior('Log');
+
+        
+        $this->hasMany('Actions', [
+            'foreignKey' => 'client_id',
+        ]);
+        $this->hasMany('Enquires', [
+            'foreignKey' => 'client_id',
+        ]);
+        $this->hasMany('Offers', [
+            'foreignKey' => 'client_id',
+        ]);
+        $this->hasMany('Reminders', [
+            'foreignKey' => 'client_id',
+        ]);
+        $this->hasMany('Reservations', [
+            'foreignKey' => 'client_id',
+        ]);
         $this->hasMany('Sales', [
             'foreignKey' => 'client_id',
         ]);
-        
         $this->belongsTo('Sources', [
             'foreignKey' => 'source_id',
             'className' => 'Categories',
@@ -60,9 +59,20 @@ class ClientsTable extends Table
             'className' => 'Categories',        
         ]);
 
+        $this->belongsTo('PoolCategories', [
+            'foreignKey' => 'pool_id',    
+            'className' => 'Categories',        
+        ]);
+
         $this->belongsTo('Region', [
             'foreignKey' => 'adrs_region',    
             'className' => 'Categories',        
+        ]);
+
+        $this->hasOne('Users', [
+            'foreignKey' => 'user_role',
+			'dependent' => true,
+			'cascadeCallbacks' => true
         ]);
 
         $this->hasMany('Reports', [
@@ -71,76 +81,155 @@ class ClientsTable extends Table
 			'dependent' => true,
 			'cascadeCallbacks' => true
         ])->setConditions(['Reports.tar_tbl'=>'Clients']);
+
+        $this->belongsTo('TagCategories', [
+            'foreignKey' => 'client_tags',
+            'className' => 'Categories',
+        ]);
+
+        $this->belongsTo('Categories', [
+            'foreignKey' => 'category_id',
+            'className' => 'Categories',
+        ]);
+
+        $this->hasOne('Books', [
+            'foreignKey' => 'client_id',
+			'dependent' => true,
+			'cascadeCallbacks' => true
+        ]);
+
+        $this->hasMany('UserSale', [
+            'foreignKey' => 'client_id',
+			'dependent' => true,
+			'cascadeCallbacks' => true
+        ]);
+
+        $this->hasMany('EmpathyReports', [
+            'foreignKey' => 'tar_id',
+            'className' => 'Reports',
+            'dependent' => true,
+            'cascadeCallbacks' => true
+        ]);
+        
+        $this->hasMany('ClientSpecs', [
+            'foreignKey' => 'client_id',
+			'dependent' => true,
+			'cascadeCallbacks' => true
+        ]);
+
         
     }
+    public static function defaultConnectionName(): string
+    {
+        return 'default';
+    }
 
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
     public function validationDefault(Validator $validator): Validator
     {
-        // $validator
-        //     ->integer('source_id')
-        //     ->allowEmptyString('source_id');
+        $validator
+            ->integer('category_id')
+            ->allowEmptyString('category_id');
 
-        // $validator
-        //     ->scalar('client_name')
-        //     ->maxLength('client_name', 255)
-        //     ->requirePresence('client_name', 'create')
-        //     ->notEmptyString('client_name');
+        $validator
+            ->integer('source_id')
+            ->allowEmptyString('source_id');
 
-        // $validator
-        //     ->scalar('client_phone')
-        //     ->maxLength('client_phone', 255)
-        //     ->allowEmptyString('client_phone');
+        $validator
+            ->integer('pool_id')
+            ->allowEmptyString('pool_id');
 
-        // $validator
-        //     ->scalar('client_mobile')
-        //     ->maxLength('client_mobile', 255)
-        //     ->allowEmptyString('client_mobile');
+        $validator
+            ->scalar('client_name')
+            ->maxLength('client_name', 255)
+            ->requirePresence('client_name', 'create')
+            ->notEmptyString('client_name');
 
-        // $validator
-        //     ->scalar('client_email')
-        //     ->maxLength('client_email', 255)
-        //     ->allowEmptyString('client_email');
+        $validator
+            ->integer('client_phone')
+            ->allowEmptyString('client_phone');
 
-        // $validator
-        //     ->scalar('client_address')
-        //     ->maxLength('client_address', 255)
-        //     ->allowEmptyString('client_address');
+        $validator
+            ->integer('client_mobile')
+            ->allowEmptyString('client_mobile');
 
-        // $validator
-        //     ->scalar('client_nationality')
-        //     ->maxLength('client_nationality', 255)
-        //     ->allowEmptyString('client_nationality');
+        $validator
+            ->scalar('client_email')
+            ->maxLength('client_email', 255)
+            ->allowEmptyString('client_email');
 
-        // $validator
-        //     ->scalar('client_configs')
-        //     ->allowEmptyString('client_configs');
+        $validator
+            ->scalar('client_address')
+            ->maxLength('client_address', 255)
+            ->allowEmptyString('client_address');
 
-        // $validator
-        //     ->integer('adrs_country')
-        //     ->allowEmptyString('adrs_country');
+        $validator
+            ->scalar('client_nationality')
+            ->maxLength('client_nationality', 255)
+            ->allowEmptyString('client_nationality');
 
-        // $validator
-        //     ->integer('adrs_city')
-        //     ->allowEmptyString('adrs_city');
+        $validator
+            ->scalar('client_configs')
+            ->allowEmptyString('client_configs');
 
-        // $validator
-        //     ->integer('adrs_region')
-        //     ->allowEmptyString('adrs_region');
+        $validator
+            ->allowEmptyString('client_priority');
 
-        // $validator
-        //     ->dateTime('stat_created')
-        //     ->requirePresence('stat_created', 'create')
-        //     ->notEmptyDateTime('stat_created');
+        $validator
+            ->integer('client_finance')
+            ->allowEmptyString('client_finance');
 
-        // $validator
-        //     ->notEmptyString('rec_state');
+        $validator
+            ->requirePresence('client_current_stage', 'create')
+            ->notEmptyString('client_current_stage');
+
+        $validator
+            ->scalar('client_tags')
+            ->allowEmptyString('client_tags');
+
+        $validator
+            ->integer('client_budget')
+            ->allowEmptyString('client_budget');
+
+        $validator
+            ->integer('client_commission')
+            ->allowEmptyString('client_commission');
+
+        $validator
+            ->integer('client_units')
+            ->allowEmptyString('client_units');
+
+        $validator
+            ->scalar('client_shared_roles')
+            ->maxLength('client_shared_roles', 255)
+            ->allowEmptyString('client_shared_roles');
+
+        $validator
+            ->integer('adrs_country')
+            ->allowEmptyString('adrs_country');
+
+        $validator
+            ->integer('adrs_city')
+            ->allowEmptyString('adrs_city');
+
+        $validator
+            ->integer('adrs_region')
+            ->allowEmptyString('adrs_region');
+
+        $validator
+            ->dateTime('stat_created')
+            ->requirePresence('stat_created', 'create')
+            ->notEmptyDateTime('stat_created');
+
+        $validator
+            ->notEmptyString('rec_state');
 
         return $validator;
+    }
+
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->add($rules->existsIn('category_id', 'Categories'), ['errorField' => 'category_id']);
+
+        return $rules;
     }
 }
