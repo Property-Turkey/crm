@@ -321,6 +321,8 @@ header .logo img {
   overflow-x: hidden;
 }
 
+
+
 .white-box::-webkit-scrollbar {
   width: 8px; 
   background-color: white;
@@ -1662,6 +1664,51 @@ tags-input .tags .even.selected {
   color: unset;
 }
 
+.row-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.colored-box {
+  position: relative;
+}
+
+.notification-badge {
+  position: absolute;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 35%;
+  background-color: red;
+  color: white;
+  text-align: center;
+  font-size: 12px;
+  line-height: 20px;
+  bottom: 16px;
+}
+
+
+
+.colored-box {
+  position: relative;
+  flex: 1;
+  height: 30px;
+  margin: 3px;
+  padding: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  text-align: center;
+  overflow: visible; 
+  white-space: nowrap;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+
+
+
 .green-btns {
   display: flex;
   align-items: center;
@@ -1687,6 +1734,7 @@ tags-input .tags .even.selected {
   background-color: #e0ffe4; 
   white-space: nowrap;
 }
+
 .darkgr-btnStatus {
   background-color: rgb(85, 85, 85);
   color: white; 
@@ -1719,8 +1767,6 @@ tags-input .tags .even.selected {
   margin: 8px;
   font-weight: 600;
   color: #999;
-  
-  
   transform: scale(1.05);
   transition: all 0.3s;
 }
@@ -1742,14 +1788,14 @@ tags-input .tags .even.selected {
   font-size: 15px;
 }
 
- .lead-preview .down-btns {
+.lead-preview .down-btns {
   padding-top: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
- .lead-preview .down-btns .btn {
+ 
+.lead-preview .down-btns .btn {
   font-size: 16px;
 }
 
@@ -2126,13 +2172,14 @@ input:checked+.slider:before {
 }
 
 .tab-buttons button {
-  background-color: #4CAF50; /* Arka plan rengi */
-  color: white; /* Yazı rengi */
+  background-color: #4CAF50;
+  color: white;
   border: none;
-  padding: 10px 20px; /* Buton içeriği ile buton kenarları arasındaki boşluk */
-  font-size: 16px;
+  padding: 10px 20px;
+  font-size: 14px;
   cursor: pointer;
-  margin: 0 10px; /* Butonlar arasındaki boşluk miktarı */
+  margin: 5px 10px;
+  width: 240px;
 }
 
 .tab-buttons button:hover {

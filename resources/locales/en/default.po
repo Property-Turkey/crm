@@ -1001,3 +1001,10 @@ msgstr "Field Advisor"
 
 msgid "booked"
 msgstr "Booked"
+
+msgid "sale_id"
+msgstr "Sale ID"
+
+msgid "sale_name"
+msgstr "Sale Name"
+

@@ -738,19 +738,7 @@
                     
                     $scope.calculateDateRange(dateFilter);
                     
-                    if ($scope.rec.statistic.user_role) {
-                        
-                        _doRequest('<?= $app_folder ?>/admin/' + ctrl + '/saleByfield', {
-                            
-                            user_role: $scope.rec.statistic.user_role,
-                            
-                            
-                        }, 'post').then(function(res) {
-                            var recData = 'saleByfield';
-                            handleResponse(res, recData);
-                        });
-
-                    }else{
+          
                        // Diğer işlemleri gerçekleştir
                         _doRequest('<?= $app_folder ?>/admin/' + ctrl + '/numbers', {
                             user_id: user_id,
@@ -785,7 +773,7 @@
                                 handleResponse(res, recData);
                             });
                         } 
-                    }
+                    
                     
                 };
 
@@ -1987,7 +1975,6 @@
                                             'class' => 'wb-ele-select-cur cur-inp',
                                             'label' => false,
                                             'type' => 'select',
-                                            'empty' => '$',
                                             'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
                                             'ng-model' => 'rec.reservation.reservation_currency',
                                         ]) ?> 
@@ -2002,7 +1989,7 @@
                                             'class' => 'wb-ele-select-cur cur-inp',
                                             'label' => false,
                                             'type' => 'select',
-                                            'empty' => '$',
+                                            
                                             'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
                                             'ng-model' => 'rec.reservation.reservation_currency',
                                         ]) ?> 
@@ -2036,7 +2023,7 @@
                                             'label' => false,
                                             'type' => 'select',
                                             'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
-                                            'empty' => '$',
+                                            
                                             'ng-model' => 'rec.reservation.reservation_currency',
                                         ]) ?> 
                                             
@@ -2286,7 +2273,7 @@
                                             'label' => false,
                                             'type' => 'select',
                                             'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
-                                            'empty' => '$',
+                                            
                                             'ng-model' => 'rec.client.client_specs[0].clientspec_currency',
                                         ]) ?> 
                                             

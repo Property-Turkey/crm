@@ -1,7 +1,7 @@
 <div class="container" ng-init="
-    doGet('/admin/clients/kbidata', 'rec', 'kbidata');">
+    doGet('/admin/users/kbidata', 'rec', 'kbidata');">
     <div class="heading ">
-        <div class="title" style="font-size: 16px;">KBI</div>
+        <div class="title" style="font-size: 16px;"></div>
     </div>
 
 
@@ -9,18 +9,17 @@
         <div class="col-12">
 
 
-            <div class="white-box-dashboard mb-3" style="overflow-x: auto !important; ">
 
 
                 <div class="row">
 
-                    <div class="col-md-12 mb-3 d-flex">
+                <div class="col-md-12 mb-3 d-flex">
                         <div class="white-box-dashboard mb-3 custom-table"
                             style="overflow-x: auto !important; max-height: 400px;">
                             <div class="heading">
                                 <div class="title" style="font-size: 16px;">KBI</div>
                             </div>
-                            <table class="table table-bordered custom-table" >
+                            <table class="table table-bordered custom-table">
                                 <thead>
                                     <tr>
                                         <th>
@@ -56,6 +55,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
+                                    <!-- {{rec.kbidata.ccUsers}} -->
                                     <tr ng-repeat="cc in rec.kbidata.ccUsers">
                                         <td>
                                             <div>
@@ -65,49 +66,107 @@
                                         <td>
                                             <div>
                                                 {{cc.user_fullname}}
+
+
                                             </div>
                                         </td>
+
                                         <td>
                                             <div>
-                                                {{}}
+                                                <div ng-if="cc.actions_today_called.length > 0"
+                                                    ng-repeat="action in cc.actions_today_called">
+                                                    {{ action.COUNT }}
+                                                </div>
+                                                <div ng-if="cc.actions_today_called.length === 0">
+                                                    0
+                                                </div>
                                             </div>
                                         </td>
+
                                         <td>
                                             <div>
-                                                {{}}
+                                                <div ng-if="cc.actions_today_spoken.length > 0"
+                                                    ng-repeat="action in cc.actions_today_spoken">
+                                                    {{ action.COUNT }}
+                                                </div>
+                                                <div ng-if="cc.actions_today_spoken.length === 0">
+                                                    0
+                                                </div>
                                             </div>
                                         </td>
+
                                         <td>
                                             <div>
-                                                {{}}
+                                                <div ng-if="cc.actions_yesterday_called.length > 0"
+                                                    ng-repeat="action in cc.actions_yesterday_called">
+                                                    {{ action.COUNT }}
+                                                </div>
+                                                <div ng-if="cc.actions_yesterday_called.length === 0">
+                                                    0
+                                                </div>
                                             </div>
                                         </td>
+
                                         <td>
                                             <div>
-                                                {{}}
+                                                <div ng-if="cc.actions_yesterday_spoken.length > 0"
+                                                    ng-repeat="action in cc.actions_yesterday_spoken">
+                                                    {{ action.COUNT }}
+                                                </div>
+                                                <div ng-if="cc.actions_yesterday_spoken.length === 0">
+                                                    0
+                                                </div>
                                             </div>
                                         </td>
+
                                         <td>
                                             <div>
-                                                {{}}
+                                                <div ng-if="cc.actions_bef_yesterday_called.length > 0"
+                                                    ng-repeat="action in cc.actions_bef_yesterday_called">
+                                                    {{ action.COUNT }}
+                                                </div>
+                                                <div ng-if="cc.actions_bef_yesterday_called.length === 0">
+                                                    0
+                                                </div>
                                             </div>
                                         </td>
+
                                         <td>
                                             <div>
-                                                {{}}
+                                                <div ng-if="cc.actions_bef_yesterday_spoken.length > 0"
+                                                    ng-repeat="action in cc.actions_bef_yesterday_spoken">
+                                                    {{ action.COUNT }}
+                                                </div>
+                                                <div ng-if="cc.actions_bef_yesterday_spoken.length === 0">
+                                                    0
+                                                </div>
                                             </div>
                                         </td>
+
                                         <td>
                                             <div>
-                                                {{}}
+                                                <div ng-if="cc.actions_befbef_yesterday_called.length > 0"
+                                                    ng-repeat="action in cc.actions_befbef_yesterday_called">
+                                                    {{ action.COUNT }}
+                                                </div>
+                                                <div ng-if="cc.actions_befbef_yesterday_called.length === 0">
+                                                    0
+                                                </div>
                                             </div>
                                         </td>
+
                                         <td>
                                             <div>
-                                                {{}}
+                                                <div ng-if="cc.actions_befbef_yesterday_spoken.length > 0"
+                                                    ng-repeat="action in cc.actions_befbef_yesterday_spoken">
+                                                    {{ action.COUNT }}
+                                                </div>
+                                                <div ng-if="cc.actions_befbef_yesterday_spoken.length === 0">
+                                                    0
+                                                </div>
                                             </div>
                                         </td>
-                                        
+
                                     </tr>
                                 </tbody>
                             </table>
@@ -117,8 +176,6 @@
                     </div>
 
 
-
-                </div>
 
 
 

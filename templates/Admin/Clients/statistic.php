@@ -630,9 +630,9 @@ stacked: true
                                     </div>
                                     <div class="col-md-6 mb-3 d-flex">
                                         <div class="white-box-dashboard mb-3"
-                                            style="overflow-x: auto !important; max-height: 400px;">
+                                            style="overflow-x: auto !important;">
                                             <table  class="table table-bordered custom-table"
-                                                style="table-layout: fixed;">
+                                                >
                                                 <thead>
                                                     <tr>
                                                         <th>
@@ -664,9 +664,9 @@ stacked: true
 
                                     <div class="col-md-6 mb-3 d-flex">
                                         <div class="white-box-dashboard mb-3"
-                                            style="overflow-x: auto !important; max-height: 400px;">
+                                            style="overflow-x: auto !important;">
                                             <table  class="table table-bordered custom-table"
-                                                style="table-layout: fixed;">
+                                                >
                                                 <thead>
                                                     <tr>
                                                         <th>
@@ -906,14 +906,14 @@ stacked: true
                                     <!-- İlk tablo: Client Advisor​ Detail Selected Period of time -->
                                     <div class="col-md-12 mb-3 d-flex">
                                         <div class="white-box-dashboard mb-3 custom-table"
-                                            style="overflow-x: auto !important; max-height: 400px;">
+                                            style="overflow-x: auto !important;">
                                             <div class="heading">
                                                 <div class="title" style="font-size: 16px;">Client Advisor​ Detail
                                                     Selected
                                                     Period of time</div>
                                             </div>
                                             <table class="table table-bordered custom-table"
-                                                style="table-layout: fixed;">
+                                                >
                                                 <thead>
                                                     <tr>
                                                         <th>
@@ -993,14 +993,14 @@ stacked: true
                                     <!-- İkinci tablo: Field Detail Selected Period of time -->
                                     <div class="col-md-12 mb-3 d-flex">
                                         <div class="white-box-dashboard mb-3 custom-table"
-                                            style="overflow-x: auto !important; max-height: 400px;">
+                                            style="overflow-x: auto !important;">
                                             <div class="heading">
                                                 <div class="title" style="font-size: 16px;">Field Detail Selected Period
                                                     of time
                                                 </div>
                                             </div>
                                             <table class="table table-bordered custom-table"
-                                                style="table-layout: fixed;">
+                                                >
                                                 <thead>
                                                     <tr>
                                                         <th>
@@ -1079,13 +1079,13 @@ stacked: true
 <!-- 
                                     <div class="col-md-12 mb-3 d-flex">
                                         <div class="white-box-dashboard mb-3 custom-table"
-                                            style="overflow-x: auto !important; max-height: 400px;">
+                                            style="overflow-x: auto !important;">
                                             <div class="heading">
                                                 <div class="title" style="font-size: 16px;">Client Advisor​ Detail all
                                                     time</div>
                                             </div>
                                             <table class="table table-bordered custom-table"
-                                                style="table-layout: fixed;">
+                                                >
                                                 <thead>
                                                     <tr>
                                                         <th>
@@ -1161,13 +1161,13 @@ stacked: true
 
                                     <div class="col-md-12 mb-3 d-flex">
                                         <div class="white-box-dashboard mb-3 custom-table"
-                                            style="overflow-x: auto !important; max-height: 400px;">
+                                            style="overflow-x: auto !important;">
                                             <div class="heading">
                                                 <div class="title" style="font-size: 16px;">Field Detail All time
                                                 </div>
                                             </div>
                                             <table class="table table-bordered custom-table"
-                                                style="table-layout: fixed;">
+                                                >
                                                 <thead>
                                                     <tr>
                                                         <th>

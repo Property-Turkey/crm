@@ -22,6 +22,81 @@ class UsersTable extends Table
             'foreignKey' => 'user_id',
         ]);
 
+        $this->hasMany('Actions', [
+            'foreignKey' => 'user_id',
+        ]);
+
+        //today
+
+        $this->hasMany('ActionsTodayCalled', [
+            'className'=>'Actions',
+            'foreignKey' => 'user_id',
+        ])->setConditions([
+            'action_type'=>75,                 
+            'DATE(stat_created)' => date('Y-m-d')
+        ]);
+
+        $this->hasMany('ActionsTodaySpoken', [
+            'className'=>'Actions',
+            'foreignKey' => 'user_id',
+        ])->setConditions([
+            'action_type'=>76, 
+            'DATE(stat_created)' => date('Y-m-d')
+        ]);
+
+        //yesterday
+
+        $this->hasMany('ActionsYesterdayCalled', [
+            'className'=>'Actions',
+            'foreignKey' => 'user_id',
+        ])->setConditions([
+            'action_type'=>75,                 
+            'DATE(stat_created)' => date('Y-m-d', strtotime('-1 day'))
+        ]);
+
+        $this->hasMany('ActionsYesterdaySpoken', [
+            'className'=>'Actions',
+            'foreignKey' => 'user_id',
+        ])->setConditions([
+            'action_type'=>76, 
+            'DATE(stat_created)' => date('Y-m-d', strtotime('-1 day'))
+        ]);
+
+        //before yesterday
+
+        $this->hasMany('ActionsBefYesterdayCalled', [
+            'className'=>'Actions',
+            'foreignKey' => 'user_id',
+        ])->setConditions([
+            'action_type'=>75,                 
+            'DATE(stat_created)' => date('Y-m-d', strtotime('-2 day'))
+        ]);
+
+        $this->hasMany('ActionsBefYesterdaySpoken', [
+            'className'=>'Actions',
+            'foreignKey' => 'user_id',
+        ])->setConditions([
+            'action_type'=>76, 
+            'DATE(stat_created)' => date('Y-m-d', strtotime('-2 day'))
+        ]);
+
+        //before before yesterday
+
+        $this->hasMany('ActionsBefbefYesterdayCalled', [
+            'className'=>'Actions',
+            'foreignKey' => 'user_id',
+        ])->setConditions([
+            'action_type'=>75,                 
+            'DATE(stat_created)' => date('Y-m-d', strtotime('-3 day'))
+        ]);
+
+        $this->hasMany('ActionsBefbefYesterdaySpoken', [
+            'className'=>'Actions',
+            'foreignKey' => 'user_id',
+        ])->setConditions([
+            'action_type'=>76, 
+            'DATE(stat_created)' => date('Y-m-d', strtotime('-3 day'))
+        ]);
 		$this->addBehavior('Log');
     }
 

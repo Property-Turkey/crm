@@ -7,6 +7,7 @@ use App\Controller\AppController;
 use Cake\Event\EventInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 
 class UsersController extends AppController
 {
@@ -27,6 +28,221 @@ class UsersController extends AppController
         $userCount = $this->Users->Clients->find()->count();
 
         $this->set(compact('clientCount'));
+    }
+
+    
+    // public function kbidata()
+    // {
+    //     $this->autoRender = false;
+
+    //     //client advisor table
+    //     $ccUsers = $this->Users->find()
+    //         ->where(['user_role' => 'cc'])
+    //         ->toArray();
+
+    //     $ccUserIds = array_column($ccUsers, 'id');
+    //     $currentDate = date('Y-m-d');
+    //     $yesterdayDate = date('Y-m-d', strtotime('-1 day'));
+    //     $befyesterdayDate = date('Y-m-d', strtotime('-2 day'));
+    //     $befbefyesterdayDate = date('Y-m-d', strtotime('-3 day'));
+
+    //     $ccUsercallCounts = [];
+    //     $ccUserspokenCounts = [];
+
+    //     foreach ($ccUserIds as $ccUserId) {
+
+    //         //---------------------------current day
+
+    //         $callCount = $this->Users->Actions->find()
+    //             ->where([
+    //                 'user_id' => $ccUserId,
+    //                 'DATE(stat_created)' => $currentDate,
+    //                 'action_type' => 75
+    //             ])->count();
+
+    //             $ccUsercallCounts[$ccUserId] = $callCount;
+
+    //         $spokenCount = $this->Users->Actions->find()
+    //             ->where([
+    //                 'user_id' => $ccUserId,
+    //                 'DATE(stat_created)' => $currentDate,
+    //                 'action_type' => 76
+    //             ])
+    //             ->count();
+
+    //         $ccUserspokenCounts[$ccUserId] = $spokenCount;
+
+    //         //---------------------------yesterday
+
+    //         $yestercallCount = $this->Users->Actions->find()
+    //             ->where([
+    //                 'user_id' => $ccUserId,
+    //                 'DATE(stat_created)' => $yesterdayDate,
+    //                 'action_type' => 75
+    //             ])->count();
+    //             // sql($yestercallCount);
+    //         $ccUsercallyesterCounts[$ccUserId] = $yestercallCount;
+
+    //         $spokenyesterCount = $this->Users->Actions->find()
+    //             ->where([
+    //                 'user_id' => $ccUserId,
+    //                 'DATE(stat_created)' => $yesterdayDate,
+    //                 'action_type' => 76
+    //             ])
+    //             ->count();
+
+    //         $ccUserspokenyesterCounts[$ccUserId] = $spokenyesterCount;
+
+    //         //--------------------------- before yesterday
+
+    //         $befyestercallCount = $this->Users->Actions->find()
+    //             ->where([
+    //                 'user_id' => $ccUserId,
+    //                 'DATE(stat_created)' => $befyesterdayDate,
+    //                 'action_type' => 75
+    //             ])
+    //             ->count();
+
+    //         $ccUsercallbefyesterCounts[$ccUserId] = $befyestercallCount;
+
+    //         $spokenbefyesterCount = $this->Users->Actions->find()
+    //             ->where([
+    //                 'user_id' => $ccUserId,
+    //                 'DATE(stat_created)' => $befyesterdayDate,
+    //                 'action_type' => 76
+    //             ])
+    //             ->count();
+
+    //         $ccUserspokenbefyesterCounts[$ccUserId] = $spokenbefyesterCount;
+
+    //         //--------------------------- before before yesterday
+
+    //         $befbefyestercallCount = $this->Users->Actions->find()
+    //             ->where([
+    //                 'user_id' => $ccUserId,
+    //                 'DATE(stat_created)' => $befbefyesterdayDate,
+    //                 'action_type' => 75
+    //             ])
+    //             ->count();
+
+    //         $ccUsercallbefbefyesterCounts[$ccUserId] = $befbefyestercallCount;
+
+    //         $spokenbefbefyesterCount = $this->Users->Actions->find()
+    //             ->where([
+    //                 'user_id' => $ccUserId,
+    //                 'DATE(stat_created)' => $befbefyesterdayDate,
+    //                 'action_type' => 76
+    //             ])
+    //             ->count();
+
+    //         $ccUserspokenbefbefyesterCounts[$ccUserId] = $spokenbefbefyesterCount;
+
+
+    //     }
+
+    //     echo json_encode([
+    //         "status" => "SUCCESS",
+    //         "msg" => __("success"),
+    //         "data" => [
+    //             'ccUsers' => $ccUsers,
+    //             'ccUsercallCounts' => $ccUsercallCounts,
+    //             'ccUserspokenCounts' => $ccUserspokenCounts,
+    //             'ccUsercallyesterCounts' => $ccUsercallyesterCounts,
+    //             'ccUserspokenyesterCounts' => $ccUserspokenyesterCounts,
+    //             'ccUsercallbefyesterCounts' => $ccUsercallbefyesterCounts,
+    //             'ccUserspokenbefyesterCounts' => $ccUserspokenbefyesterCounts,
+    //             'ccUsercallbefbefyesterCounts' => $ccUsercallbefbefyesterCounts,
+    //             'ccUserspokenbefbefyesterCounts' => $ccUserspokenbefbefyesterCounts,
+
+    //         ]
+    //     ]);
+    //     die();
+
+    // }
+
+    public function kbidata()
+{
+    $this->autoRender = false;
+
+    
+    $ccUsers = $this->Users->find()
+    ->contain([
+        'ActionsTodaySpoken' => [
+            'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+        ],
+        'ActionsTodayCalled' => [
+            'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+        ],
+
+        'ActionsYesterdayCalled' => [
+            'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+        ],
+        'ActionsYesterdaySpoken' => [
+            'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+        ],
+
+        'ActionsBefYesterdayCalled' => [
+            'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+        ],
+        'ActionsBefYesterdaySpoken' => [
+            'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+        ],
+
+        'ActionsBefbefYesterdayCalled' => [
+            'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+        ],
+        'ActionsBefbefYesterdaySpoken' => [
+            'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+        ],
+    ])
+    ->where(['user_role' => 'cc'])
+    ->toArray();
+
+        // dd( $this->Do->convertJson( $ccUsers ));
+
+    // $ccUserIds = array_column($ccUsers, 'id');
+    // $dateRanges = [
+    //     'currentDate' => date('Y-m-d'),
+    //     'yesterdayDate' => date('Y-m-d', strtotime('-1 day')),
+    //     'befyesterdayDate' => date('Y-m-d', strtotime('-2 day')),
+    //     'befbefyesterdayDate' => date('Y-m-d', strtotime('-3 day')),
+    // ];
+
+    // $actionTypes = [75, 76];
+    // $result = [];
+    // foreach ($ccUserIds as $ccUserId) {
+    //     foreach ($dateRanges as $rangeKey => $rangeDate) {
+    //         foreach ($actionTypes as $actionType) {
+    //             $count = $this->Users->Actions->find()
+    //                 ->where([
+    //                     'user_id' => $ccUserId,
+    //                     'DATE(stat_created)' => $rangeDate,
+    //                     'action_type' => $actionType
+    //                 ])
+    //                 ->count();
+
+    //                 $result[$ccUserId][$rangeKey][$actionType] = $count;
+
+    //         }
+    //     }
+    // }
+
+ 
+    echo json_encode([
+        "status" => "SUCCESS",
+        "msg" => __("success"),
+        "data" => [
+            'ccUsers' => $ccUsers,
+            ]
+        ,
+    ]);
+    die();
+}
+
+
+    public function kbi()
+    {
+
     }
 
     private function statistics()

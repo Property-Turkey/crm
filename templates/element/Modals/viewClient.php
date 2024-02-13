@@ -322,11 +322,11 @@
                                             </span>
                                             <div class="d-flex align-items-center justify-content-center">
                                                 <!-- Called Checkbox -->
-                                                <input type="checkbox" ng-model="rec.client.action.action_type[0]" ng-change="
+                                                <input type="checkbox" ng-model="rec.client.action.action_type" ng-change="
                                                 rec.client.action.client_id = rec.client.id;
                                                 actionSave();" ng-true-value="75"/> Called
                                                 <!-- Spoken Checkbox -->
-                                                <input type="checkbox" ng-model="rec.client.action.action_type[1]" ng-change="
+                                                <input type="checkbox" ng-model="rec.client.action.action_type" ng-change="
                                                 rec.client.action.client_id = rec.client.id;
                                                 actionSave();" ng-true-value="76"/> Spoken
                                             </div>

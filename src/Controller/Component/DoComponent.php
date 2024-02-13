@@ -132,6 +132,7 @@ class DoComponent extends Component {
 
     public function currencyConverter($from, $to, $sum)
     {
+        $sum = $sum * 1;
         if($from == $to){return $sum;}// no need convertion if the same currency
         if($from == 'USD'){// reverse db ratio and multiply it by sum
             $toReverse = 1 / $this->getConf($to.'_USD');

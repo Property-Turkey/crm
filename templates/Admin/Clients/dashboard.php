@@ -272,7 +272,8 @@ stacked: true
 <div class="container-fluid px-4" ng-init="
     doGet('/admin/clients/numbers', 'rec', 'numbers');
     doGet('/admin/clients/bar', 'rec', 'bar');
-    doGet('/admin/clients/doughnut', 'rec', 'doughnut');">
+    doGet('/admin/clients/doughnut', 'rec', 'doughnut');
+    doGet('/admin/clients/notifications', 'rec', 'notification');">
 
 
     <!-- {{rec.doughnut.sourceDoughnutData}} -->
@@ -327,7 +328,7 @@ stacked: true
                             <?= __('end_date') ?>:
                         </span>
                         <input date-format class="wb-ele-dashboard py-1" type="date" id="endDate"
-                            ng-model="rec.dashboard.endDate" ng-change="getClientsByDateRange()">
+                            ng-model="rec.dashboard.endDate" ng-change="getDashClientsByDateRange()">
                     </label>
 
 
@@ -344,6 +345,90 @@ stacked: true
                 </div>
 
             </div>
+
+
+
+
+
+            <?php if (in_array($authUser['user_role'], ['cc']) || isset($authUser['user_original_role'])) { ?>
+                <div class="col-8 " style="display: flex;  gap: 10px;top: 21px;position: relative;z-index: 1;">
+
+                    <div class="colored-box" ng-if="rec.notification.newAssignCount != 0" style="background-color:indianred"
+                        onclick="location.href='/en/admin/clients/index';">
+                        <span class="notification-badge"
+                            format-currency="rec.notification.newAssignCount"></span>
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        <div class="m-1 d-none d-lg-block">New Assign
+                        </div>
+                    </div>
+
+                    <div class="colored-box" ng-if="rec.notification.newReminderCount != 0"
+                        style="background-color:cadetblue" onclick="location.href='/en/admin/clients/index';">
+                        <span class="notification-badge" format-currency="rec.notification.newReminderCount"></span>
+                        <i class="fa fa-book" aria-hidden="true"></i>
+                        <div class="m-1 d-none d-lg-block">New Reminder</div>
+                    </div>
+
+                </div>
+            <?php } ?>
+
+            <?php if (in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.field']) || isset($authUser['user_original_role'])) { ?>
+                <div class="col-8 " style="display: flex;  gap: 10px;top: 21px;position: relative;z-index: 1;">
+
+                    <div class="colored-box" ng-if="rec.notification.newClientsCount != 0"
+                        style="background-color:indianred" onclick="location.href='/en/admin/clients/index';">
+                        <span class="notification-badge" format-currency="rec.notification.newClientsCount"></span>
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        <div class="m-1 d-none d-lg-block">New Sold Online
+                        </div>
+                    </div>
+
+                    <div class="colored-box" ng-if="rec.notification.newBookedCount != 0" style="background-color:cadetblue"
+                        onclick="location.href='/en/admin/clients/index';">
+                        <span class="notification-badge" format-currency="rec.notification.newBookedCount"></span>
+                        <i class="fa fa-book" aria-hidden="true"></i>
+                        <div class="m-1 d-none d-lg-block">New Booked</div>
+                    </div>
+
+                    <div class="colored-box" ng-if="rec.notification.newSoldCount != 0" style="background-color:#ffddf4"
+                        onclick="location.href='/en/admin/clients/index';">
+                        <span class="notification-badge" format-currency="rec.notification.newSoldCount"></span>
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                        <div class="m-1 d-none d-lg-block">New Sold</div>
+                    </div>
+
+                    <div class="colored-box" ng-if="rec.notification.newCancelledCount != 0"
+                        style="background-color:#f1e2ff" onclick="location.href='/en/admin/clients/index';">
+                        <span class="notification-badge" format-currency="rec.notification.newCancelledCount"></span>
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                        <div class="m-1 d-none d-lg-block">New Cancelled</div>
+                    </div>
+
+                    <div class="colored-box" ng-if="rec.notification.newDownPaymentCount != 0"
+                        style="background-color:beige" onclick="location.href='/en/admin/clients/index';">
+                        <span class="notification-badge" format-currency="rec.notification.newDownPaymentCount"></span>
+                        <i class="fa fa-credit-card" aria-hidden="true"></i>
+                        <div class="m-1 d-none d-lg-block">New Down Payment</div>
+                    </div>
+
+                    <div class="colored-box" ng-if="rec.notification.newReservedCount != 0" style="background-color:bisque"
+                        onclick="location.href='/en/admin/clients/index';">
+                        <span class="notification-badge" format-currency="rec.notification.newReservedCount"></span>
+                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                        <div class="m-1 d-none d-lg-block">New Reserved</div>
+                    </div>
+                    <div class="colored-box" ng-if="rec.notification.newSoldOnlineCount != 0" style="background-color:brown"
+                        onclick="location.href='/en/admin/clients/index';">
+                        <span class="notification-badge" format-currency="rec.notification.newSoldOnlineCount"></span>
+                        <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                        <div class="m-1 d-none d-lg-block">New Sold Online</div>
+                    </div>
+
+
+                </div>
+            <?php } ?>
+
+
             <div class="white-box-dashboard mb-3" style="overflow-x: auto !important; ">
                 <div class="row col-md-2">
                     <div class="heading my-1 dashboard-h">
@@ -360,6 +445,7 @@ stacked: true
                 </div>
 
             </div>
+
             <div class="row">
 
                 <div class="col-md-6 mb-3 d-flex">
@@ -528,10 +614,11 @@ stacked: true
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="col-md-3">
-            <?php if (in_array($authUser['user_role'], [ 'admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
+            <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                 <div class="panel panel-default mb-3" ng-class="{ 'custom-style': showFilters }">
                     <div class="filter-row">
                         <!-- Advisor Select -->
@@ -552,9 +639,11 @@ stacked: true
             <?php } ?>
 
 
+
+
             <div class="white-box-dashboard mb-3">
                 <div class="row m-1">
-                    <div class="col-7">
+                    <div class="col-4">
                         <div class="custom-box" style="background-color: #f9edd3;">
                             <i class="fa fa-user icon" aria-hidden="true" style="color: #ffb400;"></i>
                         </div>
@@ -569,10 +658,88 @@ stacked: true
                             </div>
                         </div>
                     </div>
-                    <div class="col-5">
-                    </div>
+
+
+
+                    <!-- <div class="col-8">
+                        <div class="row-container">
+                            <div class="colored-box"
+                                
+                                onclick="location.href='/en/admin/clients/index';">
+                                <i class="fa fa-bell" aria-hidden="true"></i>
+                                <div class="m-1">New Leads ({{rec.notification.unseenLeadsCount}})</div>
+                            </div>
+
+                            <div class="colored-box"
+                                ng-style="{'background-color': rec.notification.unseenBookedCount === 0 ? '#6b6868' : '#FF8A65'}"
+                                onclick="location.href='/en/admin/clients/index';">
+                                <i class="fa fa-bell" aria-hidden="true"></i>
+                                <div class="m-1">New Booked ({{rec.notification.unseenBookedCount}})</div>
+                            </div>
+
+                        </div>
+
+                        <div class="row-container">
+                            <div class="colored-box"
+                                ng-style="{'background-color': rec.notification.unseenSoldCount === 0 ? '#6b6868' : '#FFD54F'}"
+                                onclick="location.href='/en/admin/clients/index';">
+                                <i class="fa fa-bell" aria-hidden="true"></i>
+                                <div class="m-1">New Sold ({{rec.notification.unseenSoldCount}})</div>
+                            </div>
+
+                            <div class="colored-box"
+                                ng-style="{'background-color': rec.notification.unseenCancelledCount === 0 ? '#6b6868' : '#4DB6AC'}"
+                                onclick="location.href='/en/admin/clients/index';">
+                                <i class="fa fa-bell" aria-hidden="true"></i>
+                                <div class="m-1">New Cancelled ({{rec.notification.unseenCancelledCount}})</div>
+                            </div>
+
+                        </div>
+
+                        <div class="row-container">
+                            <div class="colored-box"
+                                ng-style="{'background-color': rec.notification.unseenDownPaymentCount === 0 ? '#6b6868' : '#FF7043'}"
+                                onclick="location.href='/en/admin/clients/index';">
+                                <i class="fa fa-bell" aria-hidden="true"></i>
+                                <div class="m-1">New Down Payment ({{rec.notification.unseenDownPaymentCount}})</div>
+                            </div>
+
+
+                            <div class="colored-box"
+                                ng-style="{'background-color': rec.notification.unseenReservedCount === 0 ? '#6b6868' : '#90CAF9'}"
+                                onclick="location.href='/en/admin/clients/index';">
+                                <i class="fa fa-bell" aria-hidden="true"></i>
+                                <div class="m-1">New Reserved ({{rec.notification.unseenReservedCount}})</div>
+                            </div>
+
+                        </div>
+
+                        <div class="row-container">
+                            <div class="colored-box"
+                                ng-style="{'background-color': rec.notification.unseenReservedCount === 0 ? '#6b6868' : '#90CAF9'}"
+                                onclick="location.href='/en/admin/clients/index';">
+                                <i class="fa fa-bell" aria-hidden="true"></i>
+                                <div class="m-1">New Reserved ({{rec.notification.unseenReservedCount}})</div>
+                            </div>
+
+                            <div class="colored-box "
+                                ng-style="{'background-color': rec.notification.unseenSoldOnlineCount === 0 ? '#6b6868' : '#7986CB'}"
+                                onclick="location.href='/en/admin/clients/index';">
+                                <i class="fa fa-bell" aria-hidden="true"></i>
+                                <div class="m-1">New Sold Online ({{rec.notification.unseenSoldOnlineCount}})</div>
+                            </div>
+
+                        </div>
+
+
+                    </div> -->
+
+
                 </div>
             </div>
+
+
+
             <div class="white-box-dashboard mb-3">
                 <div class="row m-1">
                     <div class="col-7">
@@ -681,7 +848,7 @@ stacked: true
 
             </div>
 
-           
+
 
         </div>
     </div>

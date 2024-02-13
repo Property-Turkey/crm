@@ -29,7 +29,7 @@ $admin_menu = [
         "sub" => [
             ["name" => "all", "url" => ["clients", "dashboard", ""]],
         ],
-        
+
     ],
     [
         "name" => "statistic",
@@ -39,7 +39,7 @@ $admin_menu = [
         "sub" => [
             ["name" => "all", "url" => ["clients", "statistic", ""]],
         ],
-        
+
     ],
     [
         "name" => "users",
@@ -85,7 +85,7 @@ $admin_menu = [
         "sub" => [
             ["name" => "all", "url" => ["clients", "index", ""]],
         ],
-        
+
     ],
 
 ];
@@ -100,7 +100,7 @@ $non_admin_menu = [
             ["name" => "all", "url" => ["users", "myaccount", ""]],
         ]
     ],
-    
+
 
 ];
 
@@ -115,6 +115,47 @@ $urlparse[4] = empty($urlparse[4]) ? '' : $urlparse[4];
 
 
 <!-- Header Start -->
+<style>
+    .notification-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .notifications-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        min-width: 200px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+    }
+
+    .notifications-dropdown a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #333;
+        font-size: 12px !important;
+        /* Bildirimlerin boyutu */
+        border-bottom: 1px solid #ddd;
+        /* Gri çizgi */
+    }
+
+    .notifications-dropdown a:last-child {
+        border-bottom: none;
+        /* Son elemanın altındaki çizgiyi kaldır */
+    }
+
+    .notification-container:hover .notifications-dropdown {
+        display: block;
+    }
+
+    .notification-icon {
+        cursor: pointer;
+    }
+</style>
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid m-2">
         <a class="navbar-brand" href="#">
@@ -134,9 +175,23 @@ $urlparse[4] = empty($urlparse[4]) ? '' : $urlparse[4];
             </ul>
 
             <div class="nav-btns">
-                <a href="#" class="notifications">
-                    <div class="notification-icon"><i class="fa fa-bell"></i></div>
-                </a>
+
+                <div class="notification-container">
+                    <a href="#">
+                        <div class="notification-icon"><i class="fa fa-bell"></i></div>
+                    </a>
+
+                    <div class="notifications-dropdown">
+                        <!-- Dropdown içeriği buraya eklenebilir -->
+                        <a ng-if="rec.notification.newClientsCount !=0" href="#">You have new Leads ({{rec.notification.newClientsCount}})</a>
+                        <a ng-if="rec.notification.newBookedCount !=0" href="#">You have new Booked ({{rec.notification.newBookedCount}})</a>
+                        <a ng-if="rec.notification.newSoldCount !=0" href="#">You have new Sold ({{rec.notification.newSoldCount}})</a>
+                        <a ng-if="rec.notification.newCancelledCount !=0" href="#">You have new Cancelled ({{rec.notification.newCancelledCount}})</a>
+                        <a ng-if="rec.notification.newDownPaymentCount !=0" href="#">You have new Down Payment ({{rec.notification.newDownPaymentCount}})</a>
+                        <a ng-if="rec.notification.newReservedCount !=0" href="#">You have new Reserved ({{rec.notification.newReservedCount}})</a>
+                        <a ng-if="rec.notification.newSoldOnlineCount !=0" href="#">You have new Sold Online ({{rec.notification.newSoldOnlineCount}})</a>
+                    </div>
+                </div>
                 <?php
                 foreach ($non_admin_menu as $itm) {
                     $isCategories = $urlparse[2] === 'categories';
@@ -182,14 +237,14 @@ $urlparse[4] = empty($urlparse[4]) ? '' : $urlparse[4];
                                         ['escape' => false, 'class' => 'dropdown-item']
                                     ) ?>
                                 </li>
-                                
-                                
+
+
                             </div>
                         </div>
 
                     <?php } ?>
                 <?php } ?>
-                
+
             </div>
         </div>
         <button name="menu-toggle" id="sideClose" ng-click="toggleSidebar()" class="menu">
