@@ -84,22 +84,22 @@
 
 <body class="nav-md" ng-app="app" ng-controller="ctrl as ctrl">
     <?php if ($authUser) { ?>
-        
-                                                                    <?= $this->element("header"); ?>
-            
+
+        <?= $this->element("header"); ?>
+
     <?php } ?>
 
     <?php if (!$authUser) { ?>
 
-                                                                    <?= $this->element("headerLog"); ?>
-            
+        <?= $this->element("headerLog"); ?>
+
     <?php } ?>
-        
+
     <!--  -->
     <?= $this->fetch("content"); ?>
     <!--  -->
     <?= $this->element("modals"); ?>
-   
+
     <div id="imgHolder" class="imgHolder" onClick="this.setAttribute('style', 'opacity:0; visibility:hidden;')"></div>
     <div id="PNote" class="PNote"></div>
     <div id="slideHolder" class="imgHolder slideHolder"></div>
@@ -108,7 +108,7 @@
     <!--    JAVASCRIPT      -->
     <!-- Angular -->
     <?php echo $this->Html->script('angular') ?>
-    
+
     <!-- NG Tags Input-->
     <?php echo $this->Html->script('ng-tags-input.min') ?>
     <!-- Angular Sanitize -->
@@ -205,11 +205,12 @@
     <!-- JQuery Mask Money -->
     <?php //echo $this->Html->script('angularjs-currency-input-mask') 
     ?>
-    
-    
+
+
 
     <?php if (@$isMap == 1) { ?>
-                                                                                                <script src="https://maps.googleapis.com/maps/api/js?key=<?= $gmapKey ?>&sensor=false&libraries=places&language=en"></script>
+        <script
+            src="https://maps.googleapis.com/maps/api/js?key=<?= $gmapKey ?>&sensor=false&libraries=places&language=en"></script>
     <?php } ?>
     <!-- Google Maps Directive -->
     <?php //echo $this->Html->script('gm') 
@@ -245,9 +246,9 @@
         errorMsg['isSelectEmpty'] = '<?= __('is-selected-empty-msg') ?>';
         errorMsg['isPhone'] = '<?= __('is-phone-msg') ?>';
         errorMsg['setNumber'] = '<?= __('is-number-msg') ?>';
-        
-        
-        var _getExt = function(fileext) {
+
+
+        var _getExt = function (fileext) {
             var ext = fileext.split('/')[1];
             switch (ext) {
                 case 'jpg':
@@ -262,7 +263,7 @@
             }
         }
 
-        var _setError = function(elm, msg, clr) {
+        var _setError = function (elm, msg, clr) {
 
             !msg ? msg = "" : msg;
             !clr ? clr = false : clr;
@@ -277,15 +278,15 @@
             $('.error-message', tar).text(msg)
         }
 
-        var _getErrors = function(obj, form_name) {
-            (form_name[0] == '#' || form_name[0] == '.') ? form_name: form_name = '#' + form_name;
+        var _getErrors = function (obj, form_name) {
+            (form_name[0] == '#' || form_name[0] == '.') ? form_name : form_name = '#' + form_name;
             $(".error-message").text('');
             for (var prop in obj) {
                 var value = obj[prop];
                 if (typeof obj[prop] !== 'object') {
                     continue;
                 }
-                var arr = $.map(value, function(val, index) {
+                var arr = $.map(value, function (val, index) {
                     return [val];
                 });
                 var elm = $(form_name + ' [name="' + prop + '"]');
@@ -300,9 +301,9 @@
         function closePNote() {
             $('#PNote').removeClass('showPNote default redBg greenBg yellowBg blackBg grayBg');
         }
-        
+
         var showPNoteTm;
-        var showPNote = function(_title, _msg, _type, _isSticky, _delay) {
+        var showPNote = function (_title, _msg, _type, _isSticky, _delay) {
             $('#PNote').html(`
                 <div class=""> 
                     <a href  onclick="closePNote();"><i class='fa fa-times close'></i></a>
@@ -322,10 +323,10 @@
             }
         }
 
-        
 
 
-        var _setDate = function(dt, p, flag) {
+
+        var _setDate = function (dt, p, flag) {
             !dt ? dt = '' : dt;
             !p ? p = [0, 0, 0, 0, 0, 0] : p;
 
@@ -345,33 +346,33 @@
             second += (p[5] * 1);
 
             if (month.toString().length == 1) {
-            month = '0' + month;
+                month = '0' + month;
             }
             if (day.toString().length == 1) {
-            day = '0' + day;
+                day = '0' + day;
             }
             if (hour.toString().length == 1) {
-            hour = '0' + hour;
+                hour = '0' + hour;
             }
             if (minute.toString().length == 1) {
-            minute = '0' + minute;
+                minute = '0' + minute;
             }
             if (second.toString().length == 1) {
-            second = '0' + second;
+                second = '0' + second;
             }
             var res = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
             if (flag == 'onlydate') {
-            res = year + '-' + month + '-' + day;
+                res = year + '-' + month + '-' + day;
             }
             if (flag == 'onlyMonthYear') {
-            res = year + '-' + month;
+                res = year + '-' + month;
             }
             return res;
         }
 
 
-        var _filter = function(val) {
-            if (typeof(val) != "string") return val;
+        var _filter = function (val) {
+            if (typeof (val) != "string") return val;
             return val
                 .replace(/[\"]/g, '\\"')
                 .replace(/[\\]/g, '\\\\')
@@ -395,7 +396,7 @@
         //     return res + ' ' + _unit;
         // };
 
-        var nFormat = function(v, _unit, _round) {
+        var nFormat = function (v, _unit, _round) {
             !_unit ? _unit = '' : _unit;
 
             if (!v && v !== 0) {
@@ -411,7 +412,7 @@
             return _unit + '' + formattedIntegerPart + decimalPart;
         };
 
-        var _setCvrBtn = function(tar, param, icon) {
+        var _setCvrBtn = function (tar, param, icon) {
             if (tar == '#modal_cvr' || tar == '#main_preloader' || tar == '#properties_preloader') {
                 if ($(tar).length > 1) {
                     for (var i in $(tar)) {
@@ -439,21 +440,21 @@
         }
 
         var doClickUpdt;
-        var doClick = function(tar, delay) {
+        var doClick = function (tar, delay) {
             tar[0] == '#' || tar[0] == '.' || tar[0] == '[' ? tar : '#' + tar;
             !delay ? delay = 1 : delay;
             clearTimeout(doClickUpdt)
-            doClickUpdt = setTimeout(function() {
+            doClickUpdt = setTimeout(function () {
                 return $(tar).click()
             }, delay);
         }
 
-        var playSound = function(url) {
+        var playSound = function (url) {
             var audio = new Audio('<?= $path ?>/' + url);
             audio.play();
         }
 
-        var DtSetter = function(tar, val, val2) {
+        var DtSetter = function (tar, val, val2) {
             var defines = {
                 'bool': {
                     0: '<?= __('disabled') ?>',
@@ -485,7 +486,7 @@
                 'emphaty_heads': JSON.parse('<?= json_encode($this->Do->get('emphaty_heads')) ?>'),
             }
 
-        
+
             // if (tar == 'rec_stateSale') {
             //     // console.log(val2);
             //     if(val && val2){
@@ -501,9 +502,9 @@
                     return '';
                 }
             }
-            
 
-            if (tar == 'client_current_stageSale' || tar == 'client_priorities' ) {
+
+            if (tar == 'client_current_stageSale' || tar == 'client_priorities') {
                 // console.log(tar)
                 return defines[tar][val];
             }
@@ -527,14 +528,14 @@
             var viewSaleModal = $("#viewClient_mdl");
             viewSaleModal.css("z-index", 9);
         }
-        var getBrowser = function() {
+        var getBrowser = function () {
             var browsers = {}
             // Opera 8.0+
             browsers.opera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
             // Firefox 1.0+
             browsers.firefox = typeof InstallTrigger !== 'undefined';
             // Safari 3.0+ "[object HTMLElementConstructor]" 
-            browsers.safari = /constructor/i.test(window.HTMLElement) || (function(p) {
+            browsers.safari = /constructor/i.test(window.HTMLElement) || (function (p) {
                 return p.toString() === "[object SafariRemoteNotification]";
             })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification));
             browsers.safari = navigator.userAgent.indexOf('Safari/') > -1 && navigator.userAgent.indexOf('Chrome/') < 0;
@@ -561,15 +562,15 @@
         ////////////////////     ANGULARJS   ////////////////////////
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
-        (function() {
+        (function () {
 
             var __ = this;
 
             var app = angular.module('app',
                 ['ngTagsInput', 'ngAnimate', 'ngSanitize',]
             ); //, 'gm', '' 'ckeditor', 'ngTagsInput', 'cur.$mask'
-            app.controller('ctrl', function($scope, $http, $location, $timeout, $q, $compile, $filter, $interval, $window) {
-    
+            app.controller('ctrl', function ($scope, $http, $location, $timeout, $q, $compile, $filter, $interval, $window) {
+
                 // Ekran genişliği 992 piksel ve altındaysa
                 if (getBrowser() == 'safari' && window.innerWidth <= 992) {
                     $('.wb-ele-select').addClass('safari_input_padding');
@@ -593,8 +594,8 @@
                     $('.safari_input_padding').css(safariCss);
                 }
 
-                
-                
+
+
                 // this.preSaveConvertTagsArToStringAr = function(){
                 //     var tmpAr = this.tags; //data bound var
                 //     var nwAr = [];
@@ -604,7 +605,7 @@
                 //     console.log("my new value array: ["+nwAr.join(',')+"]");
                 // };
 
-                
+
                 $scope.showMore = false;
 
                 $scope.filesInfo = {
@@ -632,10 +633,10 @@
                 // };
 
                 $scope.param_meetdate = '';
-                $timeout(function(){
-                $scope.param_meetdate = "2023-07-13 21:31:29";
-                },1000)
-                $scope.doSubmit = function(){
+                $timeout(function () {
+                    $scope.param_meetdate = "2023-07-13 21:31:29";
+                }, 1000)
+                $scope.doSubmit = function () {
                     alert($scope.param_meetdate)
                 }
 
@@ -669,38 +670,36 @@
                 }
                 var rec_origin = {
                     content: {},
-                    category: {category_priority:99},
+                    category: { category_priority: 99 },
                     client: {},
                     sale: {},
-                    permission:{
-                        permission_c: 0, 
+                    permission: {
+                        permission_c: 0,
                         permission_r: 0,
                         permission_u: 0,
                         permission_d: 0,
                     },
                     report: {
-                        empathy:{
-                           
-                        }
+
                     },
                     action: {
                         // isCalled: false,
                         // isSpoken: false
                     },
                     user: {
-                        activate:1,
+                        activate: 1,
                     },
-                    log:{
+                    log: {
 
                     },
-                    dashboard : {
+                    dashboard: {
                     },
-                    statistic : {
+                    statistic: {
                     },
-                    saleByfield:{
+                    saleByfield: {
 
                     }
-                    
+
                 }
 
                 $scope.rec = {
@@ -712,81 +711,81 @@
                     book: rec_origin.book,
                     report: rec_origin.report,
                     action: rec_origin.action,
-                    user:rec_origin.user,
-                    log:rec_origin.log,
-                    dashboard:rec_origin.dashboard,
-                    statistic:rec_origin.statistic,
+                    user: rec_origin.user,
+                    log: rec_origin.log,
+                    dashboard: rec_origin.dashboard,
+                    statistic: rec_origin.statistic,
                 };
 
-                $scope.activate =function(){
+                $scope.activate = function () {
                     return $scope.rec.user.activate;
                 }
-                $scope.setDate = function(dt, p, flag) {
-                    return _setDate (dt, p, flag) 
+                $scope.setDate = function (dt, p, flag) {
+                    return _setDate(dt, p, flag)
                 }
 
-                $scope.setZIndex = function(){
+                $scope.setZIndex = function () {
                     return setZIndex()
                 };
 
-             
 
 
-                $scope.updateCharts = function() {
+
+                $scope.updateCharts = function () {
                     var user_id = $scope.rec.dashboard.user_id;
                     var dateFilter = $scope.rec.dashboard.dateFilter;
-                    
+
                     $scope.calculateDateRange(dateFilter);
-                    
-          
-                       // Diğer işlemleri gerçekleştir
-                        _doRequest('<?= $app_folder ?>/admin/' + ctrl + '/numbers', {
-                            user_id: user_id,
+
+
+                    // Diğer işlemleri gerçekleştir
+                    _doRequest('<?= $app_folder ?>/admin/' + ctrl + '/numbers', {
+                        user_id: user_id,
+                        firstDate: $scope.rec.dashboard.firstDate,
+                        finishDate: $scope.rec.dashboard.finishDate
+
+                    }, 'post').then(function (res) {
+                        var recData = 'numbers';
+                        handleResponse(res, recData);
+                    });
+
+
+
+                    if ($scope.rec.dashboard.firstDate && $scope.rec.dashboard.finishDate) {
+                        _doRequest('<?= $app_folder ?>/admin/' + ctrl + '/bar', {
+
                             firstDate: $scope.rec.dashboard.firstDate,
                             finishDate: $scope.rec.dashboard.finishDate
-                            
-                        }, 'post').then(function(res) {
-                            var recData = 'numbers';
+
+                        }, 'post').then(function (res) {
+                            var recData = 'bar';
                             handleResponse(res, recData);
                         });
 
-                        
+                        _doRequest('<?= $app_folder ?>/admin/' + ctrl + '/doughnut', {
 
-                        if ($scope.rec.dashboard.firstDate && $scope.rec.dashboard.finishDate) {
-                            _doRequest('<?= $app_folder ?>/admin/' + ctrl + '/bar', {
-                                
-                                firstDate: $scope.rec.dashboard.firstDate,
-                                finishDate: $scope.rec.dashboard.finishDate
-                                
-                            }, 'post').then(function(res) {
-                                var recData = 'bar';
-                                handleResponse(res, recData);
-                            });
+                            firstDate: $scope.rec.dashboard.firstDate,
+                            finishDate: $scope.rec.dashboard.finishDate
 
-                            _doRequest('<?= $app_folder ?>/admin/' + ctrl + '/doughnut', {
-                                
-                                    firstDate: $scope.rec.dashboard.firstDate,
-                                    finishDate: $scope.rec.dashboard.finishDate
-                                
-                            }, 'post').then(function(res) {
-                                var recData = 'doughnut';
-                                handleResponse(res, recData);
-                            });
-                        } 
-                    
-                    
+                        }, 'post').then(function (res) {
+                            var recData = 'doughnut';
+                            handleResponse(res, recData);
+                        });
+                    }
+
+
                 };
 
-                
 
-     
+
+
 
                 function handleResponse(res, recData) {
                     var doSearchUpdt;
 
                     $timeout.cancel(doSearchUpdt);
                     _setCvrBtn('#main_preloader', 1);
-                    doSearchUpdt = $timeout(function() {
+                    doSearchUpdt = $timeout(function () {
                         _setCvrBtn('#main_preloader', 0);
                         if (res.data.status == "SUCCESS") {
                             $scope.rec[recData] = res.data.data; // recData olarak gelen değeri kullan
@@ -795,9 +794,9 @@
                         }
                     }, 250);
                 }
-                
-                
-                $scope.calculateDateRange = function(dateFilter) {
+
+
+                $scope.calculateDateRange = function (dateFilter) {
                     var currentDate = new Date();
                     switch (dateFilter) {
                         case '1': // Daily
@@ -824,24 +823,24 @@
                 };
 
 
-                $scope.updateStateCharts = function() {
+                $scope.updateStateCharts = function () {
                     var stateId = $scope.rec.dashboard.recstate;
                     if (stateId) {
                         $scope.doGet('/admin/clients/numbers?recstate=' + stateId, 'rec', 'numbers');
                     }
-                    
+
                 };
 
-               
-                var currentDate = new Date();  
-                var tenDaysAgo = new Date(currentDate);  
-                tenDaysAgo.setDate(currentDate.getDate() - 10);  
+
+                var currentDate = new Date();
+                var tenDaysAgo = new Date(currentDate);
+                tenDaysAgo.setDate(currentDate.getDate() - 10);
 
                 $scope.rec.statistic.starterDate = tenDaysAgo.toISOString().split('T')[0];
 
-            
-                $scope.getClientsByDateRange = function() {
-                
+
+                $scope.getClientsByDateRange = function () {
+
                     var starterDate = $scope.rec.statistic.starterDate;
                     var endDate = $scope.rec.statistic.endDate;
 
@@ -854,22 +853,39 @@
                     $scope.doGet('/admin/clients/saleByfield?starterDate=' + starterDate + '&endDate=' + endDate, 'rec', 'saleByfield');
                 };
 
-                $scope.actionSave = function() {
-                    $scope.doSave($scope.rec.client.action, 'action', 'actions', '#action_btn', '#actions_preloader');
+                $scope.actionSave = function (clientId, actionType) {
+
+
+                    $scope.rec.action.client_id = clientId;
+                    $scope.rec.action.action_type = actionType;
+
+                    $scope.doSave($scope.rec.action, 'action', 'actions', '#client_btn', '#actions_preloader');
                     //  alert($scope.rec.client.id)
-                  
+
+                };
+                $scope.checkDate = function (statCreated) {
+                    var currentDate = new Date();
+                    var createdDate = new Date(statCreated);
+                    var timeDifference = currentDate - createdDate;
+                    var hoursDifference = timeDifference / (1000 * 60 * 60);
+
+                    return hoursDifference < 24;
+                };
+
+                $scope.isDisabled = function (statCreated) {
+                    return $scope.checkDate(statCreated);
                 };
 
 
-                var currentDate = new Date();  
-                var tenDaysAgo = new Date(currentDate);  
-                tenDaysAgo.setDate(currentDate.getDate() - 10);  
+                var currentDate = new Date();
+                var tenDaysAgo = new Date(currentDate);
+                tenDaysAgo.setDate(currentDate.getDate() - 10);
 
                 $scope.rec.dashboard.starterDate = tenDaysAgo.toISOString().split('T')[0];
 
-            
-                $scope.getDashClientsByDateRange = function() {
-                
+
+                $scope.getDashClientsByDateRange = function () {
+
                     var starterDate = $scope.rec.dashboard.starterDate;
                     var endDate = $scope.rec.dashboard.endDate;
 
@@ -884,10 +900,10 @@
                     $scope.doGet('/admin/clients/doughnut?startDate=' + starterDate + '&endDate=' + endDate, 'rec', 'doughnut');
                 };
 
-                $scope.actionSave = function() {
+                $scope.actionSave = function () {
                     $scope.doSave($scope.rec.client.action, 'action', 'actions', '#action_btn', '#actions_preloader');
                     //  alert($scope.rec.client.id)
-                  
+
                 };
 
                 // Başlangıçta ilk tab gösterilecek
@@ -930,35 +946,35 @@
 
 
                 $scope.loadTagsUpdt = false;
-                $scope.loadTags = function(query, target, parent, role) {
+                $scope.loadTags = function (query, target, parent, role) {
                     $timeout.cancel($scope.loadTagsUpdt);
                     !parent ? parent = '' : parent;
                     !role ? role = '' : role;
-                    return $scope.loadTagsUpdt = $timeout(function() { 
+                    return $scope.loadTagsUpdt = $timeout(function () {
                         return $http.get('<?= $app_folder ?>/admin/' + target + '?tags=1&keyword=' + query + '&parent=' + parent + '&role=' + role)
-                            .then(function(response) {
+                            .then(function (response) {
                                 return response.data.data;
                             });
-                    }, 1000)
+                    }, 500)
                 };
 
-                
-                $scope.handleButtonClick = function(recStateId) {
+
+                $scope.handleButtonClick = function (recStateId) {
                     $scope.rec.sale.rec_state = recStateId;
                 };
 
-                $scope.clearTags = function() {
+                $scope.clearTags = function () {
                     $scope.rec.sale.name = []; //clean client item
                 };
 
                 $scope.modalElement = ''; // Başlangıçta boş bir modal element
 
-                $scope.updateModalElement = function(elementText) {
+                $scope.updateModalElement = function (elementText) {
                     $scope.modalElement = elementText;
                 };
 
 
-                
+
                 // $scope.changeUser = function () {
                 //     // Perform AJAX request to update data based on selected user
                 //     $http.post('localhost/<?= $app_folder ?>/admin/clients/dashboard', { filerData: $scope.rec.search.user })
@@ -970,7 +986,7 @@
                 //             console.error('Error updating data:', error);
                 //         });
                 // };
-                
+
                 $scope.calculateccWidth = function (id) {
                     var maxCount = Math.max.apply(null, Object.values($scope.rec.saleByfield.userBookCounts));
                     var widthPercentage = ($scope.rec.saleByfield.userBookCounts[id] / maxCount) * 100;
@@ -990,18 +1006,18 @@
                 $scope.isPasswordInputDisabled = true;
 
                 // Function to toggle the input state
-                $scope.togglePasswordInput = function() {
+                $scope.togglePasswordInput = function () {
                     $scope.isPasswordInputDisabled = !$scope.isPasswordInputDisabled;
                 };
-                $scope.deletePasswordInput = function() {
+                $scope.deletePasswordInput = function () {
                     $scope.rec.user.password = "";
                     $scope.isPasswordInputDisabled = !$scope.isPasswordInputDisabled;
                 };
-                
+
 
                 // This function creates or removes Elements based on stat, element, and tar
                 $scope.inlineElement = function (tar, stat, element) {
-                    
+
                     $(".inlineElement").parent().html("");
                     if (stat === 1) {
                         let elementsCreated = "";
@@ -1013,30 +1029,30 @@
                                 doSave(rec.report, 'report', 'reports', '#client_btn', '#empathy_preloader');">
                                 
                                 <?php foreach ($this->Do->cat(61) as $k => $itm) { ?>
-                                                    <label for="" class="mr-2 col-md-6 col-12 col-lg-3">
+                                                                            <label for="" class="mr-2 col-md-6 col-12 col-lg-3">
 
 
-                                                        <div class="d-flex">
-                                                            <span class="sm-txt"><?= __($itm) ?></span>
-                                                            <div class="sm-txt hover-text p-1 pt-0">?
-                                                                <span class="tooltip-text" id="right"></span>
-                                                            </div>
-                                                        </div>
+                                                                                <div class="d-flex">
+                                                                                    <span class="sm-txt"><?= __($itm) ?></span>
+                                                                                    <div class="sm-txt hover-text p-1 pt-0">?
+                                                                                        <span class="tooltip-text" id="right"></span>
+                                                                                    </div>
+                                                                                </div>
 
-                                                        <?= $this->Form->control($itm, [
-                                                            'class' => 'wb-ele-select-modal ',
-                                                            'label' => false,
-                                                            'type' => 'textarea',
-                                                            'ng-model' => 'rec.report.empathy[' . $k . '].report_text',
-                                                            'cols' => '30',
-                                                            'rows' => '3',
-                                                            'placeholder' => __($itm),
-                                                        ]) ?>
+                                                                                <?= $this->Form->control($itm, [
+                                                                                    'class' => 'wb-ele-select-modal ',
+                                                                                    'label' => false,
+                                                                                    'type' => 'textarea',
+                                                                                    'ng-model' => 'rec.report.empathy[' . $k . '].report_text',
+                                                                                    'cols' => '30',
+                                                                                    'rows' => '3',
+                                                                                    'placeholder' => __($itm),
+                                                                                ]) ?>
 
                                         
 
 
-                                                    </label>
+                                                                            </label>
                                 <?php } ?>
                                 <div class="down-btns mt-4 d-flex justify-content-end">
                                     <div class="flex-gap-10">
@@ -1059,14 +1075,20 @@
                                             tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
                                             ng-model="rec.client.adrscountry" 
                                             add-from-autocomplete-only="true" 
+                                            
                                             max-tags="1" 
                                             placeholder="<?= __('adrs_country') ?>" 
                                             display-property="text"
                                             key-property="value"
                                             ng-disabled="rec.client.adrscountry "
                                             ng-style="{'background-color': rec.client.adrscountry ? '#eeeeee' : 'initial'}">
+                                            <auto-complete source="loadTags($query, 'addresses', '0')"
+                                                min-length="0"
+                                                load-on-focus="true"
+                                                load-on-empty="true"
+                                                max-results-to-show="30"
+                                            ></auto-complete>
                                             
-                                            <auto-complete min-length="1" highlightMatchedText="true" source="loadTags($query, 'addresses', '0')"></auto-complete>
                                         </tags-input>
 
                                         <span ng-if="rec.client.adrscountry" ng-click="rec.client.adrscountry = '';" class="fa fa-times" style="cursor: pointer; position: absolute; top: 55%; right: 20px; transform: translateY(-50%);"></span>                                        
@@ -1288,7 +1310,7 @@
 
 
                     `)($scope);
-                } else if (element === "add-user") {
+                        } else if (element === "add-user") {
                             elementsCreated = $compile(`
                             
                             <form class="row  inlineElement"  id="user_form" ng-submit="
@@ -1385,7 +1407,7 @@
 
 
                     `)($scope);
-                } else if (element === "edit-permission") {
+                        } else if (element === "edit-permission") {
                             elementsCreated = $compile(`
                             
                             <form class="row inlineElement" ng-submit="
@@ -1476,14 +1498,14 @@
                             elementsCreated = $compile(`
                             <form class="row inlineElement" 
                             ng-submit="
-                                rec.user_sale.client_id = rec.client.id;
-                                doSave(rec.user_sale, 'user_sale', 'usersale', '#client_btn', '#usersale_preloader');">
+                                rec.user_client.client_id = rec.client.id;
+                                doSave(rec.user_client, 'user_client', 'userclient', '#client_btn', '#userclient_preloader');">
                                 
                                 
                                 <!--<label for="" class="col-6 col-sm-12" ng-if="rec.client.client_current_stage == 2">
                                     <span class="sm-txt">CC Advisor </span>
                                     <tags-input  style="padding: 0px;padding-left: 10px;"
-                                        ng-model="rec.user_sale.user" 
+                                        ng-model="rec.user_client.user" 
                                         add-from-autocomplete-only="true" 
                                         placeholder="<?= __('user') ?>" 
                                         display-property="text"
@@ -1491,14 +1513,17 @@
                                         class="wb-txt-inp"
                                         tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
                                     >
-                                        <auto-complete min-length="1" highlightMatchedText="true" source="loadTags($query, 'users', '', 'cc')"></auto-complete>
+                                        <auto-complete min-length="0"
+                                                load-on-focus="true"
+                                                load-on-empty="true"
+                                                max-results-to-show="30" source="loadTags($query, 'users', '', 'cc')"></auto-complete>
                                     </tags-input>
                                 </label>
 
-                                <label for="" class="col-6 col-sm-3" ng-if="rec.client.client_current_stage == 4">
+                                <label for="" class="col-6 col-sm-12" ng-if="rec.client.client_current_stage == 4">
                                     <span class="sm-txt">Field Advisor </span>
                                     <tags-input  style="padding: 0px;padding-left: 10px;"
-                                        ng-model="rec.user_sale.user" 
+                                        ng-model="rec.user_client.user" 
                                         add-from-autocomplete-only="true" 
                                         placeholder="<?= __('user') ?>" 
                                         display-property="text"
@@ -1506,14 +1531,17 @@
                                         class="wb-txt-inp"
                                         tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
                                     >
-                                        <auto-complete min-length="1"  highlightMatchedText="true" source="loadTags($query, 'users', '', 'field')"></auto-complete>
+                                        <auto-complete min-length="0"
+                                                load-on-focus="true"
+                                                load-on-empty="true"
+                                                max-results-to-show="30"  source="loadTags($query, 'users', '', 'field')"></auto-complete>
                                     </tags-input>
                                 </label>-->
 
-                                <label for="" class="col-6 col-sm-3">
+                                <label for="" class="col-6 col-sm-12">
                                     <span class="sm-txt"> Advisor </span>
                                     <tags-input  style="padding: 0px;padding-left: 10px;"
-                                        ng-model="rec.user_sale.user" 
+                                        ng-model="rec.user_client.user" 
                                         add-from-autocomplete-only="true" 
                                         placeholder="<?= __('user') ?>" 
                                         display-property="text"
@@ -1521,13 +1549,16 @@
                                         class="wb-txt-inp"
                                         tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
                                     >
-                                        <auto-complete min-length="1"  highlightMatchedText="true" source="loadTags($query, 'users', '', '')"></auto-complete>
+                                        <auto-complete min-length="0"
+                                                load-on-focus="true"
+                                                load-on-empty="true"
+                                                max-results-to-show="30"  source="loadTags($query, 'users', '', '')"></auto-complete>
                                     </tags-input>
                                 </label>
 
                                 <div class="down-btns mt-4 d-flex justify-content-end">
                                     <div class="flex-gap-10 ">
-                                        <button class="btn btn-danger" id="usersale_preloader" type="submit"><?= __('save_changes') ?></button>
+                                        <button class="btn btn-danger" id="userclient_preloader" type="submit"><?= __('save_changes') ?></button>
                                     </div>
                                 </div>
                             </form>
@@ -1573,6 +1604,116 @@
                             </form>
 
                     `)($scope);
+                        } else if (element === "allNotes") {
+                            elementsCreated = $compile(`
+                            
+                                <div class="heading">
+                                    <div class="title">Notes</div>
+                                    
+                                </div>
+
+                                <div class="noData" ng-if="rec.client.reports == ''  ">
+
+                                    <?= __('no_data') ?>
+
+                                </div>
+                                <div ng-repeat="clsale in rec.client.reports track by $index">
+                                    <div class="note"
+                                        ng-if="!(clsale.report_type == '201' || clsale.report_type == '202' || clsale.report_type == '203' || clsale.report_type == '204' || itm.report_type == '75' || itm.report_type == '76' )">
+
+                                        <div class="box-heading d-flex">
+                                            <div class="col-lg-2 text-nowrap">
+                                                <i class="fas-sticky-note"></i> {{ clsale.type_category.category_name }}
+                                                {{DtSetter('rec_stateSale', clsale.client_current_stage,
+                                                clsale.report_type)}}
+                                                <b>{{ rec.clsale.user.user_fullname }}</b>
+
+                                            </div>
+
+
+                                            <div class="col-lg-8 text truncate">
+                                                <p>
+                                                    {{ clsale.report_text }}
+                                                </p>
+                                            </div>
+
+
+                                            <div class="flex-center flex-gap-10">
+                                                <b> {{ clsale.stat_created.split(' ')[1] }} </b>
+                                                <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                                                    <div class="dropdown">
+                                                                        <button class="btn" type="button" data-bs-toggle="dropdown"
+                                                                            aria-expanded="false">
+                                                                            <i class="fas-ellipsis"></i>
+                                                                        </button>
+                                                                        <ul class="dropdown-menu">
+                                                                            <li id="delete_preloader">
+                                                                                <a class="dropdown-item delete-btn"
+                                                                                    ng-click="doDelete('/admin/reports/delete/' + clsale.id);
+                                                                                    doSave(rec.report, 'report', 'reports', '#client_btn', '#report_preloader');"
+                                                                                    href="#">Delete</a>
+                                                                            </li>
+                                                                            <li id="delete_preloader">
+                                                                                <a class="dropdown-item delete-btn" ng-click="
+                                                                                    updateModalElement('Notes');
+                                                                                    openModal('#subModal'); 
+                                                                                    doGet('/admin/reports?id=' + clsale.id, 'rec', 'report');
+                                                                                    inlineElement('#elementsContainer', 1, 'notes');"
+                                                                                    href="#">
+                                                                                    <?= __('edit') ?>
+                                                                                </a>
+                                                                            </li>
+
+                                                                        </ul>
+                                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                    `)($scope);
+                        } else if (element === "notesindex") {
+                            elementsCreated = $compile(`
+                            <form class="row inlineElement" ng-submit="
+                                rec.report.tar_id = itm.id; 
+                                rec.report.tar_tbl = 'Clients'; 
+                                doSave(rec.report, 'report', 'reports', '#client_btn', '#report_preloader');">
+                                <div class="row">
+
+                                    
+                                    <label  class="col-md-6 col-12 col-lg-3">
+                                        <span class="sm-txt"><?= __('report_type') ?></span>
+                                        <?= $this->Form->text('report_type', [
+                                            'type' => 'select',
+                                            'options' => $this->Do->cat(53),
+                                            'class' => 'wb-ele-select-modal col-12',
+                                            'ng-model' => 'rec.report.report_type'
+                                        ]) ?>
+                                    </label>
+
+                                    <label for="" class=" col-12">
+                                        <span class="sm-txt"> Note </span>
+                                        <textarea
+                                            ng-model="rec.report.report_text"
+                                            class="wb-txt-inp"
+                                            name=""
+                                            id=""
+                                            cols="30"
+                                            rows="3"
+                                            placeholder="The Note"
+                                        ></textarea>
+                                    </label>
+                                </div>
+
+                                <div class="down-btns mt-4 d-flex justify-content-end">
+                                    <div class="flex-gap-10">
+                                        <button class="btn btn-danger" id="report_preloader" type="submit"><?= __('save_changes') ?></button>
+                                    </div>
+                                </div>
+                            </form>
+                    `)($scope);
                         } else if (element === "showNotes") {
                             elementsCreated = $compile(`
                             <form class="row inlineElement">
@@ -1607,7 +1748,7 @@
 
                                 <label for="" class="col-md-6 col-12 col-lg-4">
                                     <span class="sm-txt"><?= __('meet_place') ?></span>
-                                    <input type="text" max ng-model="rec.book.book_meetplace" class="wb-txt-inp" id="" />
+                                    <input type="text" ng-model="rec.book.book_meetplace" class="wb-txt-inp" id="" />
                                 </label>
 
                                 <label for="" class="col-md-6 col-12 col-lg-4">
@@ -1620,15 +1761,35 @@
                                     <input type="text" ng-model="rec.book.book_current_stay" class="wb-txt-inp" id="" />
                                 </label>
 
-                                <label for="" class="col-md-6 col-12 col-lg-4">
+                                <label for="" class="col-md-6 col-12 col-lg-4" ng-if="!(rec.book.in_turkey == 1)">
                                     <span class="sm-txt"><?= __('booking_date') ?></span>
                                     <input type="date" date-format ng-model="rec.book.book_arrivedate" class="wb-txt-inp p-2 ps-3" id="" />
+                                </label>
+
+                                <label for="" class="col-md-6 col-12 col-lg-4" ng-if="!(rec.book.in_turkey == 1)">
+                                    <span class="sm-txt"><?= __('booking_departuredate') ?></span>
+                                    <input type="date" date-format ng-model="rec.book.book_departuredate" class="wb-txt-inp p-2 ps-3" id="" />
                                 </label>
 
                                 <label for="" class="col-md-6 col-12 col-lg-4">
                                     <span class="sm-txt"><?= __('booking_time') ?></span>
                                     <input type="date" date-format ng-model="rec.book.book_meetdate" class="wb-txt-inp" id="" />
                                 </label>
+
+                                <div class="col-md-6 col-12 col-lg-4 mt-3">
+                                    <div class="flex-center text-center">
+                                        <label class="switch">
+                                            <input 
+                                            ng-model="rec.book.in_turkey" 
+                                            ng-value = "'1'" 
+                                            name="invoice" 
+                                            id="finance-client1" 
+                                            type="checkbox" />
+                                            <span class="slider round"></span>
+                                        </label>
+                                        <label for="finance-client1"> Is Client in Turkey? </label>
+                                    </div>
+                                </div>
 
                                 
                                 
@@ -1668,7 +1829,10 @@
                                                     ng-style="{'background-color': rec.offer.property_id ? '#eeeeee' : 'initial'}"
                                                     
                                                 >
-                                                    <auto-complete min-length="1" highlightMatchedText="true" source="loadTags($query, 'pmsproperties', '0')"></auto-complete>
+                                                    <auto-complete min-length="0"
+                                                load-on-focus="true"
+                                                load-on-empty="true"
+                                                max-results-to-show="30" source="loadTags($query, 'pmsproperties', '0')"></auto-complete>
                                                 </tags-input>
 
                                                 <span ng-if="rec.offer.property_id" ng-click="rec.offer.property_id = '';" class="fa fa-times" style="cursor: pointer; position: absolute; top: 55%; right: 20px; transform: translateY(-50%);"></span>                                        
@@ -1740,8 +1904,8 @@
                                 </div>
                             </form>
                     `)
-                        ($scope);
-                    } else if (element === "add-category") {
+                                ($scope);
+                        } else if (element === "add-category") {
                             elementsCreated = $compile(`
                             
                             <form class="row   inlineElement" ng-submit="
@@ -1801,8 +1965,70 @@
                             
                         
                     `)
-                        ($scope);
-                    } else if (element === "add-child") {
+                                ($scope);
+                        } else if (element === "add-poolcategory") {
+                            elementsCreated = $compile(`
+                            
+                            <form class="row   inlineElement" ng-submit="
+                                rec.category.user_id = rec.user.id;
+                                rec.category.category_name = rec.user.user_fullname + 'Pool';
+                                doSave(rec.category, 'category', 'categories', '#category_btn', 
+                                '#category_preloader'); ">
+
+                                
+                                <label for="" class="col-md-6 col-12 col-lg-4">
+                                    <span class="sm-txt"> <?= __('pool_name') ?></span>
+                                    <div class="form-control has-feedback-left"> 
+                                        {{rec.category.category_name = rec.user.user_fullname + ' Pool'}} 
+                                    </div>
+
+                                </label>
+                                
+
+                                <label for="" class="col-md-6 col-12 col-lg-4">
+                                    <span class="sm-txt"><?= __('language_id') ?></span>
+                                    <?= $this->Form->text('language_id', [
+                                        'type' => 'select',
+                                        'options' => $this->Do->lcl($this->Do->get('langs')),
+                                        'class' => 'form-control has-feedback-left',
+                                        'ng-model' => 'rec.category.language_id'
+                                    ]) ?>
+                                </label>
+
+                                <label for="" class="col-md-6 col-12 col-lg-4">
+                                    <span class="sm-txt"><?= __('category_priority') ?></span>
+                                    <?= $this->Form->text('category_priority', [
+                                        'type' => 'text',
+                                        'class' => 'form-control has-feedback-left',
+                                        'ng-model' => 'rec.category.category_priority'
+                                    ]) ?>
+                                </label>
+
+                                <label for="" class="col-12 ">
+                                    <span class="sm-txt"><?= __('category_configs.icon') ?></span>
+                                    
+                                    <div class="div">
+                                        <?= $this->Form->text('category_configs.icon', [
+                                            'type' => 'text',
+                                            'class' => 'form-control has-feedback-left',
+                                            'ng-model' => 'rec.category.category_configs.icon',
+                                            'fa-icons' => '',
+                                        ]) ?>
+                                        <span class="fa {{rec.category.category_configs.icon||'fa-tag'}} form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="icons_div"></div>
+                                </label>
+                                
+                                <div class="down-btns mt-4 d-flex justify-content-end">
+                                    <div class="flex-gap-10 ">
+                                        <button class="btn btn-danger" id="category_preloader" type="submit"> <?= __('save_changes') ?> </button>
+                                    </div>
+                                </div>
+                            </form>
+                        
+                    `)
+                                ($scope);
+                        } else if (element === "add-child") {
                             elementsCreated = $compile(`
                             
                             <form class="row   inlineElement" ng-submit="
@@ -1858,8 +2084,8 @@
                             
                         
                     `)
-                        ($scope);
-                    } else if (element === "edit-child") {
+                                ($scope);
+                        } else if (element === "edit-child") {
                             elementsCreated = $compile(`
                             <form class="row   inlineElement" ng-submit="
                                 rec.category.parent_id = rec.category.parent_id;
@@ -1917,7 +2143,8 @@
 
                             
                     `)
-                        ($scope);} else if (element === "view-category") {
+                                ($scope);
+                        } else if (element === "view-category") {
                             elementsCreated = $compile(`
                             
                             <form class="row   inlineElement"
@@ -1959,194 +2186,232 @@
                                 </div>
                             </form>
                     `)
-                        ($scope);
+                                ($scope);
                         } else if (element === "reservation") {
                             elementsCreated = $compile(`
                             <form class="row  inlineElement"  id="client_form" ng-submit="
                                 rec.reservation.client_id = rec.client.id;
                                 doSave(rec.reservation, 'reservation', 'reservations', '#client_btn', 
                                 '#reservations_preloader');">
+                                <?php if (!(in_array($authUser['user_role'], ['accountant'])) || isset($authUser['user_original_role'])) { ?>
+
+                                                    <div class="col-md-6 col-12 col-lg-3">
+                                                        <span class="sm-txt"> <?= __('reservation_amount') ?> </span>
+                                                        <div class="input-group">
+                                                        <?= $this->Form->control('', [
+                                                            'class' => 'wb-ele-select-cur cur-inp',
+                                                            'label' => false,
+                                                            'type' => 'select',
+                                                            'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
+                                                            'ng-model' => 'rec.reservation.reservation_currency',
+                                                        ]) ?> 
+                                            
+                                                            <input n-format ng-model="rec.reservation.reservation_amount" class="form-control wb-txt-inp" value="400k" type="text" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-12 col-lg-3">
+                                                        <span class="sm-txt"> <?= __('reservation_price') ?> </span>
+                                                        <div class="input-group">
+                                                        <?= $this->Form->control('', [
+                                                            'class' => 'wb-ele-select-cur cur-inp',
+                                                            'label' => false,
+                                                            'type' => 'select',
+
+                                                            'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
+                                                            'ng-model' => 'rec.reservation.reservation_currency',
+                                                        ]) ?> 
+                                            
+                                                            <input n-format ng-model="rec.reservation.reservation_price" class="form-control wb-txt-inp" value="400k" type="text" />
+                                                        </div>
+                                                    </div>
+
+                                    
+                                                    <label  class="col-md-6 col-12 col-lg-3">
+                                                        <span class="sm-txt"><?= __('pay_type') ?></span>
+                                                        <?= $this->Form->text('pay_type', [
+                                                            'type' => 'select',
+                                                            'options' => $this->Do->cat(198),
+                                                            'class' => 'wb-ele-select-modal col-12',
+                                                            'ng-model' => 'rec.reservation.reservation_paytype'
+                                                        ]) ?>
+                                                    </label>
                                     
 
-                                    <div class="col-md-6 col-12 col-lg-3">
-                                        <span class="sm-txt"> <?= __('reservation_amount') ?> </span>
-                                        <div class="input-group">
-                                        <?= $this->Form->control('', [
-                                            'class' => 'wb-ele-select-cur cur-inp',
-                                            'label' => false,
-                                            'type' => 'select',
-                                            'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
-                                            'ng-model' => 'rec.reservation.reservation_currency',
-                                        ]) ?> 
-                                            
-                                            <input n-format ng-model="rec.reservation.reservation_amount" class="form-control wb-txt-inp" value="400k" type="text" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-12 col-lg-3">
-                                        <span class="sm-txt"> <?= __('reservation_price') ?> </span>
-                                        <div class="input-group">
-                                        <?= $this->Form->control('', [
-                                            'class' => 'wb-ele-select-cur cur-inp',
-                                            'label' => false,
-                                            'type' => 'select',
-                                            
-                                            'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
-                                            'ng-model' => 'rec.reservation.reservation_currency',
-                                        ]) ?> 
-                                            
-                                            <input n-format ng-model="rec.reservation.reservation_price" class="form-control wb-txt-inp" value="400k" type="text" />
-                                        </div>
-                                    </div>
+                                                    <div class="col-md-6 col-12 col-lg-3">
+                                                        <span class="sm-txt"> <?= __('commission') ?> </span>
+                                                        <input type="text" n-format ng-model="rec.reservation.reservation_comission" class="wb-txt-inp"></input>
+                                                    </div>
 
-                                    
-                                    <label  class="col-md-6 col-12 col-lg-3">
-                                        <span class="sm-txt"><?= __('pay_type') ?></span>
-                                        <?= $this->Form->text('pay_type', [
-                                            'type' => 'select',
-                                            'options' => $this->Do->cat(198),
-                                            'class' => 'wb-ele-select-modal col-12',
-                                            'ng-model' => 'rec.reservation.reservation_paytype'
-                                        ]) ?>
-                                    </label>
+                                                    <div class="col-md-6 col-12 col-lg-3">
+                                                        <span class="sm-txt"> <?= __('down_pay') ?> </span>
+                                                        <div class="input-group">
+                                                        <?= $this->Form->control('', [
+                                                            'class' => 'wb-ele-select-cur cur-inp',
+                                                            'label' => false,
+                                                            'type' => 'select',
+                                                            'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
+
+                                                            'ng-model' => 'rec.reservation.reservation_currency',
+                                                        ]) ?> 
+                                            
+                                                            <input n-format ng-model="rec.reservation.reservation_downpayment" class="form-control wb-txt-inp" value="400k" type="text" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6 col-12 col-lg-3">
+                                                        <span class="sm-txt"> <?= __('down_paydate') ?> </span>
+                                                        <input type="date" date-format ng-model="rec.reservation.reservation_downpayment_date" class="wb-txt-inp"></input>
+                                                    </div>
+
+        
                                     
 
-                                    <div class="col-md-6 col-12 col-lg-3">
-                                        <span class="sm-txt"> <?= __('commission') ?> </span>
-                                        <input type="text" n-format ng-model="rec.reservation.reservation_comission" class="wb-txt-inp"></input>
-                                    </div>
-
-                                    <div class="col-md-6 col-12 col-lg-3">
-                                        <span class="sm-txt"> <?= __('down_pay') ?> </span>
-                                        <div class="input-group">
-                                        <?= $this->Form->control('', [
-                                            'class' => 'wb-ele-select-cur cur-inp',
-                                            'label' => false,
-                                            'type' => 'select',
-                                            'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
+                                                    <label class="col-md-6 col-12 col-lg-3" style="position: relative;">
+                                                        <span class="sm-txt"> <?= __('property_id') ?> </span>
+                                                        <tags-input  style="padding: 0px;padding-left: 10px;"
+                                                            class="wb-txt-inp" 
+                                                            tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
+                                                            ng-model="rec.reservation.property" 
+                                                            add-from-autocomplete-only="true" 
+                                                            max-tags="1" 
+                                                            placeholder="<?= __('property_id') ?>" 
+                                                            display-property="text"
+                                                            key-property="value"
+                                                            ng-disabled="rec.reservation.property "
+                                                            ng-style="{'background-color': rec.reservation.property ? '#eeeeee' : 'initial'}"
                                             
-                                            'ng-model' => 'rec.reservation.reservation_currency',
-                                        ]) ?> 
-                                            
-                                            <input n-format ng-model="rec.reservation.reservation_downpayment" class="form-control wb-txt-inp" value="400k" type="text" />
-                                        </div>
-                                    </div>
+                                                        >
+                                                            <auto-complete min-length="0"
+                                                                load-on-focus="true"
+                                                                load-on-empty="true"
+                                                                max-results-to-show="30" source="loadTags($query, 'pmsproperties', '0')"></auto-complete>
+                                                        </tags-input>
 
-                                    <div class="col-md-6 col-12 col-lg-3">
-                                        <span class="sm-txt"> <?= __('down_paydate') ?> </span>
-                                        <input type="date" date-format ng-model="rec.reservation.reservation_downpayment_date" class="wb-txt-inp"></input>
-                                    </div>
+                                                        <span ng-if="rec.reservation.property_id" ng-click="rec.reservation.property = ''; rec.reservation.property_id = '';" class="fa fa-times" style="cursor: pointer; position: absolute; top: 55%; right: 20px; transform: translateY(-50%);"></span>                                        
 
-                                    <div class="col-md-6 col-12 col-lg-3">
-                                        <span class="sm-txt"> <?= __('invoice_date') ?> </span>
-                                        <input type="date" date-format ng-model="rec.reservation.reservation_invoice_date" class="wb-txt-inp" ></input>
-                                    </div>
+                                                    </label>
 
-                                    <div class="col-md-6 col-12 col-lg-3 mt-3">
-                                        <div class="flex-center text-center">
-                                            <label class="switch">
-                                                <input 
-                                                ng-model="rec.reservation.reservation_isinvoice_sent" 
-                                                ng-value = "'1'" 
-                                                name="invoice" 
-                                                id="finance-client1" 
-                                                type="radio" />
-                                                <span class="slider round"></span>
-                                            </label>
-                                            <label for="finance-client1"> Is Invoice Send? </label>
-                                        </div>
-                                    </div>
-
-
-                                    <label class="col-md-6 col-12 col-lg-3" style="position: relative;">
-                                        <span class="sm-txt"> <?= __('property_id') ?> </span>
-                                        <tags-input  style="padding: 0px;padding-left: 10px;"
-                                            class="wb-txt-inp" 
-                                            tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
-                                            ng-model="rec.reservation.property" 
-                                            add-from-autocomplete-only="true" 
-                                            max-tags="1" 
-                                            placeholder="<?= __('property_id') ?>" 
-                                            display-property="text"
-                                            key-property="value"
-                                            ng-disabled="rec.reservation.property "
-                                            ng-style="{'background-color': rec.reservation.property ? '#eeeeee' : 'initial'}"
-                                            
-                                        >
-                                            <auto-complete min-length="1" highlightMatchedText="true" source="loadTags($query, 'pmsproperties', '0')"></auto-complete>
-                                        </tags-input>
-
-                                        <span ng-if="rec.reservation.property_id" ng-click="rec.reservation.property = ''; rec.reservation.property_id = '';" class="fa fa-times" style="cursor: pointer; position: absolute; top: 55%; right: 20px; transform: translateY(-50%);"></span>                                        
-
-                                    </label>
-
-                                    <label class="col-md-6 col-12 col-lg-3">
-                                        <span class="sm-txt"><?= __('unit_info') ?></span>
-                                        <?= $this->Form->control('unit_info', [
-                                            'class' => 'p-2 wb-ele-select-modal ',
-                                            'label' => false,
-                                            'type' => 'textarea',
-                                            'ng-model' => 'rec.reservation.reservation_details',
-                                            'cols' => '30',
-                                            'rows' => '1',
-                                            'placeholder' => 'Unit Information...',
-                                        ]) ?>
-                                    </label>
+                                                    <label class="col-md-6 col-12 col-lg-3">
+                                                        <span class="sm-txt"><?= __('unit_info') ?></span>
+                                                        <?= $this->Form->control('unit_info', [
+                                                            'class' => 'p-2 wb-ele-select-modal ',
+                                                            'label' => false,
+                                                            'type' => 'textarea',
+                                                            'ng-model' => 'rec.reservation.reservation_details',
+                                                            'cols' => '30',
+                                                            'rows' => '1',
+                                                            'placeholder' => 'Unit Information...',
+                                                        ]) ?>
+                                                    </label>
 
                                   
-                                    <!--<label class="col-md-6 col-12 col-lg-3" ng-if="rec.reservation.reservation_downpayment == null && (rec.reservation.rec_state != 14 || rec.reservation.rec_state != 13 || rec.reservation.rec_state != 15)">
-                                        <span class="sm-txt"> <?= __('rec_state') ?> </span>
-                                        <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
-                                            <option ng-click="handleButtonClick(recStateId);" 
-                                                    ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
-                                                    value="{{ recStateId }}" 
-                                                    ng-selected="recStateId === rec.reservation.rec_state"
-                                                    ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15 || recStateId == 17">
-                                                {{ recStateName }}
-                                            </option>
-                                        </select>
-                                    </label>
+                                                    <!--<label class="col-md-6 col-12 col-lg-3" ng-if="rec.reservation.reservation_downpayment == null && (rec.reservation.rec_state != 14 || rec.reservation.rec_state != 13 || rec.reservation.rec_state != 15)">
+                                                        <span class="sm-txt"> <?= __('rec_state') ?> </span>
+                                                        <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
+                                                            <option ng-click="handleButtonClick(recStateId);" 
+                                                                    ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
+                                                                    value="{{ recStateId }}" 
+                                                                    ng-selected="recStateId === rec.reservation.rec_state"
+                                                                    ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15 || recStateId == 17">
+                                                                {{ recStateName }}
+                                                            </option>
+                                                        </select>
+                                                    </label>
 
 
-                                    <label class="col-md-6 col-12 col-lg-3" ng-if="rec.reservation.reservation_downpayment != null && (rec.reservation.rec_state == 14 || rec.reservation.rec_state == 13 || rec.reservation.rec_state == 15)">
-                                        <span class="sm-txt"> <?= __('rec_state') ?> </span>
-                                        <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
-                                            <option ng-click="handleButtonClick(recStateId);" 
-                                                    ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
-                                                    value="{{ recStateId }}" 
-                                                    ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15">
-                                                {{ recStateName }}
-                                            </option>
-                                        </select>
-                                    </label>-->
+                                                    <label class="col-md-6 col-12 col-lg-3" ng-if="rec.reservation.reservation_downpayment != null && (rec.reservation.rec_state == 14 || rec.reservation.rec_state == 13 || rec.reservation.rec_state == 15)">
+                                                        <span class="sm-txt"> <?= __('rec_state') ?> </span>
+                                                        <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
+                                                            <option ng-click="handleButtonClick(recStateId);" 
+                                                                    ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
+                                                                    value="{{ recStateId }}" 
+                                                                    ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15">
+                                                                {{ recStateName }}
+                                                            </option>
+                                                        </select>
+                                                    </label>-->
 
-                                    <label class="col-md-6 col-12 col-lg-3" ng-if="rec.reservation.reservation_downpayment == null && (rec.reservation.rec_state != 14 && rec.reservation.rec_state != 13 && rec.reservation.rec_state != 15)">
-                                        <span class="sm-txt"> <?= __('rec_state') ?> </span>
-                                        <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
-                                            <option ng-click="handleButtonClick(recStateId);" 
-                                                    ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
-                                                    value="{{ recStateId }}" 
-                                                    ng-selected="recStateId === rec.reservation.rec_state"
-                                                    ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15 || recStateId == 17">
-                                                {{ recStateName }}
-                                            </option>
-                                        </select>
-                                    </label>
+                                                    <label class="col-md-6 col-12 col-lg-3" ng-if="rec.reservation.reservation_downpayment == null && (rec.reservation.rec_state != 14 && rec.reservation.rec_state != 13 && rec.reservation.rec_state != 15)">
+                                                        <span class="sm-txt"> <?= __('rec_state') ?> </span>
+                                                        <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
+                                                            <option ng-click="handleButtonClick(recStateId);" 
+                                                                    ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
+                                                                    value="{{ recStateId }}" 
+                                                                    ng-selected="recStateId === rec.reservation.rec_state"
+                                                                    ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15 || recStateId == 17">
+                                                                {{ recStateName }}
+                                                            </option>
+                                                        </select>
+                                                    </label>
 
-                                    <label class="col-md-6 col-12 col-lg-3" ng-if="rec.reservation.reservation_downpayment != null && (rec.reservation.rec_state == 14 || rec.reservation.rec_state == 13 || rec.reservation.rec_state == 15)">
-                                        <span class="sm-txt"> <?= __('rec_state') ?> </span>
-                                        <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
-                                            <option ng-click="handleButtonClick(recStateId);" 
-                                                    ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
-                                                    value="{{ recStateId }}" 
-                                                    ng-selected="recStateId === rec.reservation.rec_state"
-                                                    ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15">
-                                                {{ recStateName }}
-                                            </option>
-                                        </select>
-                                    </label>
+                                                    <label class="col-md-6 col-12 col-lg-3" ng-if="rec.reservation.reservation_downpayment != null && (rec.reservation.rec_state == 14 || rec.reservation.rec_state == 13 || rec.reservation.rec_state == 15)">
+                                                        <span class="sm-txt"> <?= __('rec_state') ?> </span>
+                                                        <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
+                                                            <option ng-click="handleButtonClick(recStateId);" 
+                                                                    ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
+                                                                    value="{{ recStateId }}" 
+                                                                    ng-selected="recStateId === rec.reservation.rec_state"
+                                                                    ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15">
+                                                                {{ recStateName }}
+                                                            </option>
+                                                        </select>
+                                                    </label>
+
+                                    
+                                                    <div class="col-md-6 col-12 col-lg-3 mt-3">
+                                                        <div class="flex-center text-center">
+                                                            <label class="switch">
+                                                                <input 
+                                                                ng-model="rec.reservation.downpayment_paid" 
+                                                                ng-value = "'1'" 
+                                                                name="invoice" 
+                                                                id="finance-client3" 
+                                                                type="checkbox" />
+                                                                <span class="slider round"></span>
+                                                            </label>
+                                                            <label for="finance-client3"> <?= __('downpayment_paid') ?> </label>
+                                                        </div>
+                                                    </div>
+                                    <?php } ?>
+
+                                    
+                                    <?php if (in_array($authUser['user_role'], ['accountant']) || isset($authUser['user_original_role'])) { ?>
+                                                    <div class="col-md-6 col-12 col-lg-3 mt-3">
+                                                        <div class="flex-center text-center">
+                                                            <label class="switch">
+                                                                <input 
+                                                                ng-model="rec.reservation.reservation_isinvoice_sent" 
+                                                                ng-value = "'1'" 
+                                                                name="invoice" 
+                                                                id="finance-client4" 
+                                                                type="checkbox" />
+                                                                <span class="slider round"></span>
+                                                            </label>
+                                                            <label for="finance-client4"> <?= __('is_invoice_sent') ?> </label>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <div class="col-md-6 col-12 col-lg-3">
+                                                        <span class="sm-txt"> <?= __('invoice_date') ?> </span>
+                                                        <input type="date" date-format ng-model="rec.reservation.reservation_invoice_date" class="wb-txt-inp" ></input>
+                                                    </div>
 
 
-
+                                                    <div class="col-md-6 col-12 col-lg-3 mt-3">
+                                                        <div class="flex-center text-center">
+                                                            <label class="switch">
+                                                                <input 
+                                                                ng-model="rec.reservation.is_commision_collacted" 
+                                                                ng-value = "'1'" 
+                                                                name="invoice" 
+                                                                id="finance-client2" 
+                                                                type="checkbox" />
+                                                                <span class="slider round"></span>
+                                                            </label>
+                                                            <label for="finance-client2"> <?= __('is_commision_collacted') ?> </label>
+                                                        </div>
+                                                    </div>
+                                    <?php } ?>
                                     <div class="down-btns mt-4 d-flex justify-content-end">
                                         <div class="flex-gap-10 ">
                                             <button class="btn btn-danger" id="reservations_preloader" type="submit"> <?= __('save_changes') ?> </button>
@@ -2154,7 +2419,7 @@
                                     </div>
                                 </form>
                     `)
-                    ($scope);
+                                ($scope);
                         } else if (element === "finance") {
                             elementsCreated = $compile(`
                             
@@ -2225,7 +2490,7 @@
                                     
                                 </form>
                     `)
-                    ($scope);
+                                ($scope);
                         } else if (element === "info") {
                             elementsCreated = $compile(`
                             <form class="row  inlineElement"  id="client_form" ng-submit="
@@ -2247,25 +2512,34 @@
                                     <label class="col-md-6 col-12 col-lg-3">
                                         <span class="sm-txt"> <?= __('clientspec_propertytype') ?> </span> 
                                         <tags-input placeholder="Add Property Type" style="padding: 0px;padding-left: 10px;"ng-model="rec.client.client_specs[0].clientspec_propertytype" display-property="text" key-property="value" class="wb-txt-inp" tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
-                                            <auto-complete min-length="1" source="loadTags($query, 'categories', 159)"></auto-complete>
+                                            <auto-complete min-length="0"
+                                                load-on-focus="true"
+                                                load-on-empty="true"
+                                                max-results-to-show="30" source="loadTags($query, 'categories', 159)"></auto-complete>
                                         </tags-input>
                                     </label>
 
                                     <label class="col-md-6 col-12 col-lg-3">
                                         <span class="sm-txt"> <?= __('client_tags') ?> </span>
                                         <tags-input placeholder="Add Lead Tag" style="padding: 0px;padding-left: 10px;"ng-model="rec.client.client_tags" class="wb-txt-inp" tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
-                                            <auto-complete min-length="1" source="loadTags($query, 'categories', 40)"></auto-complete>
+                                            <auto-complete min-length="0"
+                                                load-on-focus="true"
+                                                load-on-empty="true"
+                                                max-results-to-show="30" source="loadTags($query, 'categories', 40)"></auto-complete>
                                         </tags-input>
                                     </label>
 
                                     <label class="col-md-6 col-12 col-lg-3">
                                         <span class="sm-txt"><?= __('clientspec_beds') ?></span>
                                         <tags-input placeholder="Add Beds" style="padding: 0px;padding-left: 10px;"ng-model="rec.client.client_specs[0].clientspec_beds" display-property="text" key-property="value" class="wb-txt-inp" tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
-                                            <auto-complete min-length="1" source="loadTags($query, 'categories', 183)"></auto-complete>
+                                            <auto-complete min-length="0"
+                                                load-on-focus="true"
+                                                load-on-empty="true"
+                                                max-results-to-show="30" source="loadTags($query, 'categories', 183)"></auto-complete>
                                         </tags-input>
                                     </label>
 
-                                    <label class="col-md-6 col-12 col-lg-3">
+                                    <!--<label class="col-md-6 col-12 col-lg-3">
                                         <span class="sm-txt"> <?= __('client_budget') ?> </span>
                                         <div class="input-group">
                                         <?= $this->Form->control('client_budget', [
@@ -2273,17 +2547,67 @@
                                             'label' => false,
                                             'type' => 'select',
                                             'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
-                                            
+
                                             'ng-model' => 'rec.client.client_specs[0].clientspec_currency',
                                         ]) ?> 
                                             
-                                            <input n-format ng-model="rec.client.client_budget" class="form-control wb-txt-inp" value="400k" type="text" />
+                                        </div>
+                                    </label>-->
+
+                                    
+                                    <label class="col-md-6 col-12 col-lg-3">
+                                        <span class="sm-txt"><?= __('client_budget') ?></span>
+                                        <div class="input-group">
+                                            <?= $this->Form->select(
+                                                'client.client_budget',
+                                                [
+                                                    '' => 'Select One',
+                                                    '50000' => 'Up to Dolar 50k',
+                                                    '100000' => 'Up to Dolar 100k',
+                                                    '150000' => 'Up to Dolar 150k',
+                                                    '200000' => 'Up to Dolar 200k',
+                                                    '300000' => 'Up to Dolar 300k',
+                                                    '400000' => 'Up to Dolar 400k',
+                                                    '500000' => 'Up to Dolar 500k',
+                                                    '750000' => 'Up to Dolar 750k',
+                                                    '1000000' => 'Up to Dolar 1m',
+                                                    '1500000' => 'Up to Dolar 1.5m',
+                                                    '2000000' => 'Up to Dolar 2m',
+                                                    '2000001' => 'Dolar 2m +',
+                                                ],
+                                                [
+                                                    'class' => 'wb-ele-select-modal col-12',
+                                                    'label' => false,
+                                                    'ng-model' => 'rec.client.client_budget '
+                                                ]
+                                            ) ?>
                                         </div>
                                     </label>
 
-                                    <label class="col-md-6 col-12 col-lg-3">
-                                        <span class="sm-txt"> <?= __('target_location') ?>  </span>
-                                        <input type="text" ng-model="rec.client.client_specs[0].clientspec_loction_target" class="wb-txt-inp" placeholder="Enter" />
+                                    <label class="col-md-6 col-12 col-lg-3" style="position: relative;">
+                                        <span class="sm-txt"> <?= __('target_location') ?> </span>
+
+                                        <tags-input  style="padding: 0px;padding-left: 10px;"
+                                            class="wb-txt-inp" 
+                                            tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
+                                            ng-model="rec.client.client_specs[0].clientspec_loction_target" 
+                                            add-from-autocomplete-only="true" 
+                                            max-tags="1" 
+                                            placeholder="<?= __('target_location') ?>" 
+                                            display-property="text"
+                                            key-property="value"
+                                            ng-disabled="rec.client.client_specs[0].targetLocation "
+                                            ng-style="{'background-color': rec.client.client_specs[0].targetLocation ? '#eeeeee' : 'initial'}"
+                                            
+                                        >
+                                            <auto-complete min-length="0"
+                                                load-on-focus="true"
+                                                load-on-empty="true"
+                                                max-results-to-show="30" source="loadTags($query, 'addresses', '1')"></auto-complete>
+                                        </tags-input>
+
+                                        <span ng-if="rec.client.client_specs[0].targetLocation" ng-click="rec.client.client_specs[0].targetLocation = '';" class="fa fa-times" style="cursor: pointer; position: absolute; top: 55%; right: 20px; transform: translateY(-50%);"></span>                                        
+
                                     </label>
 
                                     <label  class="col-md-6 col-12 col-lg-3">
@@ -2353,9 +2677,9 @@
 
                                 </form>
                     `)
-                    ($scope);
-                
-                } else if (element === "add-sale") {
+                                ($scope);
+
+                        } else if (element === "add-sale") {
                             elementsCreated = $compile(`
                             
                             <form class="row  inlineElement"  id="client_form" ng-submit="
@@ -2422,7 +2746,10 @@
                                             ng-style="{'background-color': rec.client.adrscountry ? '#eeeeee' : 'initial'}"
                                             
                                         >
-                                            <auto-complete min-length="1" highlightMatchedText="true" source="loadTags($query, 'addresses', '0')"></auto-complete>
+                                            <auto-complete min-length="0"
+                                                load-on-focus="true"
+                                                load-on-empty="true"
+                                                max-results-to-show="30" source="loadTags($query, 'addresses', '0')"></auto-complete>
                                         </tags-input>
 
                                         <span ng-if="rec.client.adrscountry" ng-click="rec.client.adrscountry = '';" class="fa fa-times" style="cursor: pointer; position: absolute; top: 55%; right: 20px; transform: translateY(-50%);"></span>                                        
@@ -2465,6 +2792,46 @@
 
                                 
                     `)($scope);
+
+                        } else if (element === "add-pool") {
+                            elementsCreated = $compile(`
+                            
+                            <form class="row  inlineElement"  id="client_form" ng-submit="
+                            rec.user_pool.user_id = rec.user.id;
+                            doSave(rec.user_pool, 'user_pool', 'userpool', '#client_btn', '#userpool_preloader');">
+
+                                
+
+                            <label class="col-md-6 col-12 col-lg-12">
+                                        <span class="sm-txt"> <?= __('pool_name') ?> </span>
+                                        <tags-input placeholder="Add User Pool" 
+                                        style="padding: 0px;padding-left: 10px;"
+                                        ng-model="rec.user_pool.pool_id" 
+                                        class="wb-txt-inp" 
+                                        tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
+                                            <auto-complete min-length="0"
+                                                load-on-focus="true"
+                                                load-on-empty="true"
+                                                max-results-to-show="30" source="loadTags($query, 'categories', 28)">
+                                            </auto-complete>
+                                        </tags-input>
+                                    </label>
+
+
+                                    
+
+                                    <div class="down-btns mt-4 d-flex justify-content-end">
+                                        <div class="flex-gap-10 ">
+                                            <button type="submit" class="btn btn-danger" id="userpool_preloader"> <?= __('save_changes') ?> 
+                                            </button>
+                                        </div>
+                                    </div>
+
+
+                                </form>
+
+                                
+                        `)($scope);
                         } else {
                             console.log("object");
                         }
@@ -2523,17 +2890,18 @@
                     $(".lead-preview").removeClass("active");
                     $(".overlay").removeClass("active");
                 });
-            
-                
 
-                
-                $scope.openDatePicker = function(datepickerName) {
+
+
+
+                $scope.openDatePicker = function (datepickerName) {
                     $scope.datepickers[datepickerName] = true;
                 };
-    
 
 
-                $scope.showLogUrlAlert = function(logUrl) {
+
+
+                $scope.showLogUrlAlert = function (logUrl) {
                     var logValue = logUrl;
                     // alert(logUrl);
                     var lowerCaseFirstChar = logValue.charAt(0).toLowerCase();
@@ -2545,8 +2913,8 @@
                 };
 
 
-            
-                $scope.newEntity = function(tar, params) {
+
+                $scope.newEntity = function (tar, params) {
                     // $scope.rec = [];
                     var dt = rec_origin[tar];
                     if (typeof params === 'object') {
@@ -2560,31 +2928,31 @@
                     $scope.rec[tar] = dt;
                 }
 
-                $scope.showPNote = function(_title, _msg, _type, _isHide, _delay) {
+                $scope.showPNote = function (_title, _msg, _type, _isHide, _delay) {
                     return showPNote(_title, _msg, _type, _isHide, _delay)
                 }
 
-                $scope.nFormat = function(v, unit, round) {
+                $scope.nFormat = function (v, unit, round) {
                     return nFormat(v, unit, round)
                 }
 
-                $scope.getLastId = function(obj, isKey) {
+                $scope.getLastId = function (obj, isKey) {
                     !isKey ? isKey = true : isKey;
                     var keysObj = Object.keys(obj);
                     var res = isKey ? keysObj[keysObj.length - 1] : obj[keysObj[keysObj.length - 1]];
                     return res + '';
                 }
 
-                $scope.copyToClipBoard = function(tar) {
-                    navigator.clipboard.writeText(tar).then(function() {
+                $scope.copyToClipBoard = function (tar) {
+                    navigator.clipboard.writeText(tar).then(function () {
                         showPNote('<?= __('note-message') ?>', '<?= __('link_copied') ?>', 'greenBg');
-                    }, function(err) {
+                    }, function (err) {
                         console.error('Async: Could not copy text: ', err);
                         showPNote('<?= __('note-message') ?>', '<?= __('link_copy_failed') ?> ' + err, 'redBg');
                     });
                 }
 
-                $scope.currencyConverter = function(from, to, price) {
+                $scope.currencyConverter = function (from, to, price) {
                     var currCurrency = 2;
                     var ratios = DtSetter('ratios', 'list');
                     // console.log('ratios', from, to, price ,ratios);
@@ -2601,7 +2969,7 @@
                     return nFormat(toUsd * (1 / (ratios[to + '_USD'] * 1))); // multiplay with the price
                 }
 
-                $scope.empty = function(v) {
+                $scope.empty = function (v) {
                     if (!v) {
                         return true;
                     }
@@ -2614,7 +2982,7 @@
                         }
                     }
                     if (typeof v === 'object') {
-                        v = Object.keys(v).filter(function(k) {
+                        v = Object.keys(v).filter(function (k) {
                             return v[k] !== false;
                         });
                         if (Object.keys(v).length == 0) {
@@ -2633,11 +3001,11 @@
                     return false;
                 }
 
-                $scope.isArray = function(v) {
+                $scope.isArray = function (v) {
                     return (typeof v === 'object' || typeof v === 'array');
                 }
 
-                $scope.removeFilter = function(tar, key, ind) {
+                $scope.removeFilter = function (tar, key, ind) {
                     if (tar == 'adrs') {
                         $scope.rec.search[key] = ''
                     }
@@ -2658,20 +3026,20 @@
                     }
                     $scope.doSearch();
                 }
-                
 
-                $scope.toImage = function(tar) {
+
+                $scope.toImage = function (tar) {
                     html2canvas(document.querySelector(tar)).then(canvas => {
                         $('#imgHolder').html('<img src="' + canvas.toDataURL("image/png") + '"><i class="fa fa-times" aria-hidden="true"></i>');
                         $('#imgHolder').attr("style", "opacity: 1; z-index:1111;");
                     })
                 }
 
-                $scope.DtSetter = function(tar, val, val2) {
+                $scope.DtSetter = function (tar, val, val2) {
                     return DtSetter(tar, val, val2)
                 }
 
-                const nToArray = function(num) {
+                const nToArray = function (num) {
                     var arr = [];
                     for (var i = 0; i < num; i++) {
                         arr[i] = i
@@ -2679,7 +3047,7 @@
                     return arr;
                 }
 
-                $scope.pager = function(total, curr) {
+                $scope.pager = function (total, curr) {
                     var arr = nToArray(total + 1).slice(curr, curr + 3)
                     if (curr > 1) {
                         arr.unshift(curr - 1)
@@ -2690,7 +3058,7 @@
                     return arr;
                 }
 
-                $scope.chkAll = function(tar, val) {
+                $scope.chkAll = function (tar, val) {
                     var all = $(tar + " input");
                     $scope.selected = {}
                     for (var i = 0; i < all.length; i++) {
@@ -2702,29 +3070,29 @@
                     }
                 }
 
-                $scope.toElm = function(tar) {
+                $scope.toElm = function (tar) {
                     var elmTarget = $(!tar ? "body" : "#" + tar).offset().top;
                     $("html").animate({
                         scrollTop: elmTarget
                     }, 1000);
                 }
 
-                $scope.formatter = function(val) {
+                $scope.formatter = function (val) {
                     var suffix = "$";
                     var prefix = " USD";
                     var v = suffix + val.replace('.', '').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + prefix;
                     return v;
                 }
 
-                $scope.closeModal = function(tar) {
+                $scope.closeModal = function (tar) {
                     $(tar).modal('hide');
                 }
 
-                $scope.openModal = function(tar) {
+                $scope.openModal = function (tar) {
                     $(tar).modal('show');
                 }
 
-                $scope.getPhoto = function(fileToUpload, photo, folder, noimg) {
+                $scope.getPhoto = function (fileToUpload, photo, folder, noimg) {
                     // console.log(fileToUpload, photo, folder, noimg)
                     !fileToUpload ? fileToUpload = false : fileToUpload;
                     !photo ? photo = '' : photo;
@@ -2744,13 +3112,13 @@
                     return '<?= $app_folder ?>/img/' + noimg
                 }
 
-                $scope.doClick = function(tar, delay) {
+                $scope.doClick = function (tar, delay) {
                     return doClick(tar, delay)
                 }
 
-                $scope.doFilter = function() {
+                $scope.doFilter = function () {
                     var url = [];
-                    angular.forEach($scope.search, function(v, k) {
+                    angular.forEach($scope.search, function (v, k) {
                         if (v) {
                             url.push(k + '=' + v)
                         }
@@ -2758,7 +3126,7 @@
                     $scope.goTo('/admin/' + ctrl + '/' + actn + '?' + url.join('&'))
                 }
 
-                $scope.goTo = function(path, ext = null) {
+                $scope.goTo = function (path, ext = null) {
                     if (ext == 'param') {
                         return window.location.href = window.location.pathname + path
                     }
@@ -2768,7 +3136,7 @@
                     return window.location.href = $scope.dmn + $scope.app_folder + path
                 }
 
-                $scope.showMenu = function(tar) {
+                $scope.showMenu = function (tar) {
 
                     !tar ? tar = $('.left_col').css('left') : tar;
 
@@ -2789,7 +3157,7 @@
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 }
-                var _doRequest = function(url, obj, method) {
+                var _doRequest = function (url, obj, method) {
                     !method ? method = 'get' : method;
                     !obj ? obj = null : obj;
 
@@ -2808,11 +3176,11 @@
                     return $http(requestObj)
                 }
 
-                $scope.multiHandle = function(url, tar) {
+                $scope.multiHandle = function (url, tar) {
                     !tar ? tar = $scope.selected : tar;
                     if (Object.keys(tar).length < 1) {
                         return showPNote('<?= __('note-message') ?>', '<?= __('is-selected-empty-msg') ?>', 'error');
-                    }!url ? url = $scope.path + '/' + $scope.currlang : $scope.path + '/' + $scope.currlang + url;
+                    } !url ? url = $scope.path + '/' + $scope.currlang : $scope.path + '/' + $scope.currlang + url;
 
                     // console.log(tar)
                     var msg = '<?= __('delete_selected_records') ?>';
@@ -2835,18 +3203,18 @@
                     }
                     if (confirm(msg)) {
 
-                        var ids = Object.keys(tar).filter(function(k) {
+                        var ids = Object.keys(tar).filter(function (k) {
                             return tar[k] !== false;
                         });
                         // return console.log(ids.join())
-                        _doRequest(url + '/' + ids.join(), false, method).then(function(res) {
+                        _doRequest(url + '/' + ids.join(), false, method).then(function (res) {
                             if (res.data.redirect) {
                                 window.location.href = res.data.redirect
                             }
                             if (res.data.status == "SUCCESS") {
                                 $scope.selected = {}
                                 showPNote('<?= __('note-message') ?>', res.data.msg || '<?= __('multi-handling-success') ?>', 'greenBg');
-                                setTimeout(function() {
+                                setTimeout(function () {
                                     $scope.doGet('/admin/' + ctrl.toLowerCase() + '/index?list=1', 'list', ctrl.toLowerCase());
                                 }, 100)
                             } else {
@@ -2856,18 +3224,18 @@
                     }
                 }
 
-                $scope.doGet = function(url, type, tar, preloader) {
+                $scope.doGet = function (url, type, tar, preloader) {
                     !type ? type = 'list' : type;
                     !preloader ? preloader = '#main_preloader' : preloader;
                     if (preloader) {
                         _setCvrBtn(preloader, 1)
                     }
-                    _doRequest(url, null, 'post').then(function(res) {
+                    _doRequest(url, null, 'post').then(function (res) {
 
                         if (type == 'reload') {
                             location.reload();
                         }
-                        
+
                         if (res.data.redirect) {
                             window.location.href = res.data.redirect
                         }
@@ -2882,20 +3250,20 @@
                         } else {
                             $scope.rec[tar] = angular.fromJson(res.data.data);
                         }
-                       
+
                     })
                 }
                 var doGetTm;
-                $scope.doGetDelay = function(url, type, tar, preloader, delay) {
+                $scope.doGetDelay = function (url, type, tar, preloader, delay) {
                     !delay ? delay = 1500 : delay;
                     clearTimeout(doGetTm)
-                    doGetTm = setTimeout(function() {
+                    doGetTm = setTimeout(function () {
                         return $scope.doGet(url, type, tar, preloader)
                     }, delay);
                 }
 
-               
-                $scope.doSave = function(orginialObj, tar, ctrl, btn, preloader, form) {
+
+                $scope.doSave = function (orginialObj, tar, ctrl, btn, preloader, form) {
                     !tar ? tar = 'package' : tar;
                     !ctrl ? ctrl = '<?= strtolower($this->request->getParam("controller")) ?>' : tar;
                     !btn ? btn = false : btn;
@@ -2922,8 +3290,8 @@
                     )
                     var done = defer.promise;
 
-                    
-                    done.then(function(res) {
+
+                    done.then(function (res) {
                         if (preloader) {
                             _setCvrBtn(preloader, 0)
                         }
@@ -2931,7 +3299,7 @@
                             window.location.href = res.data.redirect
                         }
                         if (res.data.status == 'SUCCESS') {
-                            if(ctrl=='Sales' && tar == 'client'){
+                            if (ctrl == 'Sales' && tar == 'client') {
 
                             }
                             // alert('<?= __("save-success") ?>')
@@ -2948,11 +3316,11 @@
                     })
                 }
 
-                $scope.doDelete = function(url, doUpdate) {
+                $scope.doDelete = function (url, doUpdate) {
                     if (confirm("<?= __('delete_confirm') ?>")) {
                         _doRequest(url, {
                             id: url
-                        }, "DELETE").then(function(res) {
+                        }, "DELETE").then(function (res) {
                             if (res.data.redirect) {
                                 window.location.href = res.data.redirect
                             }
@@ -2967,9 +3335,9 @@
                     }
                 }
 
-                $scope.delImage = function(url, image, doUpdate) {
+                $scope.delImage = function (url, image, doUpdate) {
                     if (confirm('<?= __('do_you_want_to_delete_image') ?>')) {
-                        _doRequest(url, image, "DELETE").then(function(res) {
+                        _doRequest(url, image, "DELETE").then(function (res) {
                             if (res.data.redirect) {
                                 window.location.href = res.data.redirect
                             }
@@ -2984,15 +3352,15 @@
                         });
                     }
                 }
-   
 
-                $scope.clearSearchFields = function() {
+
+                $scope.clearSearchFields = function () {
                     $scope.rec.search = null;
                 };
 
                 var doSearchUpdt;
                 var lastSearch = '';
-                $scope.doSearch = function(isPager) {
+                $scope.doSearch = function (isPager) {
 
                     if (lastSearch == JSON.stringify($scope.rec.search)) {
                         return false;
@@ -3000,9 +3368,9 @@
 
                     $timeout.cancel(doSearchUpdt);
                     _setCvrBtn('#main_preloader', 1);
-                    doSearchUpdt = $timeout(function() {
+                    doSearchUpdt = $timeout(function () {
 
-                        _doRequest('<?= $app_folder ?>/admin/' + ctrl + '?list=1' , {search: $scope.rec.search}, 'post').then(function(res) {
+                        _doRequest('<?= $app_folder ?>/admin/' + ctrl + '?list=1', { search: $scope.rec.search }, 'post').then(function (res) {
 
                             lastSearch = JSON.stringify($scope.rec.search);
 
@@ -3034,18 +3402,18 @@
                 }
                 // PREVENT SESSION EXPIRE
                 var refreshTime = 600000; // every 10 minutes in milliseconds
-                $interval(function() {
+                $interval(function () {
                     _doRequest('/configs/refresher')
                 }, refreshTime);
             });
 
             // DIRECTIVE //////////////////////////////////////////////////////
-            app.directive('chk', function() {
+            app.directive('chk', function () {
                 return {
                     scope: {
                         chk: '@'
                     },
-                    link: function(scope, element, attrs, ctrl) {
+                    link: function (scope, element, attrs, ctrl) {
                         element.bind('blur', onBlur);
 
                         function onBlur(ctrl) {
@@ -3073,35 +3441,35 @@
 
             });
 
-            app.directive('faIcons', function($http, $compile) {
+            app.directive('faIcons', function ($http, $compile) {
                 return {
                     restrict: 'AE',
-                    link: function($scope, elm, attr, ctrl) {
-                        
+                    link: function ($scope, elm, attr, ctrl) {
+
                         elm.bind("input", onChange);
 
                         function onChange() {
                             $http.get('<?= $app_folder ?>/webroot/js/fa4.json').then((data) => {
                                 var html = '';
-                                for(var i=0; i<data.data.length; i++){
-                                    if(data.data[i].indexOf( $scope.rec.category.category_configs.icon ) > -1|| $scope.rec.category.category_configs.icon.length == 0){
-                                    html+=`
-                                        <a href="javascript:void(0);" ng-click="rec.category.category_configs.icon = '`+data.data[i]+`'">
-                                            <i class="fa `+data.data[i]+`"></i>
+                                for (var i = 0; i < data.data.length; i++) {
+                                    if (data.data[i].indexOf($scope.rec.category.category_configs.icon) > -1 || $scope.rec.category.category_configs.icon.length == 0) {
+                                        html += `
+                                        <a href="javascript:void(0);" ng-click="rec.category.category_configs.icon = '`+ data.data[i] + `'">
+                                            <i class="fa `+ data.data[i] + `"></i>
                                         </a>`
                                     }
                                 }
-                                $('.icons_div').html( $compile(html)($scope) );
+                                $('.icons_div').html($compile(html)($scope));
                             });
                         }
                     }
                 }
             });
 
-            app.directive('setIframe', function($compile) {
+            app.directive('setIframe', function ($compile) {
                 return {
                     restrict: 'AE',
-                    link: function($scope, elm, attr, ctrl) {
+                    link: function ($scope, elm, attr, ctrl) {
                         var iframe = $compile(`
                             <iframe width="100%" ng-src="https://www.youtube.com/embed/` + attr.setIframe + `" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         `)($scope);
@@ -3110,14 +3478,14 @@
                 }
             });
 
-            app.filter('urlcrypt', function() {
+            app.filter('urlcrypt', function () {
                 return window.decodeURIComponent;
             });
 
-            app.directive("showImg", function() {
+            app.directive("showImg", function () {
                 return {
-                    link: function(scope, elm, attrs, ngModel) {
-                        elm.bind('click', function(e) {
+                    link: function (scope, elm, attrs, ngModel) {
+                        elm.bind('click', function (e) {
 
                             if (attrs.src.indexOf(".svg") > 0) {
                                 return "";
@@ -3168,25 +3536,25 @@
                 }
             });
 
-            app.directive("removeTempHide", function() {
+            app.directive("removeTempHide", function () {
                 return {
-                    link: function(scope, elm, attrs) {
+                    link: function (scope, elm, attrs) {
                         elm.removeClass('tempHide');
                     }
                 }
             });
 
-            app.directive("multiSelect", function($timeout) {
+            app.directive("multiSelect", function ($timeout) {
                 return {
-                    link: function(scope, elm, attrs) {
+                    link: function (scope, elm, attrs) {
 
-                        $timeout(function() {
+                        $timeout(function () {
 
                             elm.selectpicker({
                                 container: 'body'
                             });
                             $(elm).selectpicker('refresh');
-                            elm.on('hide.bs.select', function(e) {
+                            elm.on('hide.bs.select', function (e) {
                                 $(elm).selectpicker('refresh');
                                 if (attrs.actn) {
                                     return eval(attrs.actn)
@@ -3199,27 +3567,27 @@
                 }
             })
 
-            app.directive('clickOutside', function($document) {
+            app.directive('clickOutside', function ($document) {
                 return {
                     restrict: 'A',
-                    link: function(scope, elem, attr, ctrl) {
-                        elem.bind('click', function(e) {
+                    link: function (scope, elem, attr, ctrl) {
+                        elem.bind('click', function (e) {
                             e.stopPropagation();
                         });
-                        $document.bind('click', function() {
+                        $document.bind('click', function () {
                             scope.$apply(attr.clickOutside);
                         })
                     }
                 }
             });
 
-            app.directive('textareaExpander', function() {
+            app.directive('textareaExpander', function () {
                 return {
                     restrict: 'AE',
                     require: 'ngModel',
-                    link: function(scope, elm, attrs, ctrl) {
+                    link: function (scope, elm, attrs, ctrl) {
                         $(elm)[0].rows = !$(elm)[0].rows ? 1 : $(elm)[0].rows
-                        ctrl.$parsers.unshift(function(viewValue) {
+                        ctrl.$parsers.unshift(function (viewValue) {
                             if ($(elm)[0].scrollHeight > $(elm)[0].offsetHeight) {
                                 $(elm)[0].rows = $(elm)[0].rows + 1
                             }
@@ -3229,11 +3597,11 @@
                 };
             });
 
-            app.directive('onlyNumbers', function() {
+            app.directive('onlyNumbers', function () {
                 return {
                     restrict: 'AC',
-                    link: function(scope, el, attr, ctrl) {
-                        el.bind('keypress', function(e) {
+                    link: function (scope, el, attr, ctrl) {
+                        el.bind('keypress', function (e) {
                             if (e.which != 8 && e.which != 13 && e.which != 0 && (e.which < 48 || e.which > 57)) {
                                 _setError(el, '<?= __('only_numbers') ?>');
                                 return false;
@@ -3241,7 +3609,7 @@
                                 _setError(el, '');
                             }
                         })
-                        el.bind('blur', function(e) {
+                        el.bind('blur', function (e) {
                             let n_arr = attr.onlyNumbers.split('-'),
                                 isError = false;
                             console.log(n_arr)
@@ -3263,19 +3631,19 @@
                     }
                 }
             });
-           
 
-            app.directive('fileModel', ['$parse', function($parse) {
+
+            app.directive('fileModel', ['$parse', function ($parse) {
                 return {
                     restrict: 'A',
-                    link: function($scope, element, attrs) {
+                    link: function ($scope, element, attrs) {
                         var model = $parse(attrs.fileModel);
                         var modelSetter = model.assign;
 
-                        element.bind('change', function(changeEvent) {
+                        element.bind('change', function (changeEvent) {
 
                             var total_upload_size = 0;
-                            angular.forEach(changeEvent.target.files, function(itm, k) {
+                            angular.forEach(changeEvent.target.files, function (itm, k) {
 
                                 if ($scope.filesInfo[attrs.name] === undefined || $scope.filesInfo[attrs.name] == null) {
                                     $scope.filesInfo[attrs.name] = []
@@ -3284,10 +3652,10 @@
                                 // prepare file info
                                 var reader = new FileReader();
 
-                                reader.onload = function(loadEvent) {
+                                reader.onload = function (loadEvent) {
                                     // upload files docs
                                     if (attrs.name == 'doc_file') {
-                                        $scope.$apply(function() {
+                                        $scope.$apply(function () {
                                             $scope.filesInfo[attrs.name].push({
                                                 lastModified: itm.lastModified,
                                                 lastModifiedDate: itm.lastModifiedDate,
@@ -3304,7 +3672,7 @@
                                         var image = new Image();
                                         image.src = loadEvent.target.result;
 
-                                        image.onload = function() {
+                                        image.onload = function () {
                                             let dim = this.height > this.width ? this.height : this.width;
                                             total_upload_size += (itm.size / 1024 / 1024)
                                             if (total_upload_size > 10) {
@@ -3316,7 +3684,7 @@
                                             } else if ((itm.size / 1024 / 1024) > 5) { // check if photo bigger than 1.5 mb
                                                 showPNote('<?= __('note-message') ?>', itm.name + ' <?= __('file-too-big') ?>', 'redBg');
                                             } else {
-                                                $scope.$apply(function() {
+                                                $scope.$apply(function () {
                                                     $scope.filesInfo[attrs.name].push({
                                                         lastModified: itm.lastModified,
                                                         lastModifiedDate: itm.lastModifiedDate,
@@ -3333,7 +3701,7 @@
                                 }
                                 reader.readAsDataURL(itm);
                                 // prepage file upload
-                                $scope.$apply(function() {
+                                $scope.$apply(function () {
                                     modelSetter($scope, [element[0].files[k]]);
                                 });
 
@@ -3344,16 +3712,16 @@
                 };
             }]);
 
-            app.directive('setChart', function($timeout) {
+            app.directive('setChart', function ($timeout) {
                 return {
                     restrict: 'A',
-                    link: function(scope, elem, attr, ctrl) {
+                    link: function (scope, elem, attr, ctrl) {
 
-                        var addSeperator = function(n) {
+                        var addSeperator = function (n) {
                             return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
                         var chart, ctx;
-                        scope.$watch('rec.stats', function(old, newVal) {
+                        scope.$watch('rec.stats', function (old, newVal) {
 
                             var type = !attr.setChart ? 'pie' : attr.setChart;
                             var dt = scope.rec.dashboard.stats[attr.dt];
@@ -3415,7 +3783,7 @@
                                     },
                                     tooltips: {
                                         callbacks: {
-                                            label: function(tooltipItems, data) {
+                                            label: function (tooltipItems, data) {
                                                 if ('bar,line'.indexOf(type) === -1) {
                                                     var content = [
                                                         data.labels[tooltipItems.index],
@@ -3449,9 +3817,9 @@
                 }
             });
 
-            app.directive('setRequired', function() {
+            app.directive('setRequired', function () {
                 return {
-                    link: function(scope, element, attrs, ngModel) {
+                    link: function (scope, element, attrs, ngModel) {
                         if (attrs.setRequired == 'msg') {
                             return $(element).html(' <i class="fa redText fa-asterisk"></i> <?= __('red_star_required_fields') ?>');
                         }
@@ -3461,9 +3829,9 @@
                 }
             });
 
-            app.directive('setProgressWidth', function() {
+            app.directive('setProgressWidth', function () {
                 return {
-                    link: function(scope, el, attrs, ngModel) {
+                    link: function (scope, el, attrs, ngModel) {
                         var arr = attrs.setProgressWidth.split(',');
                         var val = arr[attrs.ind];
                         $(el).attr('style', 'width: ' + scope.getPercentage(arr, val) + '%; background:' + scope.clrs[attrs.ind]);
@@ -3473,54 +3841,54 @@
 
             app.directive('dateFormat', function () {
                 return {
-                require: 'ngModel',
-                link: function (scope, elm, attrs, ctrl) {
-                    ctrl.$formatters.push(function (data) {
-                    return new Date(data);
-                    });
-                    ctrl.$parsers.push(function (data) {
-                        return _setDate(new Date(data))
-                    });
-                }
+                    require: 'ngModel',
+                    link: function (scope, elm, attrs, ctrl) {
+                        ctrl.$formatters.push(function (data) {
+                            return new Date(data);
+                        });
+                        ctrl.$parsers.push(function (data) {
+                            return _setDate(new Date(data))
+                        });
+                    }
                 };
             });
 
 
-            app.directive('chartDirective', function() {
+            app.directive('chartDirective', function () {
                 return {
                     restrict: 'A',
                     scope: {
                         chartType: '@',
                         data: '=' // Two-way data binding for passing data
                     },
-                    link: function(scope, element, attrs) {
-                        var chart; 
+                    link: function (scope, element, attrs) {
+                        var chart;
 
-                        scope.$watch('data', function(newData, oldData) {
+                        scope.$watch('data', function (newData, oldData) {
                             if (chart) {
                                 chart.destroy();
                             }
 
                             if (newData) {
-                                
+
                                 var ctx = element[0].getContext('2d');
                                 chart = new Chart(ctx, {
                                     type: attrs.chartType,
                                     data: newData,
                                     options: {
-                                        aspectRatio: attrs.chartType === 'doughnut' ? 2 :  attrs.chartType === 'bar ' ? maintainAspectRatio: false, responsive: true,
+                                        aspectRatio: attrs.chartType === 'doughnut' ? 2 : attrs.chartType === 'bar ' ? maintainAspectRatio : false, responsive: true,
                                     },
                                     responsive: true
                                 });
-                                    
-                                
+
+
                             }
                         });
                     }
                 };
             });
 
-            
+
             app.directive('nFormat', function () {
                 return {
                     require: 'ngModel',
@@ -3538,24 +3906,24 @@
                         ctrl.$render = function () {
                             elm.val(nFormat(ctrl.$modelValue, attrs.unit));
                         };
-                        
+
                         attrs.$observe('unit', function (newValue) {
-                            ctrl.$render(); 
+                            ctrl.$render();
                         });
                     }
                 };
             });
 
-            app.directive('formatCurrency', function() {
+            app.directive('formatCurrency', function () {
                 return {
                     scope: {
                         amount: '=formatCurrency'
                     },
                     template: '{{ formattedAmount }}',
-                    link: function(scope) {
+                    link: function (scope) {
                         const threshold = 1000;
 
-                        scope.$watch('amount', function(newValue) {
+                        scope.$watch('amount', function (newValue) {
                             if (Math.abs(newValue) < threshold) {
                                 scope.formattedAmount = newValue;
                             } else if (Math.abs(newValue) < threshold * threshold) {
@@ -3567,18 +3935,18 @@
                     }
                 };
             });
-            app.directive('valueChecker', function($compile, $interval) {
+            app.directive('valueChecker', function ($compile, $interval) {
                 return {
                     restrict: 'A',
-                    link: function(scope, element, attrs) {
+                    link: function (scope, element, attrs) {
                         // İlk değeri al
                         var value = scope.$eval(attrs.valueChecker);
                         renderValue(value);
 
                         // Belirli bir aralıkta değeri kontrol et
-                        var intervalPromise = $interval(function() {
+                        var intervalPromise = $interval(function () {
                             var newValue = scope.$eval(attrs.valueChecker);
-                            
+
                             // Değer değiştiyse güncelle
                             if (!angular.equals(value, newValue)) {
                                 value = newValue;
@@ -3587,7 +3955,7 @@
                         }, 1000); // Her saniyede bir kontrol et, istediğiniz aralığı belirleyebilirsiniz.
 
                         // Sayfa veya scope destroy edildiğinde interval'ı temizle
-                        scope.$on('$destroy', function() {
+                        scope.$on('$destroy', function () {
                             $interval.cancel(intervalPromise);
                         });
 
@@ -3597,7 +3965,7 @@
                             if (angular.isObject(value) || angular.isArray(value)) {
                                 // Eğer value bir object veya array ise, içerisindeki key-value'ları görüntüle
                                 var innerHtml = '<div class="text-danger">';
-                                angular.forEach(value, function(innerValue, innerKey) {
+                                angular.forEach(value, function (innerValue, innerKey) {
                                     innerHtml += '<p >';
                                     renderKeyValue(innerKey, innerValue);
                                     innerHtml += '</p>';
@@ -3630,7 +3998,7 @@
             // if(getBrowser() == 'safari'){
             //     $('.wb-ele-select').addClass('safari_input_padding');
 
-                
+
             // }
 
             // if (getBrowser() == 'safari') {

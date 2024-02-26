@@ -98,7 +98,7 @@ class ClientsTable extends Table
 			'cascadeCallbacks' => true
         ]);
 
-        $this->hasMany('UserSale', [
+        $this->hasMany('UserClient', [
             'foreignKey' => 'client_id',
 			'dependent' => true,
 			'cascadeCallbacks' => true

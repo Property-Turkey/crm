@@ -2,88 +2,83 @@
     <div class="listing-modal-1 modal-dialog modal-xl">
         <div class="modal-content">
 
+            
             <div class="modal-header">
-                <h4 class="modal-title">
-                    <?= __('view') ?>
-                </h4>
+            <h4 class="title">Notes</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeModal" aria-label="Close"></button>
+
             </div>
 
             <div class="modal-body row">
                 <div class="col-md-12 col-sm-12">
                     <div class="view_page">
-                        <div class="grid">
+                        <div class="grid lead-preview">
 
-                        <div  ng-repeat="itm in rec.<?= ($this->request->getParam('controller') === 'Clients') ? 'client' : (($this->request->getParam('controller') === 'Sales') ? 'sale' : '')  ?>.reports.slice(-2)">
-                               
-
-                                
-                               <div class="grid_row row">
-                                   <div class="col-md-3 grid_header2"><?=__('status_id')?></div>
-                                   <div class="col-md-9 notwrapped">{{ itm.status.category_name }}</div>
-                               </div>
-
-                               <div class="grid_row row">
-                                   <div class="col-md-3 grid_header2"><?=__('report_type')?></div>
-                                   <div class="col-md-9 notwrapped">{{ itm.type.category_name }}</div>
-                               </div>
-
-                               <div class="grid_row row">
-                                   <div class="col-md-3 grid_header2"><?=__('report_text')?></div>
-                                   <div class="col-md-9 notwrapped">{{ itm.report_text }}</div>
-                               </div>
-                               
-                               <div class="grid_row row">
-                                   <div class="col-md-3 grid_header2"><?=__('stat_created')?></div>
-                                   <div class="col-md-9 notwrapped">{{itm.stat_created}}</div>
-                               </div>
-                               
-                               <div class="grid_row row mb-3">
-                                   <div class="col-md-3 grid_header2"><?=__('rec_state')?></div>
-                                   <div class="col-md-9 notwrapped" ng-bind-html="DtSetter( 'bool2', itm.rec_state )"></div>
-                               </div>
-
-                               
-                           </div>
-
-                               <div class="col-md-12 col-sm-12 form-group has-feedback d-flex justify-content-end pt-2"  ng-click ="toggleDivReport()">
-                                   <button id="toggleReportButton" type="submit" class="btn btn-info">
-                                       <span></span> 
-                                       <i class="fa" ng-class="isDivReportOpen ? 'fa-minus' : 'fa-plus'"></i>{{ isDivReportOpen ? __('show_less') : __('show_more') }}
-                                   </button>
-                               </div>
+                          
 
 
+                                <div class="heading">
+                                    <div class="title"></div>
+                                    <div class="flex-gap-10">
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                            <button class="btn btn-modal" ng-click="
+                                            newEntity('report');
+                                            setZIndex();
+                                            updateModalElement('Notes');
+                                            openModal('#subModal');
+                                            inlineElement('#elementsContainer', 1, 'notes');">
+                                                <i class="fas-plus"></i>
+                                                <?= __('add_notes') ?>
+                                            </button>
+                                        <?php } ?>
 
-                               
-                           <div ng-show="isDivReportOpen" ng-repeat="itm in rec.<?= ($this->request->getParam('controller') === 'Clients') ? 'client' : (($this->request->getParam('controller') === 'Sales') ? 'sale' : '')  ?>.reports">
-                              
-                                <div class="grid_row row">
-                                   <div class="col-md-3 grid_header2"><?=__('status_id')?></div>
-                                   <div class="col-md-9 notwrapped">{{ itm.status.category_name }}</div>
-                               </div>
+                                    </div>
+                                </div>
 
-                               <div class="grid_row row">
-                                   <div class="col-md-3 grid_header2"><?=__('report_type')?></div>
-                                   <div class="col-md-9 notwrapped">{{ itm.type.category_name }}</div>
-                               </div>
+                                <div class="noData" ng-if="rec.client.reports == ''  ">
 
-                               <div class="grid_row row">
-                                   <div class="col-md-3 grid_header2"><?=__('report_text')?></div>
-                                   <div class="col-md-9 notwrapped">{{ itm.report_text }}</div>
-                               </div>
-                               
-                               <div class="grid_row row">
-                                   <div class="col-md-3 grid_header2"><?=__('stat_created')?></div>
-                                   <div class="col-md-9 notwrapped">{{itm.stat_created}}</div>
-                               </div>
-                               
-                               <div class="grid_row row mb-3">
-                                   <div class="col-md-3 grid_header2"><?=__('rec_state')?></div>
-                                   <div class="col-md-9 notwrapped" ng-bind-html="DtSetter( 'bool2', itm.rec_state )"></div>
-                               </div>
-                               
-                           </div>
-                        </div>
+                                    <?= __('no_data') ?>
+
+                                </div>
+                                <div ng-repeat="clsale in rec.client.reports track by $index">
+                                    <div class="note"
+                                        ng-if="!(clsale.report_type == '201' || clsale.report_type == '202' || clsale.report_type == '203' || clsale.report_type == '204' || itm.report_type == '75' || itm.report_type == '76' )">
+
+                                        <div class="box-heading d-flex">
+                                            <div class="col-lg-2 text-nowrap">
+                                                <i class="fas-sticky-note"></i> {{ clsale.type_category.category_name }}
+                                                {{DtSetter('rec_stateSale', clsale.client_current_stage,
+                                                clsale.report_type)}}
+                                                <b>{{ rec.clsale.user.user_fullname }}</b>
+
+                                            </div>
+
+
+                                            <div class="col-lg-8 text p-2">
+                                                <p>
+                                                    {{ clsale.report_text }}
+                                                </p>
+                                            </div>
+
+
+                                            <div class="flex-center flex-gap-10">
+                                                <b> {{ clsale.stat_created.split(' ')[1] }} </b>
+                                                 
+
+
+                                            </div>
+                                        </div>
+                                        <!-- <span class="spoken"></span>
+                                    <div class="text">
+                                        <p>{{ itm.report_text }}</p>
+                                    </div> -->
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
                     </div>
                 </div>
             </div>

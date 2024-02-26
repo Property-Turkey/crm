@@ -1,5 +1,6 @@
 <div id="indxPg" class="right_col" role="main" ng-init="
 doGet('/admin/users/index?list=1', 'list', 'users');
+
     ">
 
 
@@ -29,7 +30,8 @@ doGet('/admin/users/index?list=1', 'list', 'users');
                         Delete
                     </button>
 
-                    <select class="wb-ele-select" style="width: auto;height: 37px;padding: 8px 6px;  border-radius: 6px;">
+                    <select class="wb-ele-select"
+                        style="width: auto;height: 37px;padding: 8px 6px;  border-radius: 6px;">
                         <option value="Select" empty="true">Select</option>
                         <option ng-click="multiHandle('/admin/users/enable/1')">Enable</option>
                         <option ng-click="multiHandle('/admin/users/enable/0')">Disable</option>
@@ -74,7 +76,7 @@ doGet('/admin/users/index?list=1', 'list', 'users');
                                 <div class="col-md-2 p-0 title">
                                     <?= __('action') ?>
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
@@ -102,14 +104,16 @@ doGet('/admin/users/index?list=1', 'list', 'users');
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#viewUser_mdl"
                                                 ng-click="doGet('/admin/users?id='+itm.id, 'rec', 'user');"
                                                 class="btn-link">
-                                                {{ itm.user_fullname }} 
+                                                {{ itm.user_fullname }}
                                             </a>
-                                            
+
                                         </div>
                                     </div>
 
                                     <div class="col-lg-5 col-12 pr-5 mr-5 info">
-                                        <div class="col-4 title hideWeb"><?= __('user_info') ?></div>
+                                        <div class="col-4 title hideWeb">
+                                            <?= __('user_info') ?>
+                                        </div>
                                         <div class="col-6 p-0 col-lg-12">
                                             <p>
                                                 <i class="fa fa-user"></i>
@@ -122,16 +126,39 @@ doGet('/admin/users/index?list=1', 'list', 'users');
                                     </div>
 
                                     <div class="col-lg-2 col-12 pr-5 mr-5 info">
-                                        <div class="col-4 title hideWeb"><?= __('user_info') ?></div>
+                                        <div class="col-4 title hideWeb">
+                                            <?= __('user_info') ?>
+                                        </div>
                                         <div class="col-6 p-0 col-lg-12">
-                                        <button id="modalBtn" style="font-size: 13px;" class="btn btn-modal"
-                                            ng-click="setZIndex();
+                                            <button id="modalBtn" style="font-size: 13px;" class="btn btn-modal"
+                                                ng-click="setZIndex();
                                                 updateModalElement('User');
                                                 doGet('/admin/users?id='+itm.id, 'rec', 'user');
                                                 openModal('#subModal'); inlineElement('#elementsContainer', 1, 'edit-user')">
-                                            <i class="fa fa-pencil"></i>
-                                            <?= __('edit_user') ?>
-                                        </button>
+                                                <i class="fa fa-pencil"></i>
+                                                <?= __('edit_user') ?>
+                                            </button>
+
+                                            <button id="modalBtn" style="font-size: 13px;" class="btn btn-modal"
+                                                ng-click="setZIndex();
+                                                newEntity('category');
+                                                openModal('#subModal'); 
+                                                rec.category.parent_id = 28; 
+                                                rec.category.parent_name = itm.category_name;
+                                                doGet('/admin/users?id='+itm.id, 'rec', 'user'); 
+                                                inlineElement('#elementsContainer', 1, 'add-poolcategory');
+                                            ">
+                                                <i class="fa fa-pencil"></i>
+                                                <?= __('move_user_to_own_pool') ?>
+                                            </button>
+                                            <button id="modalBtn" style="font-size: 13px;" class="btn btn-modal"
+                                                ng-click="setZIndex();
+                                                updateModalElement('Categories');
+                                                doGet('/admin/users?id='+itm.id, 'rec', 'user');
+                                                openModal('#subModal'); inlineElement('#elementsContainer', 1, 'add-pool')">
+                                                <i class="fa fa-pencil"></i>
+                                                <?= __('allow_user_access_this_pool') ?>
+                                            </button>
                                         </div>
                                     </div>
 

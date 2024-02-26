@@ -8,14 +8,19 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-
-class UserSaleTable extends Table
+class UserPoolTable extends Table
 {
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
     public function initialize(array $config): void
     {
         parent::initialize($config);
 
-        $this->setTable('user_sale');
+        $this->setTable('user_pool');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
@@ -23,13 +28,21 @@ class UserSaleTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Clients', [
-            'foreignKey' => 'client_id',
+
+        $this->belongsTo('PoolUserCategories', [
+            'foreignKey' => 'pool_id',
             'joinType' => 'INNER',
+            'className' => 'Categories',   
         ]);
+
     }
 
-    
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
     public function validationDefault(Validator $validator): Validator
     {
         $validator
@@ -37,24 +50,30 @@ class UserSaleTable extends Table
             ->notEmptyString('user_id');
 
         $validator
-            ->integer('client_id')
-            ->notEmptyString('client_id');
+            ->integer('pool_id')
+            ->requirePresence('pool_id', 'create')
+            ->notEmptyString('pool_id');
 
         $validator
             ->dateTime('stat_created')
             ->allowEmptyDateTime('stat_created');
 
         $validator
-            ->notEmptyString('rec_state');
+            ->allowEmptyString('rec_state');
 
         return $validator;
     }
 
-  
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
-        $rules->add($rules->existsIn('client_id', 'Clients'), ['errorField' => 'client_id']);
 
         return $rules;
     }

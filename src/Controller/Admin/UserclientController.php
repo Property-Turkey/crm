@@ -5,7 +5,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 
-class UserSaleController extends AppController
+class UserClientController extends AppController
 {
     public function index($_pid = null)
     {
@@ -28,7 +28,7 @@ class UserSaleController extends AppController
             $conditions = [];
 
             if (isset($_pid)) {
-                $conditions['UserSale.source_id'] = $_pid;
+                $conditions['UserClient.source_id'] = $_pid;
             }
             if (strlen($_k.'') > 0) {
                 if ($_method == 'like') {
@@ -39,12 +39,12 @@ class UserSaleController extends AppController
             }
 
             if ($_k !== false) {
-                $_method == 'like' ? $conditions[$_col . ' LIKE '] = '%' . $_k . '%' : $conditions['UserSale.' . $_col] = $_k; 
+                $_method == 'like' ? $conditions[$_col . ' LIKE '] = '%' . $_k . '%' : $conditions['UserClient.' . $_col] = $_k; 
             }
 
             // ONE RECORD
             if (!empty($_id)) {
-                $data = $this->UserSale->get($_id, [
+                $data = $this->UserClient->get($_id, [
                     'contain' => [],
                 ])->toArray();
                 
@@ -54,7 +54,7 @@ class UserSaleController extends AppController
 
             // LIST
             if (!empty($_list)) {
-                $data = $this->paginate($this->UserSale, [
+                $data = $this->paginate($this->UserClient, [
                     "order" => [$_col => $_dir],
                     "conditions" => $conditions,
                     "contain" => [],
@@ -65,7 +65,7 @@ class UserSaleController extends AppController
                 [
                     "status" => "SUCCESS",
                     "data" => $this->Do->convertJson($data),
-                    "paging" => $this->request->getAttribute('paging')['UserSale']
+                    "paging" => $this->request->getAttribute('paging')['UserClient']
                 ],
                 JSON_UNESCAPED_UNICODE
             );
@@ -78,8 +78,8 @@ class UserSaleController extends AppController
         
         $user_id = $dt['user'][0]['value'];
         $client_id = $dt['client_id'];
-        $UserClientTable =  $this->getTableLocator()->get('UserSale');
-        $ClientTable = $this->getTableLocator()->get('UserSale')->Clients->get($client_id);
+        $UserClientTable =  $this->getTableLocator()->get('UserClient');
+        $ClientTable = $this->getTableLocator()->get('UserClient')->Clients->get($client_id);
         
 
         // add mode
@@ -106,7 +106,8 @@ class UserSaleController extends AppController
                 unset($dt['id']);
                 $rec = $UserClientTable->newEntity($dt);
 
-                if ($newddRec = $this->getTableLocator()->get('UserSale')->Clients->save($ClientTable) && $newRec = $UserClientTable->save($rec)) {
+                $rec->client_id = $client_id;
+                if ($newddRec = $this->getTableLocator()->get('UserClient')->Clients->save($ClientTable) && $newRec = $UserClientTable->save($rec)) {
                     echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec, $newddRec)]);
                     die();
                 }
@@ -121,7 +122,7 @@ class UserSaleController extends AppController
 
     private function isUserAlreadyAssigned($clientId, $userId)
     {
-        $UserClientTable = $this->getTableLocator()->get('UserSale');
+        $UserClientTable = $this->getTableLocator()->get('UserClient');
         
         $existingRecord = $UserClientTable->find('all', [
             'conditions' => [
@@ -149,7 +150,7 @@ class UserSaleController extends AppController
             die();
         }
 
-        $delRec = $this->UserSale->deleteAll(['id IN ' => explode(",", $id)]);
+        $delRec = $this->UserClient->deleteAll(['id IN ' => explode(",", $id)]);
 
         if ($delRec) {
             $res = ["status" => "SUCCESS", "data" => $delRec];
@@ -178,9 +179,9 @@ class UserSaleController extends AppController
             if (!is_numeric($rec)) {
                 continue;
             }
-            $dt = $this->UserSale->newEmptyEntity();
+            $dt = $this->UserClient->newEmptyEntity();
             $dt["id"] = $rec;
-            if (!$this->UserSale->save($dt)) {
+            if (!$this->UserClient->save($dt)) {
                 $errors[] = $dt->getErrors();
             }
         }

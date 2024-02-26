@@ -95,29 +95,29 @@
                                     <div class="title">Lead</div>
                                     <div class="flex-center flex-gap-5">
                                         <?php if (!in_array($authUser['user_role'], ['cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                                            <button id="modalBtn" class="btn btn-modal"
-                                                                ng-click="setZIndex();
+                                            <button id="modalBtn" class="btn btn-modal"
+                                                ng-click="setZIndex();
                                                     updateModalElement('Lead');
                                                     doGet('/admin/clients?id='+rec.client.id, 'rec', 'client');
                                                     openModal('#subModal'); inlineElement('#elementsContainer', 1, 'contact-setting')">
-                                                                <i class="fa fa-pencil"></i>
-                                                                <?= __('edit_contact') ?>
-                                                            </button>
+                                                <i class="fa fa-pencil"></i>
+                                                <?= __('edit_contact') ?>
+                                            </button>
                                         <?php } ?>
-                                        
+
                                         <!-- <button class="sm-btn">
                                             <i class="fas-plus"></i>
                                         </button> -->
                                         <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                            
-                                                <button class="sm-btn">
-                                                    <a class="fas-phone" href="tel:{{rec.client.client_mobile}}"></a>
-                                                </button>
-                                                <button class="sm-btn">
-                                                    <a class="fas-mail" href="mailto:{{rec.client.client_email}}"></a>
-                                                </button>
+
+                                            <button class="sm-btn">
+                                                <a class="fas-phone" href="tel:{{rec.client.client_mobile}}"></a>
+                                            </button>
+                                            <button class="sm-btn">
+                                                <a class="fas-mail" href="mailto:{{rec.client.client_email}}"></a>
+                                            </button>
                                         <?php } ?>
-                                
+
                                         <!-- <div class="dropdown">
                                             <button class="sm-btn" type="button" data-bs-toggle="dropdown"
                                                 aria-expanded="false">
@@ -142,9 +142,9 @@
                                                 <?= __('client_name') ?>
                                             </span>
                                             <div class="wb-ele">{{rec.client.client_name}}</div>
-                                            
+
                                         </div>
-                                        
+
                                         <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt">
                                                 <?= __('client_phone') ?>
@@ -198,23 +198,23 @@
                                     <div class="heading pb-0 mb-0 mt-3">
                                         <div class="title" style="color: #7d7d7d;">Lead Information</div>
                                         <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                                            <button style="color: #7d7d7d;" id="modalBtn" class="btn btn-modal"
-                                                                ng-click="setZIndex();
+                                            <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                                <button style="color: #7d7d7d;" id="modalBtn" class="btn btn-modal"
+                                                    ng-click="setZIndex();
                                                 updateModalElement('Lead Information');
                                                 doGet('/admin/clients?id=' + rec.client.id, 'rec', 'client');
                                                 openModal('#subModal');
                                                 inlineElement('#elementsContainer', 1, 'info')">
-                                                                <span style="display: flex;">
-                                                                    <i class="fas-plus"></i>Add
-                                                                </span>/
-                                                                <span style="display: flex;width: max-content;">
-                                                                    <i class="fa fa-pencil" style="margin: 3px;"></i>
-                                                                    <?= __('edit_info') ?>
-                                                                </span>
-                                                            </button>
-                                        <?php } ?>
-                                            
+                                                    <span style="display: flex;">
+                                                        <i class="fas-plus"></i>Add
+                                                    </span>/
+                                                    <span style="display: flex;width: max-content;">
+                                                        <i class="fa fa-pencil" style="margin: 3px;"></i>
+                                                        <?= __('edit_info') ?>
+                                                    </span>
+                                                </button>
+                                            <?php } ?>
+
                                         </div>
                                     </div>
                                     <hr style="margin: 10px;">
@@ -258,22 +258,38 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-12 col-lg-3">
+                                        <div class="col-md-6 col-12 col-lg-3"
+                                            ng-if="!(rec.client.client_budget == 2000001)">
+                                            <span class="sm-txt">
+                                                <?= __('client_budget') ?>
+                                            </span>
+                                            <div class="wb-ele">
+
+                                                Up to {{nFormat( rec.client.client_budget
+                                                ,DtSetter('currencies_icons',2))}}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-12 col-lg-3"
+                                            ng-if="rec.client.client_budget == 2000001">
                                             <span class="sm-txt">
                                                 <?= __('client_budget') ?>
                                             </span>
                                             <div class="wb-ele">
 
                                                 {{nFormat( rec.client.client_budget
-                                                ,DtSetter('currencies_icons',rec.client.client_specs[0].clientspec_currency))}}
+                                                ,DtSetter('currencies_icons',2))}} +
                                             </div>
                                         </div>
+
                                         <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt">
                                                 <?= __('target_location') ?>
                                             </span>
-                                            <div class="wb-ele">{{
-                                                rec.client.client_specs[0].clientspec_loction_target }}
+                                            <div class="wb-ele">
+                                                <span
+                                                    ng-repeat="tag in rec.client.client_specs[0].clientspec_loction_target track by $index">{{$index
+                                                    > 0 ? ',' : ''}}{{ tag.text }}</span>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
@@ -297,11 +313,20 @@
                                             <div class="wb-ele">
                                                 <div class="priority">
                                                     <div ng-class="{
-                                                            'low': rec.client.client_priority >= 1 && rec.client.client_priority <= 3,
-                                                            'med': rec.client.client_priority > 3 && rec.client.client_priority <= 6,
-                                                            'high': rec.client.client_priority > 6 && rec.client.client_priority <= 10
+                                                            'gray': rec.client.client_priority == null || rec.client.client_priority == 0,
+                                                            'low': rec.client.client_priority == 1,
+                                                            'med': rec.client.client_priority == 2,
+                                                            'high': rec.client.client_priority == 3
                                                         }"></div>{{ DtSetter('client_priorities',
                                                     rec.client.client_priority) }}
+                                                </div>
+
+                                                <div class="mx-1"
+                                                    ng-repeat="notify in rec.client.notification.clientsWithoutPriorty"
+                                                    ng-if="notify.id == itm.id">
+                                                    <i class="fa fa-exclamation-circle redColor" aria-hidden="true">
+                                                        <small>Set the priorty</small>
+                                                    </i>
                                                 </div>
                                             </div>
 
@@ -320,19 +345,96 @@
                                             <span class="sm-txt">
                                                 <?= __('actions') ?>
                                             </span>
-                                            <div class="d-flex align-items-center justify-content-center">
-                                                <!-- Called Checkbox -->
-                                                <input type="checkbox" ng-model="rec.client.action.action_type" ng-change="
-                                                rec.client.action.client_id = rec.client.id;
-                                                actionSave();" ng-true-value="75"/> Called
-                                                <!-- Spoken Checkbox -->
-                                                <input type="checkbox" ng-model="rec.client.action.action_type" ng-change="
-                                                rec.client.action.client_id = rec.client.id;
-                                                actionSave();" ng-true-value="76"/> Spoken
+                                            <div class="note-flex">
+                                                <!-- <div class="col-md-6 col-12 ">
+                                                    <div class="flex-center text-center">
+                                                        <label class="switch">
+                                                            <input ng-model="rec.client.action.action_type" ng-change="
+                                                                rec.client.action.client_id = rec.client.id;
+                                                                actionSave();" ng-true-value="75" name="invoice" id="finance-client3"
+                                                                type="checkbox" />
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                        <label for="finance-client3">
+                                                            <?= __('called') ?>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-12 ">
+                                                    <div class="flex-center text-center">
+                                                        <label class="switch">
+                                                            <input ng-model="rec.client.action.action_type" ng-change="
+                                                                rec.client.action.client_id = rec.client.id;
+                                                                actionSave();" ng-true-value="76" name="invoice" id="finance-client4"
+                                                                type="checkbox" />
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                        <label for="finance-client3">
+                                                            <?= __('spoken') ?>
+                                                        </label>
+                                                    </div>
+                                                </div> -->
+
+                                                <div class="note-flex">
+                                                    <div class="row">
+                                                        <div class="col-6 ">
+                                                            <div class="flex-center text-center">
+                                                                <label class="switch">
+                                                                    <input ng-model="rec.client.action.action_type"
+                                                                        ng-change="checkDate(rec.client.actions[rec.client.actions.length - 1].stat_created);
+                                                                        rec.client.action.client_id = rec.client.id;
+                                                                        actionSave();" ng-true-value="75"
+                                                                        name="invoice" id="finance-client3"
+                                                                        type="checkbox"
+                                                                        ng-disabled="isDisabled(rec.client.actions[rec.client.actions.length - 1].stat_created)" />
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                                <label for="finance-client3">
+                                                                    <?= __('called') ?>
+
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6 ">
+                                                            <div class="flex-center text-center">
+                                                                <label class="switch">
+                                                                    <input ng-model="rec.client.action.action_type"
+                                                                        ng-change="checkDate(rec.client.actions[rec.client.actions.length - 1].stat_created);
+                                                                        rec.client.action.client_id = rec.client.id;
+                                                                        actionSave();" ng-true-value="76"
+                                                                        name="invoice" id="finance-client3"
+                                                                        type="checkbox"
+                                                                        ng-disabled="isDisabled(rec.client.actions[rec.client.actions.length - 1].stat_created)" />
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                                <label for="finance-client3">
+                                                                    <?= __('spoken') ?>
+
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
                                             </div>
+
+                                            <!-- <div class="d-flex align-items-center justify-content-center">
+
+                                                <input type="checkbox" ng-model="rec.client.action.action_type"
+                                                    ng-change="
+                                                rec.client.action.client_id = rec.client.id;
+                                                actionSave();" ng-true-value="75" />
+                                                <?= __('called') ?>
+                                                <input type="checkbox" ng-model="rec.client.action.action_type"
+                                                    ng-change="
+                                                rec.client.action.client_id = rec.client.id;
+                                                actionSave();" ng-true-value="76" />
+                                                <?= __('spoken') ?>
+                                            </div> -->
                                         </div>
-                                        
-                                 
+
+
 
                                     </div>
                                 </div>
@@ -652,7 +754,7 @@
                             <div class="accordion-body">
                                 <div class="noData" ng-if="rec.client.enquires == ''  ">
 
-                                     <?= __('no_data') ?>
+                                    <?= __('no_data') ?>
 
                                 </div>
                                 <div class="white-box mt-2" ng-repeat="enq in rec.client.enquires track by $index">
@@ -760,7 +862,7 @@
                                         <div class="title"></div>
                                         <div class="flex-gap-10">
 
-                                        <?php if (!in_array($authUser['user_role'], ['cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                            <?php if (!in_array($authUser['user_role'], ['cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                                 <button class="btn btn-modal" id="modalBtn" ng-click="setZIndex();
                                                 updateModalElement('Assign');
                                                 newEntity('book'); 
@@ -769,12 +871,12 @@
                                                     <i class="fas-plus"></i>
                                                     <?= __('add_assign') ?>
                                                 </button>
-                                        <?php } ?>
-                                            
+                                            <?php } ?>
+
 
                                             <!-- <button id="modalBtn" ng-if="rec.client.client_current_stage == 2"
                                                 class="btn btn-modal"
-                                                ng-click="doGet('/admin/usersale?sale_id=' + rec.client.id, 'rec', 'user_sale');
+                                                ng-click="doGet('/admin/usersale?sale_id=' + rec.client.id, 'rec', 'user_client');
                                                             openModal('#subModal'); inlineElement('#elementsContainer', 1, 'assign')">
                                                 <i class="fas-plus"></i>
                                                 <?= __('cc_assign') ?>
@@ -782,7 +884,7 @@
 
                                             <button id="modalBtn" ng-if="rec.client.client_current_stage == 4"
                                                 class="btn btn-modal"
-                                                ng-click="doGet('/admin/usersale?sale_id=' + rec.client.id, 'rec', 'user_sale');
+                                                ng-click="doGet('/admin/usersale?sale_id=' + rec.client.id, 'rec', 'user_client');
                                                             openModal('#subModal'); inlineElement('#elementsContainer', 1, 'assign')">
                                                 <i class="fas-plus"></i>
                                                 <?= __('field_assign') ?>
@@ -790,13 +892,13 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="noData" ng-if="rec.client.user_sale == ''">
+                                        <div class="noData" ng-if="rec.client.user_client == ''">
 
-                                        <?= __('no_data') ?>
+                                            <?= __('no_data') ?>
 
                                         </div>
                                         <div class="white-box mb-3"
-                                            ng-repeat="assign in rec.client.user_sale track by $index">
+                                            ng-repeat="assign in rec.client.user_client track by $index">
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="row">
@@ -841,70 +943,64 @@
                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#client1-collapseNote" aria-expanded="true"
                                 aria-controls="client1-collapseNote">
-                                <span class="title">Empahty Mapping and Notes</span>
+                                <span class="title">
+                                    <?= __('notes') ?>
+                                </span>
                             </button>
                         </h2>
 
-                        
+
                         <div id="client1-collapseNote" class="accordion-collapse collapse ">
                             <div class="accordion-body">
                                 <?php
                                 // <!-- Empahty Section -->
                                 ?>
-                                <div class="heading">
+                                <!-- <div class="heading">
                                     <div class="title">Empathy Mapping</div>
                                     <div class="flex-gap-10">
-                                        <!-- <button class="btn btn-modal" id="modalBtn">
-                                            <div class="d-flex justify-content-between" ng-if="rec.client.reports"
-                                                >
-                                                <i class="fas-plus"></i>Add /
-                                                <i class="fa fa-pencil"></i><?= __('edit') ?>
-                                            </div>
-                                                
-                                        </button> -->
+                                        
                                         <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                                            <button id="modalBtn" class="btn btn-modal"
-                                                                ng-click="
+                                            <button id="modalBtn" class="btn btn-modal" ng-click="
                                                     setZIndex();
                                                     updateModalElement('Empathy Mapping');
                                                     doGet('/admin/reports?report_type=empathy&tar_id=' + rec.client.id, 'rec', 'report'); 
                                                     openModal('#subModal'); 
                                                     inlineElement('#elementsContainer', 1, 'empathy')">
-                                                                <span style="display: flex;">
-                                                                    <i class="fas-plus"></i>Add
-                                                                </span>/
-                                                                <span style="display: flex;width: max-content;">
-                                                                    <i class="fa fa-pencil" style="margin: 3px;"></i>
-                                                                    <?= __('edit_empathy') ?>
-                                                                </span>
-                                                            </button>
+                                                <span style="display: flex;">
+                                                    <i class="fas-plus"></i>Add
+                                                </span>/
+                                                <span style="display: flex;width: max-content;">
+                                                    <i class="fa fa-pencil" style="margin: 3px;"></i>
+                                                    <?= __('edit_empathy') ?>
+                                                </span>
+                                            </button>
                                         <?php } ?>
-                                        
+
                                     </div>
-                                    <!-- {{rec.report.empathy[3].report_type}} -->
+                                    
                                 </div>
-                                
+
                                 <div class="white-box">
                                     <div class="row">
-                                        
+
                                         <div class="col-md-6 col-12 col-lg-3"
                                             ng-repeat="report in rec.client.reports track by $index"
                                             ng-if="(report.report_type == '201' || report.report_type == '202' || report.report_type == '203' || report.report_type == '204')">
-                                            <!-- Eğer report boşsa -->
+                                            
                                             <div ng-if="!report.report_text">
-                                            <?= __('no_data') ?>
+                                                <?= __('no_data') ?>
                                             </div>
                                             <span class="sm-txt">
                                                 {{report.type_category.category_name}}
                                             </span>
-                                            <!-- Eğer report doluysa -->
+                                            
                                             <div ng-if="report.report_text">
                                                 <div class="wb-ele-empahty">{{ report.report_text }}</div>
                                             </div>
                                         </div>
 
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <?php
                                 // <!-- Report Notes Section -->
@@ -912,24 +1008,24 @@
                                 <div class="heading">
                                     <div class="title">Notes</div>
                                     <div class="flex-gap-10">
-                                    <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                                            <button class="btn btn-modal" ng-click="
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                            <button class="btn btn-modal" ng-click="
                                             newEntity('report');
                                             setZIndex();
                                             updateModalElement('Notes');
                                             openModal('#subModal');
                                             inlineElement('#elementsContainer', 1, 'notes');">
-                                                            <i class="fas-plus"></i>
-                                                            <?= __('add_notes') ?>
-                                                        </button>
+                                                <i class="fas-plus"></i>
+                                                <?= __('add_notes') ?>
+                                            </button>
                                         <?php } ?>
-                                        
+
                                     </div>
                                 </div>
 
                                 <div class="noData" ng-if="rec.client.reports == ''  ">
 
-                                <?= __('no_data') ?>
+                                    <?= __('no_data') ?>
 
                                 </div>
                                 <div ng-repeat="clsale in rec.client.reports track by $index">
@@ -946,7 +1042,7 @@
                                             </div>
 
 
-                                            <div class="col-lg-8 text truncate">
+                                            <div class="col-lg-8 text p-2">
                                                 <p>
                                                     {{ clsale.report_text }}
                                                 </p>
@@ -955,33 +1051,34 @@
 
                                             <div class="flex-center flex-gap-10">
                                                 <b> {{ clsale.stat_created.split(' ')[1] }} </b>
-                                                <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                                        <div class="dropdown">
-                                                            <button class="btn" type="button" data-bs-toggle="dropdown"
-                                                                aria-expanded="false">
-                                                                <i class="fas-ellipsis"></i>
-                                                            </button>
-                                                            <ul class="dropdown-menu">
-                                                                <li id="delete_preloader">
-                                                                    <a class="dropdown-item delete-btn"
-                                                                        ng-click="doDelete('/admin/reports/delete/' + clsale.id);
+                                                <!-- <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                                    <div class="dropdown">
+                                                        <button class="btn" type="button" data-bs-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                            <i class="fas-ellipsis"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li id="delete_preloader">
+                                                                <a class="dropdown-item delete-btn"
+                                                                    ng-click="doDelete('/admin/reports/delete/' + clsale.id);
                                                                     doSave(rec.report, 'report', 'reports', '#client_btn', '#report_preloader');"
-                                                                        href="#">Delete</a>
-                                                                </li>
-                                                                <li id="delete_preloader">
-                                                                    <a class="dropdown-item delete-btn" ng-click="
+                                                                    href="#">Delete</a>
+                                                            </li>
+                                                            <li id="delete_preloader">
+                                                                <a class="dropdown-item delete-btn" ng-click="
                                                                     updateModalElement('Notes');
                                                                     openModal('#subModal'); 
                                                                     doGet('/admin/reports?id=' + clsale.id, 'rec', 'report');
-                                                                    inlineElement('#elementsContainer', 1, 'notes');" href="#">
-                                                                        <?= __('edit') ?>
-                                                                    </a>
-                                                                </li>
+                                                                    inlineElement('#elementsContainer', 1, 'notes');"
+                                                                    href="#">
+                                                                    <?= __('edit') ?>
+                                                                </a>
+                                                            </li>
 
-                                                            </ul>
-                                                        </div>
-                                                <?php } ?>
-                                                
+                                                        </ul>
+                                                    </div>
+                                                <?php } ?> -->
+
 
                                             </div>
                                         </div>
@@ -1012,16 +1109,16 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                    <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                                            <button class="btn btn-modal" ng-click="setZIndex();
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                            <button class="btn btn-modal" ng-click="setZIndex();
                                             newEntity('reminder'); 
                                             openModal('#subModal'); 
                                             inlineElement('#elementsContainer', 1, 'reminders')">
-                                                            <i class="fas-plus"></i>
-                                                            <?= __('add_reminder') ?>
-                                                        </button>
+                                                <i class="fas-plus"></i>
+                                                <?= __('add_reminder') ?>
+                                            </button>
                                         <?php } ?>
-                                        
+
                                     </div>
                                 </div>
                                 <?php
@@ -1029,7 +1126,7 @@
                                 ?>
                                 <div class="noData" ng-if="rec.client.reminders == ''  ">
 
-                                <?= __('no_data') ?>
+                                    <?= __('no_data') ?>
 
                                 </div>
                                 <div ng-repeat="clrem in rec.client.reminders track by $index">
@@ -1052,7 +1149,7 @@
 
                                             <div class="col">
                                                 <span class="sm-txt">
-                                                    <?= __('Next Call Date') ?>
+                                                    <?= __('next_call_date') ?>
                                                 </span>
                                                 <div class="wb-ele">
                                                     <?= $this->Html->image(
@@ -1074,7 +1171,7 @@
 
                                             <div class="col">
                                                 <span class="sm-txt">
-                                                    <?= __('Next Call Date') ?>
+                                                    <?= __('next_call_time') ?>
                                                 </span>
                                                 <div class="wb-ele">
                                                     <?= $this->Html->image('/img/clock_regular.svg', ['' => '']) ?>
@@ -1119,22 +1216,22 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                    <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                                            <button class="btn btn-modal" ng-click="
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                            <button class="btn btn-modal" ng-click="
                                             setZIndex();
                                             newEntity('offer'); 
                                             openModal('#subModal'); 
                                             inlineElement('#elementsContainer', 1, 'offers')">
-                                                            <i class="fas-plus"></i>
-                                                            <?= __('add_offer') ?>
-                                                        </button>
+                                                <i class="fas-plus"></i>
+                                                <?= __('add_offer') ?>
+                                            </button>
                                         <?php } ?>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="noData" ng-if="rec.client.offers == ''">
 
-                                <?= __('no_data') ?>
+                                    <?= __('no_data') ?>
 
                                 </div>
                                 <div class="white-box mb-2" ng-repeat="itm in rec.client.offers track by $index">
@@ -1192,13 +1289,13 @@
                                 <div class="heading" ng-if="!rec.client.book">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                    <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                                            <button class="btn btn-modal" id="modalBtn"
-                                                            ng-click="setZIndex();newEntity('book'); openModal('#subModal'); inlineElement('#elementsContainer', 1, 'booking')">
-                                                            <i class="fas-plus"></i> Add
-                                                        </button>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                            <button class="btn btn-modal" id="modalBtn"
+                                                ng-click="setZIndex();newEntity('book'); openModal('#subModal'); inlineElement('#elementsContainer', 1, 'booking')">
+                                                <i class="fas-plus"></i> Add
+                                            </button>
                                         <?php } ?>
-                                        
+
 
                                     </div>
                                 </div>
@@ -1206,22 +1303,22 @@
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
                                         <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                                            <button class="btn btn-modal" id="modalBtn"
-                                                            ng-click="
+                                            <button class="btn btn-modal" id="modalBtn"
+                                                ng-click="
                                             setZIndex();
                                             doGet('/admin/books?id=' +rec.client.book.id, 'rec', 'book'); openModal('#subModal'); inlineElement('#elementsContainer', 1, 'booking')">
 
-                                                            <i class="fa fa-pencil"></i>
-                                                            <?= __('edit_book') ?>
-                                                        </button>
+                                                <i class="fa fa-pencil"></i>
+                                                <?= __('edit_book') ?>
+                                            </button>
                                         <?php } ?>
-                                        
+
 
                                     </div>
                                 </div>
                                 <div class="noData" ng-if="!rec.client.book">
 
-                                <?= __('no_data') ?>
+                                    <?= __('no_data') ?>
 
                                 </div>
                                 <div class="white-box" ng-if="rec.client.book">
@@ -1236,6 +1333,18 @@
 
                                             </div>
                                         </div>
+
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt">
+                                                <?= __('booking_departuredate') ?>
+                                            </span>
+                                            <div class="wb-ele">
+                                                <?= $this->Html->image('/img/datepicker.png', ['' => '']) ?>
+                                                {{ rec.client.book.book_departuredate.split(' ')[0] }}
+
+                                            </div>
+                                        </div>
+
                                         <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt">
                                                 <?= __('booking_time') ?>
@@ -1301,7 +1410,7 @@
                         </div>
                     </div>
 
-                   
+
                     <?php
                     // <!-- Deals Section -->
                     ?>
@@ -1320,22 +1429,22 @@
                                 <div class="heading ">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                    <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                                            <button class="btn btn-modal" id="modalBtn" ng-click="
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale', 'cc']) || isset($authUser['user_original_role'])) { ?>
+                                            <button class="btn btn-modal" id="modalBtn" ng-click="
                                         setZIndex();
                                         newEntity('reservation');
                                         openModal('#subModal'); 
                                         inlineElement('#elementsContainer', 1, 'reservation')">
-                                                            <i class="fas-plus"></i>
-                                                            <?= __('add_deal') ?>
-                                                        </button>
+                                                <i class="fas-plus"></i>
+                                                <?= __('add_deal') ?>
+                                            </button>
                                         <?php } ?>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="noData" ng-if="rec.client.reservations == ''">
 
-                                <?= __('no_data') ?>
+                                    <?= __('no_data') ?>
 
                                 </div>
                                 <div>
@@ -1344,18 +1453,18 @@
                                         <div class="heading">
                                             <div class="title"></div>
                                             <div class="flex-gap-10">
-                                            <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                                                <button class="btn btn-modal" id="modalBtn btn-Booking" ng-click="
+                                                <?php if (!in_array($authUser['user_role'], ['cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                                    <button class="btn btn-modal" id="modalBtn btn-Booking" ng-click="
                                                     setZIndex();
                                                     doGet('/admin/reservations?id='+deals.id, 'rec', 'reservation');
                                                     openModal('#subModal'); 
                                                     inlineElement('#elementsContainer', 1, 'reservation')">
-                                                                        <i class="fas-plus"></i>
-                                                                        <?= __('edit_deal') ?>
-                                                                    </button>
-                                                                </div>
+                                                        <i class="fas-plus"></i>
+                                                        <?= __('edit_deal') ?>
+                                                    </button>
+                                                </div>
                                             <?php } ?>
-                                                
+
                                         </div>
 
 
@@ -1379,7 +1488,7 @@
                                                     </div>
                                                 </div>
 
-                                                
+
 
                                                 <div class="col-md-6 col-12 col-lg-3">
                                                     <span class="sm-txt">
@@ -1406,7 +1515,7 @@
                                                         class="wb-ele form-control" placeholder="% Please specify">
                                                         {{nFormat( deals.reservation_usdprice
                                                         ,DtSetter('currencies_icons','$'))}}
-                                                        
+
                                                         <!-- --{{deals.reservation_currency}}--
                                                 --{{deals.reservation_price}}-- -->
                                                         <!-- {{DtSetter('currencies_icons', 2)}}
@@ -1422,7 +1531,7 @@
                                                     <div class="wb-ele form-control">
                                                         {{deals.payment.category_name}}</div>
                                                 </div>
-                                                
+
                                                 <div class="col-md-6 col-12 col-lg-3">
                                                     <span class="sm-txt"> Down Payment </span>
                                                     <div class="wb-ele">
@@ -1448,7 +1557,7 @@
                                                     <div class="wb-ele">
                                                         {{nFormat( deals.reservation_comission
                                                         ,DtSetter('currencies_icons',deals.reservation_currency))}}
-                                                        
+
                                                     </div>
                                                 </div>
 
@@ -1456,11 +1565,12 @@
                                                     <span class="sm-txt">
                                                         <?= __('usdcommission') ?>
                                                     </span>
-                                                    <div type="text" 
-                                                        class="wb-ele form-control" placeholder="Please specify">
+                                                    <div type="text" class="wb-ele form-control"
+                                                        placeholder="Please specify">
 
-                                                        {{nFormat( deals.reservation_usdcomission,DtSetter('currencies_icons','$'))}}
-                                                       </div>
+                                                        {{nFormat(
+                                                        deals.reservation_usdcomission,DtSetter('currencies_icons','$'))}}
+                                                    </div>
                                                 </div>
 
                                                 <div class="col-md-6 col-12 col-lg-3">
@@ -1479,15 +1589,15 @@
                                                         <?= __('property_id') ?>
                                                     </span>
                                                     <div class="wb-ele">
-                                                       {{deals.property.property_ref}}
+                                                        {{deals.property.property_ref}}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-6 col-12 col-lg-3">
                                                     <span class="sm-txt">
-                                                    <?= __('clientspec_propertytype') ?>
+                                                        <?= __('clientspec_propertytype') ?>
                                                     </span>
-                                                    
+
                                                     <div class="wb-ele">
                                                         {{deals.pmscategory.category_name}}
                                                     </div>
@@ -1497,7 +1607,7 @@
                                                     <span class="sm-txt">
                                                         <?= __('project_id') ?>
                                                     </span>
-                                                    
+
                                                     <div class="wb-ele">
                                                         {{deals.project.project_ref}}
                                                     </div>
@@ -1507,7 +1617,7 @@
                                                     <span class="sm-txt">
                                                         <?= __('seller_name') ?>
                                                     </span>
-                                                    
+
                                                     <div class="wb-ele">
                                                         {{deals.seller.seller_name}}
                                                     </div>
@@ -1517,7 +1627,7 @@
                                                     <span class="sm-txt">
                                                         <?= __('sold_from') ?>
                                                     </span>
-                                                    
+
                                                     <div class="wb-ele">
                                                         {{deals.Property.seller_name}}
                                                     </div>
@@ -1527,7 +1637,7 @@
                                                     <span class="sm-txt">
                                                         <?= __('dev_name') ?>
                                                     </span>
-                                                    
+
                                                     <div class="wb-ele">
                                                         {{deals.developer.dev_name}}
                                                     </div>
@@ -1556,7 +1666,80 @@
                                                         3, deals.rec_state)
                                                         }}</div>
                                                 </div>
-                                                
+
+
+                                                <div class="col-md-6 col-12 col-lg-3"
+                                                    ng-if="deals.reservation_isinvoice_sent == 1">
+                                                    <span class="sm-txt">
+                                                        <?= __('is_invoice_sent') ?>
+                                                    </span>
+
+                                                    <div class="wb-ele">
+                                                        <i class="fa fa-check-circle-o greenText"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6 col-12 col-lg-3"
+                                                    ng-if="deals.reservation_isinvoice_sent == 0 || deals.reservation_isinvoice_sent == null">
+                                                    <span class="sm-txt">
+                                                        <?= __('is_invoice_sent') ?>
+                                                    </span>
+
+                                                    <div class="wb-ele">
+                                                        <i class="fa fa-check-circle-o redText"></i>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="col-md-6 col-12 col-lg-3"
+                                                    ng-if="deals.is_commision_collacted == 1">
+                                                    <span class="sm-txt">
+                                                        <?= __('is_commision_collacted') ?>
+                                                    </span>
+
+                                                    <div class="wb-ele">
+                                                        <i class="fa fa-check-circle-o greenText"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6 col-12 col-lg-3"
+                                                    ng-if="deals.is_commision_collacted == 0 || deals.is_commision_collacted == null">
+                                                    <span class="sm-txt">
+                                                        <?= __('is_commision_collacted') ?>
+                                                    </span>
+
+                                                    <div class="wb-ele">
+                                                        <i class="fa fa-check-circle-o redText"></i>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                                <div class="col-md-6 col-12 col-lg-3"
+                                                    ng-if="deals.downpayment_paid == 1">
+                                                    <span class="sm-txt">
+                                                        <?= __('downpayment_paid') ?>
+                                                    </span>
+
+                                                    <div class="wb-ele">
+                                                        <i class="fa fa-check-circle-o greenText"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6 col-12 col-lg-3"
+                                                    ng-if="deals.downpayment_paid == 0 || deals.downpayment_paid == null">
+                                                    <span class="sm-txt">
+                                                        <?= __('downpayment_paid') ?>
+                                                    </span>
+
+                                                    <div class="wb-ele">
+                                                        <i class="fa fa-check-circle-o redText"></i>
+                                                    </div>
+                                                </div>
+
+
 
                                                 <!-- {{deals.reservation_isinvoice_sent}}
                                         <div class="pl-5 col-md-1 col-8">

@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 class CategoriesController extends AppController
 {
 
     public function index($_pid = null)
     {
-       
+
         if (is_numeric($_pid) && $_pid > 0) {
             $conditions['Categories.parent_id'] = $_pid;
         }
@@ -19,7 +20,7 @@ class CategoriesController extends AppController
         $_keyword = isset($_GET['keyword']) ? $_GET['keyword'] : false;
         $_parent = isset($_GET['parent']) ? $_GET['parent'] : false;
 
-        
+
         // TAGS search result for tags
         if (!empty($_tags)) {
             $tagsCondition = [
@@ -37,10 +38,10 @@ class CategoriesController extends AppController
         }
 
         if ($this->request->is('post')) {
-           
+
             $this->autoRender = false;
 
-        
+
             $dt = json_decode(file_get_contents('php://input'), true);
 
             $_method = !empty($_GET['method']) ? $_GET['method'] : '';
@@ -67,7 +68,7 @@ class CategoriesController extends AppController
 
             $conditions = [];
 
-            
+
             if (strlen($_k . '') > 0) {
                 if ($_method == 'like') {
                     $conditions[$_col . ' LIKE '] = '%' . $_k . '%';
@@ -79,17 +80,16 @@ class CategoriesController extends AppController
             // $_pid'yi önceden kontrol et
             if (is_numeric($_pid) && $_pid > 0) {
                 $conditions['Categories.parent_id'] = $_pid;
-            }
-            elseif (is_numeric($_pid) && ($_pid = 0 || $_pid = ' ')) {
+            } elseif (is_numeric($_pid) && ($_pid = 0 || $_pid = ' ')) {
                 $conditions['Categories.parent_id'] = 0;
             }
-            
+
 
             // //Search
             if (!empty($dt['search'])) {
                 foreach ($dt['search'] as $col => $val) {
                     if (empty($val)) {
-                        continue; 
+                        continue;
                     }
 
                     if (in_array($col, $noneSearchable)) {
@@ -142,13 +142,13 @@ class CategoriesController extends AppController
         }
 
 
-        
+
 
     }
 
 
 
-    public function save($id = -1) 
+    public function save($id = -1)
     {
         $dt = json_decode(file_get_contents('php://input'), true);
         $this->autoRender = false;
@@ -159,7 +159,7 @@ class CategoriesController extends AppController
 
             $rec = $this->Categories->patchEntity($rec, $dt);
         }
-    
+
         // Add mode
         if ($this->request->is(['post'])) {
             $dt['id'] = null;
@@ -168,75 +168,77 @@ class CategoriesController extends AppController
 
             $rec = $this->Categories->newEntity($dt);
         }
-    
+
         if ($this->request->is(['post', 'patch', 'put'])) {
-            
-            
+            if (isset($dt['user_id'])) {
+                if ($newRec = $this->Categories->save($rec)) {
+
+                    $assignTable = TableRegistry::getTableLocator()->get('UserClient');
+                    $clientTable = TableRegistry::getTableLocator()->get('Clients');
+
+                    $userId = $dt['user_id'];
+
+                    $userclientIds = $assignTable
+                        ->find('list', [
+                            'keyField' => 'id',
+                            'valueField' => 'id'
+                        ])
+                        ->where(['user_id' => $userId])
+                        ->toArray();
+
+                    $clientIds = $clientTable->UserClient
+                        ->find('list', [
+                            'keyField' => 'id',
+                            'valueField' => 'id'
+                        ])
+                        ->select(['client_id', 'user_id'])
+                        ->where(['user_id' => $userId])
+                        ->toArray();
+dd($clientIds);
+
+                    $otherUserIds = $assignTable
+                        ->find()
+                        ->where([
+                            'client_id IN' => $clientIds,
+                            'user_id IS NOT' => $userId
+                        ])
+                        ->toArray();
+
+                    if (empty($otherUserIds)) {
+                        $savingTest = $assignTable->Clients
+                            ->saveAll(
+                                ['pool_id' => $newRec->id],
+                                ['id IN' => $clientIds]
+                            );
+                    }
+
+                    $deleteResult = $assignTable
+                        ->deleteAll(['user_id' => $userId]);
+
+                    if ($deleteResult) {
+                        echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
+                        die();
+                    } else {
+                        echo json_encode(["status" => "FAIL", "data" => "Error deleting UserClient records."]);
+                        die();
+                    }
+
+                }
+            }
+
+
+
+
+
             if ($newRec = $this->Categories->save($rec)) {
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
                 die();
             }
-    
+
             echo json_encode(["status" => "FAIL", "data" => $rec->getErrors()]);
             die();
         }
     }
-    
-    // public function save($id = -1)
-    // {
-    //     $this->request->allowMethod(['post', 'put', 'patch']);
-
-    //     $this->autoRender = false;
-    //     $dt = json_decode(file_get_contents('php://input'), true);
-
-    //     if ($this->request->is(['patch', 'put'])) {
-    //         $rec = $this->Categories->get($dt['id']);
-    //         // dd($rec);
-    //     }
-
-    //     if ($this->request->is(['post'])) {
-    //         $rec = $this->Categories->newEmptyEntity();
-    //         $dt['id'] = null;
-
-    //         // dd($ظrec);
-    //     }
-
-
-    //     $dt['category_configs'] = json_encode(!empty($dt['category_configs']) ? $dt['category_configs'] : ['icon' => '', 'isProtected' => '']);
-
-    //     $rec = $this->Categories->patchEntity($rec, $dt);
-
-    //     if ($newRec = $this->Categories->save($rec)) {
-    //         echo json_encode(["status" => "SUCCESS", "data" => $newRec]);
-    //         die();
-    //     }
-    //     echo json_encode(["status" => "FAIL", "data" => $rec->getErrors()]);
-    //     die();
-    // }
-
-
-    // public function delete($id = null)
-    // {
-    //     if(!$id){
-    //         echo json_encode( ["status"=>"FAIL", "msg"=>__("is-selected-empty-msg"), "data"=>[]] ); die();
-    //     }
-    //     $this->request->allowMethod(['post', 'delete']);
-    //     $this->autoRender  = false;
-
-    //     if(!$this->_isAuthorized(true)){
-    //         echo json_encode( ["status"=>"FAIL", "msg"=>__("no-auth"), "data"=>[]] ); die();
-    //     }
-    //     $delRec = $this->Categories->deleteAll(['id IN ' => explode(",", $id)]);
-
-    //     if ($delRec) {
-    //         $res = ["status"=>"SUCCESS", "data"=>$delRec];
-    //     }else{
-    //         $res = ["status"=>"FAIL", "data"=>$delRec->getErrors()];
-    //     }
-    //     echo json_encode($res);die();
-
-    //     return $this->redirect(['action' => 'index']);
-    // }
 
 
     public function delete($id = null)

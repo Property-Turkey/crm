@@ -141,6 +141,7 @@ doGet('/admin/users/index?list=1', 'list', 'users');
                                             <i class="fa fa-pencil"></i>
                                             <?= __('edit_user') ?>
                                         </button>
+                                        
                                         </div>
                                     </div>
 

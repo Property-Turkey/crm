@@ -160,7 +160,7 @@ class UsersController extends AppController
 
     // }
 
-    public function kbidata()
+    public function performancedata()
 {
     $this->autoRender = false;
 
@@ -240,7 +240,7 @@ class UsersController extends AppController
 }
 
 
-    public function kbi()
+    public function performance()
     {
 
     }

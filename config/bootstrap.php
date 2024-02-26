@@ -278,7 +278,7 @@ Configure::write('statusID', [ 1=>'isNew', 2=>'isCalled', 3=>'isSpoken', 4=>'isM
 Configure::write('currencies', [4=>'GBP', 1=>'EUR', 2=>'USD', 3=>'TRY']);
 Configure::write('currencies_icons', [4=>'£', 1=>'€', 2=>'$', 3=>'₺']);
 Configure::write('stats', [[0=>__("disabled"), 1=>__("enabled"), 2=>__('sold')]]);
-Configure::write('client_priorities', [ 1=>'Insignificant', 2=>'Very Low Significance', 3=>'Low Importance', 4=>'Moderate Importance', 5=>'Moderate Significance', 6=>'Medium-High Importance', 7=>'High Importance', 8=>'Very High Importance',9=>'Vital importance',10=>'Urgent']);
+Configure::write('client_priorities', [ 1=>'Low', 2=>'Normal', 3=>'High Top']);
 Configure::write('report_priorities', [ 1=>'top', 5=>'normal', 10=>'last']);
 Configure::write('client_current_stageSale', [ 1=>'Source', 
 2=>'CC Supervisor', 3=>'CC', 4=>'Field Supervisor', 5=>'Field', 6=>'Accountant', 7=>'Aftersale']);

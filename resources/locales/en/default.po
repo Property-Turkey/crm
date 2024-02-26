@@ -607,124 +607,184 @@ msgstr "This browser is either very old or does not support modern applications.
 
 msgid "clients"
 msgstr "Clients"
+
 msgid "client_name"
 msgstr "Lead Name"
+
 msgid "client_id"
 msgstr "Client Name"
+
 msgid "source_id"
 msgstr "Source"
+
 msgid "category_id"
-msgstr "Category Type"
+msgstr "Segement"
+
 msgid "pool_id"
 msgstr "Pool Type"
+
 msgid "client_current_stage"
-msgstr "Advisor"
+msgstr "Adviser"
+
 msgid "lead_priority"
 msgstr "Priority"
+
 msgid "rec_state"
 msgstr "Status"
+
 msgid "sales_info"
 msgstr "Lead Info"
+
 msgid "action"
 msgstr "Action"
+
 msgid "budget"
 msgstr "Budget"
+
 msgid "client_budget"
 msgstr "Budget"
+
 msgid "report_type"
 msgstr "Report Type"
+
 msgid "status_id"
 msgstr "Situation"
+
 msgid "report_text"
 msgstr "Report Text"
+
 msgid "stat_created"
 msgstr "Created"
+
 msgid "add_notes"
 msgstr "Add Notes"
+
 msgid "save"
 msgstr "Save"
+
 msgid "add_report"
 msgstr "Add Notes"
+
 msgid "edit_book"
 msgstr "Edit Booking"
+
 msgid "view"
 msgstr "View"
+
 msgid "edit"
 msgstr "Edit"
+
 msgid "sales_list"
 msgstr "Sales List"
+
 msgid "add_sale"
 msgstr "Add Sale"
+
 msgid "client_phone"
 msgstr "Lead Phone"
+
 msgid "client_mobile"
 msgstr "Lead Mobile"
+
 msgid "property_id"
 msgstr "Property ID"
+
 msgid "client_email"
 msgstr "Lead Email"
+
 msgid "client_address"
 msgstr "Lead Address"
+
 msgid "client_nationality"
 msgstr "Lead Nationality"
+
 msgid "adrs_country"
 msgstr "Country"
+
 msgid "adrs_city"
 msgstr "City"
+
 msgid "adrs_region"
 msgstr "Region"
+
 msgid "clients_list"
 msgstr "Clients List"
+
 msgid "add_client"
 msgstr "Add Client"
+
 msgid "client_info"
 msgstr "Client Information"
+
 msgid "location_info"
 msgstr "Location Information"
+
 msgid "client_tags"
 msgstr "Lead Tag"
+
 msgid "client_priority"
 msgstr "Lead Priority"
+
 msgid "permissions_list"
 msgstr "Permissions List"
+
 msgid "permission_role"
 msgstr "Permission Role"
+
 msgid "permission_module"
 msgstr "Permission Module"
+
 msgid "permission_c"
 msgstr "Create"
+
 msgid "permission_r"
 msgstr "Read"
+
 msgid "permission_u"
 msgstr "Update"
+
 msgid "permission_d"
 msgstr "Delete"
+
 msgid "categories_list"
 msgstr "Categories"
+
 msgid "category_name"
 msgstr "Category Name"
+
 msgid "language_id"
 msgstr "Language"
+
 msgid "parent_id"
 msgstr "Parent"
+
 msgid "add_child"
 msgstr "Add Child"
+
 msgid "add"
 msgstr "Add"
+
 msgid "view"
 msgstr "View"
+
 msgid "add_category"
 msgstr "Add Category"
+
 msgid "users_list"
 msgstr "Users List"
+
 msgid "user_role"
 msgstr "User Role"
+
 msgid "office"
 msgstr "Office"
+
 msgid "add_user"
 msgstr "Add User"
+
 msgid "view"
 msgstr "View"
+
 msgid "red_star_required_fields"
 msgstr "Red Star Required Fields"
 msgid "configs_list"
@@ -967,7 +1027,7 @@ msgid "sale_byregion"
 msgstr "Sale by Region"
 
 msgid "sale_byclientadvsior"
-msgstr "Sale by Client Advisor"
+msgstr "Sale by Client Adviser"
 
 msgid "sale_byfield"
 msgstr "Sale by Field"
@@ -993,11 +1053,11 @@ msgstr "Commission (USD)"
 msgid "sale_volume"
 msgstr "Sale Volume"
 
-msgid "client_advisor"
-msgstr "Client Advisor"
+msgid "client_adviser"
+msgstr "Client Adviser"
 
-msgid "field_advisor"
-msgstr "Field Advisor"
+msgid "field_adviser"
+msgstr "Field Adviser"
 
 msgid "booked"
 msgstr "Booked"
@@ -1008,3 +1068,96 @@ msgstr "Sale ID"
 msgid "sale_name"
 msgstr "Sale Name"
 
+msgid "pool_name"
+msgstr "Pool Name"
+
+msgid "booking_departuredate"
+msgstr "Client Departure Date"
+
+msgid "is_invoice_sent"
+msgstr "Invoice Sent?"
+
+
+msgid "is_commision_collacted"
+msgstr "Commission Collacted?"
+
+
+msgid "downpayment_paid"
+msgstr "Downpayment Paid?"
+
+msgid "allow_user_access_this_pool"
+msgstr "Allow User to Access This Pool"
+
+msgid "move_user_to_own_pool"
+msgstr "Move User to Own Pool"
+
+msgid "view_allNotes"
+msgstr "View All Notes"
+
+msgid "offers"
+msgstr "Offers"
+
+msgid "next_call_date"
+msgstr "Next Call Date"
+
+msgid "next_call_time"
+msgstr "Next Call Time"
+
+msgid "called"
+msgstr "Called"
+
+msgid "spoken"
+msgstr "Spoken"
+
+msgid "snooze"
+msgstr "Snooze"
+
+msgid "notes_offers"
+msgstr "Notes & Offers"
+
+
+msgid "set_the_status"
+msgstr "Set the status"
+
+
+msgid "set_the_budget"
+msgstr "Set the budget"
+
+
+msgid "set_the_priorty"
+msgstr "Set the priorty"
+
+
+msgid "notes_offers"
+msgstr "Set the status"
+
+
+msgid "deals_properties"
+msgstr "Deals Properties"
+
+msgid "current_call"
+msgstr "Calls made so far today"
+
+msgid "current_spoken"
+msgstr "People spoken to so far today"
+
+msgid "yesterday_call"
+msgstr "Calls Made yesterday"
+
+msgid "yesterday_spoken"
+msgstr "People spoken to yesterday"
+
+msgid "beforeyesterday_call"
+msgstr "Calls made day before"
+
+msgid "beforeyesterday_spoken"
+msgstr "People spoken to day before"
+
+msgid "2xbeforeyesterday_call"
+msgstr "Calls made 2 days ago"
+
+msgid "2xbeforeyesterday_spoken"
+msgstr "People spoken to 2 days ago"
+
+msgid "request_reallocation"
+msgstr "Request Reallocation"

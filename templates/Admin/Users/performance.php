@@ -1,5 +1,5 @@
 <div class="container" ng-init="
-    doGet('/admin/users/kbidata', 'rec', 'kbidata');">
+    doGet('/admin/users/performancedata', 'rec', 'performancedata');">
     <div class="heading ">
         <div class="title" style="font-size: 16px;"></div>
     </div>
@@ -14,8 +14,7 @@
                 <div class="row">
 
                 <div class="col-md-12 mb-3 d-flex">
-                        <div class="white-box-dashboard mb-3 custom-table"
-                            style="overflow-x: auto !important; max-height: 400px;">
+                        <div class="white-box-dashboard mb-3 custom-table">
                             <div class="heading">
                                 <div class="title" style="font-size: 16px;">KBI</div>
                             </div>
@@ -57,7 +56,7 @@
                                 <tbody>
 
                                     <!-- {{rec.kbidata.ccUsers}} -->
-                                    <tr ng-repeat="cc in rec.kbidata.ccUsers">
+                                    <tr ng-repeat="cc in rec.performancedata.ccUsers">
                                         <td>
                                             <div>
                                                 {{$index + 1}}.

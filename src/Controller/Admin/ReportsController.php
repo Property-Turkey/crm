@@ -142,48 +142,48 @@ class ReportsController extends AppController
 
             $this->autoRender = false;
 
-            
-            if (!empty($dt['empathy'])) {
-
-                $empathyData = array_filter($dt['empathy'], function ($empathy) {
-                    return !empty($empathy);
-                });
-                
-                foreach ($empathyData as $k => &$empathy) {
-
-                    if (!empty($empathy['report_text'])) {
-
-                        $empathy['report_type'] = $k;
-
-                        $empathy['tar_tbl'] = 'Clients';
-                        
-                        $empathy['tar_id'] = $dt['tar_id'];
-
-                        $empathy['user_id'] = $this->authUser['id'];
-                        
-                        $empathy['stat_created'] = date('Y-m-d H:i:s');
-                    }
-                    
-                }
-
-
-                // $empathyData = array_values($dt['empathy']);
-
-                $empathyData = array_values($empathyData);
-
-                if ($newRec = $this->Do->adder($empathyData, 'Reports')) {
-                    echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
-                    die();
-                }
-            } else {
-                unset($dt['empathy']);
-                unset($dt['type_category']);
-            }
-
             if ($newRec = $this->Reports->save($rec)) {
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
                 die();
             }
+            // if (!empty($dt['empathy'])) {
+
+            //     $empathyData = array_filter($dt['empathy'], function ($empathy) {
+            //         return !empty($empathy);
+            //     });
+                
+            //     foreach ($empathyData as $k => &$empathy) {
+
+            //         if (!empty($empathy['report_text'])) {
+
+            //             $empathy['report_type'] = $k;
+
+            //             $empathy['tar_tbl'] = 'Clients';
+                        
+            //             $empathy['tar_id'] = $dt['tar_id'];
+
+            //             $empathy['user_id'] = $this->authUser['id'];
+                        
+            //             $empathy['stat_created'] = date('Y-m-d H:i:s');
+            //         }
+                    
+            //     }
+
+
+            //     // $empathyData = array_values($dt['empathy']);
+
+            //     $empathyData = array_values($empathyData);
+
+            //     if ($newRec = $this->Do->adder($empathyData, 'Reports')) {
+            //         echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
+            //         die();
+            //     }
+            // } else {
+            //     unset($dt['empathy']);
+            //     unset($dt['type_category']);
+            // }
+
+            
         }
     }
 
