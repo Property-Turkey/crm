@@ -365,7 +365,7 @@ class ClientsController extends AppController
         // Giriş yapan kullanıcının ID'sini alın
         $userId = $this->Auth->user('id');
 
-        $poolData = TableRegistry::getTableLocator()->get('Userpool');
+        $poolData = TableRegistry::getTableLocator()->get('UserPool');
 
         $poolIds = $poolData->find()
             ->select(['pool_id'])

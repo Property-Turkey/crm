@@ -5,7 +5,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 
-class UserpoolController extends AppController
+class UserPoolController extends AppController
 {
     public function index($_pid = null)
     {
@@ -28,7 +28,7 @@ class UserpoolController extends AppController
             $conditions = [];
 
             if (isset($_pid)) {
-                $conditions['Userpool.source_id'] = $_pid;
+                $conditions['UserPool.source_id'] = $_pid;
             }
             if (strlen($_k.'') > 0) {
                 if ($_method == 'like') {
@@ -39,12 +39,12 @@ class UserpoolController extends AppController
             }
 
             if ($_k !== false) {
-                $_method == 'like' ? $conditions[$_col . ' LIKE '] = '%' . $_k . '%' : $conditions['Userpool.' . $_col] = $_k; 
+                $_method == 'like' ? $conditions[$_col . ' LIKE '] = '%' . $_k . '%' : $conditions['UserPool.' . $_col] = $_k; 
             }
 
             // ONE RECORD
             if (!empty($_id)) {
-                $data = $this->Userpool->get($_id, [
+                $data = $this->UserPool->get($_id, [
                     'contain' => [],
                 ])->toArray();
                 
@@ -54,7 +54,7 @@ class UserpoolController extends AppController
 
             // LIST
             if (!empty($_list)) {
-                $data = $this->paginate($this->Userpool, [
+                $data = $this->paginate($this->UserPool, [
                     "order" => [$_col => $_dir],
                     "conditions" => $conditions,
                     "contain" => [],
@@ -65,7 +65,7 @@ class UserpoolController extends AppController
                 [
                     "status" => "SUCCESS",
                     "data" => $this->Do->convertJson($data),
-                    "paging" => $this->request->getAttribute('paging')['Userpool']
+                    "paging" => $this->request->getAttribute('paging')['UserPool']
                 ],
                 JSON_UNESCAPED_UNICODE
             );
@@ -79,10 +79,10 @@ class UserpoolController extends AppController
         $this->autoRender = false;
         // Edit mode
         if ($this->request->is(['patch', 'put'])) {
-            $rec = $this->Userpool->get($dt['id']);
+            $rec = $this->UserPool->get($dt['id']);
 
             
-            $rec = $this->Userpool->patchEntity($rec, $dt);
+            $rec = $this->UserPool->patchEntity($rec, $dt);
         }
     
         // Add mode
@@ -90,7 +90,7 @@ class UserpoolController extends AppController
             $dt['id'] = null;
             $dt['stat_created'] = date('Y-m-d H:i:s');
             
-            $rec = $this->Userpool->newEntity($dt);
+            $rec = $this->UserPool->newEntity($dt);
             if (isset($dt['pool_id'])) {
                 $rec->pool_id = $dt['pool_id'][0]['value'];
             }
@@ -99,7 +99,7 @@ class UserpoolController extends AppController
         if ($this->request->is(['post', 'patch', 'put'])) {
             
             
-            if ($newRec = $this->Userpool->save($rec)) {
+            if ($newRec = $this->UserPool->save($rec)) {
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
                 die();
             }
@@ -128,7 +128,7 @@ class UserpoolController extends AppController
             die();
         }
 
-        $delRec = $this->Userpool->deleteAll(['id IN ' => explode(",", $id)]);
+        $delRec = $this->UserPool->deleteAll(['id IN ' => explode(",", $id)]);
 
         if ($delRec) {
             $res = ["status" => "SUCCESS", "data" => $delRec];
@@ -157,9 +157,9 @@ class UserpoolController extends AppController
             if (!is_numeric($rec)) {
                 continue;
             }
-            $dt = $this->Userpool->newEmptyEntity();
+            $dt = $this->UserPool->newEmptyEntity();
             $dt["id"] = $rec;
-            if (!$this->Userpool->save($dt)) {
+            if (!$this->UserPool->save($dt)) {
                 $errors[] = $dt->getErrors();
             }
         }
