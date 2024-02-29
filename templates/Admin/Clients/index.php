@@ -627,7 +627,7 @@
                                                         }"></div> {{ itm.id }}
 
                                                 </div>
-                                                <div class="mx-2"
+                                                <div class="mx-2"   type="button"   data-toggle="tooltip" data-placement="top" title="<?= __('set_the_priorty') ?>"
                                                     ng-repeat="notify in rec.notification.clientsWithoutPriorty"
                                                     ng-if="notify.id == itm.id">
                                                     <i class="fa fa-exclamation-circle redColor" aria-hidden="true">
@@ -667,7 +667,7 @@
                                                     <?= __('budget') ?>
                                                 </span>
 
-                                                <div class="mx-2"
+                                                <div class="mx-2"   type="button"  data-toggle="tooltip" data-placement="top" title="<?= __('set_the_budget') ?>"
                                                     ng-repeat="notify in rec.notification.clientsWithoutBudget"
                                                     ng-if="notify.id == itm.id">
                                                     <i class="fa fa-exclamation-circle redColor" aria-hidden="true">
@@ -717,7 +717,7 @@
                                                 <span class="sm-txt">
                                                     <?= __('rec_state') ?>
                                                 </span>
-                                                <div class="mx-2"
+                                                <div class="mx-2"  type="button" data-toggle="tooltip" data-placement="top" title="<?= __('set_the_status') ?>"
                                                     ng-repeat="notify in rec.notification.clientsWithoutStatus"
                                                     ng-if="notify.id == itm.id">
                                                     <i class="fa fa-exclamation-circle redColor" aria-hidden="true">
