@@ -178,38 +178,29 @@ class CategoriesController extends AppController
 
                     $userId = $dt['user_id'];
 
-                    $userclientIds = $assignTable
-                        ->find('list', [
-                            'keyField' => 'id',
-                            'valueField' => 'id'
-                        ])
-                        ->where(['user_id' => $userId])
-                        ->toArray();
-
                     $clientIds = $clientTable->UserClient
-                        ->find('list', [
-                            'keyField' => 'id',
-                            'valueField' => 'id'
-                        ])
+                        ->find()
                         ->select(['client_id', 'user_id'])
                         ->where(['user_id' => $userId])
                         ->toArray();
-dd($clientIds);
 
-                    $otherUserIds = $assignTable
-                        ->find()
-                        ->where([
-                            'client_id IN' => $clientIds,
-                            'user_id IS NOT' => $userId
-                        ])
-                        ->toArray();
 
-                    if (empty($otherUserIds)) {
-                        $savingTest = $assignTable->Clients
-                            ->saveAll(
-                                ['pool_id' => $newRec->id],
-                                ['id IN' => $clientIds]
-                            );
+                    foreach ($clientIds as $clientId) {
+
+                        $otherUserIds = $assignTable
+                            ->find()
+                            ->where([
+                                'client_id IN' => $clientId->client_id,
+                                'user_id IS NOT' => $userId
+                            ])
+                            ->toArray();
+                        if (empty($otherUserIds)) {
+                            $updateResult = $assignTable->Clients
+                                ->updateAll(
+                                    ['pool_id' => $newRec->id],
+                                    ['id' => $clientId->client_id]
+                                );
+                        }
                     }
 
                     $deleteResult = $assignTable
@@ -222,12 +213,8 @@ dd($clientIds);
                         echo json_encode(["status" => "FAIL", "data" => "Error deleting UserClient records."]);
                         die();
                     }
-
                 }
             }
-
-
-
 
 
             if ($newRec = $this->Categories->save($rec)) {

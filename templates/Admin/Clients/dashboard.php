@@ -1,6 +1,6 @@
 <?php
-$from = !isset($_GET['from']) ? date('Y-m-d', strtotime('first day of this month')) : $_GET['from'];
-$to = !isset($_GET['to']) ? date('Y-m-d') : $_GET['to'];
+$starterDate = !isset($_GET['startDate']) ? date('Y-m-d', strtotime('first day of this month')) : $_GET['startDate'];
+$endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
 ?>
 
 
@@ -86,19 +86,18 @@ $to = !isset($_GET['to']) ? date('Y-m-d') : $_GET['to'];
 
 
             <?php if (in_array($authUser['user_role'], ['cc']) || isset($authUser['user_original_role'])) { ?>
-                <div class="notifications-boxes" >
+                <div class="notifications-boxes">
 
-                    <div class="colored-box badge greenBg" ng-if="rec.notification.newAssignCount != 0" 
+                    <div class="colored-box badge greenBg" ng-if="rec.notification.newAssignCount != 0"
                         onclick="location.href='/en/admin/clients/index';">
-                        <span class="notification-badge"
-                            format-currency="rec.notification.newAssignCount"></span>
+                        <span class="notification-badge" format-currency="rec.notification.newAssignCount"></span>
                         <i class="fa fa-user" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block">Assigns
                         </div>
                     </div>
 
                     <div class="colored-box badge redBg" ng-if="rec.notification.newReminderCount != 0"
-                         onclick="location.href='/en/admin/clients/index';">
+                        onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.newReminderCount"></span>
                         <i class="fa fa-book" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block">Reminders</div>
@@ -111,7 +110,7 @@ $to = !isset($_GET['to']) ? date('Y-m-d') : $_GET['to'];
                 <div class="notifications-boxes">
 
                     <div class="col-1 colored-box badge" ng-if="rec.notification.newClientsCount != 0"
-                         onclick="location.href='/en/admin/clients/index';">
+                        onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.newClientsCount"></span>
                         <i class="fa fa-user" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block">Sold Online
@@ -125,7 +124,7 @@ $to = !isset($_GET['to']) ? date('Y-m-d') : $_GET['to'];
                         <div class="m-1 d-none d-lg-block">Booked</div>
                     </div>
 
-                    <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newSoldCount != 0" 
+                    <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newSoldCount != 0"
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.newSoldCount"></span>
                         <i class="fa fa-check" aria-hidden="true"></i>
@@ -146,31 +145,32 @@ $to = !isset($_GET['to']) ? date('Y-m-d') : $_GET['to'];
                         <div class="m-1 d-none d-lg-block">Down Payment</div>
                     </div>
 
-                    <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newReservedCount != 0" 
+                    <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newReservedCount != 0"
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.newReservedCount"></span>
                         <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block">Reserved</div>
                     </div>
-                    <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newSoldOnlineCount != 0" 
+                    <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newSoldOnlineCount != 0"
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.newSoldOnlineCount"></span>
                         <i class="fa fa-check-circle-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block">Sold Online</div>
                     </div>
-                    <div class="col-1 colored-box badge redBg" ng-if="rec.notification.invoiceSend != 0" 
+                    <div class="col-1 colored-box badge redBg" ng-if="rec.notification.invoiceSend != 0"
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.invoiceSend"></span>
                         <i class="fa fa-check-circle-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block">Invoice Not Sent</div>
                     </div>
 
-                    <div class="col-1 colored-box badge redBg" ng-if="rec.notification.commissionCollacted != 0" 
+                    <div class="col-1 colored-box badge redBg" ng-if="rec.notification.commissionCollacted != 0"
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.commissionCollacted"></span>
                         <i class="fa fa-check-circle-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block">Commission Collacted</div>
                     </div>
+
 
                 </div>
             <?php } ?>
@@ -313,8 +313,8 @@ $to = !isset($_GET['to']) ? date('Y-m-d') : $_GET['to'];
                                 <div ng-repeat="(id, data) in rec.numbers.groupedData"
                                     class="mt-3 d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
-                                        <img ng-src=""
-                                            class="img-fluid rounded-circle" style="width: 70px; height: 70px;" />
+                                        <img ng-src="" class="img-fluid rounded-circle"
+                                            style="width: 70px; height: 70px;" />
                                         <span class="ms-2">
                                             {{ data.count }}<br>
                                             <span style="font-size:12px;">{{ data.adrs_name }}</span>
@@ -386,13 +386,21 @@ $to = !isset($_GET['to']) ? date('Y-m-d') : $_GET['to'];
             <?php } ?>
 
 
-
+            
+            <div class="notifications-boxes">
+                <div class=" colored-box badge redBg" ng-if="rec.notification.recStateOneRecords != 0"
+                >
+                    <span class="notification-badge" format-currency="rec.notification.recStateOneRecords"></span>
+                    <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                    <div class="m-1 d-none d-lg-block">Reallocate Clients</div>
+                </div>
+            </div>
 
             <div class="white-box-dashboard mb-3">
                 <div class="row m-1">
                     <div class="col-4">
-                        <div class="custom-box leads_countBg" >
-                            <i class="fa fa-user icon" aria-hidden="true" ></i>
+                        <div class="custom-box leads_countBg">
+                            <i class="fa fa-user icon" aria-hidden="true"></i>
                         </div>
                         <div class="heading mt-1 dashboard-h">
                             <div class="title-d">
@@ -427,7 +435,7 @@ $to = !isset($_GET['to']) ? date('Y-m-d') : $_GET['to'];
                             </div>
                         </div>
                         <div class="heading my-0 dashboard-h">
-                            <div class="title calls_listFont" >
+                            <div class="title calls_listFont">
                                 {{rec.numbers.reminderCount}}
                             </div>
                         </div>
@@ -444,7 +452,7 @@ $to = !isset($_GET['to']) ? date('Y-m-d') : $_GET['to'];
 
                 <div class="row m-1">
                     <div class="col-7">
-                        <div class="custom-box call_logBg" >
+                        <div class="custom-box call_logBg">
                             <i class="fa fa-phone icon" aria-hidden="true"></i>
                         </div>
                         <div class="heading mt-1 dashboard-h">
@@ -454,7 +462,7 @@ $to = !isset($_GET['to']) ? date('Y-m-d') : $_GET['to'];
                         </div>
                         <div class="heading my-0 dashboard-h">
                             <div class="title call_logFont">
-                                {{rec.numbers.actionCount}} <span >Out of
+                                {{rec.numbers.actionCount}} <span>Out of
                                     {{rec.numbers.AllactionCount}}
                                 </span>
                             </div>
@@ -501,7 +509,7 @@ $to = !isset($_GET['to']) ? date('Y-m-d') : $_GET['to'];
 
                 <div class="row m-1">
                     <div class="col-7">
-                        <div class="custom-box pursebg" >
+                        <div class="custom-box pursebg">
                             <i class="fa fa-check icon pursecolor" aria-hidden="true"></i>
                         </div>
                         <div class="heading mt-1 dashboard-h">
@@ -510,7 +518,7 @@ $to = !isset($_GET['to']) ? date('Y-m-d') : $_GET['to'];
                             </div>
                         </div>
                         <div class="heading my-0 dashboard-h pursecolorFont">
-                            <div class="title" >
+                            <div class="title">
                                 {{rec.numbers.pursueCount}}
                             </div>
                         </div>
@@ -527,5 +535,8 @@ $to = !isset($_GET['to']) ? date('Y-m-d') : $_GET['to'];
 
         </div>
     </div>
+    <?php echo $this->element('Modals/viewReallocate') ?>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.1/chart.min.js"></script>
+
+    

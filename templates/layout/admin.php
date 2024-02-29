@@ -860,9 +860,12 @@
                     $scope.rec.action.action_type = actionType;
 
                     $scope.doSave($scope.rec.action, 'action', 'actions', '#client_btn', '#actions_preloader');
-                    //  alert($scope.rec.client.id)
 
                 };
+
+                
+
+
                 $scope.checkDate = function (statCreated) {
                     var currentDate = new Date();
                     var createdDate = new Date(statCreated);

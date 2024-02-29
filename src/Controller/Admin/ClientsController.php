@@ -360,8 +360,6 @@ class ClientsController extends AppController
 
     }
 
-
-
     public function pool()
     {
         // Giriş yapan kullanıcının ID'sini alın
@@ -398,9 +396,6 @@ class ClientsController extends AppController
         ]);
         die();
     }
-
-
-
 
     public function save($id = -1)
     {
@@ -561,7 +556,7 @@ class ClientsController extends AppController
         extract($this->getClientIdsAndUser());
         $isAdmin = $this->authUser['user_role'] === 'admin.admin' || $this->authUser['user_role'] === 'admin.root';
 
-
+    
 
         if (!$isAdmin) {
 
@@ -592,10 +587,11 @@ class ClientsController extends AppController
                 $clientIds = $filteredClientIds;
             }
 
+            $starterDate = !empty($_GET['startDate']) ? $_GET['startDate'] : '';
+            $endDate = !empty($_GET['endDate']) ? $_GET['endDate'] : '';
 
-
-            $starterDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
-            $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+            // $starterDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
+            // $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
 
             if ($starterDate && $endDate) {
 
@@ -655,8 +651,9 @@ class ClientsController extends AppController
 
 
 
-            $starterDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
-            $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+            $starterDate = !empty($_GET['startDate']) ? $_GET['startDate'] : '';
+            $endDate = !empty($_GET['endDate']) ? $_GET['endDate'] : '';
+
 
             if ($starterDate && $endDate) {
 
@@ -783,8 +780,9 @@ class ClientsController extends AppController
         $this->autoRender = false;
 
 
-        $starterDate = isset($_GET['starterDate']) ? $_GET['starterDate'] : null;
-        $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+        $starterDate = !empty($_GET['startDate']) ? $_GET['startDate'] : '';
+            $endDate = !empty($_GET['endDate']) ? $_GET['endDate'] : '';
+
 
 
 
@@ -2407,8 +2405,9 @@ class ClientsController extends AppController
 
 
 
-            $starterDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
-            $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+            $starterDate = !empty($_GET['startDate']) ? $_GET['startDate'] : '';
+            $endDate = !empty($_GET['endDate']) ? $_GET['endDate'] : '';
+
 
             if ($starterDate && $endDate) {
 
@@ -2469,8 +2468,9 @@ class ClientsController extends AppController
 
 
 
-            $starterDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
-            $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+            $starterDate = !empty($_GET['startDate']) ? $_GET['startDate'] : '';
+            $endDate = !empty($_GET['endDate']) ? $_GET['endDate'] : '';
+
 
             if ($starterDate && $endDate) {
 
@@ -2660,8 +2660,9 @@ class ClientsController extends AppController
 
 
 
-            $starterDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
-            $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+            $starterDate = !empty($_GET['startDate']) ? $_GET['startDate'] : '';
+            $endDate = !empty($_GET['endDate']) ? $_GET['endDate'] : '';
+
 
             if ($starterDate && $endDate) {
 
@@ -2721,8 +2722,9 @@ class ClientsController extends AppController
 
 
 
-            $starterDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
-            $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+            $starterDate = !empty($_GET['startDate']) ? $_GET['startDate'] : '';
+            $endDate = !empty($_GET['endDate']) ? $_GET['endDate'] : '';
+
 
             if ($starterDate && $endDate) {
 
@@ -3001,7 +3003,6 @@ class ClientsController extends AppController
                 ])
                 ->count();
 
-            // Sorguyu oluştur
             $commissionCollacted = $reservationTable
                 ->find()
                 ->where([
@@ -3013,9 +3014,8 @@ class ClientsController extends AppController
 
 
             $previousDateTime = date('Y-m-d H:i:s', strtotime('-24 hours'));
-            ;
+            
 
-            // Clients tablosundaki verileri kontrol et
             $clientsWithoutBudget = $this->Clients->find()
                 ->select(['id', 'client_name'])
                 ->where([
@@ -3032,13 +3032,19 @@ class ClientsController extends AppController
                 ])
                 ->toArray();
 
-                $clientsWithoutStatus = $this->Clients->find()
+            $clientsWithoutStatus = $this->Clients->find()
                 ->select(['id', 'client_name'])
                 ->where([
                     'stat_created <=' => $previousDateTime,
                     'rec_state = 1',
                 ])
                 ->toArray();
+
+            $recStateOneRecords = $assignTable
+                ->find()
+                ->where(['rec_state' => 2])
+                ->count();
+
 
         } else {
             $userSaleTable = TableRegistry::getTableLocator()->get('UserClient');
@@ -3174,6 +3180,13 @@ class ClientsController extends AppController
                 ])
                 ->toArray();
 
+
+            $recStateOneRecords = $userSaleTable
+                ->find()
+                ->where(['rec_state' => 2])
+                ->count();
+
+                
         }
 
         echo json_encode([
@@ -3194,6 +3207,7 @@ class ClientsController extends AppController
                 'clientsWithoutBudget' => $clientsWithoutBudget,
                 'clientsWithoutPriorty' => $clientsWithoutPriorty,
                 'clientsWithoutStatus' => $clientsWithoutStatus,
+                'recStateOneRecords' => $recStateOneRecords,
             ],
         ]);
         die();

@@ -881,10 +881,8 @@
                                                                 <label class="switch">
                                                                     <input ng-model="rec.client.action.action_type"
                                                                         ng-click="doGet('/admin/clients?id=' + itm.id, 'rec', 'client');rec.action.client_id = itm.id;
-                                                                        actionSave(itm.id, 76);"
-                                                                        ng-true-value="76" 
-                                                                        name="invoice"
-                                                                        id="finance-client4" 
+                                                                        actionSave(itm.id, 76);" ng-true-value="76"
+                                                                        name="invoice" id="finance-client4"
                                                                         type="checkbox" />
                                                                     <span class="slider round"></span>
                                                                 </label>
@@ -954,24 +952,21 @@
                                                 <!-- assign.user.user_fullname -->
                                                 <!-- {{itm}} -->
                                             </div>
-                                           
+
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="row">
                                                         <div class="col-12 mb-2">
-                                                            <div class="btn btn-gray mt-1" type="button" ng-click="setZIndex();
-                                                                newEntity('reminder'); 
-                                                                openModal('#subModal'); 
-                                                                doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
-                                                                inlineElement('#elementsContainer', 1, 'reminders')">
+                                                            <div class="btn btn-gray mt-1" type="button" ng-click="
+                                                                rec.user_client.recState = 2;
+                                                                rec.user_client.client_id = itm.id;
+                                                                doSave(rec.user_client, 'user_client', 'userclient', '#client_btn', '#userclient_preloader');
+                                                                doGet('/admin/userclient?client_id=' + itm.id, 'rec', 'client');
+                                                                ">
                                                                 <?= __('request_reallocation') ?>
                                                             </div>
 
                                                         </div>
-                                                       
-
-
-
                                                     </div>
 
                                                 </div>

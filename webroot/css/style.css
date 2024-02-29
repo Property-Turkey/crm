@@ -597,7 +597,7 @@ header .logo img {
     justify-content: start;
 }
 .note-font {
-    font-size: var(--fs_12);
+    font-size: var(--fs_12) !important;
 }
 .form-control {
     border: 1px solid #c7c7c7;

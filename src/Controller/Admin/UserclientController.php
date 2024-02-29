@@ -23,14 +23,14 @@ class UserClientController extends AppController
             $_to = !empty($_GET['to']) ? $_GET['to'] : '';
             $_col = !empty($_GET['col']) ? $_GET['col'] : 'id';
             $_k = (isset($_GET['k']) && strlen($_GET['k']) > 0) ? $_GET['k'] : false;
-            
+
             $data = [];
             $conditions = [];
 
             if (isset($_pid)) {
                 $conditions['UserClient.source_id'] = $_pid;
             }
-            if (strlen($_k.'') > 0) {
+            if (strlen($_k . '') > 0) {
                 if ($_method == 'like') {
                     $conditions[$_col . ' LIKE '] = '%' . $_k . '%';
                 } else {
@@ -39,7 +39,7 @@ class UserClientController extends AppController
             }
 
             if ($_k !== false) {
-                $_method == 'like' ? $conditions[$_col . ' LIKE '] = '%' . $_k . '%' : $conditions['UserClient.' . $_col] = $_k; 
+                $_method == 'like' ? $conditions[$_col . ' LIKE '] = '%' . $_k . '%' : $conditions['UserClient.' . $_col] = $_k;
             }
 
             // ONE RECORD
@@ -47,7 +47,7 @@ class UserClientController extends AppController
                 $data = $this->UserClient->get($_id, [
                     'contain' => [],
                 ])->toArray();
-                
+
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
                 die();
             }
@@ -58,7 +58,7 @@ class UserClientController extends AppController
                     "order" => [$_col => $_dir],
                     "conditions" => $conditions,
                     "contain" => [],
-                ]); 
+                ]);
             }
 
             echo json_encode(
@@ -73,32 +73,47 @@ class UserClientController extends AppController
         }
     }
 
-    public function save($id = -1){
+    public function save($id = -1)
+    {
         $dt = json_decode(file_get_contents('php://input'), true);
+
+
+        if ($this->request->is(['patch', 'put'])) {
+            $rec = $this->UserClient->get($dt['id']);
+
+            debug($dt['user_id']);
         
-        $user_id = $dt['user'][0]['value'];
-        $client_id = $dt['client_id'];
-        $UserClientTable =  $this->getTableLocator()->get('UserClient');
-        $ClientTable = $this->getTableLocator()->get('UserClient')->Clients->get($client_id);
-        
+            $rec = $this->UserClient->patchEntity($rec, $dt);
+        }
+
 
         // add mode
         if ($this->request->is(['post'])) {
             $dt['stat_created'] = date('Y-m-d H:i:s');
             $client_id = $dt['client_id'];
-            // debug($dt['client_id']);
-            // dd($client_id);
-            if($ClientTable->client_current_stage == 2){
-
-                $ClientTable->client_current_stage = 3;
-                $ClientTable->rec_state = 1;
-
-            }elseif($ClientTable->client_current_stage == 4){
+            if (isset($dt['recState'])) {
                 
-                $ClientTable->client_current_stage = 5;
-                $ClientTable->rec_state = 1;
+                $dt['user_id'] = $this->authUser['id'];
+                
+            } else {
+                $user_id = $dt['user'][0]['value'];
+                $UserClientTable = $this->getTableLocator()->get('UserClient');
+                $ClientTable = $this->getTableLocator()->get('UserClient')->Clients->get($client_id);
+                
+                // debug($dt['client_id']);
+                // dd($client_id);
+                if ($ClientTable->client_current_stage == 2) {
+
+                    $ClientTable->client_current_stage = 3;
+                    $ClientTable->rec_state = 1;
+
+                } elseif ($ClientTable->client_current_stage == 4) {
+
+                    $ClientTable->client_current_stage = 5;
+                    $ClientTable->rec_state = 1;
+                }
             }
-        
+
 
             if (!$this->isUserAlreadyAssigned($client_id, $user_id)) {
                 $dt['user_id'] = $user_id;
@@ -117,20 +132,35 @@ class UserClientController extends AppController
                 echo json_encode(["status" => "FAIL", "msg" => "This user is already assigned to this client.", "data" => []]);
                 die();
             }
+
+         
+        }
+
+        if ($this->request->is(['post', 'patch', 'put'])) {
+            $this->autoRender = false;
+            
+
+            if ($newRec = $this->UserClient->save($rec)) {
+                echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
+                die();
+            }
+
+            echo json_encode(["status" => "FAIL", "data" => $rec->getErrors()]);
+            die();
         }
     }
 
     private function isUserAlreadyAssigned($clientId, $userId)
     {
         $UserClientTable = $this->getTableLocator()->get('UserClient');
-        
+
         $existingRecord = $UserClientTable->find('all', [
             'conditions' => [
                 'client_id' => $clientId,
                 'user_id' => $userId,
             ],
         ])->first();
-        
+
         return !empty($existingRecord);
     }
 
