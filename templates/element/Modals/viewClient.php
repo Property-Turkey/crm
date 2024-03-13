@@ -232,9 +232,8 @@
                                                 <?= __('client_tags') ?>
                                             </span>
                                             <div class="wb-ele">
-                                                <span ng-repeat="tag in rec.client.client_tags track by $index">{{$index
-                                                    >
-                                                    0 ? ',' : ''}}{{ tag.text }}</span>
+                                                <span ng-repeat="tag in rec.client.client_tags track by $index">
+                                                {{ tag.text }}{{$index < (rec.client.client_tags.length - 1) ? ',' : '' }}</span>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
@@ -243,8 +242,8 @@
                                             </span>
                                             <div class="wb-ele">
                                                 <span
-                                                    ng-repeat="tag in rec.client.client_specs[0].clientspec_propertytype track by $index">{{$index
-                                                    > 0 ? ',' : ''}}{{ tag.text }}</span>
+                                                    ng-repeat="tag in rec.client.client_specs[0].clientspec_propertytype track by $index">
+                                                    {{ tag.text }}{{$index < (rec.client.client_specs[0].clientspec_propertytype.length - 1) ? ',' : '' }}</span>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
@@ -253,8 +252,8 @@
                                             </span>
                                             <div class="wb-ele">
                                                 <span
-                                                    ng-repeat="tag in rec.client.client_specs[0].clientspec_beds track by $index">{{$index
-                                                    > 0 ? ',' : ''}}{{ tag.text }}
+                                                    ng-repeat="tag in rec.client.client_specs[0].clientspec_beds track by $index">
+                                                    {{ tag.text }}{{$index < (rec.client.client_specs[0].clientspec_beds.length - 1) ? ',' : '' }}
                                                 </span>
                                             </div>
                                         </div>
@@ -288,8 +287,8 @@
                                             </span>
                                             <div class="wb-ele">
                                                 <span
-                                                    ng-repeat="tag in rec.client.client_specs[0].clientspec_loction_target track by $index">{{$index
-                                                    > 0 ? ',' : ''}}{{ tag.text }}</span>
+                                                    ng-repeat="tag in rec.client.client_specs[0].clientspec_loction_target track by $index">
+                                                    {{ tag.text }}{{$index < ( rec.client.client_specs[0].clientspec_loction_target.length - 1) ? ',' : '' }}</span>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
@@ -865,7 +864,8 @@
                                             <?php if (!in_array($authUser['user_role'], ['cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                                 <button class="btn btn-modal" id="modalBtn" ng-click="setZIndex();
                                                 updateModalElement('Assign');
-                                                newEntity('book'); 
+                                                newEntity('newTag');
+                                                tagList = [];
                                                 openModal('#subModal'); 
                                                 inlineElement('#elementsContainer', 1, 'assign')">
                                                     <i class="fas-plus"></i>
@@ -903,9 +903,19 @@
                                                 <div class="col-12">
                                                     <div class="row">
                                                         <div class="col m-1" style="white-space: nowrap;">
+                                                        <div class="note-flex">
                                                             <span class="sm-txt">
                                                                 Advisor
                                                             </span>
+                                                            <i ng-if="assign.rec_state == 2"
+                                                                class="fa fa-exclamation-circle redColor"
+                                                                aria-hidden="true">
+                                                                <small class="note-font">
+                                                                    <?= __('require_reallocation') ?>
+                                                                </small>
+                                                            </i>
+                                                        </div>
+                                                            
                                                             <div class="wb-ele ng-binding">{{assign.user.user_fullname}}
                                                             </div>
                                                         </div>
@@ -1250,7 +1260,6 @@
                                                 <div class="h-line hideMob"></div>
                                                 <label class="switch">
                                                     <span disabled class="slider round" ng-model="itm.isinterested"
-                                                        ng-if="itm.isinterested == 1"
                                                         ng-class="{'green-background': itm.isinterested == 1}">
                                                     </span>
                                                 </label>

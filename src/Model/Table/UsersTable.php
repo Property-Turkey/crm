@@ -26,6 +26,7 @@ class UsersTable extends Table
             'foreignKey' => 'user_id',
         ]);
 
+        
         //today
 
         $this->hasMany('ActionsTodayCalled', [

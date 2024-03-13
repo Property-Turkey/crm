@@ -182,14 +182,15 @@ $urlparse[4] = empty($urlparse[4]) ? '' : $urlparse[4];
                     </a>
 
                     <div class="notifications-dropdown">
-                        <!-- Dropdown içeriği buraya eklenebilir -->
-                        <a ng-if="rec.notification.newClientsCount !=0" href="#">You have new Leads ({{rec.notification.newClientsCount}})</a>
-                        <a ng-if="rec.notification.newBookedCount !=0" href="#">You have new Booked ({{rec.notification.newBookedCount}})</a>
-                        <a ng-if="rec.notification.newSoldCount !=0" href="#">You have new Sold ({{rec.notification.newSoldCount}})</a>
-                        <a ng-if="rec.notification.newCancelledCount !=0" href="#">You have new Cancelled ({{rec.notification.newCancelledCount}})</a>
-                        <a ng-if="rec.notification.newDownPaymentCount !=0" href="#">You have new Down Payment ({{rec.notification.newDownPaymentCount}})</a>
-                        <a ng-if="rec.notification.newReservedCount !=0" href="#">You have new Reserved ({{rec.notification.newReservedCount}})</a>
-                        <a ng-if="rec.notification.newSoldOnlineCount !=0" href="#">You have new Sold Online ({{rec.notification.newSoldOnlineCount}})</a>
+                        <a ng-if="rec.notification != null" href="#">New Leads ({{rec.notification.newClientsCount}})</a>
+                        <a ng-if="rec.notification != null" href="#">New Booked ({{rec.notification.newBookedCount}})</a>
+                        <a ng-if="rec.notification != null" href="#">New Sold ({{rec.notification.newSoldCount}})</a>
+                        <a ng-if="rec.notification != null" href="#">New Cancelled ({{rec.notification.newCancelledCount}})</a>
+                        <a ng-if="rec.notification != null" href="#">New Down Payment ({{rec.notification.newDownPaymentCount}})</a>
+                        <a ng-if="rec.notification != null" href="#">New Reserved ({{rec.notification.newReservedCount}})</a>
+                        <a ng-if="rec.notification != null" href="#">New Sold Online ({{rec.notification.newSoldOnlineCount}})</a>
+                        <a ng-if="rec.notification != null" href="#"><?=__('not_proccesing')?> ({{rec.notification.notProccesing}})</a>
+
                     </div>
                 </div>
                 <?php

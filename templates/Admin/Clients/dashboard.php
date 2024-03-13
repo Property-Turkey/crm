@@ -386,16 +386,20 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
             <?php } ?>
 
 
-            
-            <div class="notifications-boxes">
-                <div class=" colored-box badge redBg" ng-if="rec.notification.recStateOneRecords != 0"
-                >
-                    <span class="notification-badge" format-currency="rec.notification.recStateOneRecords"></span>
-                    <i class="fa fa-times-circle-o" aria-hidden="true"></i>
-                    <div class="m-1 d-none d-lg-block">Reallocate Clients</div>
+            <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
+                <div class="notifications-boxes">
+                    <div class=" colored-box badge redBg" ng-if="rec.notification.recStateOneRecords != 0">
+                        <span class="notification-badge" format-currency="rec.notification.recStateOneRecords"></span>
+                        <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                        <div class="m-1 d-none d-lg-block">Reallocate Clients</div>
+                    </div>
+                    <div class=" colored-box badge redBg" ng-if="rec.notification.notProccesing != 0">
+                        <span class="notification-badge" format-currency="rec.notification.notProccesing"></span>
+                        <i class="fa fa-stop-circle" aria-hidden="true"></i>
+                        <div class="m-1 d-none d-lg-block"><?=__('not_proccesing')?></div>
+                    </div>
                 </div>
-            </div>
-
+            <?php } ?>
             <div class="white-box-dashboard mb-3">
                 <div class="row m-1">
                     <div class="col-4">
@@ -413,14 +417,8 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                             </div>
                         </div>
                     </div>
-
-
-
-
-
                 </div>
             </div>
-
 
 
             <div class="white-box-dashboard mb-3">
@@ -538,5 +536,3 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
     <?php echo $this->element('Modals/viewReallocate') ?>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.1/chart.min.js"></script>
-
-    

@@ -23,6 +23,7 @@ class UserClientTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
         ]);
+        
         $this->belongsTo('Clients', [
             'foreignKey' => 'client_id',
             'joinType' => 'INNER',

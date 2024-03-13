@@ -1094,6 +1094,12 @@ msgstr "Move User to Own Pool"
 msgid "view_allNotes"
 msgstr "View All Notes"
 
+msgid "view_allOffers"
+msgstr "View All Offers"
+
+msgid "view_allProperties"
+msgstr "View All Deals"
+
 msgid "offers"
 msgstr "Offers"
 
@@ -1161,3 +1167,25 @@ msgstr "People spoken to 2 days ago"
 
 msgid "request_reallocation"
 msgstr "Request Reallocation"
+
+msgid "accept"
+msgstr "Accept"
+
+msgid "reject"
+msgstr "Reject"
+
+msgid "change_advisor"
+msgstr "Change Advisor"
+
+msgid "change_pool"
+msgstr "Change Pool"
+
+msgid "require_reallocation"
+msgstr "Requiring Reallocation"
+
+msgid "settings_reallocation"
+msgstr "Reallocation Settings"
+
+msgid "not_proccesing"
+msgstr "Not proccesing lead"
+

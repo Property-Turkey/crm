@@ -41,6 +41,8 @@ class ClientsController extends AppController
     public function index($_pid = null)
     {
 
+
+
         $_client = isset($_GET['tags']) ? $_GET['tags'] : false;
         $_keyword = isset($_GET['keyword']) ? $_GET['keyword'] : false;
 
@@ -88,7 +90,33 @@ class ClientsController extends AppController
             $data = [];
             $conditions = [];
 
+            $_actionsUserId = !empty($_GET['userId']) ? $_GET['userId'] : '';
+            // dd($_actionsUserId);
+            if (isset($_GET['userId'])) {
+                $_pid = $_actionsUserId;
+            }
 
+            if (is_numeric($_pid) && $_pid > 0) {
+                $query = $this->Clients->find()
+                    ->select(['Clients.id'])
+                    ->distinct(['Clients.id'])
+                    ->innerJoinWith('Actions', function ($q) use ($_pid) {
+                        return $q->where(['Actions.user_id' => $_pid]);
+                    });
+            
+                $clientIds = $query->toArray();
+            
+                $clientIds = array_column($clientIds, 'id');
+            
+                if (!empty($clientIds)) {
+                    $conditions['Clients.id IN'] = $clientIds;
+                } else {
+                    $conditions['Clients.id IN'] = [];
+                }
+            }
+            
+            
+            
             // if(!empty( $dt )){
             //     foreach($dt as $key=>$itm){
             //         if(in_array($key, $noneSearchable)){ continue; }
@@ -116,7 +144,7 @@ class ClientsController extends AppController
             if (!empty($dt['search'])) {
                 foreach ($dt['search'] as $col => $val) {
                     if (empty($val)) {
-                        continue; // Skip this column if input is empty
+                        continue; 
                     }
                     if (in_array($col, $noneSearchable)) {
                         continue;
@@ -134,38 +162,9 @@ class ClientsController extends AppController
                     } else {
                         $conditions[$col . ' LIKE '] = '%' . $val . '%';
                     }
-                    // dd($dt['search']);
                 }
             }
 
-
-            // Search
-            // if (!empty($dt['search'])) {
-            //     foreach ($dt['search'] as $col => $val) {
-            //         if (empty($val)) {
-            //             continue; // Skip this column if input is empty
-            //         }
-            //         if (in_array($col, $noneSearchable)) {
-            //             continue;
-            //         }
-            //         if (in_array($col, $exactFields)) {
-            //             $conditions['Clients.' . $col] = $val;
-            //         }elseif (in_array($col, $otherCtrl)) {
-            //             $conditions['' . $col] = $val;
-            //         }  elseif ($col == 'client_tags') {
-            //             foreach ($val as $tag) {
-            //                 $conditions['AND'][] = ['client_tags LIKE ' => '%"'.$tag['value'].'"%'];
-            //             }
-            //         }elseif ($col == $betweenFields) {
-            //             dd(1);
-            //             $conditions[' BETWEEN ? AND ?'][] = [in_array($col, $betweenFields)];
-            //         } else {
-            //             $conditions[$col . ' LIKE '] = '%' . $val . '%';
-            //         }
-
-
-            //     }
-            // }
             // ONE RECORD
             if (!empty($_id)) {
                 $data = $this->Clients->get($_id, [
@@ -192,7 +191,7 @@ class ClientsController extends AppController
                         "Reservations.Pmscategory" => ['fields' => ['category_name', 'id']],
                         "Reservations.Payment",
                         "Reservations.Currency",
-                        "UserClient.Users",
+                        "UserClient.Users" => ['fields' => ['user_fullname', 'id']],
                         "UserClient",
                         "Users",
                         "Actions",
@@ -344,6 +343,7 @@ class ClientsController extends AppController
             // Kategori verilerini al
             $categoryOptions = $this->Clients->Categories->find('list', ['keyField' => 'id', 'valueField' => 'category_name'])->toArray();
 
+           
             echo json_encode(
                 [
                     "status" => "SUCCESS",
@@ -454,9 +454,21 @@ class ClientsController extends AppController
                 $rec->adrs_country = $dt['adrscountry'][0]['value'];
             }
 
+            if (isset($dt['pool'])) {
+                $rec->pool_id = $dt['pool'][0]['value'];
+            }
 
-            // debug($dt['adrscountry'][0]['value']);
-            // debug($rec['adrscountry']);
+            if (isset($dt['pool'])) {
+
+                $UserClientTable = $this->getTableLocator()->get('UserClient');
+
+                $deleteConditions = ['client_id' => $dt['client_id'], 'user_id' => $dt['user_id']];
+
+                $UserClientTable->deleteAll($deleteConditions);
+
+            }
+
+
         }
 
         // Add mode
@@ -491,6 +503,7 @@ class ClientsController extends AppController
             }
 
 
+
             // if (isset($dt['enquires'][0]['property'][0]['value'])) {
             //     $rec->property_id = $dt['enquires'][0]['property'][0]['value'];
             // }
@@ -505,6 +518,7 @@ class ClientsController extends AppController
             // dd($rec);
             // debug($dt['adrscountry']);
         }
+
 
         if ($this->request->is(['post', 'patch', 'put'])) {
             $this->autoRender = false;
@@ -556,7 +570,7 @@ class ClientsController extends AppController
         extract($this->getClientIdsAndUser());
         $isAdmin = $this->authUser['user_role'] === 'admin.admin' || $this->authUser['user_role'] === 'admin.root';
 
-    
+
 
         if (!$isAdmin) {
 
@@ -781,7 +795,7 @@ class ClientsController extends AppController
 
 
         $starterDate = !empty($_GET['startDate']) ? $_GET['startDate'] : '';
-            $endDate = !empty($_GET['endDate']) ? $_GET['endDate'] : '';
+        $endDate = !empty($_GET['endDate']) ? $_GET['endDate'] : '';
 
 
 
@@ -3014,7 +3028,7 @@ class ClientsController extends AppController
 
 
             $previousDateTime = date('Y-m-d H:i:s', strtotime('-24 hours'));
-            
+
 
             $clientsWithoutBudget = $this->Clients->find()
                 ->select(['id', 'client_name'])
@@ -3039,6 +3053,8 @@ class ClientsController extends AppController
                     'rec_state = 1',
                 ])
                 ->toArray();
+
+            $notProccesing = count($clientsWithoutStatus);
 
             $recStateOneRecords = $assignTable
                 ->find()
@@ -3180,14 +3196,16 @@ class ClientsController extends AppController
                 ])
                 ->toArray();
 
+            $notProccesing = count($clientsWithoutStatus);
 
             $recStateOneRecords = $userSaleTable
                 ->find()
                 ->where(['rec_state' => 2])
                 ->count();
-
-                
         }
+
+        $user_id = $this->authUser['id'];
+
 
         echo json_encode([
             'status' => 'SUCCESS',
@@ -3208,6 +3226,8 @@ class ClientsController extends AppController
                 'clientsWithoutPriorty' => $clientsWithoutPriorty,
                 'clientsWithoutStatus' => $clientsWithoutStatus,
                 'recStateOneRecords' => $recStateOneRecords,
+                'user_id' => $user_id,
+                'notProccesing' => $notProccesing,
             ],
         ]);
         die();

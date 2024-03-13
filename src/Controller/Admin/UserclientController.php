@@ -82,7 +82,7 @@ class UserClientController extends AppController
             $rec = $this->UserClient->get($dt['id']);
 
             debug($dt['user_id']);
-        
+
             $rec = $this->UserClient->patchEntity($rec, $dt);
         }
 
@@ -92,16 +92,27 @@ class UserClientController extends AppController
             $dt['stat_created'] = date('Y-m-d H:i:s');
             $client_id = $dt['client_id'];
             if (isset($dt['recState'])) {
-                
+
                 $dt['user_id'] = $this->authUser['id'];
-                
+
+            } else if (isset($dt['accept'])) {
+
+                $user_id = $dt['user_id'];
+            } else if (isset($dt['reject'])) {
+
+                $user_id = $dt['user_id'];
+            } else if (isset($dt['reallocate'])) {
+
+
+                $dt['user_id'] = $dt['user'][0]['value'];
+                // dd($dt['user_id']);
             } else {
+
                 $user_id = $dt['user'][0]['value'];
                 $UserClientTable = $this->getTableLocator()->get('UserClient');
                 $ClientTable = $this->getTableLocator()->get('UserClient')->Clients->get($client_id);
-                
-                // debug($dt['client_id']);
-                // dd($client_id);
+
+
                 if ($ClientTable->client_current_stage == 2) {
 
                     $ClientTable->client_current_stage = 3;
@@ -113,7 +124,8 @@ class UserClientController extends AppController
                     $ClientTable->rec_state = 1;
                 }
             }
-
+        }
+        if (!isset($dt['recState']) && !isset($dt['accept']) && !isset($dt['reject']) && !isset($dt['reallocate'])) {
 
             if (!$this->isUserAlreadyAssigned($client_id, $user_id)) {
                 $dt['user_id'] = $user_id;
@@ -132,22 +144,79 @@ class UserClientController extends AppController
                 echo json_encode(["status" => "FAIL", "msg" => "This user is already assigned to this client.", "data" => []]);
                 die();
             }
-
-         
         }
+        if (isset($dt['recState'])) {
 
-        if ($this->request->is(['post', 'patch', 'put'])) {
-            $this->autoRender = false;
-            
+            if ($this->request->is(['post', 'patch', 'put'])) {
+                $this->autoRender = false;
+                $UserClientTable = $this->getTableLocator()->get('UserClient');
 
-            if ($newRec = $this->UserClient->save($rec)) {
-                echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
+                if (isset($dt['recState'])) {
+                    $UserClientTable->updateAll(
+                        ['rec_state' => 2],
+                        ['client_id' => $dt['client_id'], 'user_id' => $dt['user_id']]
+                    );
+                }
+
+                echo json_encode(["status" => "SUCCESS", "msg" => "Request Sended."]);
                 die();
             }
+        }
+        if (isset($dt['accept'])) {
 
-            echo json_encode(["status" => "FAIL", "data" => $rec->getErrors()]);
+            if ($this->request->is(['post', 'patch', 'put'])) {
+                $this->autoRender = false;
+                $UserClientTable = $this->getTableLocator()->get('UserClient');
+                $ClientsTable = $this->getTableLocator()->get('Clients');
+
+
+
+                $deleteConditions = ['client_id' => $dt['client_id'], 'user_id' => $dt['user_id']];
+
+                $UserClientTable->deleteAll($deleteConditions);
+
+                $updateConditions = ['id' => $dt['client_id']];
+                $updateFields = ['pool_id' => 465];
+                $ClientsTable->updateAll($updateFields, $updateConditions);
+
+                echo json_encode(["status" => "SUCCESS", "msg" => "Request Accepted."]);
+                die();
+            }
+        }
+        if (isset($dt['reject'])) {
+
+            if ($this->request->is(['post', 'patch', 'put'])) {
+                $this->autoRender = false;
+                $UserClientTable = $this->getTableLocator()->get('UserClient');
+
+                if (isset($dt['reject'])) {
+                    $UserClientTable->updateAll(
+                        ['rec_state' => 1],
+                        ['client_id' => $dt['client_id'], 'user_id' => $dt['user_id']]
+                    );
+                }
+
+                echo json_encode(["status" => "SUCCESS", "msg" => "Request Rejected."]);
+                die();
+            }
+        }
+
+        if (isset($dt['reallocate'])) {
+
+            if ($this->request->is(['post', 'patch', 'put'])) {
+                $this->autoRender = false;
+                $UserClientTable = $this->getTableLocator()->get('UserClient');
+
+                $UserClientTable->updateAll(
+                    ['user_id' => $dt['user_id'], 'rec_state' => 1],
+                    ['client_id' => $dt['client_id'], 'id' => $dt['userclient_id']]
+                );
+
+            }
+            echo json_encode(["status" => "SUCCESS", "msg" => "Request Rejected."]);
             die();
         }
+
     }
 
     private function isUserAlreadyAssigned($clientId, $userId)

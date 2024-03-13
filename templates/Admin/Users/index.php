@@ -1,7 +1,11 @@
-<div id="indxPg" class="right_col" role="main" ng-init="
-doGet('/admin/users/index?list=1', 'list', 'users');
 
-    ">
+<?php
+$_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getParam('pass')[0];
+// dd($_pid);
+?>
+
+<div id="indxPg" class="right_col" role="main" ng-init="
+    doGet('/admin/users/index/<?= $_pid ?>?list=1', 'list', 'users');">
 
 
     <main>

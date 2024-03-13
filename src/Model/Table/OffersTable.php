@@ -63,8 +63,8 @@ class OffersTable extends Table
 
         $validator
             ->integer('property_id')
-            ->requirePresence('property_id', 'create')
-            ->notEmptyString('property_id');
+            // ->requirePresence('property_id', 'create')
+            ->allowEmptyString('property_id');
 
         $validator
             ->scalar('offer_desc')
