@@ -103,20 +103,20 @@ class ClientsController extends AppController
                     ->innerJoinWith('Actions', function ($q) use ($_pid) {
                         return $q->where(['Actions.user_id' => $_pid]);
                     });
-            
+
                 $clientIds = $query->toArray();
-            
+
                 $clientIds = array_column($clientIds, 'id');
-            
+
                 if (!empty($clientIds)) {
                     $conditions['Clients.id IN'] = $clientIds;
                 } else {
                     $conditions['Clients.id IN'] = [];
                 }
             }
-            
-            
-            
+
+
+
             // if(!empty( $dt )){
             //     foreach($dt as $key=>$itm){
             //         if(in_array($key, $noneSearchable)){ continue; }
@@ -144,7 +144,7 @@ class ClientsController extends AppController
             if (!empty($dt['search'])) {
                 foreach ($dt['search'] as $col => $val) {
                     if (empty($val)) {
-                        continue; 
+                        continue;
                     }
                     if (in_array($col, $noneSearchable)) {
                         continue;
@@ -291,7 +291,6 @@ class ClientsController extends AppController
                 $q = $this->Clients->find()
                     ->order(['Clients.' . $_col => $_dir])
                     ->where([$conditions])
-                    ->limit(12)
                     ->contain([
                         "ClientSpecs",
                         'PoolCategories',
@@ -322,12 +321,21 @@ class ClientsController extends AppController
                     ])
                     ->group('Clients.id');
 
-                if ($userRole != 'admin.root' && $userRole != 'admin.admin' && $userRole != 'admin.cc') {
+                if ($userRole != 'admin.root' && $userRole != 'admin.admin' && $userRole != 'admin.cc' && $userRole != 'accountant' ) {
                     $userId = $this->authUser['id'];
                     $q->matching('UserClient', function ($q) use ($userId) {
                         return $q->where(['user_id' => $userId]);
                     });
+                }elseif ($userRole === 'accountant') {
+                    $q->matching('Reservations', function ($q) {
+                        return $q->where([
+                            'Reservations.downpayment_paid' => 1,
+                            'Reservations.client_id = Clients.id'
+                        ]);
+                    });
+                    
                 }
+                
 
                 // Kategori filtresini uygula
                 $selectedCategoryId = $this->request->getQuery('category_id');
@@ -337,13 +345,14 @@ class ClientsController extends AppController
                     });
                 }
 
-                $data = $this->paginate($q);
+                $data = $this->paginate($q, ['limit' => 50]);
+
             }
 
             // Kategori verilerini al
             $categoryOptions = $this->Clients->Categories->find('list', ['keyField' => 'id', 'valueField' => 'category_name'])->toArray();
 
-           
+
             echo json_encode(
                 [
                     "status" => "SUCCESS",
@@ -387,14 +396,55 @@ class ClientsController extends AppController
             }
         }
 
+
+        // Son 75 action_type'ı al
+        $latestActions75 = $this->Clients->Actions->find()
+            ->select(['client_id', 'action_type', 'stat_created'])
+            ->where(['action_type' => 75])
+            ->order(['id' => 'DESC'])
+            ->toArray();
+
+        // Her bir action_type için ait client_id'leri grupla
+        $clientAction75 = [];
+        foreach ($latestActions75 as $action) {
+            // dd($action->stat_created);
+            $clientAction75[$action->client_id][] = $action->action_type;
+            $clientAction75[$action->client_id][] = $action->stat_created;
+
+        }
+
+        // Son 75 action_type'ı al
+        $latestActions76 = $this->Clients->Actions->find()
+            ->select(['client_id', 'action_type', 'stat_created'])
+            ->where(['action_type' => 76])
+            ->order(['id' => 'DESC'])
+            ->toArray();
+
+        // Her bir action_type için ait client_id'leri grupla
+        $clientAction76 = [];
+        foreach ($latestActions76 as $action) {
+            // dd($action->stat_created);
+            $clientAction76[$action->client_id][] = $action->action_type;
+            $clientAction76[$action->client_id][] = $action->stat_created;
+
+        }
+
+
+
         echo json_encode([
             'status' => 'SUCCESS',
             'msg' => __('success'),
             'data' => [
                 'categories' => $categories,
+                'latestActions75' => $latestActions75,
+                // 'lastActionType76' => $lastActionType76,
+                // 'clientAction76' => $clientAction76,
+                'clientAction75' => $clientAction75,
+                'clientAction76' => $clientAction76,
             ],
         ]);
         die();
+
     }
 
     public function save($id = -1)
@@ -3232,6 +3282,7 @@ class ClientsController extends AppController
         ]);
         die();
     }
+
 
     private function getRecStateLabel($recState)
     {

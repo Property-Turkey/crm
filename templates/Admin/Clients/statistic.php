@@ -283,9 +283,9 @@ stacked: true
     <div class="container">
         <!-- Tab Buttons -->
         <div class="tab-buttons">
-            <button ng-click="changeTab(1)">PT Booking & Sales report</button>
-            <button ng-click="changeTab(2)">Client Advisor and Field Detail</button>
-            <button ng-click="changeTab(3)">Payment Details</button>
+            <button ng-click="changeTab(1)"><?= __('book_sale_report') ?></button>
+            <button ng-click="changeTab(2)"><?= __('adviserfield_detail') ?></button>
+            <button ng-click="changeTab(3)"><?= __('payment_details') ?></button>
 
         </div>
 
@@ -297,7 +297,7 @@ stacked: true
             <div ng-if="currentTab == 1">
                 <div class="container">
                     <div class="heading ">
-                        <div class="title" style="font-size: 16px;">PT Booking & Sales report</div>
+                        <div class="title" style="font-size: 16px;"><?= __('book_sale_report') ?></div>
                     </div>
                     <div class="panel panel-default mb-3" ng-class="{ 'custom-style': showFilters }">
 
@@ -720,7 +720,7 @@ stacked: true
             <div ng-if="currentTab == 2">
                 <div class="container">
                     <div class="heading ">
-                        <div class="title" style="font-size: 16px;">Client Advisor and Field Detail</div>
+                        <div class="title" style="font-size: 16px;"><?= __('adviserfield_detail') ?></div>
                     </div>
                     <div class="panel panel-default mb-3" ng-class="{ 'custom-style': showFilters }">
 
@@ -908,9 +908,7 @@ stacked: true
                                         <div class="white-box-dashboard mb-3 custom-table"
                                             style="overflow-x: auto !important;">
                                             <div class="heading">
-                                                <div class="title" style="font-size: 16px;">Client Advisor​ Detail
-                                                    Selected
-                                                    Period of time</div>
+                                                <div class="title" style="font-size: 16px;"> <?= __('adviser_detail_period') ?></div>
                                             </div>
                                             <table class="table table-bordered custom-table"
                                                 >
@@ -995,9 +993,7 @@ stacked: true
                                         <div class="white-box-dashboard mb-3 custom-table"
                                             style="overflow-x: auto !important;">
                                             <div class="heading">
-                                                <div class="title" style="font-size: 16px;">Field Detail Selected Period
-                                                    of time
-                                                </div>
+                                                <div class="title" style="font-size: 16px;"><?= __('field_detail_period') ?></div>
                                             </div>
                                             <table class="table table-bordered custom-table"
                                                 >
@@ -1265,7 +1261,7 @@ stacked: true
             <!-- Payment Details Tab -->
             <div ng-if="currentTab == 3">
                 <div class="heading">
-                    <div class="title" style="font-size: 16px;">Payment Details</div>
+                    <div class="title dashoardFont"><?= __('payment_details') ?></div>
                 </div>
 
 

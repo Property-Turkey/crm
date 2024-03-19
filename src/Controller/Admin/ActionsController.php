@@ -99,7 +99,7 @@ class ActionsController extends AppController
             $dt['user_id'] = $this->authUser['id'];
             $client_id = $dt['client_id'];
             $rec = $this->Actions->newEntity($dt);
-            
+
             $rec->client_id = $dt['client_id'];
 
             // Check if a similar record exists
@@ -111,11 +111,13 @@ class ActionsController extends AppController
                 ->order(['stat_created' => 'DESC'])
                 ->first();
 
-            // If a similar record exists and its stat_created is less than 24 hours ago, don't add a new record
-            if ($lastRecord && $lastRecord->stat_created->wasWithinLast('24 hours')) {
-                echo json_encode(["status" => "ERROR", "msg" => __("Cannot add a new record within 24 hours.")]);
+            // If a similar record exists and its stat_created is less than the midnight of the next day, don't add a new record
+            if ($lastRecord && $lastRecord->stat_created > $rec->stat_created->modify('-24 hours')) {
+                echo json_encode(["status" => "ERROR", "msg" => __("Cannot add a new record within the same day.")]);
                 die();
             }
+            
+
 
             // Add the new record
             if ($this->Actions->save($rec)) {

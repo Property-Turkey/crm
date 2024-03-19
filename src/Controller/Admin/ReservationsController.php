@@ -13,15 +13,15 @@ class ReservationsController extends AppController
             $this->autoRender = false;
 
             $dt = json_decode(file_get_contents('php://input'), true);
-            $_method = !empty($_GET['method']) ? $_GET['method'] : '';
-            $_dir = !empty($_GET['direction']) ? $_GET['direction'] : 'DESC';
-            $_col = !empty($_GET['col']) ? $_GET['col'] : 'id';
-            $_tags = isset($_GET['tags']) ? $_GET['tags'] : false;
+            $_method = !empty ($_GET['method']) ? $_GET['method'] : '';
+            $_dir = !empty ($_GET['direction']) ? $_GET['direction'] : 'DESC';
+            $_col = !empty ($_GET['col']) ? $_GET['col'] : 'id';
+            $_tags = isset ($_GET['tags']) ? $_GET['tags'] : false;
             $_id = $this->request->getQuery('id');
             $_list = $this->request->getQuery('list');
-            $_from = !empty($_GET['from']) ? $_GET['from'] : '';
-            $_to = !empty($_GET['to']) ? $_GET['to'] : '';
-            $_k = (isset($_GET['k']) && strlen($_GET['k']) > 0) ? $_GET['k'] : false;
+            $_from = !empty ($_GET['from']) ? $_GET['from'] : '';
+            $_to = !empty ($_GET['to']) ? $_GET['to'] : '';
+            $_k = (isset ($_GET['k']) && strlen($_GET['k']) > 0) ? $_GET['k'] : false;
 
             $reservations = $this->paginate($this->Reservations);
 
@@ -31,7 +31,7 @@ class ReservationsController extends AppController
 
             $data = [];
 
-            if (!empty($dt)) {
+            if (!empty ($dt)) {
                 foreach ($dt as $key => $itm) {
                     if (in_array($key, $noneSearchable)) {
                         continue;
@@ -40,7 +40,7 @@ class ReservationsController extends AppController
                 }
             }
 
-            if (isset($_pid)) {
+            if (isset ($_pid)) {
                 $conditions['Reservations.source_id'] = $_pid;
             }
             if (strlen($_k . '') > 0) {
@@ -57,9 +57,9 @@ class ReservationsController extends AppController
 
             $conditions = [];
 
-            if (!empty($dt['search'])) {
+            if (!empty ($dt['search'])) {
                 foreach ($dt['search'] as $col => $val) {
-                    if (empty($val)) {
+                    if (empty ($val)) {
                         continue;
                     }
                     if (in_array($col, $noneSearchable)) {
@@ -76,7 +76,7 @@ class ReservationsController extends AppController
             }
 
 
-            if (!empty($_id)) {
+            if (!empty ($_id)) {
                 $data = $this->Reservations->get($_id, [
                     'contain' => [
                         "Property" => ['fields' => ['param_ownertype', 'property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
@@ -88,7 +88,7 @@ class ReservationsController extends AppController
                     ]
                 ])->toArray();
 
-                if (!empty($data['property'])) {
+                if (!empty ($data['property'])) {
 
                     $data["property"] = [
                         [
@@ -102,7 +102,7 @@ class ReservationsController extends AppController
                 die();
             }
 
-            if (!empty($_list)) {
+            if (!empty ($_list)) {
                 $data = $this->paginate($this->Reservations, [
                     "order" => [$_col => $_dir],
                     "conditions" => $conditions,
@@ -134,7 +134,7 @@ class ReservationsController extends AppController
 
             $rec = $this->Reservations->get($dt['id']);
 
-            if (empty($dt['reservation_currency'])) {
+            if (empty ($dt['reservation_currency'])) {
                 $dt['reservation_currency'] = 2;
             }
 
@@ -146,8 +146,36 @@ class ReservationsController extends AppController
 
 
             $ddrec = $this->Reservations->Clients->get($dt['client_id']);
-            if (isset($dt['reservation_downpayment']) || !empty($dt['reservation_downpayment'])) {
+            if (isset ($dt['reservation_downpayment']) || !empty ($dt['reservation_downpayment'])) {
                 $ddrec->rec_state = 13;
+            }
+
+            if (isset ($dt['is_commision_collacted'])) {
+                if ($dt['is_commision_collacted'] == true) {
+                    $rec->is_commision_collacted = $dt['is_commision_collacted'] = 1;
+                }
+                if ($dt['is_commision_collacted'] == false) {
+                    $rec->is_commision_collacted = $dt['is_commision_collacted'] = 0;
+                }
+            }
+            if (isset ($dt['downpayment_paid'])) {
+                if ($dt['downpayment_paid'] == true) {
+                    $rec->downpayment_paid = $dt['downpayment_paid'] = 1;
+                }
+                if ($dt['downpayment_paid'] == false) {
+                    $rec->downpayment_paid = $dt['downpayment_paid'] = 0;
+                }
+            }
+          
+            if (isset ($dt['reservation_isinvoice_sent'])) {
+                if ($dt['reservation_isinvoice_sent'] == true) {
+                    $rec->reservation_isinvoice_sent = $dt['reservation_isinvoice_sent'] = 1;
+                }
+                // dd($dt['reservation_isinvoice_sent']);
+                if ($dt['reservation_isinvoice_sent'] == false) {
+                    $rec->reservation_isinvoice_sent = $dt['reservation_isinvoice_sent'] = 0;
+                }
+                // dd($dt['reservation_isinvoice_sent']);
             }
 
 
@@ -164,20 +192,20 @@ class ReservationsController extends AppController
                 $rec->seller_id = $property->seller_id;
                 $rec->project_id = $property->project_id;
                 $rec->type_id = $property->category_id;
-                $rec->sellertype_id = $property->param_ownertype;            }
+                $rec->sellertype_id = $property->param_ownertype;
+            }
 
 
-        
+
             // Eğer reservations tablosundaki rec_state 13, 14 veya 15 ise
             if (in_array($rec->rec_state, [13, 14, 15])) {
                 $ddrec->rec_state = $rec->rec_state;
             } elseif (isset($dt['reservation_downpayment']) && !empty($dt['reservation_downpayment'])) {
                 $ddrec->rec_state = 13;
-            }
-            else {
+            } else {
                 $ddrec->rec_state = 12;
             }
-           
+
         }
 
         // add mode
@@ -186,7 +214,7 @@ class ReservationsController extends AppController
             $dt['stat_created'] = date('Y-m-d H:i:s');
             $dt['rec_state'] = 1;
 
-            if (empty($dt['reservation_currency'])) {
+            if (empty ($dt['reservation_currency'])) {
                 $dt['reservation_currency'] = 2;
             }
 
@@ -197,7 +225,7 @@ class ReservationsController extends AppController
 
 
             $rec = $this->Reservations->newEntity($dt);
-           
+
             $propertyId = (int) $dt['property'][0]['value'];
 
             $property = $this->Reservations->Property->get($propertyId, ['fields' => ['param_ownertype', 'category_id', 'developer_id', 'seller_id', 'project_id',]]);
@@ -207,28 +235,44 @@ class ReservationsController extends AppController
                 $rec->seller_id = $property->seller_id;
                 $rec->project_id = $property->project_id;
                 $rec->type_id = $property->category_id;
-                $rec->sellertype_id = $property->param_ownertype; 
+                $rec->sellertype_id = $property->param_ownertype;
             }
 
-            if (isset($dt['property'][0]['value'])) {
+            if (isset ($dt['property'][0]['value'])) {
                 $rec->property_id = (int) $dt['property'][0]['value'];
+            }
+            if (isset ($dt['is_commision_collacted'])) {
+                if ($dt['is_commision_collacted'] == true) {
+                    $rec->is_commision_collacted = $dt['is_commision_collacted'] = 1;
+                }
+            }
+            if (isset ($dt['downpayment_paid'])) {
+                if ($dt['downpayment_paid'] == true) {
+                    $rec->downpayment_paid = $dt['downpayment_paid'] = 1;
+                }
+            }
+            
+
+            if (isset ($dt['is_invoice_sent'])) {
+                if ($dt['is_invoice_sent'] == true) {
+                    $rec->is_invoice_sent = $dt['is_invoice_sent'] = 1;
+                }
             }
 
             $newRec = $this->Reservations->save($rec);
             $ddrec = $this->Reservations->Clients->get($dt['client_id']);
 
-            
+
             if (isset($dt['reservation_downpayment']) && !empty($dt['reservation_downpayment'])) {
                 $ddrec->rec_state = 13;
                 $newRec->rec_state = 13;
-            }
-            else {
+            } else {
                 $ddrec->rec_state = 12;
             }
-                
-            
 
-            
+
+
+
 
         }
 
@@ -296,7 +340,7 @@ class ReservationsController extends AppController
             }
         }
 
-        if (empty($errors)) {
+        if (empty ($errors)) {
             $res = ["status" => "SUCCESS", "data" => $dt];
         } else {
             $res = ["status" => "FAIL", "data" => $dt->getErrors()];

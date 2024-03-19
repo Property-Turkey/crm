@@ -18,7 +18,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
     ?>
 
     <div class="heading ">
-        <div class="title dashoardFont">Dashboard</div>
+        <div class="title dashoardFont"><?= __('dashboard') ?></div>
     </div>
 
 
@@ -39,8 +39,8 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         </span>
                         <select name="category_id" class="wb-ele-dashboard py-1" ng-model="rec.dashboard.dateFilter"
                             ng-change="updateCharts()">
-                            <option value="" selected="selected">Select Time</option>
-                            <option value="0">All</option>
+                            <option value="" selected="selected"><?= __('select_time') ?></option>
+                            <option value="0"> <?= __('all') ?></option>
                             <option value="{{ dateId }}" ng-repeat="(dateId, dateName) in rec.numbers.dateFilter">{{
                                 dateName }}</option>
                         </select>
@@ -92,7 +92,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.newAssignCount"></span>
                         <i class="fa fa-user" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block">Assigns
+                        <div class="m-1 d-none d-lg-block"><?= __('assigns') ?>
                         </div>
                     </div>
 
@@ -100,7 +100,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.newReminderCount"></span>
                         <i class="fa fa-book" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block">Reminders</div>
+                        <div class="m-1 d-none d-lg-block"><?= __('reminders') ?></div>
                     </div>
 
                 </div>
@@ -113,7 +113,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.newClientsCount"></span>
                         <i class="fa fa-user" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block">Sold Online
+                        <div class="m-1 d-none d-lg-block"> <?= __('sold_online') ?>
                         </div>
                     </div>
 
@@ -121,54 +121,54 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.newBookedCount"></span>
                         <i class="fa fa-book" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block">Booked</div>
+                        <div class="m-1 d-none d-lg-block"> <?= __('booked') ?></div>
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newSoldCount != 0"
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.newSoldCount"></span>
                         <i class="fa fa-check" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block">Sold</div>
+                        <div class="m-1 d-none d-lg-block"> <?= __('sold') ?></div>
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newCancelledCount != 0"
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.newCancelledCount"></span>
                         <i class="fa fa-times" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block">Cancelled</div>
+                        <div class="m-1 d-none d-lg-block"> <?= __('cancelled') ?></div>
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newDownPaymentCount != 0"
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.newDownPaymentCount"></span>
                         <i class="fa fa-credit-card" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block">Down Payment</div>
+                        <div class="m-1 d-none d-lg-block"> <?= __('down_date') ?></div>
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newReservedCount != 0"
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.newReservedCount"></span>
                         <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block">Reserved</div>
+                        <div class="m-1 d-none d-lg-block"> <?= __('reserved') ?></div>
                     </div>
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newSoldOnlineCount != 0"
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.newSoldOnlineCount"></span>
                         <i class="fa fa-check-circle-o" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block">Sold Online</div>
+                        <div class="m-1 d-none d-lg-block"> <?= __('sold_online') ?></div>
                     </div>
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.invoiceSend != 0"
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.invoiceSend"></span>
                         <i class="fa fa-check-circle-o" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block">Invoice Not Sent</div>
+                        <div class="m-1 d-none d-lg-block"><?= __('invoice_not_sent') ?></div>
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.commissionCollacted != 0"
                         onclick="location.href='/en/admin/clients/index';">
                         <span class="notification-badge" format-currency="rec.notification.commissionCollacted"></span>
                         <i class="fa fa-check-circle-o" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block">Commission Collacted</div>
+                        <div class="m-1 d-none d-lg-block"> <?= __('commision_collacted') ?></div>
                     </div>
 
 
@@ -230,7 +230,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
 
                                 <select name="category_id" class="wb-ele-dashboard py-1"
                                     ng-model="rec.dashboard.recstate" ng-change="updateStateCharts()">
-                                    <option value="" selected="selected">Select State</option>
+                                    <option value="" selected="selected"><?= __('select_state') ?></option>
                                     <option value="{{ dateId }}"
                                         ng-repeat="(dateId, dateName) in rec.numbers.recStateList">Leads - {{
                                         dateName }}</option>
@@ -296,7 +296,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                 </div>
 
                 <div class="col-md-6 mb-3 d-flex">
-                    <div class="white-box-dashboard mb-3" style="max-height: 400px;">
+                    <div class="white-box-dashboard mb-3 byCountry">
                         <div class="row m-1">
                             <div class="col-12">
                                 <div class="row">
@@ -330,14 +330,14 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                 </div>
 
                 <div class="col-md-6 mb-3 d-flex">
-                    <div class="white-box-dashboard mb-3" style="max-height: 400pxmd-;">
+                    <div class="white-box-dashboard mb-3 byCountry">
 
                         <div class="row m-1">
 
                             <div class="col-12">
                                 <div class="row">
                                     <div class="heading my-1 dashboard-h">
-                                        <div class="title-d">Calls by Country</div>
+                                        <div class="title-d"><?= __('calls_by_country') ?></div>
                                     </div>
                                 </div>
                             </div>
@@ -391,7 +391,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                     <div class=" colored-box badge redBg" ng-if="rec.notification.recStateOneRecords != 0">
                         <span class="notification-badge" format-currency="rec.notification.recStateOneRecords"></span>
                         <i class="fa fa-times-circle-o" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block">Reallocate Clients</div>
+                        <div class="m-1 d-none d-lg-block"><?= __('reallocate_clients') ?></div>
                     </div>
                     <div class=" colored-box badge redBg" ng-if="rec.notification.notProccesing != 0">
                         <span class="notification-badge" format-currency="rec.notification.notProccesing"></span>

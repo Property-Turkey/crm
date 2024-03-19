@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="accordion accordion-flush" id="client1">
-                    <button type="button" id="client_btn" class="hideIt" ng-click="setZIndex();
+                    <button type="button" id="client_btn" class="hideIt" ng-click="
                         doGet('/admin/clients?id='+rec.client.id, 'rec', 'client');
                         doGet('/admin/clients/index?list=1', 'list', 'clients'); 
                         
@@ -94,7 +94,7 @@
                                 <div class="heading">
                                     <div class="title">Lead</div>
                                     <div class="flex-center flex-gap-5">
-                                        <?php if (!in_array($authUser['user_role'], ['cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                             <button id="modalBtn" class="btn btn-modal"
                                                 ng-click="setZIndex();
                                                     updateModalElement('Lead');
@@ -108,7 +108,7 @@
                                         <!-- <button class="sm-btn">
                                             <i class="fas-plus"></i>
                                         </button> -->
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
 
                                             <button class="sm-btn">
                                                 <a class="fas-phone" href="tel:{{rec.client.client_mobile}}"></a>
@@ -196,10 +196,10 @@
                                         </div>
                                     </div>
                                     <div class="heading pb-0 mb-0 mt-3">
-                                        <div class="title" style="color: #7d7d7d;">Lead Information</div>
+                                        <div class="title leadFont" >Lead Information</div>
                                         <div class="flex-gap-10">
-                                            <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                                <button style="color: #7d7d7d;" id="modalBtn" class="btn btn-modal"
+                                            <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                                <button id="modalBtn" class="leadFont btn btn-modal"
                                                     ng-click="setZIndex();
                                                 updateModalElement('Lead Information');
                                                 doGet('/admin/clients?id=' + rec.client.id, 'rec', 'client');
@@ -233,7 +233,8 @@
                                             </span>
                                             <div class="wb-ele">
                                                 <span ng-repeat="tag in rec.client.client_tags track by $index">
-                                                {{ tag.text }}{{$index < (rec.client.client_tags.length - 1) ? ',' : '' }}</span>
+                                                    {{ tag.text }}{{$index < (rec.client.client_tags.length - 1) ? ','
+                                                        : '' }}</span>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
@@ -243,7 +244,9 @@
                                             <div class="wb-ele">
                                                 <span
                                                     ng-repeat="tag in rec.client.client_specs[0].clientspec_propertytype track by $index">
-                                                    {{ tag.text }}{{$index < (rec.client.client_specs[0].clientspec_propertytype.length - 1) ? ',' : '' }}</span>
+                                                    {{ tag.text }}{{$index <
+                                                        (rec.client.client_specs[0].clientspec_propertytype.length - 1)
+                                                        ? ',' : '' }}</span>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
@@ -253,8 +256,9 @@
                                             <div class="wb-ele">
                                                 <span
                                                     ng-repeat="tag in rec.client.client_specs[0].clientspec_beds track by $index">
-                                                    {{ tag.text }}{{$index < (rec.client.client_specs[0].clientspec_beds.length - 1) ? ',' : '' }}
-                                                </span>
+                                                    {{ tag.text }}{{$index <
+                                                        (rec.client.client_specs[0].clientspec_beds.length - 1) ? ','
+                                                        : '' }} </span>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3"
@@ -288,7 +292,9 @@
                                             <div class="wb-ele">
                                                 <span
                                                     ng-repeat="tag in rec.client.client_specs[0].clientspec_loction_target track by $index">
-                                                    {{ tag.text }}{{$index < ( rec.client.client_specs[0].clientspec_loction_target.length - 1) ? ',' : '' }}</span>
+                                                    {{ tag.text }}{{$index < (
+                                                        rec.client.client_specs[0].clientspec_loction_target.length - 1)
+                                                        ? ',' : '' }}</span>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
@@ -373,47 +379,161 @@
                                                         </label>
                                                     </div>
                                                 </div> -->
-
+                                                <!-- 
                                                 <div class="note-flex">
                                                     <div class="row">
-                                                        <div class="col-6 ">
+                                                        <div class="col-6" ng-repeat="act in rec.client.actions">
                                                             <div class="flex-center text-center">
-                                                                <label class="switch">
-                                                                    <input ng-model="rec.client.action.action_type"
-                                                                        ng-change="checkDate(rec.client.actions[rec.client.actions.length - 1].stat_created);
-                                                                        rec.client.action.client_id = rec.client.id;
-                                                                        actionSave();" ng-true-value="75"
+                                                                <label class="switch"
+                                                                    ng-if="$last && act.action_type == 75">
+                                                                    <input ng-model="act.called"
+                                                                        ng-change="actionSave(act.client_id, 75)"
+                                                                        ng-checked="act.action_type == 75"
+                                                                        ng-disabled="checkDate(act.stat_created)"
                                                                         name="invoice" id="finance-client3"
-                                                                        type="checkbox"
-                                                                        ng-disabled="isDisabled(rec.client.actions[rec.client.actions.length - 1].stat_created)" />
+                                                                        type="checkbox" />
                                                                     <span class="slider round"></span>
                                                                 </label>
-                                                                <label for="finance-client3">
+                                                                <label for="finance-client3"
+                                                                    ng-if="$last && act.action_type == 75">
                                                                     <?= __('called') ?>
-
                                                                 </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6 ">
-                                                            <div class="flex-center text-center">
-                                                                <label class="switch">
-                                                                    <input ng-model="rec.client.action.action_type"
-                                                                        ng-change="checkDate(rec.client.actions[rec.client.actions.length - 1].stat_created);
-                                                                        rec.client.action.client_id = rec.client.id;
-                                                                        actionSave();" ng-true-value="76"
-                                                                        name="invoice" id="finance-client3"
-                                                                        type="checkbox"
-                                                                        ng-disabled="isDisabled(rec.client.actions[rec.client.actions.length - 1].stat_created)" />
+
+                                                                <label class="switch"
+                                                                    ng-if="$last && act.action_type == 76">
+                                                                    <input ng-model="act.spoken"
+                                                                        ng-change="actionSave(act.client_id, 76)"
+                                                                        ng-checked="act.action_type == 76"
+                                                                        ng-disabled="checkDate(act.stat_created)"
+                                                                        name="invoice4" id="finance-client4"
+                                                                        type="checkbox" />
                                                                     <span class="slider round"></span>
                                                                 </label>
-                                                                <label for="finance-client3">
+                                                                <label for="finance-client4"
+                                                                    ng-if="$last && act.action_type == 76">
                                                                     <?= __('spoken') ?>
-
                                                                 </label>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
 
+
+
+                                                <div class="note-flex" ng-if="rec.client.actions == ''">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <div class="flex-center text-center">
+                                                                <label class="switch">
+                                                                    <input ng-model="rec.client.actions[1].actions_type"
+                                                                        ng-change="actionSave(rec.client.id, 75)"
+                                                                        ng-checked="act.action_type == 75"
+                                                                        ng-disabled="checkDate(act.stat_created)"
+                                                                        name="invoice" id="finance-client3"
+                                                                        type="checkbox" />
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                                <label for="finance-client3">
+                                                                    <?= __('called') ?>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="flex-center text-center">
+                                                                <label class="switch">
+                                                                    <input ng-model="rec.client.actions[2].actions_type"
+                                                                        ng-change="actionSave(rec.client.id, 76)"
+                                                                        ng-checked="act.action_type == 76"
+                                                                        ng-disabled="checkDate(act.stat_created)"
+                                                                        name="invoice4" id="finance-client4"
+                                                                        type="checkbox" />
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                                <label for="finance-client4">
+                                                                    <?= __('spoken') ?>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+
+
+                                                <!-- <div class="note-flex">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <div class="flex-center text-center">
+                                                                <label class="switch">
+                                                                    <input
+                                                                        ng-model="rec.pool.clientAction75[rec.client.id]"
+                                                                        ng-change="actionSave(rec.client.id, 75)"
+                                                                        ng-checked="rec.pool.clientAction75[rec.client.id][0] == 75 "
+                                                                        ng-disabled="checkDate(rec.pool.clientAction75[rec.client.id][1])"
+                                                                        name="invoice4" id="finance-client4"
+                                                                        type="checkbox" />
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                                <label for="finance-client3">
+                                                                    <?= __('called') ?>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="flex-center text-center">
+                                                                <label class="switch">
+                                                                    <input
+                                                                        ng-model="rec.pool.clientAction76[rec.client.id]"
+                                                                        ng-change="actionSave(rec.client.id, 76)"
+                                                                        ng-checked="rec.pool.clientAction76[rec.client.id][0] == 76"
+                                                                        ng-disabled="checkDate(rec.pool.clientAction76[rec.client.id][1])"
+                                                                        name="invoice4" id="finance-client4"
+                                                                        type="checkbox" />
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                                <label for="finance-client4">
+                                                                    <?= __('spoken') ?>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+
+                                                <div class="note-flex">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <div class="flex-center text-center">
+                                                                <label class="switch">
+                                                                    <input
+                                                                        ng-model="rec.pool.clientAction75[rec.client.id]"
+                                                                        ng-change="actionSave(rec.client.id, 75)"
+                                                                        ng-checked="checkDate(rec.pool.clientAction75[rec.client.id][1])"
+                                                                        ng-disabled="checkDate(rec.pool.clientAction75[rec.client.id][1])"
+                                                                        name="invoice4" id="finance-client4"
+                                                                        type="checkbox" />
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                                <label for="finance-client3">
+                                                                    <?= __('called') ?>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="flex-center text-center">
+                                                                <label class="switch">
+                                                                    <input
+                                                                        ng-model="rec.pool.clientAction76[rec.client.id]"
+                                                                        ng-change="actionSave(rec.client.id, 76)"
+                                                                        ng-checked="checkDate(rec.pool.clientAction76[rec.client.id][1])"
+                                                                        ng-disabled="checkDate(rec.pool.clientAction76[rec.client.id][1])"
+                                                                        name="invoice4" id="finance-client4"
+                                                                        type="checkbox" />
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                                <label for="finance-client4">
+                                                                    <?= __('spoken') ?>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                             </div>
@@ -861,7 +981,7 @@
                                         <div class="title"></div>
                                         <div class="flex-gap-10">
 
-                                            <?php if (!in_array($authUser['user_role'], ['cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                            <?php if (!in_array($authUser['user_role'], ['cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                                 <button class="btn btn-modal" id="modalBtn" ng-click="setZIndex();
                                                 updateModalElement('Assign');
                                                 newEntity('newTag');
@@ -903,19 +1023,19 @@
                                                 <div class="col-12">
                                                     <div class="row">
                                                         <div class="col m-1" style="white-space: nowrap;">
-                                                        <div class="note-flex">
-                                                            <span class="sm-txt">
-                                                                Advisor
-                                                            </span>
-                                                            <i ng-if="assign.rec_state == 2"
-                                                                class="fa fa-exclamation-circle redColor"
-                                                                aria-hidden="true">
-                                                                <small class="note-font">
-                                                                    <?= __('require_reallocation') ?>
-                                                                </small>
-                                                            </i>
-                                                        </div>
-                                                            
+                                                            <div class="note-flex">
+                                                                <span class="sm-txt">
+                                                                    Advisor
+                                                                </span>
+                                                                <i ng-if="assign.rec_state == 2"
+                                                                    class="fa fa-exclamation-circle redColor"
+                                                                    aria-hidden="true">
+                                                                    <small class="note-font">
+                                                                        <?= __('require_reallocation') ?>
+                                                                    </small>
+                                                                </i>
+                                                            </div>
+
                                                             <div class="wb-ele ng-binding">{{assign.user.user_fullname}}
                                                             </div>
                                                         </div>
@@ -969,7 +1089,7 @@
                                     <div class="title">Empathy Mapping</div>
                                     <div class="flex-gap-10">
                                         
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                             <button id="modalBtn" class="btn btn-modal" ng-click="
                                                     setZIndex();
                                                     updateModalElement('Empathy Mapping');
@@ -1018,7 +1138,7 @@
                                 <div class="heading">
                                     <div class="title">Notes</div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" ng-click="
                                             newEntity('report');
                                             setZIndex();
@@ -1061,23 +1181,25 @@
 
                                             <div class="flex-center flex-gap-10">
                                                 <b> {{ clsale.stat_created.split(' ')[1] }} </b>
-                                                <!-- <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                                <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                                     <div class="dropdown">
                                                         <button class="btn" type="button" data-bs-toggle="dropdown"
                                                             aria-expanded="false">
                                                             <i class="fas-ellipsis"></i>
                                                         </button>
                                                         <ul class="dropdown-menu">
-                                                            <li id="delete_preloader">
+                                                            <!-- <li id="delete_preloader">
                                                                 <a class="dropdown-item delete-btn"
                                                                     ng-click="doDelete('/admin/reports/delete/' + clsale.id);
                                                                     doSave(rec.report, 'report', 'reports', '#client_btn', '#report_preloader');"
                                                                     href="#">Delete</a>
-                                                            </li>
+                                                            </li> -->
                                                             <li id="delete_preloader">
                                                                 <a class="dropdown-item delete-btn" ng-click="
                                                                     updateModalElement('Notes');
                                                                     openModal('#subModal'); 
+                                                                    setZIndex();
+
                                                                     doGet('/admin/reports?id=' + clsale.id, 'rec', 'report');
                                                                     inlineElement('#elementsContainer', 1, 'notes');"
                                                                     href="#">
@@ -1087,7 +1209,7 @@
 
                                                         </ul>
                                                     </div>
-                                                <?php } ?> -->
+                                                <?php } ?>
 
 
                                             </div>
@@ -1119,7 +1241,7 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" ng-click="setZIndex();
                                             newEntity('reminder'); 
                                             openModal('#subModal'); 
@@ -1226,7 +1348,7 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" ng-click="
                                             setZIndex();
                                             newEntity('offer'); 
@@ -1298,7 +1420,7 @@
                                 <div class="heading" ng-if="!rec.client.book">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" id="modalBtn"
                                                 ng-click="setZIndex();newEntity('book'); openModal('#subModal'); inlineElement('#elementsContainer', 1, 'booking')">
                                                 <i class="fas-plus"></i> Add
@@ -1311,7 +1433,7 @@
                                 <div class="heading" ng-if="rec.client.book">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" id="modalBtn"
                                                 ng-click="
                                             setZIndex();
@@ -1438,7 +1560,7 @@
                                 <div class="heading ">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale', 'cc']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale', 'cc']) || isset ($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" id="modalBtn" ng-click="
                                         setZIndex();
                                         newEntity('reservation');
@@ -1459,10 +1581,10 @@
                                 <div>
 
                                     <div ng-repeat="deals in rec.client.reservations">
-                                        <div class="heading">
+                                        <!-- <div class="heading">
                                             <div class="title"></div>
                                             <div class="flex-gap-10">
-                                                <?php if (!in_array($authUser['user_role'], ['cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                                <?php if (!in_array($authUser['user_role'], ['cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                                     <button class="btn btn-modal" id="modalBtn btn-Booking" ng-click="
                                                     setZIndex();
                                                     doGet('/admin/reservations?id='+deals.id, 'rec', 'reservation');
@@ -1473,6 +1595,21 @@
                                                     </button>
                                                 </div>
                                             <?php } ?>
+
+                                        </div> -->
+
+                                        <div class="heading">
+                                            <div class="title"></div>
+                                            <div class="flex-gap-10">
+                                                <button class="btn btn-modal" id="modalBtn btn-Booking" ng-click="
+                                                    setZIndex();
+                                                    doGet('/admin/reservations?id='+deals.id, 'rec', 'reservation');
+                                                    openModal('#subModal'); 
+                                                    inlineElement('#elementsContainer', 1, 'reservation')">
+                                                    <i class="fas-plus"></i>
+                                                    <?= __('edit_deal') ?>
+                                                </button>
+                                            </div>
 
                                         </div>
 
@@ -1677,12 +1814,12 @@
                                                 </div>
 
 
+
                                                 <div class="col-md-6 col-12 col-lg-3"
                                                     ng-if="deals.reservation_isinvoice_sent == 1">
                                                     <span class="sm-txt">
                                                         <?= __('is_invoice_sent') ?>
                                                     </span>
-
                                                     <div class="wb-ele">
                                                         <i class="fa fa-check-circle-o greenText"></i>
                                                     </div>
@@ -1693,20 +1830,16 @@
                                                     <span class="sm-txt">
                                                         <?= __('is_invoice_sent') ?>
                                                     </span>
-
                                                     <div class="wb-ele">
                                                         <i class="fa fa-check-circle-o redText"></i>
                                                     </div>
                                                 </div>
-
-
 
                                                 <div class="col-md-6 col-12 col-lg-3"
                                                     ng-if="deals.is_commision_collacted == 1">
                                                     <span class="sm-txt">
                                                         <?= __('is_commision_collacted') ?>
                                                     </span>
-
                                                     <div class="wb-ele">
                                                         <i class="fa fa-check-circle-o greenText"></i>
                                                     </div>
@@ -1717,21 +1850,16 @@
                                                     <span class="sm-txt">
                                                         <?= __('is_commision_collacted') ?>
                                                     </span>
-
                                                     <div class="wb-ele">
                                                         <i class="fa fa-check-circle-o redText"></i>
                                                     </div>
                                                 </div>
-
-
-
 
                                                 <div class="col-md-6 col-12 col-lg-3"
                                                     ng-if="deals.downpayment_paid == 1">
                                                     <span class="sm-txt">
                                                         <?= __('downpayment_paid') ?>
                                                     </span>
-
                                                     <div class="wb-ele">
                                                         <i class="fa fa-check-circle-o greenText"></i>
                                                     </div>
@@ -1742,23 +1870,11 @@
                                                     <span class="sm-txt">
                                                         <?= __('downpayment_paid') ?>
                                                     </span>
-
                                                     <div class="wb-ele">
                                                         <i class="fa fa-check-circle-o redText"></i>
                                                     </div>
                                                 </div>
 
-
-
-                                                <!-- {{deals.reservation_isinvoice_sent}}
-                                        <div class="pl-5 col-md-1 col-8">
-                                            <i ng-if="deals.reservation_isinvoice_sent == 1"
-                                                class="fa fa-check-circle-o greenText"></i>
-                                        </div>
-                                        <div class="pl-5 col-md-1 col-8">
-                                            <i ng-if="deals.reservation_isinvoice_sent != 0"
-                                                class="fa fa-check-circle-o redText"></i>
-                                        </div> -->
 
                                             </form>
                                         </div>

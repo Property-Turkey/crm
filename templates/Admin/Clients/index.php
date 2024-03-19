@@ -1,5 +1,5 @@
 <?php
-$_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getParam('pass')[0];
+$_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getParam('pass')[0];
 // dd($_pid);
 ?>
 
@@ -11,9 +11,11 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
     <main>
         <section class=" container-fluid">
-            <h2 class="client-num">Clients ({{paging.count}})</h2>
+            <h2 class="client-num">
+                <?= __('clients') ?> ({{paging.count}})
+            </h2>
             <form class="dropdowns">
-                
+
 
                 <div class="flex-gap-10 flex-wrap">
 
@@ -39,7 +41,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                 source="loadTags($query, 'categories', 40)"></auto-complete>
                         </tags-input>
                     </label> -->
-                    <label class="" style="position: relative;">
+                    <label class="relative">
                         <span class="sm-txt">
                             <?= __('client_tags') ?>
                         </span>
@@ -52,8 +54,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                 source="loadTags($query, 'categories', 40)"></auto-complete>
                         </tags-input>
 
-                        <span ng-click="doSearch()" class="fa fa-search"
-                            style="cursor: pointer; position: absolute; top: 60%; right: 10px; transform: translateY(-50%);"></span>
+                        <span ng-click="doSearch()" class="fa fa-search doSearch"></span>
 
                     </label>
 
@@ -68,13 +69,13 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             'label' => false,
                             'type' => 'select',
                             'options' => $this->Do->cat(33),
-                            'empty' => 'Please Select',
+                            'empty' => __('please_select'),
                             'ng-model' => 'rec.search.source_id',
                             'ng-change' => 'doSearch()',
                         ]) ?>
                     </label>
 
-                    <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
+                    <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset ($authUser['user_original_role'])) { ?>
 
                         <label class="">
                             <span class="sm-txt">
@@ -86,7 +87,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                 'type' => 'select',
                                 'options' => $this->Do->cat(28),
                                 'escape' => false,
-                                'empty' => 'Please Select',
+                                'empty' => __('please_select'),
                                 'ng-model' => 'rec.search.pool_id',
                                 'ng-change' => 'doSearch()',
                             ]) ?>
@@ -103,21 +104,23 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             'type' => 'select',
                             'options' => $this->Do->lcl($this->Do->get('client_priorities')),
                             'escape' => false,
-                            'empty' => 'Please Select',
+                            'empty' => __('please_select'),
                             'ng-model' => 'rec.search.client_priority',
                             'ng-change' => 'doSearch()',
                         ]) ?>
                     </label>
 
 
-                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
+                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset ($authUser['user_original_role'])) { ?>
 
                         <label class="">
                             <span class="sm-txt">
                                 <?= __('pool_id') ?>
                             </span>
                             <select class="wb-ele-select col-12" ng-model="rec.search.pool_id" ng-change="doSearch()">
-                                <option value="Select" empty="true">Please Select</option>
+                                <option value="Select" empty="true">
+                                    <?= __('please_select') ?>
+                                </option>
                                 <option ng-repeat="category in rec.pool.categories" value="{{category.id}}">
                                     {{category.category_name}}
                                 </option>
@@ -129,7 +132,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
 
                 <div class="flex-gap-10 mt-3">
-                    <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                    <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
 
                         <button class="btn btn-danger" ng-click="
                             newEntity('client');
@@ -145,7 +148,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                     <?php } ?>
 
 
-                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.field', 'admin.cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.field', 'admin.cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                         <button class="btn btn-warning" ng-click="multiHandle('/admin/clients/delete')">
                             Delete
                         </button>
@@ -212,7 +215,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                 <div class="dash-content">
                     <div class="columns-titles">
                         <div class="row m-1">
-                            <!-- <?php if (!in_array($authUser['user_role'], ['admin.cc', 'cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                            <!-- <?php if (!in_array($authUser['user_role'], ['admin.cc', 'cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                 <div class="checkbox">
                                     <input type="checkbox" class="all-clients" name="client-checkbox"
                                         ng-click="checkAll(this)" />
@@ -239,11 +242,11 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                 </div>
                             <?php } ?> -->
 
-                            <?php if (in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.field', 'cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                <div class="checkbox">
+                            <?php if (in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.field', 'cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                <!-- <div class="checkbox">
                                     <input type="checkbox" class="all-clients" name="client-checkbox"
                                         ng-click="checkAll(this)" />
-                                </div>
+                                </div> -->
                                 <div class="col-11 hideMob row">
                                     <div class="col-md-3 p-0 title">
                                         <?= __('sales_content') ?>
@@ -267,12 +270,12 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
                         </div>
                     </div>
-                    
+
                     <!--  -->
-                    <?php if (in_array($authUser['user_role'], ['aftersale']) || isset($authUser['user_original_role'])) { ?>
+                    <?php if (in_array($authUser['user_role'], ['aftersale']) || isset ($authUser['user_original_role'])) { ?>
                         <div class="client" ng-repeat="itm in lists.clients track by $index" ng-if="itm.rec_state == 13">
                             <!-- Client row Start -->
-                            
+
                             <div class="client-row">
                                 <!-- <button type="button" id="client_btn" class="hideIt" ng-click="
                             doGet('/admin/clients/index?list=1', 'list', 'clients');">
@@ -282,7 +285,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             </button> -->
 
                                 <div class="row m-1">
-                                    <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.field', 'cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                    <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.field', 'cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
                                             <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                                 name="client-checkbox" />
@@ -430,8 +433,8 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
                         </div>
                     <?php } ?>
-                    <?php if (in_array($authUser['user_role'], ['accountant']) || isset($authUser['user_original_role'])) { ?>
-                        <div class="client" ng-repeat="itm in lists.clients track by $index" ng-if="itm.rec_state == 12">
+                    <?php if (in_array($authUser['user_role'], ['accountant']) || isset ($authUser['user_original_role'])) { ?>
+                        <div class="client" ng-repeat="itm in lists.clients track by $index" >
                             <!-- Client row Start -->
 
                             <div class="client-row">
@@ -443,7 +446,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             </button> -->
 
                                 <div class="row m-1">
-                                    <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.field', 'cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                    <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.field', 'cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
                                             <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                                 name="client-checkbox" />
@@ -591,7 +594,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
                         </div>
                     <?php } ?>
-                    <?php if (!in_array($authUser['user_role'], ['aftersale', 'accountant']) || isset($authUser['user_original_role'])) { ?>
+                    <?php if (!in_array($authUser['user_role'], ['aftersale', 'accountant']) || isset ($authUser['user_original_role'])) { ?>
                         <div class="client" ng-repeat="itm in lists.clients track by $index">
                             <!-- Client row Start -->
 
@@ -604,7 +607,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             </button> -->
 
                                 <div class="row m-1">
-                                    <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.field', 'cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                    <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.field', 'cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
                                             <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                                 name="client-checkbox" />
@@ -760,8 +763,10 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                     <span class="sm-txt">
                                                         <?= __('notes') ?>
                                                     </span>
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#viewReport_mdl"
+                                                    <a href="#"
                                                         ng-click="
+                                                        openModal('#subModal');
+                                                        inlineElement('#elementsContainer', 1, 'finance');
                                                         rec.report.tar_id = itm.id;
                                                         doGet('/admin/clients?id='+itm.id, 'rec', 'client');
                                                         doGet('/admin/reports?id=' + itm.reports[itm.reports.length - 1].id, 'rec', 'report');"
@@ -789,8 +794,11 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                     <span class="sm-txt">
                                                         <?= __('offers') ?>
                                                     </span>
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#viewOffer_mdl"
-                                                        ng-click="doGet('/admin/clients?id='+itm.id, 'rec', 'client');"
+                                                    <a href="#" 
+                                                        ng-click="
+                                                        openModal('#subModal');
+                                                        inlineElement('#elementsContainer', 1, 'viewOffer');
+                                                        doGet('/admin/clients?id='+itm.id, 'rec', 'client');"
                                                         class="btn-link">
                                                         <?= __('view_allOffers') ?>
                                                     </a>
@@ -889,14 +897,13 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                                 </div>
 
                                                             </div>
-                                                            <div class="col-6">
+                                                            <!--<div class="col-6">
                                                                 <div class="flex-center text-center">
                                                                     <label class="switch">
-                                                                       
+
 
                                                                         <input
                                                                             ng-model="itm.actions[itm.actions.length - 1].action_type"
-                                                                            
                                                                             ng-true-value="75" type="checkbox" />
                                                                         <span class="slider round"></span>
                                                                     </label>
@@ -913,47 +920,103 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                                             ng-click="
                                                                                 doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
                                                                                 rec.action.client_id = itm.id;
-                                                                                actionSave(itm.id, 76);" 
-                                                                            ng-true-value="76"
-                                                                            name="invoice" id="finance-client4"
-                                                                            type="checkbox" />
+                                                                                actionSave(itm.id, 76);"
+                                                                            ng-true-value="76" name="invoice"
+                                                                            id="finance-client4" type="checkbox" />
                                                                         <span class="slider round"></span>
                                                                     </label>
                                                                     <label for="finance-client4">
                                                                         <?= __('spoken') ?>
                                                                     </label>
                                                                 </div>
+                                                            </div> -->
+
+
+                                                            <!-- <div class="note-flex">
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        <div class="flex-center text-center"
+                                                                            ng-repeat="act in itm.actions">
+                                                                            <label class="switch"
+                                                                                ng-if="$last && act.action_type == 75">
+                                                                                <input ng-model="act.called"
+                                                                                    ng-change="actionSave(act.client_id, 75)"
+                                                                                    ng-checked="act.action_type == 75"
+                                                                                    ng-disabled="checkDate(act.stat_created)"
+                                                                                    name="invoice" id="finance-client3"
+                                                                                    type="checkbox" />
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <label for="finance-client3"
+                                                                                ng-if="$last && act.action_type == 75">
+                                                                                <?= __('called') ?>
+                                                                            </label>
+
+                                                                            <label class="switch"
+                                                                                ng-if="$last && act.action_type == 76">
+                                                                                <input ng-model="act.spoken"
+                                                                                    ng-change="actionSave(act.client_id, 76)"
+                                                                                    ng-checked="act.action_type == 76"
+                                                                                    ng-disabled="checkDate(act.stat_created)"
+                                                                                    name="invoice4" id="finance-client4"
+                                                                                    type="checkbox" />
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <label for="finance-client4"
+                                                                                ng-if="$last && act.action_type == 76">
+                                                                                <?= __('spoken') ?>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div> -->
+
+                                                            <!-- {{rec.pool.lastActionType76}}
+                                                            {{rec.pool.lastActionType75}} -->
+                                                            <!-- {{rec.pool.clientAction76[itm.id]}}
+                                                             {{rec.pool.clientAction75[itm.id][0]}}
+                                                            {{rec.pool.clientAction75[itm.id].stat_created}}-->
+
+                                                            <div class="note-flex">
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        <div class="flex-center text-center">
+                                                                            <label class="switch">
+                                                                                <input
+                                                                                    ng-model="rec.pool.clientAction75[itm.id]"
+                                                                                    ng-change="actionSave(itm.id, 75)"
+                                                                                    ng-checked="checkDate(rec.pool.clientAction75[itm.id][1])"
+                                                                                    ng-disabled="checkDate(rec.pool.clientAction75[itm.id][1])"
+                                                                                    name="invoice4" id="finance-client4"
+                                                                                    type="checkbox" />
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <label for="finance-client3">
+                                                                                <?= __('called') ?>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <div class="flex-center text-center">
+                                                                            <label class="switch">
+                                                                                <input
+                                                                                    ng-model="rec.pool.clientAction76[itm.id]"
+                                                                                    ng-change="actionSave(itm.id, 76)"
+                                                                                    ng-checked="checkDate(rec.pool.clientAction76[itm.id][1])"
+                                                                                    ng-disabled="checkDate(rec.pool.clientAction76[itm.id][1])"
+                                                                                    name="invoice4" id="finance-client4"
+                                                                                    type="checkbox" />
+                                                                                <span class="slider round"></span>
+                                                                            </label>
+                                                                            <label for="finance-client4">
+                                                                                <?= __('spoken') ?>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
 
-                                                            <!-- <div class="col-md-6 col-12 ">
-                                                            <div class="flex-center text-center">
-                                                                <label class="switch">
-                                                                    <input ng-model="rec.client.action.action_type"
-                                                                        ng-change="
-                                                                            rec.client.action.client_id = rec.client.id;
-                                                                            actionSave();" ng-true-value="75" type="checkbox" />
-                                                                    <span class="slider round"></span>
-                                                                </label>
-                                                                <label for="finance-client3">
-                                                                    <?= __('called') ?>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6 col-12 ">
-                                                            <div class="flex-center text-center">
-                                                                <label class="switch">
-                                                                    <input ng-model="rec.client.action.action_type"
-                                                                        ng-change="
-                                                                            rec.client.action.client_id = rec.client.id;
-                                                                            actionSave();" ng-true-value="76" name="invoice"
-                                                                        id="finance-client4" type="checkbox" />
-                                                                    <span class="slider round"></span>
-                                                                </label>
-                                                                <label for="finance-client3">
-                                                                    <?= __('spoken') ?>
-                                                                </label>
-                                                            </div>
-                                                        </div> -->
+
 
 
 
@@ -1001,7 +1064,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                                 aria-hidden="true"></i>
                                                         </small>{{$index < (itm.user_client.length - 1) ? ',' : '' }} </div>
                                                     </div>
-                                                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
+                                                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset ($authUser['user_original_role'])) { ?>
                                                         <div class="row" ng-repeat="reallocate in itm.user_client">
                                                             <div ng-if="rec.notification.user_id == reallocate.user_id;">
                                                                 <div class="col-12">
@@ -1021,16 +1084,13 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                     <?php } ?>
 
 
-                                                    <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
+                                                    <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset ($authUser['user_original_role'])) { ?>
                                                         <div class="row">
                                                             <div>
-                                                                <div class="col-12"
+                                                                <div class="col-12" data-bs-toggle="modal"
+                                                                    data-bs-target="#viewReallocate_mdl"
                                                                     ng-click="
-                                                                    setZIndex();
-                                                                    updateModalElement('reallocate');
-                                                                    openModal('#subModal');
                                                                     newEntity('user_client');
-                                                                    inlineElement('#elementsContainer', 1, 'reallocate');
                                                                     doGet('/admin/clients?id=' + itm.id, 'rec', 'client');">
                                                                     <div class="row">
                                                                         <div class="col-12 mb-2">

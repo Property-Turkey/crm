@@ -18,7 +18,7 @@ declare(strict_types=1);
 /*
  * Configure paths required to find CakePHP + general filepath constants
  */
-ob_start(); 
+ob_start();
 require __DIR__ . DIRECTORY_SEPARATOR . 'paths.php';
 
 /*
@@ -64,7 +64,7 @@ use Cake\Error\TableRegistry;
  * If you use .env files, be careful to not commit them to source control to avoid
  * security risks. See https://github.com/josegonzalez/php-dotenv#general-security-information
  * for more information for recommended practices.
-*/
+ */
 // if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
 //     $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
 //     $dotenv->parse()
@@ -82,10 +82,10 @@ use Cake\Error\TableRegistry;
  * that changes from configuration that does not. This makes deployment simpler.
  */
 try {
-    Configure::config('default', new PhpConfig());
-    Configure::load('app', 'default', false);
+	Configure::config('default', new PhpConfig());
+	Configure::load('app', 'default', false);
 } catch (\Exception $e) {
-    exit($e->getMessage() . "\n");
+	exit ($e->getMessage() . "\n");
 }
 
 /*
@@ -93,7 +93,7 @@ try {
  * Notice: For security reasons app_local.php **should not** be included in your git repo.
  */
 if (file_exists(CONFIG . 'app_local.php')) {
-    Configure::load('app_local', 'default');
+	Configure::load('app_local', 'default');
 }
 
 /*
@@ -101,10 +101,10 @@ if (file_exists(CONFIG . 'app_local.php')) {
  * for a short time.
  */
 if (Configure::read('debug')) {
-    Configure::write('Cache._cake_model_.duration', '+2 minutes');
-    Configure::write('Cache._cake_core_.duration', '+2 minutes');
-    // disable router cache during development
-    Configure::write('Cache._cake_routes_.duration', '+2 seconds');
+	Configure::write('Cache._cake_model_.duration', '+2 minutes');
+	Configure::write('Cache._cake_core_.duration', '+2 minutes');
+	// disable router cache during development
+	Configure::write('Cache._cake_routes_.duration', '+2 seconds');
 }
 
 /*
@@ -134,7 +134,7 @@ ini_set('intl.default_locale', Configure::read('App.defaultLocale'));
  * Include the CLI bootstrap overrides.
  */
 if (PHP_SAPI === 'cli') {
-    require CONFIG . 'bootstrap_cli.php';
+	require CONFIG . 'bootstrap_cli.php';
 }
 
 /*
@@ -143,29 +143,29 @@ if (PHP_SAPI === 'cli') {
  */
 $fullBaseUrl = Configure::read('App.fullBaseUrl');
 if (!$fullBaseUrl) {
-    /*
-     * When using proxies or load balancers, SSL/TLS connections might
-     * get terminated before reaching the server. If you trust the proxy,
-     * you can enable `$trustProxy` to rely on the `X-Forwarded-Proto`
-     * header to determine whether to generate URLs using `https`.
-     *
-     * See also https://book.cakephp.org/4/en/controllers/request-response.html#trusting-proxy-headers
-     */
-    $trustProxy = false;
+	/*
+	 * When using proxies or load balancers, SSL/TLS connections might
+	 * get terminated before reaching the server. If you trust the proxy,
+	 * you can enable `$trustProxy` to rely on the `X-Forwarded-Proto`
+	 * header to determine whether to generate URLs using `https`.
+	 *
+	 * See also https://book.cakephp.org/4/en/controllers/request-response.html#trusting-proxy-headers
+	 */
+	$trustProxy = false;
 
-    $s = null;
-    if (env('HTTPS') || ($trustProxy && env('HTTP_X_FORWARDED_PROTO') === 'https')) {
-        $s = 's';
-    }
+	$s = null;
+	if (env('HTTPS') || ($trustProxy && env('HTTP_X_FORWARDED_PROTO') === 'https')) {
+		$s = 's';
+	}
 
-    $httpHost = env('HTTP_HOST');
-    if (isset($httpHost)) {
-        $fullBaseUrl = 'http' . $s . '://' . $httpHost;
-    }
-    unset($httpHost, $s);
+	$httpHost = env('HTTP_HOST');
+	if (isset ($httpHost)) {
+		$fullBaseUrl = 'http' . $s . '://' . $httpHost;
+	}
+	unset($httpHost, $s);
 }
 if ($fullBaseUrl) {
-    Router::fullBaseUrl($fullBaseUrl);
+	Router::fullBaseUrl($fullBaseUrl);
 }
 unset($fullBaseUrl);
 
@@ -182,14 +182,14 @@ Security::setSalt(Configure::consume('Security.salt'));
  * and the mobiledetect package from composer.json.
  */
 ServerRequest::addDetector('mobile', function ($request) {
-    $detector = new \Detection\MobileDetect();
+	$detector = new \Detection\MobileDetect();
 
-    return $detector->isMobile();
+	return $detector->isMobile();
 });
 ServerRequest::addDetector('tablet', function ($request) {
-    $detector = new \Detection\MobileDetect();
+	$detector = new \Detection\MobileDetect();
 
-    return $detector->isTablet();
+	return $detector->isTablet();
 });
 
 /*
@@ -197,13 +197,13 @@ ServerRequest::addDetector('tablet', function ($request) {
  */
 $isCli = PHP_SAPI === 'cli';
 
-if ($isCli) { 
-    //(new ConsoleErrorHandler(Configure::read('Error')))->register(); 
-    (new ErrorTrap(Configure::read('Error')))->register(); 
-} else { 
-    //(new ErrorHandler(Configure::read('Error')))->register();
-    (new ExceptionTrap(Configure::read('Error')))->register(); 
-} 
+if ($isCli) {
+	//(new ConsoleErrorHandler(Configure::read('Error')))->register(); 
+	(new ErrorTrap(Configure::read('Error')))->register();
+} else {
+	//(new ErrorHandler(Configure::read('Error')))->register();
+	(new ExceptionTrap(Configure::read('Error')))->register();
+}
 /*
  * You can enable default locale format parsing by adding calls
  * to `useLocaleParser()`. This enables the automatic conversion of
@@ -245,43 +245,50 @@ TypeFactory::map('time', StringType::class);
 Configure::write('gmapKey', 'AIzaSyD2EC1RqRSh1Rm6NC4_cMt2CHtrZBKzUTE');
 
 Configure::write('roles', [
-	1=>'admin.root', 
-	2=>'admin.cc',
-	3=> 'admin.admin',
+	1 => 'admin.root',
+	2 => 'admin.cc',
+	3 => 'admin.admin',
 	4 => 'admin.field',
 	5 => 'cc',
-	6 =>  'field',
+	6 => 'field',
 	7 => 'accountant',
 	8 => 'aftersale'
 ]);
 
 Configure::write('rolesChart', [
 	'cc' => 'cc',
-	'field' =>  'field',
+	'field' => 'field',
 ]);
 Configure::write('AdminRoles', [
-	1 =>'admin.root',
-	2=> 'cc',
-	3=> 'field',
+	1 => 'admin.root',
+	2 => 'cc',
+	3 => 'field',
 
 ]);
 
-Configure::write('languages', [1=>'ar', 2=>'en', 3=>'ru']);
-Configure::write('languages_ids', ['ar'=>1, 'en'=>2, 'ru'=>3]);
-Configure::write('app_folder',  in_array(env('SERVER_NAME'), ['localhost', 'devzonia.com']) ? '/'.basename(dirname(__DIR__))  : '' );
-Configure::write('isLocal',  in_array(env('SERVER_NAME'), ['localhost']) ? true : false );
+Configure::write('languages', [1 => 'ar', 2 => 'en', 3 => 'ru']);
+Configure::write('languages_ids', ['ar' => 1, 'en' => 2, 'ru' => 3]);
+Configure::write('app_folder', in_array(env('SERVER_NAME'), ['localhost', 'devzonia.com']) ? '/' . basename(dirname(__DIR__)) : '');
+Configure::write('isLocal', in_array(env('SERVER_NAME'), ['localhost']) ? true : false);
 
 
-Configure::write('targetTables', ['Sales'=>'Sales','Clients'=>'Clients']);
-Configure::write('current_stage', [3=>'CC',4=>'Supervisior']);
-Configure::write('statusID', [ 1=>'isNew', 2=>'isCalled', 3=>'isSpoken', 4=>'isMessaged', 5=>'isWhatsapped', 6=>'noSale', 7=>'cancelled']);
-Configure::write('currencies', [4=>'GBP', 1=>'EUR', 2=>'USD', 3=>'TRY']);
-Configure::write('currencies_icons', [4=>'£', 1=>'€', 2=>'$', 3=>'₺']);
-Configure::write('stats', [[0=>__("disabled"), 1=>__("enabled"), 2=>__('sold')]]);
-Configure::write('client_priorities', [ 1=>'Low', 2=>'Normal', 3=>'High Top']);
-Configure::write('report_priorities', [ 1=>'top', 5=>'normal', 10=>'last']);
-Configure::write('client_current_stageSale', [ 1=>'Source', 
-2=>'CC Supervisor', 3=>'CC', 4=>'Field Supervisor', 5=>'Field', 6=>'Accountant', 7=>'Aftersale']);
+Configure::write('targetTables', ['Sales' => 'Sales', 'Clients' => 'Clients']);
+Configure::write('current_stage', [3 => 'CC', 4 => 'Supervisior']);
+Configure::write('statusID', [1 => 'isNew', 2 => 'isCalled', 3 => 'isSpoken', 4 => 'isMessaged', 5 => 'isWhatsapped', 6 => 'noSale', 7 => 'cancelled']);
+Configure::write('currencies', [4 => 'GBP', 1 => 'EUR', 2 => 'USD', 3 => 'TRY']);
+Configure::write('currencies_icons', [4 => '£', 1 => '€', 2 => '$', 3 => '₺']);
+Configure::write('stats', [[0 => __("disabled"), 1 => __("enabled"), 2 => __('sold')]]);
+Configure::write('client_priorities', [1 => 'Low', 2 => 'Normal', 3 => 'High Top']);
+Configure::write('report_priorities', [1 => 'top', 5 => 'normal', 10 => 'last']);
+Configure::write('client_current_stageSale', [
+	1 => 'Source',
+	2 => 'CC Supervisor',
+	3 => 'CC',
+	4 => 'Field Supervisor',
+	5 => 'Field',
+	6 => 'Accountant',
+	7 => 'Aftersale'
+]);
 Configure::write('rec_stateSale', [
 	// admin, call center admin
 	2 => [
@@ -291,73 +298,95 @@ Configure::write('rec_stateSale', [
 	// call center (sales advisor)
 	3 => [
 		1 => 'New',
-		2 => 'Attempt to call', 
-		3 => 'No Response 1', 
-		4 => 'No Response 2', 
-		5 => 'No Response 3', 
-		6 => 'Not Qualified', 
-		7 => 'Pursue', 
-		8 => 'Offers Sent', 
-		9 => 'Negotiation', 
-		10 => 'Positive Matching', 
-		11=> 'Booking',
-		12=> 'Reserved',
-		13 => 'Down Payment', 
-		14 => 'Sold', 
+		2 => 'Attempt to call',
+		3 => 'No Response 1',
+		4 => 'No Response 2',
+		5 => 'No Response 3',
+		6 => 'Not Qualified',
+		7 => 'Pursue',
+		8 => 'Offers Sent',
+		9 => 'Negotiation',
+		10 => 'Positive Matching',
+		11 => 'Booking',
+		12 => 'Reserved',
+		13 => 'Down Payment',
+		14 => 'Sold',
 		15 => 'Sold Online',
 		16 => 'No Sale',
 		17 => 'Cancelled'
 	],
 	// field admin
 	4 => [
-		1 => 'New', 
-		2 => 'To Fix', 
+		1 => 'New',
+		2 => 'To Fix',
 	],
 	// field
 	5 => [
-		1 => 'New', 
+		1 => 'New',
 		2 => 'Ongoing'
 	],
 	// accountant
 	6 => [
-		1 => 'New', 
-		2 => 'Invoice issued', 
+		1 => 'New',
+		2 => 'Invoice issued',
 		3 => 'Commission collected'
 	],
 	// after sale
 	7 => [
-		1 => 'New', 
+		1 => 'New',
 		2 => 'Ongoing'
 	],
 ]);
-
+Configure::write(
+	'log_ops',
+	[
+		"Clients" => 'Clients',
+		"Users" => 'Users',
+		"Permissions" => 'Permissions',
+		"Logs" => 'Logs',
+		"Configs" => 'Configs'
+	]
+);
+Configure::write(
+	'actionsName',
+	[
+		'recover' => __('recover'),
+		'save' => __('save'),
+		'save_new' => __('save_new'),
+		'update' => __('update'),
+		'delete' => __('delete'),
+		'login' => __('login'),
+		'enable' => __('enable'),
+		'disable' => __('disable')
+	]
+);
 
 $DB_ROLES = Cake\ORM\TableRegistry::getTableLocator()->get('Permissions')->find('all')->toArray();
 
 
-$modules = array_unique(array_values(array_column($DB_ROLES, 'permission_module'))); 
+$modules = array_unique(array_values(array_column($DB_ROLES, 'permission_module')));
 $permissionsByRole = [];
 
 foreach ($DB_ROLES as $role) {
-    $permissionsByRole[$role->permission_role][$role->permission_module] = [
-        'create' => $role->permission_c ?? 0,
-        'read' => $role->permission_r ?? 0,
-        'update' => $role->permission_u ?? 0,
-        'delete' => $role->permission_d ?? 0,
-        'allids' => $role->permission_a ?? 0,
-    ];
+	$permissionsByRole[$role->permission_role][$role->permission_module] = [
+		'create' => $role->permission_c ?? 0,
+		'read' => $role->permission_r ?? 0,
+		'update' => $role->permission_u ?? 0,
+		'delete' => $role->permission_d ?? 0,
+		'allids' => $role->permission_a ?? 0,
+	];
 }
 
 foreach ($permissionsByRole as &$roleModules) {
-    foreach ($modules as $module) {
-        $roleModules[$module] = $roleModules[$module] ?? [
-            'create' => 0,
-            'read' => 0,
-            'update' => 0,
-            'delete' => 0,
-            'allids' => 0,
-        ];
-    }
+	foreach ($modules as $module) {
+		$roleModules[$module] = $roleModules[$module] ?? [
+			'create' => 0,
+			'read' => 0,
+			'update' => 0,
+			'delete' => 0,
+			'allids' => 0,
+		];
+	}
 }
 
 

@@ -40,50 +40,58 @@ class ReportsController extends AppController
             }
 
             $data = [];
-            $_id = $this->request->getQuery('tar_id');
+            $_id = $this->request->getQuery('id');
             $_list = $this->request->getQuery('list');
 
             // ONE RECORD
             if (!empty($_id)) {
 
                
-                if ($report_type == 'empathy') {
-                    $empathy_reports = $this->Reports->Clients->find()
-                        ->contain([
-                            'EmpathyReports' => function ($q) {
-                                return $q->where(['EmpathyReports.report_type IN' => [201, 202, 203, 204]]);
-                            }
-                        ])
-                        ->where(['Clients.id' => $_id])
-                        ->first();
+                // if ($report_type == 'empathy') {
+                //     $empathy_reports = $this->Reports->Clients->find()
+                //         ->contain([
+                //             'EmpathyReports' => function ($q) {
+                //                 return $q->where(['EmpathyReports.report_type IN' => [201, 202, 203, 204]]);
+                //             }
+                //         ])
+                //         ->where(['Clients.id' => $_id])
+                //         ->first();
 
-                        
-                    $empath_data = [];
-                    foreach ((array) $empathy_reports['empathy_reports'] as $itm) {
-                        $empath_data[$itm['report_type']] = $itm;
-                    }
-
-
-                    // $tar_id = isset($_GET['id']) ? $_GET['id'] : '';
-
-                    // debug($tar_id);
+                //     $empath_data = [];
+                //     foreach ((array) $empathy_reports['empathy_reports'] as $itm) {
+                //         $empath_data[$itm['report_type']] = $itm;
+                //     }
 
 
+                //     // $tar_id = isset($_GET['id']) ? $_GET['id'] : '';
 
-                    echo json_encode(["status" => "SUCCESS", "data" => ['empathy' => $this->Do->convertJson($empath_data)]], JSON_UNESCAPED_UNICODE);
-                    die();
-                } else {
-                    $data = $this->Reports->get($_id, [
-                        'contain' => [
-                            "TypeCategories"
-                        ]
-                    ])->toArray();
+                //     // debug($tar_id);
+
+                //     echo json_encode(["status" => "SUCCESS", "data" => ['empathy' => $this->Do->convertJson($empath_data)]], JSON_UNESCAPED_UNICODE);
+                //     die();
+                // } else {
+                //     $data = $this->Reports->get($_id, [
+                //         'contain' => [
+                //             "TypeCategories"
+                //         ]
+                //     ])->toArray();
     
                   
                 
-                    echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
-                    die();
-                }
+                //     echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
+                //     die();
+                // }
+
+                $data = $this->Reports->get($_id, [
+                    'contain' => [
+                        "TypeCategories"
+                    ]
+                ])->toArray();
+
+              
+            
+                echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
+                die();
                 
             }
 
@@ -104,8 +112,8 @@ class ReportsController extends AppController
             echo json_encode(
                 [
                     "status" => "SUCCESS",
-                    "data" => $this->Do->convertJson($data)
-                    //  "paging" => $this->request->getAttribute('paging')['Reports']
+                    "data" => $this->Do->convertJson($data),
+                    "paging" => $this->request->getAttribute('paging')['Reports']
                 ],
                 JSON_UNESCAPED_UNICODE
             );
@@ -127,6 +135,7 @@ class ReportsController extends AppController
         // edit mode
         if ($this->request->is(['patch', 'put'])) {
             $rec = $this->Reports->get($dt['id']);
+            // dd($dt);
             $dt = $this->Reports->patchEntity($rec, $dt);
         }
 

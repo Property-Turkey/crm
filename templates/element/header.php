@@ -201,12 +201,18 @@ $urlparse[4] = empty($urlparse[4]) ? '' : $urlparse[4];
                     if (!in_array($authUser["user_role"], $itm["roles"])) {
                         continue;
                     }
-
-                    if ($isCategories) {
-                        $isActive = 'active';
+// dd($urlparse[3]);
+                    if (in_array($urlparse[3], ['dashboard', 'statistic'])) {
+                        // dd($itm['name']);
+                        $isActive = ($urlparse[3] === 'dashboard') ? 'active' : '';
                     } else {
-                        if ((strpos($itm["active"], '/' . $urlparse[2] . '/' . $urlparse[3])) || (strpos($itm["active"], '/' . $urlparse[2] . '/' . $urlparse[3] . '' . $urlparse[4])) !== false) {
+                        // Diğer sayfalarda normal kontrol yap
+                        if ($isCategories) {
                             $isActive = 'active';
+                        } else {
+                            if ((strpos($itm["active"], '/' . $urlparse[2] . '/' . $urlparse[3])) || (strpos($itm["active"], '/' . $urlparse[2] . '/' . $urlparse[3] . '' . $urlparse[4])) !== false) {
+                                $isActive = 'active';
+                            }
                         }
                     }
 

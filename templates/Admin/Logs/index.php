@@ -1,8 +1,3 @@
-
-
-
-
-
 <div id="indxPg" class="right_col" role="main" ng-init="
 doGet('/admin/logs/index?list=1', 'list', 'logs');
     ">
@@ -48,14 +43,94 @@ doGet('/admin/logs/index?list=1', 'list', 'logs');
             <div class="dashboard">
                 <!-- Dashboard Header Start -->
                 <div class="dash-head">
-                    <div class="flex-gap-10">
-                        <form class="search-leads-form">
-                            <i class="fas-search"></i>
-                            <input type="text" ng-change="doSearch()" ng-model="rec.search.log_changes"
-                                placeholder="Search Logs" />
-                        </form>
+
+                    <div class="flex-gap-10 flex-wrap">
+
+
+                        <label class="relative">
+                            <span class="sm-txt">
+                                <?= __('log_changes') ?>
+                            </span>
+
+                            <input class="wb-txt-inp"
+                               
+                                ng-model="rec.search.log_changes" 
+                                placeholder="<?= __('log_changes') ?>" >
+                               
+                            </input>
+
+                            <span ng-click="doSearch()" class="fa fa-search doSearch"></span>
+
+                        </label>
+
+
+                        <label for="" class="">
+                            <span class="sm-txt">
+                                <?= __('module') ?>
+                            </span>
+                            <?= $this->Form->control('module', [
+                                'class' => 'wb-ele-select col-12',
+                                'label' => false,
+                                'type' => 'select',
+                                'ng-model' => 'rec.search.module',
+                                'options' => $this->Do->lcl($this->Do->get('log_ops')),
+                                'ng-change' => "doClick('#submit_btn')",
+                            ]) ?>
+                        </label>
+
+
+                        <label class="">
+                            <span class="sm-txt">
+                                <?= __('action') ?>
+                            </span>
+
+                            <?= $this->Form->control('action', [
+                                'class' => 'wb-ele-select col-12',
+                                'label' => false,
+                                'type' => 'select',
+                                'ng-model' => 'rec.search.action',
+                                'options' => $this->Do->lcl($this->Do->get('actionsName')),
+                                'ng-change' => "doClick('#submit_btn')",
+                            ]) ?>
+                        </label>
+
+
+                        <div class="filter-row">
+
+                            <!-- Start Date Input -->
+                            <label for="" class="filter-label">
+                                <span class="sm-txt" for="starterDate">
+                                    <?= __('start_date') ?>:
+                                </span>
+                                <input date-format class="wb-ele-dashboard py-1" type="date" id="starterDate"
+                                    ng-model="rec.search.starterDate"
+                                    ng-init="rec.search.starterDate = rec.search.starterDate || currentDate">
+                            </label>
+
+                            <!-- End Date Input -->
+                            <label for="" class="filter-label">
+                                <span class="sm-txt" for="endDate">
+                                    <?= __('end_date') ?>:
+                                </span>
+                                <input date-format class="wb-ele-dashboard py-1" type="date" id="endDate"
+                                    ng-model="rec.search.endDate" ng-change="getClientsByDateRange()">
+                            </label>
+
+                            <!-- Search Button -->
+
+                            <div id="main_preloader" class="preloader">
+                                <div>
+                                    <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
+                                </div>
+                                <div>
+                                    <?= __('please_wait') ?>
+                                </div>
+                            </div>
+                        </div>
+
 
                     </div>
+
                     <div class="dash-nav">
                         <?php echo $this->element('paginator-ng') ?>
                     </div>
@@ -77,7 +152,7 @@ doGet('/admin/logs/index?list=1', 'list', 'logs');
                                 <div class="col-md-5 p-0 title">
                                     <?= __('log_url') ?>
                                 </div>
-                               
+
                                 <div class="col-md-2 p-0 title">
                                     <?= __('action') ?>
                                 </div>
@@ -108,11 +183,11 @@ doGet('/admin/logs/index?list=1', 'list', 'logs');
                                             </div>
                                             <div class="col-6 p-0 col-lg-12">
                                                 <p>
-                                                {{ itm.user.user_fullname }}
+                                                    {{ itm.user.user_fullname }}
                                                 </p>
-                                                
+
                                             </div>
-                                            
+
 
                                         </div>
                                     </div>
@@ -131,7 +206,7 @@ doGet('/admin/logs/index?list=1', 'list', 'logs');
                                             </p>
                                         </div>
                                     </div>
-                                    
+
 
 
                                     <!-- <div class="col-lg-4 col-12 pr-5 mr-5 info" ng-repeat="change in itm.log_changes" 
@@ -177,17 +252,16 @@ doGet('/admin/logs/index?list=1', 'list', 'logs');
                                         <div class="col-6 p-0 col-lg-12">
                                             <button data-bs-toggle="modal" data-bs-target="#viewLog_mdl"
                                                 ng-click="doGet('/admin/logs?id='+itm.id, 'rec', 'log');"
-                                                    style="font-size: 13px;" class="btn btn-modal">
+                                                style="font-size: 13px;" class="btn btn-modal">
                                                 <i class="fa fa-eye"></i>
                                                 <?= __('view') ?>
                                             </button>
-                                            <button id="recovery" 
-                                                ng-click="doGet('/admin/logs/recover/'+itm.id, 'rec', 'log'); 
-                                                        " 
-                                                ng-show="itm.log_changes.length > 1"
-                                                    style="font-size: 13px;" class="btn btn-modal">
+                                            <button id="recovery" ng-click="doGet('/admin/logs/recover/'+itm.id, 'rec', 'log'); 
+                                                        " ng-show="itm.log_changes.length > 1" style="font-size: 13px;"
+                                                class="btn btn-modal">
                                                 <i class="fa fa-refresh"></i>
                                                 <?= __('recovery') ?>
+
                                             </button>
                                         </div>
                                     </div>
@@ -215,4 +289,3 @@ doGet('/admin/logs/index?list=1', 'list', 'logs');
 </div>
 
 <?php echo $this->element('Modals/viewLog') ?>
-

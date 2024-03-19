@@ -907,8 +907,10 @@ msgid "unit_info"
 msgstr "Unit Information" 
 msgid "commission"
 msgstr "Commission" 
+
 msgid "down_date"
 msgstr "Down Payment" 
+
 msgid "down_paydate"
 msgstr "Downpayment Date" 
 msgid "insallments"
@@ -1188,4 +1190,58 @@ msgstr "Reallocation Settings"
 
 msgid "not_proccesing"
 msgstr "Not proccesing lead"
+
+msgid "no_request"
+msgstr "No Request"
+
+msgid "assigns"
+msgstr "Assigns"
+
+msgid "sold"
+msgstr "Sold"
+
+msgid "reserved"
+msgstr "Reserved"
+
+msgid "invoice_not_sent"
+msgstr "Invoice Not Sent"
+
+msgid "commision_collacted"
+msgstr "Commission Collacted"
+
+msgid "all"
+msgstr "All"
+
+msgid "select_time"
+msgstr "Select Time"
+
+msgid "dashboard"
+msgstr "Dashboard"
+
+msgid "select_state"
+msgstr "Select State"
+
+msgid "calls_by_country"
+msgstr "Calls by Country"
+
+msgid "reallocate_clients"
+msgstr "Reallocate Clients"
+
+msgid "please_select"
+msgstr "Please Select"
+
+msgid "adviser_detail_period"
+msgstr "Client Advisor​ Detail Selected Period of time"
+
+msgid "adviserfield_detail"
+msgstr "Client Advisor and Field Detail"
+
+msgid "book_sale_report"
+msgstr "PT Booking & Sales report"
+
+msgid "payment_details"
+msgstr "Payment Details"
+
+msgid "field_detail_period"
+msgstr "Field Detail Selected Period of time"
 

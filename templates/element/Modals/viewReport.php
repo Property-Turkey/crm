@@ -12,7 +12,7 @@
 
             <div class="modal-body row">
                 <div class="col-md-12 col-sm-12">
-                    <div class="view_page">
+                    <div class="view_page p-3">
                         <form class="row inlineElement" ng-submit="
                                 rec.report.tar_id = rec.client.id; 
                                 rec.report.tar_tbl = 'Clients'; 
@@ -47,9 +47,6 @@
                                 </div>
                             </div>
                         </form>
-
-
-
 
                         <div class="accordion mt-5" id="accordionNotes">
                             <div class="accordion-item">

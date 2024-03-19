@@ -33,19 +33,19 @@ class BooksController extends AppController
             $dt = json_decode(file_get_contents('php://input'), true);
 
             // Filters and Search
-            $_from = !empty($_GET['from']) ? $_GET['from'] : '';
-            $_to = !empty($_GET['to']) ? $_GET['to'] : '';
+            $_from = !empty ($_GET['from']) ? $_GET['from'] : '';
+            $_to = !empty ($_GET['to']) ? $_GET['to'] : '';
 
-            $_method = !empty($_GET['method']) ? $_GET['method'] : '';
-            $_col = !empty($_GET['col']) ? $_GET['col'] : 'id';
-            $_k = (isset($_GET['k']) && strlen($_GET['k']) > 0) ? $_GET['k'] : false;
+            $_method = !empty ($_GET['method']) ? $_GET['method'] : '';
+            $_col = !empty ($_GET['col']) ? $_GET['col'] : 'id';
+            $_k = (isset ($_GET['k']) && strlen($_GET['k']) > 0) ? $_GET['k'] : false;
 
-            $_dir = !empty($_GET['direction']) ? $_GET['direction'] : 'DESC';
+            $_dir = !empty ($_GET['direction']) ? $_GET['direction'] : 'DESC';
 
             $noneSearchable = ['page'];
 
             $conditions = [];
-            if (!empty($dt)) {
+            if (!empty ($dt)) {
                 foreach ($dt as $key => $itm) {
                     if (in_array($key, $noneSearchable)) {
                         continue;
@@ -54,10 +54,10 @@ class BooksController extends AppController
                 }
             }
 
-            if (!empty($_from)) {
+            if (!empty ($_from)) {
                 $conditions['Books.stat_created > '] = $_from;
             }
-            if (!empty($_to)) {
+            if (!empty ($_to)) {
                 $conditions['Books.stat_created < '] = $_to;
             }
             if ($_k !== false) {
@@ -72,7 +72,7 @@ class BooksController extends AppController
 
 
             // ONE RECORD
-            if (!empty($_id)) {
+            if (!empty ($_id)) {
                 $data = $this->Books->get($_id, ['contain' => []])->toArray();
 
                 // $data['book_meetperiod'] = (int)$data['book_meetperiod'];
@@ -82,7 +82,7 @@ class BooksController extends AppController
             }
 
             // LIST
-            if (!empty($_list)) {
+            if (!empty ($_list)) {
                 $data = $this->paginate($this->Books, [
                     "order" => [$_col => $_dir],
                     "conditions" => $conditions,
@@ -132,7 +132,14 @@ class BooksController extends AppController
             // }
 
 
+            if (isset ($dt['downpayment_paid'])) {
+                if ($dt['in_turkey'] == true) {
+                    $rec->in_turkey = $dt['in_turkey'] = 1;
+                }
+            }
+
             $rec = $this->Books->patchEntity($rec, $dt);
+
 
         }
 
@@ -215,7 +222,7 @@ class BooksController extends AppController
             $delRec[$k] = $this->Books->delete($rec);
         }
 
-        $res = (!empty(array_filter($delRec))) ? ["status" => "SUCCESS", "data" => $delRec] : ["status" => "FAIL", "data" => $delRec];
+        $res = (!empty (array_filter($delRec))) ? ["status" => "SUCCESS", "data" => $delRec] : ["status" => "FAIL", "data" => $delRec];
 
         echo json_encode($res);
         die();
@@ -244,7 +251,7 @@ class BooksController extends AppController
             $updateRec[$k] = $this->Books->save($rec);
         }
 
-        $res = (!empty(array_filter($updateRec))) ? ["status" => "SUCCESS", "data" => $updateRec] : ["status" => "FAIL", "data" => $updateRec];
+        $res = (!empty (array_filter($updateRec))) ? ["status" => "SUCCESS", "data" => $updateRec] : ["status" => "FAIL", "data" => $updateRec];
 
         echo json_encode($res);
         die();

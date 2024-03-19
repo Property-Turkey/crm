@@ -12,6 +12,7 @@
     --gray: #999999;
     --black: #000000;
 
+
     --green2: #28b293eb;
     --blue2: #17a2b8eb;
     --orange2: #e69d3eeb;
@@ -2066,6 +2067,22 @@ input:checked + .slider:before {
 .darkRedBg{
     background-color: var(--color1);
     color: white;
+}
+.byCountry{
+    max-height: 400px;
+}
+.doSearch{
+    cursor: pointer;
+    position: absolute;
+    top: 60%;
+    right: 10px; 
+    transform: translateY(-50%);
+}
+.relative{
+    position: relative;
+}
+.leadFont{
+    color: #7d7d7d;
 }
 .inline-btn {
     background: var(--gentela_light);
