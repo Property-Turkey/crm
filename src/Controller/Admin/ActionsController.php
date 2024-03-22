@@ -13,17 +13,17 @@ class ActionsController extends AppController
             $this->autoRender = false;
 
             $dt = json_decode(file_get_contents('php://input'), true);
-            $_method = !empty($_GET['method']) ? $_GET['method'] : '';
-            $_dir = !empty($_GET['direction']) ? $_GET['direction'] : 'DESC';
-            $_col = !empty($_GET['col']) ? $_GET['col'] : 'id';
-            $_tags = isset($_GET['tags']) ? $_GET['tags'] : false;
+            $_method = !empty ($_GET['method']) ? $_GET['method'] : '';
+            $_dir = !empty ($_GET['direction']) ? $_GET['direction'] : 'DESC';
+            $_col = !empty ($_GET['col']) ? $_GET['col'] : 'id';
+            $_tags = isset ($_GET['tags']) ? $_GET['tags'] : false;
             $_id = $this->request->getQuery('id');
             $_list = $this->request->getQuery('list');
             $_clientsList = $this->request->getQuery('clientsList');
-            $_from = !empty($_GET['from']) ? $_GET['from'] : '';
-            $_to = !empty($_GET['to']) ? $_GET['to'] : '';
-            $_col = !empty($_GET['col']) ? $_GET['col'] : 'id';
-            $_k = (isset($_GET['k']) && strlen($_GET['k']) > 0) ? $_GET['k'] : false;
+            $_from = !empty ($_GET['from']) ? $_GET['from'] : '';
+            $_to = !empty ($_GET['to']) ? $_GET['to'] : '';
+            $_col = !empty ($_GET['col']) ? $_GET['col'] : 'id';
+            $_k = (isset ($_GET['k']) && strlen($_GET['k']) > 0) ? $_GET['k'] : false;
             $actions = $this->paginate($this->Actions);
 
             // if (isset($_pid)) {
@@ -42,7 +42,7 @@ class ActionsController extends AppController
             }
 
             // ONE RECORD
-            if (!empty($_id)) {
+            if (!empty ($_id)) {
                 $data = $this->Actions->get($_id)->toArray();
                 dd($dt);
 
@@ -59,7 +59,7 @@ class ActionsController extends AppController
             }
 
             // LIST
-            if (!empty($_list)) {
+            if (!empty ($_list)) {
                 $data = $this->paginate($this->Actions, [
                     "order" => [$_col => $_dir],
                     "conditions" => $conditions
@@ -111,12 +111,40 @@ class ActionsController extends AppController
                 ->order(['stat_created' => 'DESC'])
                 ->first();
 
-            // If a similar record exists and its stat_created is less than the midnight of the next day, don't add a new record
-            if ($lastRecord && $lastRecord->stat_created > $rec->stat_created->modify('-24 hours')) {
-                echo json_encode(["status" => "ERROR", "msg" => __("Cannot add a new record within the same day.")]);
-                die();
-            }
-            
+            // debug($lastRecord);
+            // debug($lastRecord->stat_created);
+            // Get today's date and time
+            $todayDate = strtotime(date('Y-m-d H:i:s'));
+
+            // debug($todayDate);
+
+
+            if ($lastRecord) {
+                // Get the timestamp of the last record's stat_created and adjust it to the next day's 00:00
+                $lastStatCreated = strtotime($lastRecord->stat_created->format('Y-m-d H:i:s'));
+
+                // debug($lastStatCreated);
+
+                $nextDay00DateTime = strtotime('+1 day', strtotime(date('Y-m-d 00:00:00', $lastStatCreated)));
+
+                // dd($nextDay00DateTime < $todayDate);
+
+                // Check if the next day's 00:00 is before the current date and time
+                if ($nextDay00DateTime < $todayDate) {
+                    if ($this->Actions->save($rec)) {
+                        echo json_encode(["status" => "SUCCESS", "msg" => __("Record added successfully.")]);
+                        die();
+                    } 
+                }else {
+                    // If a similar record exists and it's within the same day, prevent adding a new record
+                    echo json_encode(["status" => "ERROR", "msg" => __("Cannot add a new record within the same day.")]);
+                    die();
+                }
+            } 
+
+
+
+
 
 
             // Add the new record
@@ -194,7 +222,7 @@ class ActionsController extends AppController
             }
         }
 
-        if (empty($errors)) {
+        if (empty ($errors)) {
             $res = ["status" => "SUCCESS", "data" => $dt];
         } else {
             $res = ["status" => "FAIL", "data" => $dt->getErrors()];

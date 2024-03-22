@@ -1560,7 +1560,6 @@
                                 <div class="heading ">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale', 'cc']) || isset ($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" id="modalBtn" ng-click="
                                         setZIndex();
                                         newEntity('reservation');
@@ -1569,7 +1568,6 @@
                                                 <i class="fas-plus"></i>
                                                 <?= __('add_deal') ?>
                                             </button>
-                                        <?php } ?>
 
                                     </div>
                                 </div>

@@ -434,7 +434,7 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                         </div>
                     <?php } ?>
                     <?php if (in_array($authUser['user_role'], ['accountant']) || isset ($authUser['user_original_role'])) { ?>
-                        <div class="client" ng-repeat="itm in lists.clients track by $index" >
+                        <div class="client" ng-repeat="itm in lists.clients track by $index">
                             <!-- Client row Start -->
 
                             <div class="client-row">
@@ -668,6 +668,20 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                 <?= __('sales_info') ?>
                                             </div>
                                             <div class="col-6 p-0 col-lg-12">
+
+                                                <span class="sm-txt">
+                                                    <?= __('category_id') ?>
+                                                </span>
+                                                <button ng-click="setZIndex();
+                                                updateModalElement('Lead Information');
+                                                doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
+                                                openModal('#subModal');
+                                                inlineElement('#elementsContainer', 1, 'info')"
+                                                    class="wb-ele sm-txt-indx" type="button">
+                                                    <p>
+                                                        {{itm.category.category_name}}
+                                                    </p>
+                                                </button>
                                                 <div class="note-flex">
 
                                                     <span class="sm-txt">
@@ -704,19 +718,7 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                         -
                                                     </p>
                                                 </button>
-                                                <span class="sm-txt">
-                                                    <?= __('category_id') ?>
-                                                </span>
-                                                <button ng-click="setZIndex();
-                                                updateModalElement('Lead Information');
-                                                doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
-                                                openModal('#subModal');
-                                                inlineElement('#elementsContainer', 1, 'info')"
-                                                    class="wb-ele sm-txt-indx" type="button">
-                                                    <p>
-                                                        {{itm.category.category_name}}
-                                                    </p>
-                                                </button>
+
 
 
 
@@ -763,7 +765,7 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                     <span class="sm-txt">
                                                         <?= __('notes') ?>
                                                     </span>
-                                                    <a href="#"
+                                                    <!-- <a href="#"
                                                         ng-click="
                                                         openModal('#subModal');
                                                         inlineElement('#elementsContainer', 1, 'finance');
@@ -772,7 +774,7 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                         doGet('/admin/reports?id=' + itm.reports[itm.reports.length - 1].id, 'rec', 'report');"
                                                         class="btn-link">
                                                         <?= __('view_allNotes') ?>
-                                                    </a>
+                                                    </a> -->
 
 
                                                 </div>
@@ -794,14 +796,14 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                     <span class="sm-txt">
                                                         <?= __('offers') ?>
                                                     </span>
-                                                    <a href="#" 
+                                                    <!-- <a href="#" 
                                                         ng-click="
                                                         openModal('#subModal');
                                                         inlineElement('#elementsContainer', 1, 'viewOffer');
                                                         doGet('/admin/clients?id='+itm.id, 'rec', 'client');"
                                                         class="btn-link">
                                                         <?= __('view_allOffers') ?>
-                                                    </a>
+                                                    </a> -->
 
 
                                                 </div>
@@ -826,11 +828,11 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                     <span class="sm-txt">
                                                         <?= __('deals_properties') ?>
                                                     </span>
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#viewReservation_mdl"
+                                                    <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#viewReservation_mdl"
                                                         ng-click="doGet('/admin/clients?id='+itm.id, 'rec', 'client');"
                                                         class="btn-link">
                                                         <?= __('view_allProperties') ?>
-                                                    </a>
+                                                    </a> -->
 
 
                                                 </div>

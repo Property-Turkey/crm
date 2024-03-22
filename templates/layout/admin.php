@@ -990,36 +990,11 @@
                 };
 
 
-
-
-
-                $scope.handleButtonClick = function (recStateId) {
-                    $scope.rec.sale.rec_state = recStateId;
-                };
-
-                $scope.clearTags = function () {
-                    $scope.rec.sale.name = []; //clean client item
-                };
-
                 $scope.modalElement = ''; // Başlangıçta boş bir modal element
 
                 $scope.updateModalElement = function (elementText) {
                     $scope.modalElement = elementText;
                 };
-
-
-
-                // $scope.changeUser = function () {
-                //     // Perform AJAX request to update data based on selected user
-                //     $http.post('localhost/<?= $app_folder ?>/admin/clients/dashboard', { filerData: $scope.rec.search.user })
-                //         .then(function (response) {
-                //             // Update data on success
-                //             $scope.data = response.data.data;
-                //         })
-                //         .catch(function (error) {
-                //             console.error('Error updating data:', error);
-                //         });
-                // };
 
                 $scope.calculateccWidth = function (id) {
                     var maxCount = Math.max.apply(null, Object.values($scope.rec.saleByfield.userBookCounts));
