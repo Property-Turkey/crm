@@ -2400,6 +2400,7 @@
                                             <div class="input-group">
                                             <?= $this->Form->control('', [
                                                 'class' => 'wb-ele-select-cur cur-inp',
+                                                'empty' => '$',
                                                 'label' => false,
                                                 'type' => 'select',
                                                 'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
@@ -2416,7 +2417,7 @@
                                                 'class' => 'wb-ele-select-cur cur-inp',
                                                 'label' => false,
                                                 'type' => 'select',
-
+                                                'empty' => '$',
                                                 'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
                                                 'ng-model' => 'rec.reservation.reservation_currency',
                                             ]) ?> 
@@ -2444,7 +2445,7 @@
                                                 'class' => 'wb-ele-select-cur cur-inp',
                                                 'label' => false,
                                                 'type' => 'select',
-
+                                                'empty' => '$',
                                                 'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
                                                 'ng-model' => 'rec.reservation.reservation_currency',
                                             ]) ?> 
@@ -2463,7 +2464,7 @@
                                                 'label' => false,
                                                 'type' => 'select',
                                                 'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
-
+                                                'empty' => '$',
                                                 'ng-model' => 'rec.reservation.reservation_currency',
                                             ]) ?> 
 
@@ -2773,6 +2774,7 @@
                                             <div class="input-group">
                                             <?= $this->Form->control('', [
                                                 'class' => 'wb-ele-select-cur cur-inp',
+                                                'empty' => '$',
                                                 'label' => false,
                                                 'type' => 'select',
                                                 'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
@@ -2789,7 +2791,7 @@
                                                 'class' => 'wb-ele-select-cur cur-inp',
                                                 'label' => false,
                                                 'type' => 'select',
-
+                                                'empty' => '$',
                                                 'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
                                                 'ng-model' => 'rec.reservation.reservation_currency',
                                             ]) ?> 
@@ -2823,7 +2825,7 @@
                                                 'label' => false,
                                                 'type' => 'select',
                                                 'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
-
+                                                'empty' => '$',
                                                 'ng-model' => 'rec.reservation.reservation_currency',
                                             ]) ?> 
 
