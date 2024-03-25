@@ -1521,6 +1521,26 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="col-md-6 col-12 col-lg-3"
+                                            ng-if="rec.client.book.in_turkey == 1">
+                                            <span class="sm-txt">
+                                                <?= __('in_turkey') ?>
+                                            </span>
+                                            <div class="wb-ele">
+                                                <i class="fa fa-check-circle-o greenText"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-12 col-lg-3"
+                                            ng-if="rec.client.book.in_turkey == 0 || rec.client.book.in_turkey == null">
+                                            <span class="sm-txt">
+                                                <?= __('in_turkey') ?>
+                                            </span>
+                                            <div class="wb-ele">
+                                                <i class="fa fa-check-circle-o redText"></i>
+                                            </div>
+                                        </div>
                                         <!-- <div class="dropdown">
                                             <button class="sm-btn float" type="button" data-bs-toggle="dropdown"
                                                 aria-expanded="false">

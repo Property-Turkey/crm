@@ -140,6 +140,28 @@ class BooksController extends AppController
 
             $rec = $this->Books->patchEntity($rec, $dt);
 
+            if (isset ($dt['book_departuredate'])) {
+                if ($dt['book_departuredate'] == true) {
+                    $rec->book_departuredate = $dt['book_departuredate'];
+                }
+            }
+
+            if (isset ($dt['book_meetperiod'])) {
+                if ($dt['book_meetperiod'] == true) {
+                    $rec->book_meetperiod = $dt['book_meetperiod'];
+                }
+            }
+
+            if (isset ($dt['in_turkey'])) {
+                if ($dt['in_turkey'] == true) {
+                    $rec->in_turkey = $dt['in_turkey'] = 1;
+                }
+                // dd($dt['in_turkey']);
+                if ($dt['in_turkey'] == false) {
+                    $rec->in_turkey = $dt['in_turkey'] = 0;
+                }
+                // dd($dt['in_turkey']);
+            }
 
         }
 
@@ -150,13 +172,29 @@ class BooksController extends AppController
             $client_id = $dt['client_id'];
 
             $rec = $this->Books->newEntity($dt);
+
+            if (isset ($dt['book_departuredate'])) {
+                if ($dt['book_departuredate'] == true) {
+                    $rec->book_departuredate = $dt['book_departuredate'];
+                }
+            }
+
+            if (isset ($dt['book_meetperiod'])) {
+                if ($dt['book_meetperiod'] == true) {
+                    $rec->book_meetperiod = $dt['book_meetperiod'];
+                }
+            }
+
+            if (isset ($dt['in_turkey'])) {
+                if ($dt['in_turkey'] == true) {
+                    $rec->in_turkey = $dt['in_turkey'] = 1;
+                }
+            }
             $newRec = $this->Books->save($rec);
 
             $ddrec = $this->Books->Clients->get($dt['client_id']);
 
-
             $ddrec->rec_state = 11;
-
 
             // $rec->client_tags = json_encode($dt['client_tags']);
         }

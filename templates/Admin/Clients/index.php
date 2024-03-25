@@ -397,8 +397,7 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                     ) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Date</span>{{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
-                                                        ')[0] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[0] }}
                                                     </div>
                                                 </div>
 
@@ -406,8 +405,7 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                     <?= $this->Html->image('/img/clock_regular.svg', ['' => '']) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Time</span> {{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
-                                                        ')[1] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[1] }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -558,8 +556,7 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                     ) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Date</span>{{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
-                                                        ')[0] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[0] }}
                                                     </div>
                                                 </div>
 
@@ -567,8 +564,7 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                     <?= $this->Html->image('/img/clock_regular.svg', ['' => '']) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Time</span> {{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
-                                                        ')[1] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[1] }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -781,9 +777,10 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                 <button class="wb-ele sm-txt-indx" type="button" ng-click="
                                                         updateModalElement('Notes');
                                                         openModal('#subModal');
+                                                        inlineElement('#elementsContainer', 1, 'finance');
                                                         rec.report.tar_id = itm.id;
-                                                        doGet('/admin/reports?id=' + itm.reports[itm.reports.length - 1].id, 'rec', 'report');
-                                                        inlineElement('#elementsContainer', 1, 'notesindex');">
+                                                        doGet('/admin/clients?id='+itm.id, 'rec', 'client');
+                                                        doGet('/admin/reports?id=' + itm.reports[itm.reports.length - 1].id, 'rec', 'report');">
                                                     <p ng-if="itm.reports.length > 0">
                                                         {{ itm.reports[itm.reports.length - 1].report_text }}
                                                     </p>
@@ -813,7 +810,7 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                         newEntity('offer'); 
                                                         openModal('#subModal'); 
                                                         doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
-                                                        inlineElement('#elementsContainer', 1, 'offers')">
+                                                        inlineElement('#elementsContainer', 1, 'viewOffer')">
                                                     <p ng-if="itm.offers.length > 0">
                                                         Sent {{ itm.offers.length }} Offers
                                                     </p>
@@ -837,11 +834,12 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
 
                                                 </div>
 
-                                                <button class="wb-ele sm-txt-indx" type="button" ng-click="
+                                                <button class="wb-ele sm-txt-indx" type="button"  ng-click="
                                                     setZIndex();
                                                     openModal('#subModal'); 
                                                     doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
-                                                    inlineElement('#elementsContainer', 1, 'reservation')">
+                                                    doGet('/admin/reservations?id=' + itm.reservations[itm.reservations.length - 1].id, 'rec', 'reservation');
+                                                    inlineElement('#elementsContainer', 1, 'indexreser')">
                                                     <p ng-if="itm.reservations.length > 0">
                                                         Sent {{ itm.reservations.length }} Properties
                                                     </p>
@@ -868,8 +866,7 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                             doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
                                             inlineElement('#elementsContainer', 1, 'reminders')">
                                                     <p ng-if="itm.reminders.length > 0">
-                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
-                                                        ')[0] }}
+                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[0] }}
                                                     </p>
 
                                                 </button>
@@ -882,8 +879,7 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                             doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
                                             inlineElement('#elementsContainer', 1, 'reminders')">
                                                     <p ng-if="itm.reminders.length > 0">
-                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
-                                                        ')[1] }}
+                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[1] }}
                                                     </p>
                                                 </button>
                                                 <div class="row">
@@ -991,7 +987,8 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                                                     ng-disabled="checkDate(rec.pool.clientAction75[itm.id][1])"
                                                                                     name="invoice4" id="finance-client4"
                                                                                     type="checkbox" />
-                                                                                <span class="slider round"></span>
+                                                                                <span
+                                                                                    ng-class="{ 'slider': true, 'round': true, 'disabled': checkDate(rec.pool.clientAction75[itm.id][1]) }"></span>
                                                                             </label>
                                                                             <label for="finance-client3">
                                                                                 <?= __('called') ?>
@@ -1008,7 +1005,8 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                                                     ng-disabled="checkDate(rec.pool.clientAction76[itm.id][1])"
                                                                                     name="invoice4" id="finance-client4"
                                                                                     type="checkbox" />
-                                                                                <span class="slider round"></span>
+                                                                                <span
+                                                                                    ng-class="{ 'slider': true, 'round': true, 'disabled': checkDate(rec.pool.clientAction76[itm.id][1]) }"></span>
                                                                             </label>
                                                                             <label for="finance-client4">
                                                                                 <?= __('spoken') ?>
@@ -1017,12 +1015,6 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                                     </div>
                                                                 </div>
                                                             </div>
-
-
-
-
-
-
 
                                                         </div>
 

@@ -1870,6 +1870,10 @@ input:checked + .slider {
     background-color: #3bc14a;
 }
 
+input:checked +  .disabled{
+    background-color: #848383;
+}
+
 .green-background {
     background-color: #3bc14a;
 }

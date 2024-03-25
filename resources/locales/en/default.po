@@ -1245,3 +1245,8 @@ msgstr "Payment Details"
 msgid "field_detail_period"
 msgstr "Field Detail Selected Period of time"
 
+msgid "in_turkey"
+msgstr "Is Client in Turkey?"
+
+
+
