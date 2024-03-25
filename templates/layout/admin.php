@@ -1961,7 +1961,7 @@
                                     <input type="date" date-format ng-model="rec.book.book_arrivedate" class="wb-txt-inp p-2 ps-3" id="" />
                                 </label>
 
-                                <label for="" class="col-md-6 col-12 col-lg-4" ng-if="!(rec.book.in_turkey == 1)">
+                                <label for="" class="col-md-6 col-12 col-lg-4" >
                                     <span class="sm-txt"><?= __('booking_departuredate') ?></span>
                                     <input type="date" date-format ng-model="rec.book.book_departuredate" class="wb-txt-inp p-2 ps-3" id="" />
                                 </label>
