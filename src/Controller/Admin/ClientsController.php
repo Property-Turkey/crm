@@ -415,7 +415,7 @@ class ClientsController extends AppController
 
         // Son 75 action_type'ı al
         $latestActions76 = $this->Clients->Actions->find()
-            ->select(['client_id', 'action_type', 'stat_created'])
+            ->select(['client_id', 'action_type', 'stat_created', 'id'])
             ->where(['action_type' => 76])
             ->order(['id' => 'DESC'])
             ->toArray();
@@ -426,6 +426,8 @@ class ClientsController extends AppController
             // dd($action->stat_created);
             $clientAction76[$action->client_id][] = $action->action_type;
             $clientAction76[$action->client_id][] = $action->stat_created;
+            $clientAction76[$action->client_id][] = $action->id;
+
 
         }
 

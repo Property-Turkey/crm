@@ -436,9 +436,9 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                             <!-- Client row Start -->
 
                             <div class="client-row">
-                                <!-- <button type="button" id="client_btn" class="hideIt" ng-click="
+                                <button type="button" id="client_btn" class="hideIt" ng-click="
                             doGet('/admin/clients/index?list=1', 'list', 'clients');">
-                        </button> -->
+                        </button>
                                 <!-- <button type="button" id="client_btn" class="hideIt" ng-click="
                                 doGet('/admin/clients/index?list=1', 'list', 'clients');">
                             </button> -->
@@ -807,6 +807,7 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
 
                                                 <button class="wb-ele sm-txt-indx" type="button" ng-click="
                                                         setZIndex();
+                                                        updateModalElement('Offers');
                                                         newEntity('offer'); 
                                                         openModal('#subModal'); 
                                                         doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
@@ -837,6 +838,7 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
                                                 <button class="wb-ele sm-txt-indx" type="button"  ng-click="
                                                     setZIndex();
                                                     openModal('#subModal'); 
+                                                    updateModalElement('Deals');
                                                     doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
                                                     doGet('/admin/reservations?id=' + itm.reservations[itm.reservations.length - 1].id, 'rec', 'reservation');
                                                     inlineElement('#elementsContainer', 1, 'indexreser')">
@@ -1045,7 +1047,7 @@ $_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getPa
 
                                                 <div class="wb-ele" type="button" ng-click="setZIndex();
                                                     updateModalElement('Assign');
-                                                    newEntity('book'); 
+                                                    newEntity('user_client'); 
                                                     openModal('#subModal'); 
                                                     doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
                                                     inlineElement('#elementsContainer', 1, 'assign')">

@@ -4,10 +4,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">
-          <!-- <div ng-if="!rec.client.id || !rec.category.id || !rec.user.id">
-            <?= __('add') ?> {{ modalElement }}
+          <div>
+             {{ modalElement }}
           </div>
-          <div ng-if="rec.client.id || rec.category.id || rec.user.id">
+          <!-- <div ng-if="rec.client.id || rec.category.id || rec.user.id">
             <?= __('edit') ?> {{ modalElement }}
           </div> -->
         </h1>

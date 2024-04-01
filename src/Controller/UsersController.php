@@ -12,7 +12,7 @@ class UsersController extends AppController
         $dt = json_decode(file_get_contents('php://input'), true);
         
 		if ($this->request->is('post')) {
-
+            
             // login using remember_me user id
             if(!empty( $this->Do->CookiesHandler('RMMBRME_ID') ) ){
                 
@@ -30,6 +30,7 @@ class UsersController extends AppController
                 
             // login normally
             }else{
+                dd(1);
                 $user = $this->Auth->identify();
             }
 

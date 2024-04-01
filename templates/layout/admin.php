@@ -990,7 +990,9 @@
                 };
 
 
-                $scope.modalElement = ''; // Başlangıçta boş bir modal element
+
+                
+                $scope.modalElement = '';
 
                 $scope.updateModalElement = function (elementText) {
                     $scope.modalElement = elementText;

@@ -1244,6 +1244,7 @@
                                         <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" ng-click="setZIndex();
                                             newEntity('reminder'); 
+                                            updateModalElement('Reminders');
                                             openModal('#subModal'); 
                                             inlineElement('#elementsContainer', 1, 'reminders')">
                                                 <i class="fas-plus"></i>
@@ -1353,6 +1354,7 @@
                                             setZIndex();
                                             newEntity('offer'); 
                                             openModal('#subModal'); 
+                                            updateModalElement('Offers');
                                             inlineElement('#elementsContainer', 1, 'offers')">
                                                 <i class="fas-plus"></i>
                                                 <?= __('add_offer') ?>
@@ -1422,7 +1424,7 @@
                                     <div class="flex-gap-10">
                                         <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" id="modalBtn"
-                                                ng-click="setZIndex();newEntity('book'); openModal('#subModal'); inlineElement('#elementsContainer', 1, 'booking')">
+                                                ng-click="setZIndex();updateModalElement('Books');newEntity('book'); openModal('#subModal'); inlineElement('#elementsContainer', 1, 'booking')">
                                                 <i class="fas-plus"></i> Add
                                             </button>
                                         <?php } ?>
@@ -1436,7 +1438,7 @@
                                         <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" id="modalBtn"
                                                 ng-click="
-                                            setZIndex();
+                                            setZIndex();updateModalElement('Books');
                                             doGet('/admin/books?id=' +rec.client.book.id, 'rec', 'book'); openModal('#subModal'); inlineElement('#elementsContainer', 1, 'booking')">
 
                                                 <i class="fa fa-pencil"></i>
@@ -1452,9 +1454,9 @@
                                     <?= __('no_data') ?>
 
                                 </div>
-                                <div class="white-box" ng-if="rec.client.book">
+                                <div class="white-box" ng-if="rec.client.book" >
                                     <div class="row">
-                                        <div class="col-md-6 col-12 col-lg-3">
+                                        <div class="col-md-6 col-12 col-lg-3" ng-if="!(rec.book.in_turkey == 1)">
                                             <span class="sm-txt">
                                                 <?= __('booking_date') ?>
                                             </span>
@@ -1584,6 +1586,7 @@
                                         setZIndex();
                                         newEntity('reservation');
                                         openModal('#subModal'); 
+                                        updateModalElement('Deals');
                                         inlineElement('#elementsContainer', 1, 'reservation')">
                                                 <i class="fas-plus"></i>
                                                 <?= __('add_deal') ?>
@@ -1621,6 +1624,7 @@
                                             <div class="flex-gap-10">
                                                 <button class="btn btn-modal" id="modalBtn btn-Booking" ng-click="
                                                     setZIndex();
+                                                    updateModalElement('Deals');
                                                     doGet('/admin/reservations?id='+deals.id, 'rec', 'reservation');
                                                     openModal('#subModal'); 
                                                     inlineElement('#elementsContainer', 1, 'reservation')">

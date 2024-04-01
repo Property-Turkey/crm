@@ -761,15 +761,16 @@ class UsersController extends AppController
             // login using remember_me user id
             if (!empty($this->Do->CookiesHandler('RMMBRME_ID'))) {
 
-                $user = $this->Users->find('all', [
+                $user = $this->Users->get('all', [
                     'conditions' => ['id' => $this->Do->CookiesHandler('RMMBRME_ID')]
                 ])->first()->toArray();
 
+                
                 if (!$user) {
                     return $this->logout();
                 }
 
-                // login from email AUTOLOGIN for activation and change password
+            // login from email AUTOLOGIN for activation and change password
             } elseif (isset($dt['autologin'])) {
                 $code = base64_decode($dt['autologin']);
                 $id = substr($code, 3, -3);

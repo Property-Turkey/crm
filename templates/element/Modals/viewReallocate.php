@@ -27,7 +27,7 @@
                                     
                                   
                                 </div>
-   {{ $index + 1 }}
+  
 
                                 <div class="heading mb-2" ng-if="recStateName.rec_state == 2">
                                     <div class="title" style="color: #7d7d7d;">{{recStateName.user.user_fullname}}</div>
@@ -80,10 +80,11 @@
 
                                     <label for="" class="col-6 col-sm-12">
                                         <span class="sm-txt">
+                                            {{recStateName.user.id}}
                                             <?= __('client_current_stage') ?>
                                         </span>
                                         <tags-input style="padding: 0px;padding-left: 10px;"
-                                            ng-model="rec.user_client[recStateName.id].user" add-from-autocomplete-only="true"
+                                            ng-model="recStateName.id" add-from-autocomplete-only="true"
                                             placeholder="Select <?= __('client_current_stage') ?>"
                                             display-property="text" key-property="value" class="wb-txt-inp"
                                             tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
@@ -92,7 +93,7 @@
                                             </auto-complete>
                                         </tags-input>
                                     </label>
-{{rec.user_client.user}}
+
                                     <div class="down-btns mt-1 d-flex justify-content-end">
                                         <div class="flex-gap-10 ">
                                             <button class="btn btn-danger" id="userclient_preloader" type="submit">

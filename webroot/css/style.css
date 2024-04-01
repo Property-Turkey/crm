@@ -1851,7 +1851,7 @@ tags-input .tags .even.selected {
     right: 0;
     bottom: 0;
     width: 42px;
-    background-color: #ccc;
+    background-color: #7dd8ee;
     transition: 0.4s;
 }
 
@@ -1871,7 +1871,7 @@ input:checked + .slider {
 }
 
 input:checked +  .disabled{
-    background-color: #848383;
+    background-color: #3bc14a;
 }
 
 .green-background {
@@ -2063,6 +2063,9 @@ input:checked + .slider:before {
 }
 .greenBg {
     background-color: var(--green);
+}
+.blueBg {
+    background-color: #7dd8ee;
 }
 .darkRedBg:hover{
     background-color: #a82b05;
