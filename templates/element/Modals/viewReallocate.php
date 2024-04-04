@@ -80,11 +80,11 @@
 
                                     <label for="" class="col-6 col-sm-12">
                                         <span class="sm-txt">
-                                            {{recStateName.user.id}}
+                                            <!-- {{recStateName.user.id}} -->
                                             <?= __('client_current_stage') ?>
                                         </span>
                                         <tags-input style="padding: 0px;padding-left: 10px;"
-                                            ng-model="recStateName.id" add-from-autocomplete-only="true"
+                                            ng-model="rec.user_client.user" add-from-autocomplete-only="true"
                                             placeholder="Select <?= __('client_current_stage') ?>"
                                             display-property="text" key-property="value" class="wb-txt-inp"
                                             tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
@@ -114,7 +114,7 @@
                                             <?= __('pool_name') ?>
                                         </span>
                                         <tags-input placeholder="Add This Client to Pool"
-                                            style="padding: 0px;padding-left: 10px;" ng-model="rec.client[recStateName.id].pool"
+                                            style="padding: 0px;padding-left: 10px;" ng-model="rec.client.pool"
                                             class="wb-txt-inp"
                                             tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
                                             <auto-complete min-length="0" load-on-focus="true" load-on-empty="true"

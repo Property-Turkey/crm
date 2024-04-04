@@ -326,6 +326,23 @@ class ClientsController extends AppController
                     $q->matching('UserClient', function ($q) use ($userId) {
                         return $q->where(['user_id' => $userId]);
                     });
+                    if (!empty($dt['search']['pool_id'])) {
+                        
+                        $selectedPoolId = $dt['search']['pool_id'];
+                        // dd($dt['search']['pool_id']);
+                        $q = $this->Clients->find()
+                            ->order(['Clients.' . $_col => $_dir])
+                            ->where([$conditions])
+                            ->contain([
+                            ])
+                            ->group('Clients.id');
+        
+                        if ($selectedPoolId) {
+                            $q->matching('PoolCategories', function ($q) use ($selectedPoolId) {
+                                return $q->where(['PoolCategories.id' => $selectedPoolId]);
+                            });
+                        }
+                    }
                 }elseif ($userRole === 'accountant') {
                     $q->matching('Reservations', function ($q) {
                         return $q->where([
@@ -337,15 +354,22 @@ class ClientsController extends AppController
                 }
                 
 
-                // Kategori filtresini uygula
-                $selectedCategoryId = $this->request->getQuery('category_id');
-                if ($selectedCategoryId) {
-                    $q->matching('Categories', function ($q) use ($selectedCategoryId) {
-                        return $q->where(['Categories.id' => $selectedCategoryId]);
-                    });
-                }
+                // // Kategori filtresini uygula
+                // $selectedCategoryId = $this->request->getQuery('category_id');
+                // if ($selectedCategoryId) {
+                //     $q->matching('Categories', function ($q) use ($selectedCategoryId) {
+                //         return $q->where(['Categories.id' => $selectedCategoryId]);
+                //     });
+                // }
 
+
+                // $data = $this->paginate($q, ['limit' => 50]);
+
+                
+
+                // İstemci listesini al
                 $data = $this->paginate($q, ['limit' => 50]);
+
 
             }
 
@@ -455,11 +479,12 @@ class ClientsController extends AppController
 
         // Edit mode
         if ($this->request->is(['patch', 'put'])) {
+
+            
             $rec = $this->Clients->get($dt['id'], [
                 'contain' => ['ClientSpecs']
             ]);
             // debug($dt['adrscountry'][0]['value']);
-
             $saleSpecs = $dt['client_specs'];
             // debug($dt['adrscountry'][0]['value']);
             foreach ($saleSpecs as &$saleSpec) {
@@ -506,6 +531,7 @@ class ClientsController extends AppController
                 $rec->adrs_country = $dt['adrscountry'][0]['value'];
             }
 
+            
             if (isset($dt['pool'])) {
                 $rec->pool_id = $dt['pool'][0]['value'];
             }
@@ -3116,14 +3142,15 @@ class ClientsController extends AppController
 
         } else {
             $userSaleTable = TableRegistry::getTableLocator()->get('UserClient');
-            $clientIds = $userSaleTable
+            $clientIdsQuery = $userSaleTable
                 ->find()
                 ->where([
                     'user_id' => $userId
-                ])
-                ->extract('client_id')
-                ->toArray();
-
+                ]);
+            
+            // Şimdi `all()` metodu çağırılarak sonuçlar alınıyor
+            $clientIds = $clientIdsQuery->all()->extract('client_id')->toArray();
+            
             $booksTable = TableRegistry::getTableLocator()->get('Books');
             $reservationTable = TableRegistry::getTableLocator()->get('Reservations');
             $reminderTable = TableRegistry::getTableLocator()->get('Reminders');

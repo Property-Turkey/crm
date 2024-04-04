@@ -18,19 +18,22 @@ class UsersController extends AppController
                 
                 $user = $this->Users->find('all', [
                     'conditions'=>[ 'id'=>$this->Do->CookiesHandler('RMMBRME_ID') ]
-                ] )->first()->toArray();
-                
+                ] )->first();
+
+                // echo json_encode(['status'=>'SUCCESS', 'data'=>$user]); die(); 
+                 
                 if(!$user){ return $this->logout(); }
 
             // login from email AUTOLOGIN for activation and change password
             }elseif(isset($dt['autologin'])){
+               
                 $code = base64_decode( $dt['autologin'] );
                 $id = substr($code , 3, -3);
                 $user = $this->Users->get($id)->toArray();
                 
             // login normally
             }else{
-                dd(1);
+                
                 $user = $this->Auth->identify();
             }
 

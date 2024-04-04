@@ -234,7 +234,7 @@ class ClientsController extends AppController
                 $data = $this->paginate($q);
            
 
-        }
+            }
 
             echo json_encode(
                 [

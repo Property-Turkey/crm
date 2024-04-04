@@ -25,12 +25,12 @@
                     "templates" => ["inputContainer" => "{{content}}"]
                 ]) ?>
             </label>
-
+<!-- 
             <label class="col-12 mb-2 mycheckbox">
                 <input type="checkbox" ng-model="userdt.remember_me"> <span><span>
                         <?= __('remember_me') ?>
-            </label>
-            <label>
+            </label> -->
+            
 
 
 

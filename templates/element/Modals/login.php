@@ -27,9 +27,9 @@
                                 "templates" => [ "inputContainer" => "{{content}}"]
                             ]) ?>
                         </div>
-                        <label class="col-12 mb-2 mycheckbox">
+                        <!-- <label class="col-12 mb-2 mycheckbox">
                             <input type="checkbox" ng-model="userdt.remember_me"> <span><span> <?= __('remember_me') ?>
-                        </label>
+                        </label> -->
 
                         <div class="col-12 mb-2">
                             <button class="btn btn-success" id="login_btn">

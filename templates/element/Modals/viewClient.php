@@ -992,6 +992,15 @@
                                                     <?= __('add_assign') ?>
                                                 </button>
                                             <?php } ?>
+                                                <button ng-if="rec.search.pool_id" class="btn btn-modal" id="modalBtn" ng-click="setZIndex();
+                                                updateModalElement('Assign');
+                                                newEntity('newTag');
+                                                tagList = [];
+                                                openModal('#subModal'); 
+                                                inlineElement('#elementsContainer', 1, 'assign')">
+                                                    <i class="fas-plus"></i>
+                                                    <?= __('self_assign') ?>
+                                                </button>
 
 
                                             <!-- <button id="modalBtn" ng-if="rec.client.client_current_stage == 2"
