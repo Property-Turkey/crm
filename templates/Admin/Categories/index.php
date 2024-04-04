@@ -48,7 +48,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                         </span>
                     </button>
 
-                    <button class="btn btn-warning" ng-click="multiHandle('/admin/categories/delete')">
+                    <button class="btn btn-warning" nng-click="multiHandle('/admin/categories/delete', selected, <?= $_pid ?>)">
                         Delete
                     </button>
 
