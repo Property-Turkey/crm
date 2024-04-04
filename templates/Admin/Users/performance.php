@@ -1,5 +1,7 @@
 <?php
 $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getParam('pass')[0];
+$actionType = !isset ($this->request->getParam('action_type')[0]) ? 0 : $this->request->getParam('action_type')[0];
+
 // dd($_pid);
 ?>
 
@@ -58,29 +60,28 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             </thead>
                             <tbody>
 
-                                <div>
-                                    {{itm}}
-                                </div>
+                                
                                 <!-- {{rec.kbidata.ccUsers}} -->
-                                <tr ng-repeat="cc in lists.users track by $index" mg-if="cc.user_role == 'cc'">
+                                <tr ng-repeat="cc in lists.users track by $index" ng-if="cc.user_role == 'cc'">
+                              
                                     <td>
+                                    {{cc.actions_today_called}}
                                         <div>
                                             {{$index + 1}}.
                                         </div>
                                     </td>
+
                                     <td>
-                                        <a ng-click="redirectToUser(cc.id)">
+                                        <a ng-click="redirectTo(cc.id)">
                                             {{cc.user_fullname}}
-
-
                                         </a>
                                     </td>
 
                                     <td>
                                         <div>
                                             <a ng-if="cc.actions_today_called.length > 0"
-                                                ng-click="redirectToUser(cc.id)">
-
+                                                ng-click="redirectTo(cc.id, 75)">
+                                                    {{cc.actions_today_called.length}}
                                             </a>
                                             <div ng-if="cc.actions_today_called.length === 0">
                                                 0
@@ -104,7 +105,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                         <a>
                                             
                                             <a ng-if="cc.actions_yesterday_called.length > 0"
-                                                ng-click="redirectToUserActions(cc.id)" ng-model="rec.search.cc.id">
+                                                ng-click="redirectToActions(cc.id)" ng-model="rec.search.cc.id">
                                                 {{ cc.actions_yesterday_called.length }}
                                             </a>
 

@@ -980,8 +980,9 @@
                     }, 500)
                 };
 
-                $scope.redirectToUser = function (userId) {
-                    window.location.href = '/crm/en/admin/users/index/' + userId;
+                $scope.redirectTo = function (userId, actionType) {
+                    // window.location.href ile yönlendirme işlemini gerçekleştirin
+                    window.location.href = '/crm/en/admin/clients/index/' + userId + '?action_type=' + actionType;
                 };
 
                 $scope.redirectToUserActions = function (clientUserId) {

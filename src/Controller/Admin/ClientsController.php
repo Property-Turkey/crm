@@ -38,10 +38,10 @@ class ClientsController extends AppController
         return compact('userId', 'users', 'clientIds');
     }
 
-    public function index($_pid = null)
+    public function index($_pid = null, $actionType = null)
     {
 
-
+       
 
         $_client = isset($_GET['tags']) ? $_GET['tags'] : false;
         $_keyword = isset($_GET['keyword']) ? $_GET['keyword'] : false;
@@ -90,11 +90,12 @@ class ClientsController extends AppController
             $data = [];
             $conditions = [];
 
-            $_actionsUserId = !empty($_GET['userId']) ? $_GET['userId'] : '';
-            // dd($_actionsUserId);
-            if (isset($_GET['userId'])) {
-                $_pid = $_actionsUserId;
-            }
+
+            // $_actionsUserId = !empty($_GET['userId']) ? $_GET['userId'] : '';
+            // // dd($_actionsUserId);
+            // if (isset($_GET['userId'])) {
+            //     $_pid = $_actionsUserId;
+            // }
 
             if (is_numeric($_pid) && $_pid > 0) {
                 $query = $this->Clients->find()
@@ -114,8 +115,6 @@ class ClientsController extends AppController
                     $conditions['Clients.id IN'] = [];
                 }
             }
-
-
 
             // if(!empty( $dt )){
             //     foreach($dt as $key=>$itm){
@@ -352,15 +351,25 @@ class ClientsController extends AppController
                     });
                     
                 }
-                
-
-                // // Kategori filtresini uygula
-                // $selectedCategoryId = $this->request->getQuery('category_id');
-                // if ($selectedCategoryId) {
-                //     $q->matching('Categories', function ($q) use ($selectedCategoryId) {
-                //         return $q->where(['Categories.id' => $selectedCategoryId]);
-                //     });
-                // }
+                // dd($_pid);
+                if (is_numeric($_pid) && $_pid > 0) {
+                    // Kullanıcının sahip olduğu müşterileri bulmak için gerekli sorguyu oluşturun
+                    $query = $this->Clients->find()
+                        ->innerJoinWith('Actions', function ($q) use ($_pid, $actionType) {
+                            return $q->where([
+                                'Actions.user_id' => $_pid,
+                                'Actions.action_type' => $actionType
+                            ]);
+                        });
+            
+                    // Müşterileri pagine edin veya isteğe bağlı olarak döndürün
+                    $clients = $this->paginate($query);
+            
+                    // Bulunan müşterileri JSON formatında döndürün
+                    echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($clients)], JSON_UNESCAPED_UNICODE);
+                    die();
+                }
+               
 
 
                 // $data = $this->paginate($q, ['limit' => 50]);
