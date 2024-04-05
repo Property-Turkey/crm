@@ -174,9 +174,9 @@ class ClientsTable extends Table
         $validator
             ->allowEmptyString('client_priority');
 
-        $validator
-            ->integer('client_finance')
-            ->allowEmptyString('client_finance');
+        // $validator
+        //     ->integer('client_finance')
+        //     ->allowEmptyString('client_finance');
 
         $validator
             ->requirePresence('client_current_stage', 'create')

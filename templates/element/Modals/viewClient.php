@@ -880,25 +880,30 @@
                                     <div class="row">
                                         <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt"> Name </span>
-                                            <div class="wb-ele">{{enq.enquiry_clname}}</div>
+                                            <div class="wb-ele">{{enq.enquiry_name}}</div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt"> Phone </span>
-                                            <div class="wb-ele">{{enq.enquiry_clphone}}</div>
+                                            <div class="wb-ele">{{enq.enquiry_phone}}</div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt"> Email </span>
-                                            <div class="wb-ele">{{enq.enquiry_clemail}}</div>
+                                            <div class="wb-ele">{{enq.enquiry_email}}</div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt"> Country </span>
-                                            <div class="wb-ele">{{enq.country.adrs_name }}</div>
+                                            <div class="wb-ele">{{enq.enquiry_country.adrs_name }}</div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt"> Source </span>
                                             <div class="wb-ele">
-                                                <a href="#" class="btn-link">{{enq.source.category_name}}</a>
+                                                <a href="#" class="btn-link">{{enq.enquiry_source.category_name}}</a>
                                             </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> Messages </span>
+                                            <div class="wb-ele">{{enq. enquiry_message}}</div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt"> Property Ref </span>

@@ -320,7 +320,7 @@ class ClientsController extends AppController
                     ])
                     ->group('Clients.id');
 
-                if ($userRole != 'admin.root' && $userRole != 'admin.admin' && $userRole != 'admin.cc' && $userRole != 'accountant' ) {
+                if ($userRole != 'admin.root' && $userRole != 'admin.admin' && $userRole != 'accountant' ) {
                     $userId = $this->authUser['id'];
                     $q->matching('UserClient', function ($q) use ($userId) {
                         return $q->where(['user_id' => $userId]);
@@ -884,10 +884,6 @@ class ClientsController extends AppController
         $starterDate = !empty($_GET['startDate']) ? $_GET['startDate'] : '';
         $endDate = !empty($_GET['endDate']) ? $_GET['endDate'] : '';
 
-
-
-
-
         $userData = TableRegistry::getTableLocator()->get('Users');
         $userField = $userData->find()
             ->select(['id', 'user_fullname'])
@@ -1217,7 +1213,7 @@ class ClientsController extends AppController
         $userCC = $userData->find()
             ->select(['id', 'user_fullname'])
             ->distinct(['user_fullname'])
-            ->where(['user_role' => 'cc'])
+            ->where(['user_role' => 'admin.callcenter'])
             ->toArray();
 
         // cc olan user_role'larından sadece user_role'ları al
@@ -1554,7 +1550,7 @@ class ClientsController extends AppController
 
 
 
-        $user_roles = ['cc', 'field'];
+        $user_roles = ['admin.callcenter', 'field'];
         $userBookrole = $userData->find()
             ->select(['id', 'user_fullname', 'user_role'])
             ->distinct(['user_fullname'])
@@ -1613,8 +1609,8 @@ class ClientsController extends AppController
                 }
 
                 // Kullanıcının user_role bilgisine göre renk belirle
-                $datasetIndex = ($userClient->user_role == 'cc') ? 0 : 1;
-                $barDataset['datasets'][$datasetIndex]['backgroundColor'][] = ($userClient->user_role == 'cc') ? '#1565c0' : '#e8534f';
+                $datasetIndex = ($userClient->user_role == 'admin.callcenter') ? 0 : 1;
+                $barDataset['datasets'][$datasetIndex]['backgroundColor'][] = ($userClient->user_role == 'admin.callcenter') ? '#1565c0' : '#e8534f';
 
                 $barDataset['datasets'][$datasetIndex]['data'][] = $totalBooksCount;
             }
@@ -1636,19 +1632,14 @@ class ClientsController extends AppController
                 }
 
                 // Kullanıcının user_role bilgisine göre renk belirle
-                $datasetIndex = ($userClient->user_role == 'cc') ? 0 : 1;
-                $barDataset['datasets'][$datasetIndex]['backgroundColor'][] = ($userClient->user_role == 'cc') ? '#1565c0' : '#e8534f';
+                $datasetIndex = ($userClient->user_role == 'admin.callcenter') ? 0 : 1;
+                $barDataset['datasets'][$datasetIndex]['backgroundColor'][] = ($userClient->user_role == 'admin.callcenter') ? '#1565c0' : '#e8534f';
 
                 $barDataset['datasets'][$datasetIndex]['data'][] = $totalBooksCount;
             }
         }
 
         $data3['datasets'] = $barDataset['datasets'];
-
-
-
-
-
 
 
 
@@ -2254,7 +2245,7 @@ class ClientsController extends AppController
 
         //client advisor table
         $ccUsers = $userData->find()
-            ->where(['user_role' => 'cc'])
+            ->where(['user_role' => 'admin.callcenter'])
             ->toArray();
 
         $userBookCounts = [];
@@ -3015,9 +3006,13 @@ class ClientsController extends AppController
         $isAdmin = $this->authUser['user_role'] === 'admin.admin' || $this->authUser['user_role'] === 'admin.root';
 
         $usersTable = TableRegistry::getTableLocator()->get('Users');
+
+        // dd($usersTable);
         $assignTable = TableRegistry::getTableLocator()->get('UserClient');
 
         $user = $usersTable->get($userId);
+
+        // dd($user);
         $lastLoginDate = $user->stat_lastlogin;
 
 

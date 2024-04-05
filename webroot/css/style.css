@@ -1062,12 +1062,19 @@ input[type="checkbox"]:checked:after {
 
 .child_menu {
     border-right: 5px solid var(--gentela_darker);
-}
+    padding: 0 10px;
+  }
+  
 
 .child_menu li a:hover {
     color: #b93006 !important;
 }
 
+.text-dark {
+    width: 30px;
+    text-align: center;
+  }
+  
 .navbar .menu {
     background-color: var(--color1);
     width: 50px;

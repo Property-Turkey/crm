@@ -65,9 +65,8 @@ $actionType = !isset ($this->request->getParam('action_type')[0]) ? 0 : $this->r
                                 <tr ng-repeat="cc in lists.users track by $index" ng-if="cc.user_role == 'cc'">
                               
                                     <td>
-                                    {{cc.actions_today_called}}
                                         <div>
-                                            {{$index + 1}}.
+                                        {{cc.id}}
                                         </div>
                                     </td>
 
@@ -80,7 +79,7 @@ $actionType = !isset ($this->request->getParam('action_type')[0]) ? 0 : $this->r
                                     <td>
                                         <div>
                                             <a ng-if="cc.actions_today_called.length > 0"
-                                                ng-click="redirectTo(cc.id, 75)">
+                                             ng-click="redirectTo(cc.id, 75)">
                                                     {{cc.actions_today_called.length}}
                                             </a>
                                             <div ng-if="cc.actions_today_called.length === 0">
@@ -92,8 +91,8 @@ $actionType = !isset ($this->request->getParam('action_type')[0]) ? 0 : $this->r
                                     <td>
                                         <div>
                                             <div ng-if="cc.actions_today_spoken.length > 0"
-                                                ng-repeat="action in cc.actions_today_spoken">
-                                                {{ action.COUNT }}
+                                            ng-click="redirectTo(cc.id, 76)">
+                                              {{ cc.actions_today_spoken.length }}
                                             </div>
                                             <div ng-if="cc.actions_today_spoken.length === 0">
                                                 0
@@ -105,7 +104,7 @@ $actionType = !isset ($this->request->getParam('action_type')[0]) ? 0 : $this->r
                                         <a>
                                             
                                             <a ng-if="cc.actions_yesterday_called.length > 0"
-                                                ng-click="redirectToActions(cc.id)" ng-model="rec.search.cc.id">
+                                                ng-click="redirectTo(cc.id, 75)">
                                                 {{ cc.actions_yesterday_called.length }}
                                             </a>
 
@@ -118,8 +117,8 @@ $actionType = !isset ($this->request->getParam('action_type')[0]) ? 0 : $this->r
                                     <td>
                                         <div>
                                             <div ng-if="cc.actions_yesterday_spoken.length > 0"
-                                                ng-repeat="action in cc.actions_yesterday_spoken">
-                                                {{ action.COUNT }}
+                                            ng-click="redirectTo(cc.id, 76)">
+                                              {{ cc.actions_yesterday_spoken.length }}
                                             </div>
                                             <div ng-if="cc.actions_yesterday_spoken.length === 0">
                                                 0
@@ -130,8 +129,8 @@ $actionType = !isset ($this->request->getParam('action_type')[0]) ? 0 : $this->r
                                     <td>
                                         <div>
                                             <div ng-if="cc.actions_bef_yesterday_called.length > 0"
-                                                ng-repeat="action in cc.actions_bef_yesterday_called">
-                                                {{ action.COUNT }}
+                                                ng-click="redirectTo(cc.id, 75)">
+                                                {{ cc.actions_bef_yesterday_called.length }}
                                             </div>
                                             <div ng-if="cc.actions_bef_yesterday_called.length === 0">
                                                 0
@@ -142,8 +141,8 @@ $actionType = !isset ($this->request->getParam('action_type')[0]) ? 0 : $this->r
                                     <td>
                                         <div>
                                             <div ng-if="cc.actions_bef_yesterday_spoken.length > 0"
-                                                ng-repeat="action in cc.actions_bef_yesterday_spoken">
-                                                {{ action.COUNT }}
+                                            ng-click="redirectTo(cc.id, 76)">
+                                                {{ cc.actions_bef_yesterday_spoken.length }}
                                             </div>
                                             <div ng-if="cc.actions_bef_yesterday_spoken.length === 0">
                                                 0
@@ -154,8 +153,8 @@ $actionType = !isset ($this->request->getParam('action_type')[0]) ? 0 : $this->r
                                     <td>
                                         <div>
                                             <div ng-if="cc.actions_befbef_yesterday_called.length > 0"
-                                                ng-repeat="action in cc.actions_befbef_yesterday_called">
-                                                {{ action.COUNT }}
+                                            ng-click="redirectTo(cc.id, 75)">
+                                                {{ cc.actions_befbef_yesterday_called.length }}
                                             </div>
                                             <div ng-if="cc.actions_befbef_yesterday_called.length === 0">
                                                 0
@@ -166,8 +165,8 @@ $actionType = !isset ($this->request->getParam('action_type')[0]) ? 0 : $this->r
                                     <td>
                                         <div>
                                             <div ng-if="cc.actions_befbef_yesterday_spoken.length > 0"
-                                                ng-repeat="action in cc.actions_befbef_yesterday_spoken">
-                                                {{ action.COUNT }}
+                                            ng-click="redirectTo(cc.id, 76)">
+                                                {{ cc.actions_befbef_yesterday_spoken.length }}
                                             </div>
                                             <div ng-if="cc.actions_befbef_yesterday_spoken.length === 0">
                                                 0
