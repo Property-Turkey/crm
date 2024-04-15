@@ -198,7 +198,7 @@ class UsersController extends AppController
                     'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
                 ],
             ])
-            ->where(['user_role' => 'cc'])
+            ->where(['user_role' => 'admin.callcenter'])
             ->toArray();
 
         // dd( $this->Do->convertJson( $ccUsers ));

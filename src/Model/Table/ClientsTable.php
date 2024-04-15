@@ -26,6 +26,7 @@ class ClientsTable extends Table
         $this->addBehavior('Log');
 
         
+
         $this->hasMany('Actions', [
             'foreignKey' => 'client_id',
         ]);
@@ -232,4 +233,5 @@ class ClientsTable extends Table
 
         return $rules;
     }
+
 }

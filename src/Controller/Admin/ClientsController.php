@@ -17,7 +17,7 @@ class ClientsController extends AppController
         $isAdmin = $this->authUser['user_role'] === 'admin.admin' || $this->authUser['user_role'] === 'admin.root';
 
         $userData = TableRegistry::getTableLocator()->get('Users');
-        $users = $userData->find()
+        $users = $this->Clients->Users->find()
             ->select(['id', 'user_fullname'])
             ->toArray();
 
@@ -38,10 +38,104 @@ class ClientsController extends AppController
         return compact('userId', 'users', 'clientIds');
     }
 
-    public function index($_pid = null, $actionType = null)
+    private function getUserSaleData($userClient)
+    {
+        return $this->Clients->UserClient->find()
+            ->select(['client_id'])
+            ->where(['UserClient.user_id' => $userClient->id])
+            ->toArray();
+    }
+
+    private function getTotalReservationCount($userSaleData)
+    {
+        $totalReservationCount = 0;
+
+        foreach ($userSaleData as $userSale) {
+            $reservationCount = $this->Clients->Reservations->find()
+                ->where([
+                    'client_id' => $userSale->client_id,
+                    'reservation_downpayment IS NOT NULL'
+                ])
+                ->count();
+
+            $totalReservationCount += $reservationCount;
+        }
+
+        return $totalReservationCount;
+    }
+
+    private function getTotalPrice($userSaleData)
+    {
+        $totalPrice = 0;
+
+        foreach ($userSaleData as $userSale) {
+            $reservationsData = $this->Clients->Reservations->find()
+                ->select(['reservation_usdprice'])
+                ->where(['client_id' => $userSale->client_id])
+                ->toArray();
+
+            foreach ($reservationsData as $reservation) {
+                $totalPrice += $reservation->reservation_usdprice;
+            }
+        }
+
+        return $totalPrice;
+    }
+
+    private function getTotalBooksCount($userSaleData)
+    {
+        $totalBooksCount = 0;
+
+        foreach ($userSaleData as $userSale) {
+            $booksCount = $this->Clients->Books->find()
+                ->where(['client_id' => $userSale->client_id])
+                ->count();
+
+            $totalBooksCount += $booksCount;
+        }
+
+        return $totalBooksCount;
+    }
+
+    private function getTotalComission($userSaleData)
+    {
+        $totalComission = 0;
+
+        foreach ($userSaleData as $userSale) {
+            $reservationsData = $this->Clients->Reservations->find()
+                ->select(['reservation_usdcomission'])
+                ->where(['client_id' => $userSale->client_id])
+                ->toArray();
+
+            foreach ($reservationsData as $reservation) {
+                $totalComission += $reservation->reservation_usdcomission;
+            }
+        }
+
+        return $totalComission;
+    }
+
+    private function getClientCount($userSaleData)
+    {
+        return count($userSaleData);
+    }
+
+    private function getDateUserSaleData($userClient, $starterDate, $endDate)
+    {
+        return $this->Clients->UserClient->find()
+            ->select(['client_id'])
+            ->where([
+                'UserClient.user_id' => $userClient->id,
+                'stat_created >=' => $starterDate,
+                'stat_created <=' => $endDate
+            ])
+            ->toArray();
+    }
+
+    public function index($_pid = null)
     {
 
-       
+
 
         $_client = isset($_GET['tags']) ? $_GET['tags'] : false;
         $_keyword = isset($_GET['keyword']) ? $_GET['keyword'] : false;
@@ -68,7 +162,10 @@ class ClientsController extends AppController
 
             $dt = json_decode(file_get_contents('php://input'), true);
             // dd($dt);
+
+
             $_method = !empty($_GET['method']) ? $_GET['method'] : '';
+            $action_type = !empty($_GET['method']) ? $_GET['method'] : '';
 
             $_dir = !empty($_GET['direction']) ? $_GET['direction'] : 'DESC';
             $_col = !empty($_GET['col']) ? $_GET['col'] : 'id';
@@ -320,13 +417,13 @@ class ClientsController extends AppController
                     ])
                     ->group('Clients.id');
 
-                if ($userRole != 'admin.root' && $userRole != 'admin.admin' && $userRole != 'accountant' ) {
+                if ($userRole != 'admin.root' && $userRole != 'admin.admin' && $userRole != 'accountant') {
                     $userId = $this->authUser['id'];
                     $q->matching('UserClient', function ($q) use ($userId) {
                         return $q->where(['user_id' => $userId]);
                     });
                     if (!empty($dt['search']['pool_id'])) {
-                        
+
                         $selectedPoolId = $dt['search']['pool_id'];
                         // dd($dt['search']['pool_id']);
                         $q = $this->Clients->find()
@@ -335,46 +432,55 @@ class ClientsController extends AppController
                             ->contain([
                             ])
                             ->group('Clients.id');
-        
+
                         if ($selectedPoolId) {
                             $q->matching('PoolCategories', function ($q) use ($selectedPoolId) {
                                 return $q->where(['PoolCategories.id' => $selectedPoolId]);
                             });
                         }
                     }
-                }elseif ($userRole === 'accountant') {
+                } elseif ($userRole === 'accountant') {
                     $q->matching('Reservations', function ($q) {
                         return $q->where([
                             'Reservations.downpayment_paid' => 1,
                             'Reservations.client_id = Clients.id'
                         ]);
                     });
-                    
+
                 }
+                // dd($actionType);
                 // dd($_pid);
+                dd(1);
                 if (is_numeric($_pid) && $_pid > 0) {
                     // Kullanıcının sahip olduğu müşterileri bulmak için gerekli sorguyu oluşturun
-                    $query = $this->Clients->find()
-                        ->innerJoinWith('Actions', function ($q) use ($_pid, $actionType) {
+                    $q = $this->Clients->find()
+                    ->innerJoinWith('Actions', function ($q) use ($_pid, $action_type) {
+                        if ($action_type !== null) {
                             return $q->where([
                                 'Actions.user_id' => $_pid,
-                                'Actions.action_type' => $actionType
+                                'Actions.action_type' => $action_type
                             ]);
-                        });
-            
-                    // Müşterileri pagine edin veya isteğe bağlı olarak döndürün
-                    $clients = $this->paginate($query);
-            
-                    // Bulunan müşterileri JSON formatında döndürün
-                    echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($clients)], JSON_UNESCAPED_UNICODE);
-                    die();
+                        }
+                    });
                 }
-               
 
-
-                // $data = $this->paginate($q, ['limit' => 50]);
-
+                // if (is_numeric($_pid) && $_pid > 0) {
+                //     // dd( $_pid);
+                //     // Kullanıcının sahip olduğu müşterileri bulmak için gerekli sorguyu oluşturun
+                //     $q = $this->Clients->find()
+                //         ->where(['rec_state' => $_pid]);
                 
+                //     // Müşterileri paginate edin veya isteğe bağlı olarak döndürün
+                //     $clients = $this->paginate($query);
+                
+                // }
+                // $userId = $this->Auth->user('id');
+                // $usersTable = TableRegistry::getTableLocator()->get('Users');
+                // $user = $usersTable->get($userId);
+                // dd($lastLoginDate = $user->stat_lastlogin);
+
+
+
 
                 // İstemci listesini al
                 $data = $this->paginate($q, ['limit' => 50]);
@@ -489,7 +595,7 @@ class ClientsController extends AppController
         // Edit mode
         if ($this->request->is(['patch', 'put'])) {
 
-            
+
             $rec = $this->Clients->get($dt['id'], [
                 'contain' => ['ClientSpecs']
             ]);
@@ -540,7 +646,7 @@ class ClientsController extends AppController
                 $rec->adrs_country = $dt['adrscountry'][0]['value'];
             }
 
-            
+
             if (isset($dt['pool'])) {
                 $rec->pool_id = $dt['pool'][0]['value'];
             }
@@ -884,11 +990,11 @@ class ClientsController extends AppController
         $starterDate = !empty($_GET['startDate']) ? $_GET['startDate'] : '';
         $endDate = !empty($_GET['endDate']) ? $_GET['endDate'] : '';
 
-        $userData = TableRegistry::getTableLocator()->get('Users');
-        $userField = $userData->find()
+        // $userData = TableRegistry::getTableLocator()->get('Users');
+        $userField = $this->Clients->Users->find()
             ->select(['id', 'user_fullname'])
             ->distinct(['user_fullname'])
-            ->where(['user_role' => 'field'])
+            ->where(['user_role' => 'admin.callcenter'])
             ->toArray();
 
         $labels = [];
@@ -947,202 +1053,39 @@ class ClientsController extends AppController
             'borderColor' => '#ffddf4',
             'yAxisID' => 'y-axis-2',
         ];
-        if ($starterDate && $endDate) {
-
+        // dd($starterDate);
+        if ($endDate) { 
+            
+           
             foreach ($userField as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where([
-                        'UserClient.user_id' => $userClient->id,
-                        'stat_created >=' => $starterDate,
-                        'stat_created <=' => $endDate
-                    ])
-                    ->toArray();
-
-                $clientCount = count($userSaleData);
-
-                $pointDataset2['data'][] = $clientCount;
-            }
-            foreach ($userField as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where([
-                        'UserClient.user_id' => $userClient->id,
-                        'stat_created >=' => $starterDate,
-                        'stat_created <=' => $endDate
-                    ])
-                    ->toArray();
-
-                $totalReservationCount = 0;
-
-                foreach ($userSaleData as $userSale) {
-                    $reservationCount = $this->Clients->Reservations->find()
-                        ->where([
-                            'client_id' => $userSale->client_id,
-                            'reservation_downpayment IS NOT NULL'
-                        ])
-                        ->count();
-
-                    $totalReservationCount += $reservationCount;
-                }
-                $pointDataset1['data'][] = $totalReservationCount;
-            }
-            foreach ($userField as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where([
-                        'UserClient.user_id' => $userClient->id,
-                        'stat_created >=' => $starterDate,
-                        'stat_created <=' => $endDate
-                    ])
-                    ->toArray();
-
-                $totalPrice = 0;
-
-                foreach ($userSaleData as $userSale) {
-                    $reservationsData = $this->Clients->Reservations->find()
-                        ->select(['reservation_usdprice'])
-                        ->where(['client_id' => $userSale->client_id])
-                        ->toArray();
-
-                    foreach ($reservationsData as $reservation) {
-                        $totalPrice += $reservation->reservation_usdprice;
-                    }
-                }
-                $barDataset['data'][] = $totalPrice;
-            }
-            foreach ($userField as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where([
-                        'UserClient.user_id' => $userClient->id,
-                        'stat_created >=' => $starterDate,
-                        'stat_created <=' => $endDate
-                    ])
-                    ->toArray();
-
-                $totalBooksCount = 0;
-
-                foreach ($userSaleData as $userSale) {
-                    $booksCount = $this->Clients->Books->find()
-                        ->where(['client_id' => $userSale->client_id])
-                        ->count();
-
-                    $totalBooksCount += $booksCount;
-                }
-                $pointDataset3['data'][] = $totalBooksCount;
-            }
-            foreach ($userField as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where(['UserClient.user_id' => $userClient->id])
-                    ->toArray();
-
-                $totalComission = 0;
-
-                foreach ($userSaleData as $userSale) {
-                    $reservationsData = $this->Clients->Reservations->find()
-                        ->select(['reservation_usdcomission'])
-                        ->where(['client_id' => $userSale->client_id])
-                        ->toArray();
-
-                    foreach ($reservationsData as $reservation) {
-                        $totalComission += $reservation->reservation_usdcomission;
-                    }
-                }
-
-                $barDataset1['data'][] = $totalComission;
+               
+                $userSaleData = $this->getDateUserSaleData($userClient, $starterDate, $endDate);
+                
+                $pointDataset2['data'][] = $this->getClientCount($userSaleData);
+                
+                $pointDataset1['data'][] = $this->getTotalReservationCount($userSaleData);
+                
+                $barDataset['data'][] = $this->getTotalPrice($userSaleData);
+               
+                $pointDataset3['data'][] = $this->getTotalBooksCount($userSaleData);
+                
+                $barDataset1['data'][] = $this->getTotalComission($userSaleData);
+                
             }
         } else {
             foreach ($userField as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where([
-                        'UserClient.user_id' => $userClient->id,
-                    ])
-                    ->toArray();
+                $userSaleData = $this->getUserSaleData($userClient);
 
-                $clientCount = count($userSaleData);
+                $pointDataset1['data'][] = $this->getTotalReservationCount($userSaleData);
 
-                $pointDataset2['data'][] = $clientCount;
-            }
-            foreach ($userField as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where(['UserClient.user_id' => $userClient->id])
-                    ->toArray();
+                $pointDataset2['data'][] = count($userSaleData);
 
-                $totalReservationCount = 0;
+                $barDataset['data'][] = $this->getTotalPrice($userSaleData);
 
-                foreach ($userSaleData as $userSale) {
-                    $reservationCount = $this->Clients->Reservations->find()
-                        ->where([
-                            'client_id' => $userSale->client_id,
-                            'reservation_downpayment IS NOT NULL'
-                        ])
-                        ->count();
+                $pointDataset3['data'][] = $this->getTotalBooksCount($userSaleData);
 
-                    $totalReservationCount += $reservationCount;
-                }
-                $pointDataset1['data'][] = $totalReservationCount;
-            }
-            foreach ($userField as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where(['UserClient.user_id' => $userClient->id])
-                    ->toArray();
-
-                $totalPrice = 0;
-
-                foreach ($userSaleData as $userSale) {
-                    $reservationsData = $this->Clients->Reservations->find()
-                        ->select(['reservation_usdprice'])
-                        ->where(['client_id' => $userSale->client_id])
-                        ->toArray();
-
-                    foreach ($reservationsData as $reservation) {
-                        $totalPrice += $reservation->reservation_usdprice;
-                    }
-                }
-                $barDataset['data'][] = $totalPrice;
-            }
-            foreach ($userField as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where(['UserClient.user_id' => $userClient->id])
-                    ->toArray();
-
-                $totalBooksCount = 0;
-
-                foreach ($userSaleData as $userSale) {
-                    $booksCount = $this->Clients->Books->find()
-                        ->where(['client_id' => $userSale->client_id])
-                        ->count();
-
-                    $totalBooksCount += $booksCount;
-                }
-                $pointDataset3['data'][] = $totalBooksCount;
-            }
-            foreach ($userField as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where(['UserClient.user_id' => $userClient->id])
-                    ->toArray();
-
-                $totalComission = 0;
-
-                foreach ($userSaleData as $userSale) {
-                    $reservationsData = $this->Clients->Reservations->find()
-                        ->select(['reservation_usdcomission'])
-                        ->where(['client_id' => $userSale->client_id])
-                        ->toArray();
-
-                    foreach ($reservationsData as $reservation) {
-                        $totalComission += $reservation->reservation_usdcomission;
-                    }
-                }
-
-                $barDataset1['data'][] = $totalComission;
+                $barDataset1['data'][] = $this->getTotalComission($userSaleData);
+                // dd($barDataset1['data']);
             }
         }
 
@@ -1172,18 +1115,21 @@ class ClientsController extends AppController
             $pointDataset3,
         ];
 
+        
         // Veri setlerini birleştir
         $combinedData = array_combine($data['labels'], $data['datasets'][0]['data']);
-
         // Veri setlerini sırala
         asort($combinedData);
 
+
         // Sıralanmış veri setlerini ve etiketleri ayır
         $sortedDatasets = array_values($combinedData);
+        
         $sortedLabels = array_keys($combinedData);
-
+        
         // Yeniden oluşturulmuş veri setini güncelle
         $data['datasets'][0]['data'] = $sortedDatasets;
+        
         $data['labels'] = $sortedLabels;
         // "Sold Units" veri seti için sıralama
         $combinedDataSoldUnits = array_combine($data['labels'], $data['datasets'][2]['data']);
@@ -1209,8 +1155,8 @@ class ClientsController extends AppController
 
 
 
-        //Sale by client advisor chart-------------------
-        $userCC = $userData->find()
+        // //Sale by client advisor chart-------------------
+        $userCC = $this->Clients->Users->find()
             ->select(['id', 'user_fullname'])
             ->distinct(['user_fullname'])
             ->where(['user_role' => 'admin.callcenter'])
@@ -1221,7 +1167,6 @@ class ClientsController extends AppController
         foreach ($userCC as $userRole) {
             $labels[$userRole->id] = $userRole->user_fullname;
         }
-
         $data2 = ['labels' => array_values($labels), 'datasets' => []];
 
         $barDataset = [
@@ -1272,209 +1217,38 @@ class ClientsController extends AppController
             'borderColor' => '#ffddf4',
             'yAxisID' => 'y-axis-2',
         ];
-        if ($starterDate && $endDate) {
-            foreach ($userCC as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where([
-                        'UserClient.user_id' => $userClient->id,
-                        'stat_created >=' => $starterDate,
-                        'stat_created <=' => $endDate
-                    ])
-                    ->toArray();
-
-                $clientCount = count($userSaleData);
-
-                $pointDataset2['data'][] = $clientCount;
-            }
-
-            foreach ($userCC as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where([
-                        'UserClient.user_id' => $userClient->id,
-                        'stat_created >=' => $starterDate,
-                        'stat_created <=' => $endDate
-                    ])
-                    ->toArray();
-
-                $totalReservationCount = 0;
-
-                foreach ($userSaleData as $userSale) {
-                    $reservationCount = $this->Clients->Reservations->find()
-                        ->where([
-                            'client_id' => $userSale->client_id,
-                            'reservation_downpayment IS NOT NULL' // reservation_downpayment değeri var olanları filtrele
-                        ])
-                        ->count();
-
-                    $totalReservationCount += $reservationCount;
-                }
-                $pointDataset1['data'][] = $totalReservationCount;
-            }
-
-            foreach ($userCC as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where([
-                        'UserClient.user_id' => $userClient->id,
-                        'stat_created >=' => $starterDate,
-                        'stat_created <=' => $endDate
-                    ])
-                    ->toArray();
-
-                $totalPrice = 0;
-
-                foreach ($userSaleData as $userSale) {
-                    $reservationsData = $this->Clients->Reservations->find()
-                        ->select(['reservation_usdprice'])
-                        ->where(['client_id' => $userSale->client_id])
-                        ->toArray();
-
-                    foreach ($reservationsData as $reservation) {
-                        $totalPrice += $reservation->reservation_usdprice;
-                    }
-                }
-                $barDataset['data'][] = $totalPrice;
-            }
-
-            foreach ($userCC as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where([
-                        'UserClient.user_id' => $userClient->id,
-                        'stat_created >=' => $starterDate,
-                        'stat_created <=' => $endDate
-                    ])
-                    ->toArray();
-
-                $totalBooksCount = 0;
-
-                foreach ($userSaleData as $userSale) {
-                    $booksCount = $this->Clients->Books->find()
-                        ->where(['client_id' => $userSale->client_id])
-                        ->count();
-
-                    $totalBooksCount += $booksCount;
-                }
-                $pointDataset3['data'][] = $totalBooksCount;
-            }
-
-            foreach ($userCC as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where([
-                        'UserClient.user_id' => $userClient->id,
-                        'stat_created >=' => $starterDate,
-                        'stat_created <=' => $endDate
-                    ])
-                    ->toArray();
-
-                $totalComission = 0;
-
-                foreach ($userSaleData as $userSale) {
-                    $reservationsData = $this->Clients->Reservations->find()
-                        ->select(['reservation_usdcomission'])
-                        ->where(['client_id' => $userSale->client_id])
-                        ->toArray();
-
-                    foreach ($reservationsData as $reservation) {
-                        $totalComission += $reservation->reservation_usdcomission;
-                    }
-                }
-                $barDataset1['data'][] = $totalComission;
+        if ($endDate) { 
+            
+           
+            foreach ($userField as $userClient) {
+               
+                $userSaleData = $this->getDateUserSaleData($userClient, $starterDate, $endDate);
+                
+                $pointDataset2['data2'][] = $this->getClientCount($userSaleData);
+                
+                $pointDataset1['data2'][] = $this->getTotalReservationCount($userSaleData);
+                
+                $barDataset['data2'][] = $this->getTotalPrice($userSaleData);
+               
+                $pointDataset3['data2'][] = $this->getTotalBooksCount($userSaleData);
+                
+                $barDataset1['data2'][] = $this->getTotalComission($userSaleData);
+                
             }
         } else {
-            foreach ($userCC as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where(['UserClient.user_id' => $userClient->id])
-                    ->toArray();
+            foreach ($userField as $userClient) {
+                $userSaleData = $this->getUserSaleData($userClient);
 
-                $clientCount = count($userSaleData);
+                $pointDataset1['data2'][] = $this->getTotalReservationCount($userSaleData);
 
-                $pointDataset2['data'][] = $clientCount;
-            }
+                $pointDataset2['data2'][] = count($userSaleData);
 
-            foreach ($userCC as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where(['UserClient.user_id' => $userClient->id])
-                    ->toArray();
+                $barDataset['data2'][] = $this->getTotalPrice($userSaleData);
 
-                $totalReservationCount = 0;
+                $pointDataset3['data2'][] = $this->getTotalBooksCount($userSaleData);
 
-                foreach ($userSaleData as $userSale) {
-                    $reservationCount = $this->Clients->Reservations->find()
-                        ->where([
-                            'client_id' => $userSale->client_id,
-                            'reservation_downpayment IS NOT NULL' // reservation_downpayment değeri var olanları filtrele
-                        ])
-                        ->count();
-
-                    $totalReservationCount += $reservationCount;
-                }
-                $pointDataset1['data'][] = $totalReservationCount;
-            }
-
-            foreach ($userCC as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where(['UserClient.user_id' => $userClient->id])
-                    ->toArray();
-
-                $totalPrice = 0;
-
-                foreach ($userSaleData as $userSale) {
-                    $reservationsData = $this->Clients->Reservations->find()
-                        ->select(['reservation_usdprice'])
-                        ->where(['client_id' => $userSale->client_id])
-                        ->toArray();
-
-                    foreach ($reservationsData as $reservation) {
-                        $totalPrice += $reservation->reservation_usdprice;
-                    }
-                }
-                $barDataset['data'][] = $totalPrice;
-            }
-
-            foreach ($userCC as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where(['UserClient.user_id' => $userClient->id])
-                    ->toArray();
-
-                $totalBooksCount = 0;
-
-                foreach ($userSaleData as $userSale) {
-                    $booksCount = $this->Clients->Books->find()
-                        ->where(['client_id' => $userSale->client_id])
-                        ->count();
-
-                    $totalBooksCount += $booksCount;
-                }
-                $pointDataset3['data'][] = $totalBooksCount;
-            }
-
-            foreach ($userCC as $userClient) {
-                $userSaleData = $this->Clients->UserClient->find()
-                    ->select(['client_id'])
-                    ->where(['UserClient.user_id' => $userClient->id])
-                    ->toArray();
-
-                $totalComission = 0;
-
-                foreach ($userSaleData as $userSale) {
-                    $reservationsData = $this->Clients->Reservations->find()
-                        ->select(['reservation_usdcomission'])
-                        ->where(['client_id' => $userSale->client_id])
-                        ->toArray();
-
-                    foreach ($reservationsData as $reservation) {
-                        $totalComission += $reservation->reservation_usdcomission;
-                    }
-                }
-                $barDataset1['data'][] = $totalComission;
+                $barDataset1['data2'][] = $this->getTotalComission($userSaleData);
+                // dd($barDataset1['data']);
             }
         }
 
@@ -1505,9 +1279,9 @@ class ClientsController extends AppController
             $pointDataset2,
             $pointDataset3,
         ];
-
+// dd($data2['datasets'][0]);
         // Veri setlerini birleştir
-        $combinedData = array_combine($data2['labels'], $data2['datasets'][0]['data']);
+        $combinedData = array_combine($data2['labels'], $data2['datasets'][0]['data2']);
 
         // Veri setlerini sırala
         asort($combinedData);
@@ -1520,22 +1294,22 @@ class ClientsController extends AppController
         $data2['datasets'][0]['data'] = $sortedDatasets;
         $data2['labels'] = $sortedLabels;
         // "Sold Units" veri seti için sıralama
-        $combinedDataSoldUnits = array_combine($data2['labels'], $data2['datasets'][2]['data']);
+        $combinedDataSoldUnits = array_combine($data2['labels'], $data2['datasets'][2]['data2']);
         asort($combinedDataSoldUnits);
         $data2['datasets'][2]['data'] = array_values($combinedDataSoldUnits);
 
         // "Clients" veri seti için sıralama
-        $combinedDataClients = array_combine($data2['labels'], $data2['datasets'][3]['data']);
+        $combinedDataClients = array_combine($data2['labels'], $data2['datasets'][3]['data2']);
         asort($combinedDataClients);
         $data2['datasets'][3]['data'] = array_values($combinedDataClients);
 
         // "Booked" veri seti için sıralama
-        $combinedDataBooked = array_combine($data2['labels'], $data2['datasets'][4]['data']);
+        $combinedDataBooked = array_combine($data2['labels'], $data2['datasets'][4]['data2']);
         asort($combinedDataBooked);
         $data2['datasets'][4]['data'] = array_values($combinedDataBooked);
 
         // "Commission (USD)" veri seti için sıralama
-        $combinedDataCommissionUSD = array_combine($data2['labels'], $data2['datasets'][1]['data']);
+        $combinedDataCommissionUSD = array_combine($data2['labels'], $data2['datasets'][1]['data2']);
         asort($combinedDataCommissionUSD);
         $data2['datasets'][1]['data'] = array_values($combinedDataCommissionUSD);
 
@@ -1544,19 +1318,20 @@ class ClientsController extends AppController
 
 
         //Booking by role chart-------------------
-        // $user_role = $this->request->getData('user_role');
-        // $user_role = $user_role ?? '';
+        $user_role = $this->request->getData('user_role');
+        $user_role = $user_role ?? '';
 
 
 
 
-        $user_roles = ['admin.callcenter', 'field'];
-        $userBookrole = $userData->find()
+        $user_roles = ['admin.callcenter'];
+        $userBookrole = $this->Clients->Users->find()
             ->select(['id', 'user_fullname', 'user_role'])
             ->distinct(['user_fullname'])
             ->where(['user_role IN' => $user_roles])
             ->toArray();
 
+            // dd($userBookrole);
         $labels = [];
         foreach ($userBookrole as $userRole) {
             $labels[$userRole->id] = $userRole->user_fullname;
@@ -1643,28 +1418,32 @@ class ClientsController extends AppController
 
 
 
-        //SOURCE chart-------------------
+        // //SOURCE chart-------------------
         $sourceData = $this->Clients->find()
             ->select(['source_id', 'count' => 'COUNT(*)'])
             ->where(['source_id'])
             ->group(['source_id'])
             ->toArray();
 
+            // dd($sourceData);
         $labels = [];
         $dataPoints = [];
         $catTable = TableRegistry::getTableLocator()->get('Categories');
-        $reservationTable = TableRegistry::getTableLocator()->get('Reservations');
+        // $this->Clients->Reservation
 
         foreach ($sourceData as $source) {
             $categoryId = $source->source_id;
+
+            
+
 
             if ($categoryId !== null) {
                 $category = $catTable->get($categoryId, ['fields' => ['id', 'category_name']]);
 
                 $labels[] = $category->category_name;
-
+                
                 // Karşılık gelen client_id'lerin reservations tablosundaki reservation_usdprice toplamını al
-                $totalPrice = $reservationTable->find()
+                $totalPrice = $this->Clients->Reservations->find()
                     ->select(['totalPrice' => 'SUM(reservation_usdprice)'])
                     ->where([
                         'client_id IN' => $this->Clients->find()
@@ -1672,13 +1451,15 @@ class ClientsController extends AppController
                             ->where(['source_id' => $categoryId])
                     ])
                     ->first();
-
+                    
                 $dataPoints[] = $totalPrice->totalPrice ?? 0;
+                
+               
             } else {
                 $labels[] = 'Unknown';
 
                 // Boş source_id durumu için tüm client'ların reservations tablosundaki reservation_usdprice toplamını al
-                $totalPrice = $reservationTable->find()
+                $totalPrice = $this->Clients->Reservations->find()
                     ->select(['totalPrice' => 'SUM(reservation_usdprice)'])
                     ->first();
 
@@ -1687,16 +1468,32 @@ class ClientsController extends AppController
         }
 
         // Toplam reservation_usdprice'ın yüzdeliğini hesapla
-        $totalSum = array_sum($dataPoints);
-        $percentageArray = array_map(function ($value) use ($totalSum) {
-            return '(' . number_format(($value / $totalSum) * 100, 2) . '%)';
-        }, $dataPoints);
+        if (!empty($dataPoints)) {
+            $totalSum = array_sum($dataPoints);
+            if ($totalSum != 0) {
+                $percentageArray = array_map(function ($value) use ($totalSum) {
+                    return '(' . number_format(($value / $totalSum) * 100, 2) . '%)';
+                }, $dataPoints); 
+                
+                
+            } else {
+                // dd(1);
+            }
+        } else {
+            // $dataPoints dizisi boş olduğunda yapılacak işlem
+        }
 
         // Parantez içinde yüzdelikleri ekle
-        $labels = array_map(function ($label, $percentage) {
-            return $label . ' ' . $percentage;
-        }, $labels, $percentageArray);
+        if (!is_null($percentageArray)) {
+            $labels = array_map(function ($label, $percentage) {
+                return $label . ' ' . $percentage;
+            }, $labels, $percentageArray);
 
+            
+        } else {
+            // $percentageArray dizisi boş veya null ise, buna göre bir işlem yapılabilir.
+        }
+// dd($dataPoints);
         $sourceDoughnutData = [
             'labels' => $labels,
             'datasets' => [
@@ -1809,7 +1606,7 @@ class ClientsController extends AppController
 
 
 
-        //property type chart
+        // //property type chart
         if ($starterDate && $endDate) {
             $propertyData = $this->Clients->Reservations->find()
                 ->select(['type_id', 'count' => 'COUNT(*)'])
@@ -1954,7 +1751,6 @@ class ClientsController extends AppController
 
 
 
-        $reservationTable = TableRegistry::getTableLocator()->get('Reservations');
 
         if ($starterDate && $endDate) {
             $developerTotals = $this->Clients->Reservations->find()
@@ -2005,7 +1801,7 @@ class ClientsController extends AppController
                 ->contain(['Project'])
                 ->group(['project_id', 'Project.project_title'])
                 ->toArray();
-
+                
         }
 
 
@@ -2089,43 +1885,48 @@ class ClientsController extends AppController
             $totalClients = $this->Clients->find()
                 ->where(['rec_state IN' => [13, 14, 15]])
                 ->toArray();
+
             $totalsoldCount = count($totalClients);
+            
+
             $clientBookCounts = $this->Clients->Books->find()->count();
+            
             if ($clientBookCounts != 0) {
                 $percentageRate = round(($totalsoldCount / $clientBookCounts) * 100, 1);
+                
             } else {
                 $percentageRate = 0;
             }
 
-            $clientBookCounts = $this->Clients->Books->find()->count();
-
+            
             $totalonlineClients = $this->Clients->find()
                 ->where(['rec_state IN' => [14]])
                 ->toArray();
+                
             $totalonlineCount = count($totalonlineClients);
 
             $totalcancelClients = $this->Clients->find()
                 ->where(['rec_state IN' => [16]])
                 ->toArray();
             $totalcancelCount = count($totalcancelClients);
-
+            
             $totalUSDPrice = $this->Clients->Reservations->find()
                 ->select(['total_usdprice' => 'SUM(reservation_usdprice)'])
                 ->first()
                 ->total_usdprice;
-
+                
 
             $totalUSDcommission = $this->Clients->Reservations->find()
                 ->select(['total_usdcommission' => 'SUM(reservation_usdcomission)'])
                 ->first()
                 ->total_usdcommission;
-
+                
             $downpaymentCount = $this->Clients->Reservations->find()
                 ->where([
                     'Reservations.rec_state IN' => [13, 14],
                 ])
                 ->count();
-
+            
 
 
         }
@@ -2192,37 +1993,36 @@ class ClientsController extends AppController
                     'rec_state IN' => [13, 14, 15]
                 ])
                 ->toArray();
-
+                
             // $clientResIds bir dizi içinde client_id'leri içeriyor
             $clientIds = array_column($clientResIds, 'client_id');
-
+           
             $recStateClients = $this->Clients->find()
                 ->select(['adrs_country', 'count' => 'COUNT(*)'])
                 ->contain(['Adrscountry'])
                 ->where(['Clients.id IN' => $clientIds])
                 ->group(['Adrscountry.adrs_name'])
                 ->toArray();
-
+                
             $data4 = ['labels' => [], 'datasets' => []];
-
+           
             $addressesTable = $this->getTableLocator()->get('Addresses');
-
+            // dd(array_values(array_column($recStateClients, 'adrs_country')));
             // Get localized category names
             $pmsaddress = $this->Do->lcl(
-                $addressesTable
-                    ->find('list', ['keyField' => 'id', 'valueField' => 'adrs_name'])
+                $this->Clients->Adrscountry->find('list', ['keyField' => 'id', 'valueField' => 'adrs_name'])
                     ->where(['id IN' => array_values(array_column($recStateClients, 'adrs_country'))])
                     ->toArray()
             );
-
+            
             foreach ($recStateClients as $recStateClient) {
                 $adrsCountry = $recStateClient->adrs_country;
                 $adrsCountry = $adrsCountry ?? 'Unknown';
-                $adrsName = $pmsaddress[$adrsCountry];
-
+                $adrsName = isset($pmsaddress[$adrsCountry]) ? $pmsaddress[$adrsCountry] : 'Unknown';
+            
                 // Boş değeri kontrol et ve gerekirse 0 olarak ayarla
                 $count = $recStateClient->count ?: 0;
-
+            
                 $datasetsrec[] = [
                     'label' => $adrsName,
                     'type' => 'bar',
@@ -2232,6 +2032,7 @@ class ClientsController extends AppController
                     'maxBarThickness' => 13
                 ];
             }
+            
 
             $data4 = [
                 'labels' => [''],  // Initialize labels as an empty array
@@ -2240,11 +2041,8 @@ class ClientsController extends AppController
         }
 
 
-
-
-
-        //client advisor table
-        $ccUsers = $userData->find()
+        // //client advisor table
+        $ccUsers = $this->Clients->Users->find()
             ->where(['user_role' => 'admin.callcenter'])
             ->toArray();
 
@@ -2328,9 +2126,9 @@ class ClientsController extends AppController
                 $userReservationSaleRatios[$user->id] = 0;
             }
         }
-        //field advisor table
-        $fieldUsers = $userData->find()
-            ->where(['user_role' => 'field'])
+        // //admin.portfolio advisor table
+        $fieldUsers = $this->Clients->Users->find()
+            ->where(['user_role' => 'admin.portfolio'])
             ->toArray();
 
         $userfieldBookCounts = [];
@@ -2415,6 +2213,48 @@ class ClientsController extends AppController
                 $userfieldReservationSaleRatios[$user->id] = 0;
             }
         }
+        // dd($data3);
+
+
+        $keysToCheck = [
+            'data',
+            'data2',
+            'data3',
+            'data4',
+            'sourceDoughnutData',
+            'data6',
+            'propertyPieData',
+            'developerTotals',
+            'projectTotals',
+            'clientBookCounts',
+            'totalsoldCount',
+            'totalonlineCount',
+            'totalcancelCount',
+            'totalUSDPrice',
+            'totalUSDcommission',
+            'downpaymentCount',
+            'percentageRate',
+            'ccUsers',
+            'userBookCounts',
+            'userReservationCounts',
+            'userReservationsaleCounts',
+            'userTotalUSDPriceCounts',
+            'fieldUsers',
+            'userfieldBookCounts',
+            'userfieldReservationCounts',
+            'userfieldReservationsaleCounts',
+            'userfieldTotalUSDPriceCounts',
+            'userReservationSaleRatios',
+            'userfieldReservationSaleRatios',
+        ];
+        
+        foreach ($keysToCheck as $key) {
+            if (empty($$key) || $$key === 'Unknown') {
+                $$key = 0;
+            }
+        }
+        
+        
         echo json_encode([
             "status" => "SUCCESS",
             "msg" => __("success"),
@@ -2684,7 +2524,7 @@ class ClientsController extends AppController
 
 
         $userData = TableRegistry::getTableLocator()->get('Users');
-        $users = $userData->find()
+        $users = $this->Clients->Users->find()
             ->select(['id', 'user_fullname'])
             ->toArray();
 
@@ -2931,7 +2771,7 @@ class ClientsController extends AppController
 
             if ($clientExists) {
 
-                $client = $this->Clients->get($clientId, ['fields' => ['adrs_country']]);
+                $client = $this->Clients->get($clientId, ['admin.portfolios' => ['adrs_country']]);
 
                 $clientCountry = is_array($client->adrs_country) ? $client->adrs_country[0] : $client->adrs_country;
 
@@ -3038,8 +2878,7 @@ class ClientsController extends AppController
                 ])
                 ->count();
 
-            $reservationTable = TableRegistry::getTableLocator()->get('Reservations');
-            $newSoldCount = $reservationTable
+            $newSoldCount = $this->Clients->Reservations
                 ->find()
                 ->where([
                     'rec_state' => 14,
@@ -3047,7 +2886,7 @@ class ClientsController extends AppController
                 ])
                 ->count();
 
-            $newCancelledCount = $reservationTable
+            $newCancelledCount = $this->Clients->Reservations
                 ->find()
                 ->where([
                     'rec_state' => 17,
@@ -3056,7 +2895,7 @@ class ClientsController extends AppController
                 ->count();
 
 
-            $newDownPaymentCount = $reservationTable
+            $newDownPaymentCount = $this->Clients->Reservations
                 ->find()
                 ->where([
                     'rec_state' => 13,
@@ -3072,7 +2911,7 @@ class ClientsController extends AppController
                 ])
                 ->count();
 
-            $newSoldOnlineCount = $reservationTable
+            $newSoldOnlineCount = $this->Clients->Reservations
                 ->find()
                 ->where([
                     'rec_state' => 15,
@@ -3091,15 +2930,14 @@ class ClientsController extends AppController
 
             $thresholdDate = date('Y-m-d H:i:s', strtotime('-15 days'));
 
-            $invoiceSend = $reservationTable
-                ->find()
+            $invoiceSend = $this->Clients->Reservations->find()
                 ->where([
                     'stat_created <' => $thresholdDate,
                     'reservation_isinvoice_sent' => 0,
                 ])
                 ->count();
 
-            $commissionCollacted = $reservationTable
+            $commissionCollacted = $this->Clients->Reservations
                 ->find()
                 ->where([
                     'is_commision_collacted' => 1,
@@ -3151,12 +2989,12 @@ class ClientsController extends AppController
                 ->where([
                     'user_id' => $userId
                 ]);
-            
+
             // Şimdi `all()` metodu çağırılarak sonuçlar alınıyor
             $clientIds = $clientIdsQuery->all()->extract('client_id')->toArray();
-            
+
             $booksTable = TableRegistry::getTableLocator()->get('Books');
-            $reservationTable = TableRegistry::getTableLocator()->get('Reservations');
+            
             $reminderTable = TableRegistry::getTableLocator()->get('Reminders');
 
             $newClientsCount = $userSaleTable
@@ -3177,7 +3015,7 @@ class ClientsController extends AppController
                 ])
                 ->count();
 
-            $newSoldCount = $reservationTable
+            $newSoldCount = $this->Clients->Reservations
                 ->find()
                 ->where([
                     'client_id IN' => $clientIds,
@@ -3186,7 +3024,7 @@ class ClientsController extends AppController
                 ])
                 ->count();
 
-            $newCancelledCount = $reservationTable
+            $newCancelledCount = $this->Clients->Reservations
                 ->find()
                 ->where([
                     'client_id IN' => $clientIds,
@@ -3195,7 +3033,7 @@ class ClientsController extends AppController
                 ])
                 ->count();
 
-            $newDownPaymentCount = $reservationTable
+            $newDownPaymentCount = $this->Clients->Reservations
                 ->find()
                 ->where([
                     'client_id IN' => $clientIds,
@@ -3213,7 +3051,7 @@ class ClientsController extends AppController
                 ])
                 ->count();
 
-            $newSoldOnlineCount = $reservationTable
+            $newSoldOnlineCount = $this->Clients->Reservations
                 ->find()
                 ->where([
                     'client_id IN' => $clientIds,
@@ -3232,7 +3070,7 @@ class ClientsController extends AppController
 
             $thresholdDate = date('Y-m-d H:i:s', strtotime('-15 days'));
 
-            $invoiceSend = $reservationTable
+            $invoiceSend = $this->Clients->Reservations
                 ->find()
                 ->where([
                     'stat_created <' => $thresholdDate,
@@ -3242,7 +3080,7 @@ class ClientsController extends AppController
                 ->count();
 
             // Sorguyu oluştur
-            $commissionCollacted = $reservationTable
+            $commissionCollacted = $this->Clients->Reservations
                 ->find()
                 ->where([
                     'is_commision_collacted' => 1,
@@ -3315,7 +3153,6 @@ class ClientsController extends AppController
         ]);
         die();
     }
-
 
     private function getRecStateLabel($recState)
     {

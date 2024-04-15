@@ -1,11 +1,16 @@
 <?php
-$_pid = !isset ($this->request->getParam('pass')[0]) ? 0 : $this->request->getParam('pass')[0];
+$_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getParam('pass')[0];
+$action_type = $this->request->getQuery('action_type') ? $this->request->getQuery('action_type') : 0;
+
+
+// dd($_method);
+// $actionType = !isset($this->request->getParam('query')['action_type']) ? 0 : $this->request->getParam('query')['action_type'];
 
 // dd($_pid);
 ?>
 
 <div id="indxPg" class="right_col" role="main" ng-init="
-        doGet('/admin/clients/index/<?= $_pid ?>?list=1', 'list', 'clients');
+        doGet('/admin/clients/index/<?= $_pid ?>?action_type=<?=$action_type?>?list=1', 'list', 'clients');
         doGet('/admin/clients/pool', 'rec', 'pool');
         doGet('/admin/clients/notifications', 'rec', 'notification');">
 

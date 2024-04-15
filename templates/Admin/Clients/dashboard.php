@@ -89,7 +89,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                 <div class="notifications-boxes">
 
                     <div class="colored-box badge greenBg" ng-if="rec.notification.newAssignCount != 0"
-                        onclick="location.href='/en/admin/clients/index';">
+                        ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.newAssignCount"></span>
                         <i class="fa fa-user" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"><?= __('assigns') ?>
@@ -97,7 +97,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                     </div>
 
                     <div class="colored-box badge redBg" ng-if="rec.notification.newReminderCount != 0"
-                        onclick="location.href='/en/admin/clients/index';">
+                        ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.newReminderCount"></span>
                         <i class="fa fa-book" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"><?= __('reminders') ?></div>
@@ -110,7 +110,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                 <div class="notifications-boxes">
 
                     <div class="col-1 colored-box badge" ng-if="rec.notification.newClientsCount != 0"
-                        onclick="location.href='/en/admin/clients/index';">
+                        ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.newClientsCount"></span>
                         <i class="fa fa-user" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('sold_online') ?>
@@ -118,54 +118,54 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newBookedCount != 0"
-                        onclick="location.href='/en/admin/clients/index';">
+                        ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.newBookedCount"></span>
                         <i class="fa fa-book" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('booked') ?></div>
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newSoldCount != 0"
-                        onclick="location.href='/en/admin/clients/index';">
+                        ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.newSoldCount"></span>
                         <i class="fa fa-check" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('sold') ?></div>
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newCancelledCount != 0"
-                        onclick="location.href='/en/admin/clients/index';">
+                        ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.newCancelledCount"></span>
                         <i class="fa fa-times" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('cancelled') ?></div>
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newDownPaymentCount != 0"
-                        onclick="location.href='/en/admin/clients/index';">
+                        ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.newDownPaymentCount"></span>
                         <i class="fa fa-credit-card" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('down_date') ?></div>
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newReservedCount != 0"
-                        onclick="location.href='/en/admin/clients/index';">
+                        ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.newReservedCount"></span>
                         <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('reserved') ?></div>
                     </div>
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newSoldOnlineCount != 0"
-                        onclick="location.href='/en/admin/clients/index';">
+                        ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.newSoldOnlineCount"></span>
                         <i class="fa fa-check-circle-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('sold_online') ?></div>
                     </div>
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.invoiceSend != 0"
-                        onclick="location.href='/en/admin/clients/index';">
+                        ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.invoiceSend"></span>
                         <i class="fa fa-check-circle-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"><?= __('invoice_not_sent') ?></div>
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.commissionCollacted != 0"
-                        onclick="location.href='/en/admin/clients/index';">
+                        ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.commissionCollacted"></span>
                         <i class="fa fa-check-circle-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('commision_collacted') ?></div>
@@ -388,12 +388,14 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
 
             <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                 <div class="notifications-boxes">
-                    <div class=" colored-box badge redBg" ng-if="rec.notification.recStateOneRecords != 0">
+                    <div class=" colored-box badge redBg" ng-if="rec.notification.recStateOneRecords != 0"
+                    ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.recStateOneRecords"></span>
                         <i class="fa fa-times-circle-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"><?= __('reallocate_clients') ?></div>
                     </div>
-                    <div class=" colored-box badge redBg" ng-if="rec.notification.notProccesing != 0">
+                    <div class=" colored-box badge redBg" ng-if="rec.notification.notProccesing != 0"
+                    ng-click="dashboardRedirectTo(1)">
                         <span class="notification-badge" format-currency="rec.notification.notProccesing"></span>
                         <i class="fa fa-stop-circle" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"><?=__('not_proccesing')?></div>

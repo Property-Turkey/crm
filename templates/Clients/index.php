@@ -1,9 +1,17 @@
+<?php
+$_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getParam('pass')[0];
+$actionType = !isset($this->request->getParam('query')['action_type']) ? 0 : $this->request->getParam('query')['action_type'];
+
+// dd($_pid);
+?>
+
 <div class="container-fluid">
 
 </div>
 
 <div id="indxPg" class="right_col" role="main" ng-init="
-        doGet('/clients/index?list=1', 'list', 'clients');
+doGet('/admin/users/index/<?= $_pid ?>?action_type=<?=$actionType?>?list=1', 'list', 'users');
+
     ">
 
 

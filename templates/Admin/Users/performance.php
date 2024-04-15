@@ -1,12 +1,13 @@
 <?php
 $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getParam('pass')[0];
-$actionType = !isset ($this->request->getParam('action_type')[0]) ? 0 : $this->request->getParam('action_type')[0];
+$actionType = !isset($this->request->getParam('query')['action_type']) ? 0 : $this->request->getParam('query')['action_type'];
 
 // dd($_pid);
 ?>
 
 <div class="container" ng-init="
     doGet('/admin/users/index/<?= $_pid ?>?list=1', 'list', 'users');
+    doGet('/admin/users/performancedata', 'rec', 'performancedata');
     doGet('/admin/clients/index/<?= $_pid ?>?list=1', 'list', 'clients');">
     <div class="heading ">
         <div class="title" style="font-size: 16px;"></div>
@@ -61,8 +62,8 @@ $actionType = !isset ($this->request->getParam('action_type')[0]) ? 0 : $this->r
                             <tbody>
 
                                 
-                                <!-- {{rec.kbidata.ccUsers}} -->
-                                <tr ng-repeat="cc in lists.users track by $index" ng-if="cc.user_role == 'cc'">
+                                <!-- {{rec.performancedata.ccUsers}} -->
+                                <tr ng-repeat="cc in rec.performancedata.ccUsers track by $index" >
                               
                                     <td>
                                         <div>
@@ -79,7 +80,8 @@ $actionType = !isset ($this->request->getParam('action_type')[0]) ? 0 : $this->r
                                     <td>
                                         <div>
                                             <a ng-if="cc.actions_today_called.length > 0"
-                                             ng-click="redirectTo(cc.id, 75)">
+                                             ng-click="redirectTo(cc.id, 75)
+                                             ">
                                                     {{cc.actions_today_called.length}}
                                             </a>
                                             <div ng-if="cc.actions_today_called.length === 0">
