@@ -982,17 +982,17 @@
 
                 $scope.redirectTo = function (userId, actionType) {
                     // window.location.href ile yönlendirme işlemini gerçekleştirin
-                    window.location.href = '/crm/en/admin/clients/index/' + userId + '?action_type=' + actionType;
+                    window.location.href = '<?=$app_folder?>/en/admin/clients/index/' + userId + '?action_type=' + actionType;
                 };
 
                 $scope.dashboardRedirectTo = function (recId) {
                     // window.location.href ile yönlendirme işlemini gerçekleştirin
-                    window.location.href = '/crm/en/admin/clients/index/' + recId;
+                    window.location.href = '<?=$app_folder?>/en/admin/clients/index/' + recId;
                 };
 
                 $scope.redirectToUserActions = function (clientUserId) {
-                    $scope.doGet('/admin/clients/index?userId=' + clientUserId, 'list', 'clients');
-                    window.location.href = '/crm/en/admin/clients/index?userId=' + clientUserId;
+                    $scope.doGet('<?=$app_folder?>/admin/clients/index?userId=' + clientUserId, 'list', 'clients');
+                    window.location.href = '<?=$app_folder?>/en/admin/clients/index?userId=' + clientUserId;
                 };
 
 

@@ -388,7 +388,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
 
             <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                 <div class="notifications-boxes">
-                    <div class=" colored-box badge redBg" ng-if="rec.notification.recStateOneRecords != 0"
+                    <div class=" colored-box badge redBg" ng-if="rec.notification.recStateOneRecords != 0" href="<?=$app_folder?>/admin/clients?action_type={{property.id}}"
                     ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.recStateOneRecords"></span>
                         <i class="fa fa-times-circle-o" aria-hidden="true"></i>

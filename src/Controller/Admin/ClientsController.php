@@ -450,7 +450,7 @@ class ClientsController extends AppController
                 }
                 // dd($actionType);
                 // dd($_pid);
-                dd(1);
+                // dd(1);
                 if (is_numeric($_pid) && $_pid > 0) {
                     // Kullanıcının sahip olduğu müşterileri bulmak için gerekli sorguyu oluşturun
                     $q = $this->Clients->find()
@@ -464,16 +464,16 @@ class ClientsController extends AppController
                     });
                 }
 
-                // if (is_numeric($_pid) && $_pid > 0) {
-                //     // dd( $_pid);
-                //     // Kullanıcının sahip olduğu müşterileri bulmak için gerekli sorguyu oluşturun
-                //     $q = $this->Clients->find()
-                //         ->where(['rec_state' => $_pid]);
+                if (is_numeric($_pid) && $_pid > 0) {
+                    // dd( $_pid);
+                    // Kullanıcının sahip olduğu müşterileri bulmak için gerekli sorguyu oluşturun
+                    $q = $this->Clients->find()
+                        ->where(['rec_state' => $_pid]);
                 
-                //     // Müşterileri paginate edin veya isteğe bağlı olarak döndürün
-                //     $clients = $this->paginate($query);
+                    // Müşterileri paginate edin veya isteğe bağlı olarak döndürün
+                    $clients = $this->paginate($query);
                 
-                // }
+                }
                 // $userId = $this->Auth->user('id');
                 // $usersTable = TableRegistry::getTableLocator()->get('Users');
                 // $user = $usersTable->get($userId);
@@ -588,6 +588,14 @@ class ClientsController extends AppController
 
     }
 
+
+    public function view($id = null)
+    {
+        $rec = $this->Clients->get($id);
+        $this->set(compact('rec'));
+    }
+
+    
     public function save($id = -1)
     {
         $dt = json_decode(file_get_contents('php://input'), true);

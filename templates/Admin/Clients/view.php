@@ -10,7 +10,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 ?>
 
 <div id="indxPg" class="right_col" role="main" ng-init="
-        doGet('/admin/clients/index/<?= $_pid ?>?list=1', 'list', 'clients');
+        doGet('/admin/clients/view/<?= $_pid ?>?list=1', 'list', 'clients');
         doGet('/admin/clients/pool', 'rec', 'pool');
         doGet('/admin/clients/notifications', 'rec', 'notification');">
 
