@@ -82,10 +82,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
             </div>
 
 
-
-
-
-            <?php if (in_array($authUser['user_role'], ['cc']) || isset($authUser['user_original_role'])) { ?>
+            <?php if (in_array($authUser['user_role'], ['admin.callcenter']) || isset($authUser['user_original_role'])) { ?>
                 <div class="notifications-boxes">
 
                     <div class="colored-box badge greenBg" ng-if="rec.notification.newAssignCount != 0"
@@ -106,10 +103,10 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                 </div>
             <?php } ?>
 
-            <?php if (in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.field']) || isset($authUser['user_original_role'])) { ?>
+            <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field']) || isset($authUser['user_original_role'])) { ?>
                 <div class="notifications-boxes">
 
-                    <div class="col-1 colored-box badge" ng-if="rec.notification.newClientsCount != 0"
+                    <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newClientsCount != 0"
                         ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.newClientsCount"></span>
                         <i class="fa fa-user" aria-hidden="true"></i>
@@ -146,19 +143,19 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newReservedCount != 0"
-                        ng-click="dashboardRedirectTo(2)">
+                        ng-click="dashboardRedirectTo('new-reserved')">
                         <span class="notification-badge" format-currency="rec.notification.newReservedCount"></span>
                         <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('reserved') ?></div>
                     </div>
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newSoldOnlineCount != 0"
-                        ng-click="dashboardRedirectTo(2)">
+                        ng-click="dashboardRedirectTo('new-sold')">
                         <span class="notification-badge" format-currency="rec.notification.newSoldOnlineCount"></span>
                         <i class="fa fa-check-circle-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('sold_online') ?></div>
                     </div>
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.invoiceSend != 0"
-                        ng-click="dashboardRedirectTo(2)">
+                        ng-click="dashboardRedirectTo('invoice-not-send')">
                         <span class="notification-badge" format-currency="rec.notification.invoiceSend"></span>
                         <i class="fa fa-check-circle-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"><?= __('invoice_not_sent') ?></div>
@@ -294,6 +291,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
 
                     </div>
                 </div>
+                <?php if (!in_array($authUser['user_role'], ['accountant']) || isset($authUser['user_original_role'])) { ?>
 
                 <div class="col-md-6 mb-3 d-flex">
                     <div class="white-box-dashboard mb-3 byCountry">
@@ -328,7 +326,8 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         </div>
                     </div>
                 </div>
-
+                <?php } ?>
+                <?php if (!in_array($authUser['user_role'], ['accountant']) || isset($authUser['user_original_role'])) { ?>
                 <div class="col-md-6 mb-3 d-flex">
                     <div class="white-box-dashboard mb-3 byCountry">
 
@@ -345,12 +344,12 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                                 <div ng-repeat="data in rec.numbers.addressData"
                                     class="mt-3 d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
-                                        <!-- <img ng-src="{{ '/img/' + data.adrs_name + '.jpg' }}"
+                                        <img ng-src="{{ '/img/' + data.adrs_name + '.jpg' }}"
                                             class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
                                         <span class="ms-2">
                                             {{ data.count }}<br>
                                             <span style="font-size:12px;">{{ data.adrs_name }}</span>
-                                        </span> -->
+                                        </span>
                                     </div>
                                     <div class="text-center text-success">
                                         <!-- {{ (data.count / 409) * 100 | number:1 }}% -->
@@ -360,6 +359,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         </div>
                     </div>
                 </div>
+                <?php } ?>
             </div>
 
         </div>
@@ -388,8 +388,8 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
 
             <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                 <div class="notifications-boxes">
-                    <div class=" colored-box badge redBg" ng-if="rec.notification.recStateOneRecords != 0" href="<?=$app_folder?>/admin/clients?action_type={{property.id}}"
-                    ng-click="dashboardRedirectTo(2)">
+                    <div class=" colored-box badge redBg" ng-if="rec.notification.recStateOneRecords != 0" 
+                    ng-click="dashboardRedirectTo('reallocate')">
                         <span class="notification-badge" format-currency="rec.notification.recStateOneRecords"></span>
                         <i class="fa fa-times-circle-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"><?= __('reallocate_clients') ?></div>
@@ -462,8 +462,8 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         </div>
                         <div class="heading my-0 dashboard-h">
                             <div class="title call_logFont">
-                                {{rec.numbers.actionCount}} <span>Out of
-                                    {{rec.numbers.AllactionCount}}
+                                {{rec.numbers.actionCount}} <span> Spoken out of
+                                    {{rec.numbers.AllactionCount}} Called
                                 </span>
                             </div>
                         </div>

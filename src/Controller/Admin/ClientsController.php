@@ -165,7 +165,7 @@ class ClientsController extends AppController
 
 
             $_method = !empty($_GET['method']) ? $_GET['method'] : '';
-            $action_type = !empty($_GET['method']) ? $_GET['method'] : '';
+           
 
             $_dir = !empty($_GET['direction']) ? $_GET['direction'] : 'DESC';
             $_col = !empty($_GET['col']) ? $_GET['col'] : 'id';
@@ -441,51 +441,75 @@ class ClientsController extends AppController
                     }
                 } elseif ($userRole === 'accountant') {
                     $q->matching('Reservations', function ($q) {
-                        return $q->where([
-                            'Reservations.downpayment_paid' => 1,
-                            'Reservations.client_id = Clients.id'
-                        ]);
+                        return $q
+                        ->where('Reservations.downpayment_paid', 1)
+                        ->where('Reservations.rec_state <>', 17)
+                        ->where('Reservations.client_id = Clients.id');
                     });
-
                 }
-                // dd($actionType);
-                // dd($_pid);
-                // dd(1);
-                if (is_numeric($_pid) && $_pid > 0) {
-                    // Kullanıcının sahip olduğu müşterileri bulmak için gerekli sorguyu oluşturun
+             
+                function getClientIds($query) {
+                    $results = $query->toArray();
+                    $clientIds = [];
+                    foreach ($results as $result) {
+                        $clientIds[] = $result->client_id ?? $result->id;
+                    }
+                    return $clientIds;
+                }
+                
+                if ($_pid == 'invoice-not-send') {
+                    $thresholdDate = date('Y-m-d H:i:s', strtotime('-15 days'));
+                    $reservations = $this->Clients->Reservations->find()
+                        ->select(['client_id'])
+                        ->where([
+                            'stat_created <' => $thresholdDate,
+                            'reservation_isinvoice_sent' => 0,
+                        ])
+                        ->distinct();
+                    $clientIds = getClientIds($reservations);
+                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
+                } elseif (in_array($_pid, ['new-sold', 'new-reserved'])) {dd(1);
+                    $userId = $this->Auth->user('id');
+                    $usersTable = TableRegistry::getTableLocator()->get('Users');
+                    $user = $usersTable->get($userId);
+                    $lastLoginDate = $user->stat_lastlogin;
+                
+                    $query = ($_pid == 'new-sold') ?
+                        $this->Clients->Reservations->find()->select(['client_id'])->where(['rec_state' => 15, 'stat_created >' => $lastLoginDate]) :
+                        $this->Clients->find()->where(['rec_state' => 12, 'stat_created >' => $lastLoginDate]);
+                
+                    $clientIds = getClientIds($query);
+                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
+                } elseif ($_pid == 'reallocate') {
+                    
+                    $userclient = $this->Clients->UserClient->find()
+                        ->select(['client_id'])
+                        ->where([
+                            'rec_state' => 2
+                        ])
+                        ->distinct();
+                    $clientIds = getClientIds($userclient);
+                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
+                } elseif (is_numeric($_pid) && $_pid > 17) {
                     $q = $this->Clients->find()
-                    ->innerJoinWith('Actions', function ($q) use ($_pid, $action_type) {
-                        if ($action_type !== null) {
+                        ->distinct()
+                        ->innerJoinWith('Actions', function ($q) use ($_pid) {
                             return $q->where([
                                 'Actions.user_id' => $_pid,
-                                'Actions.action_type' => $action_type
                             ]);
-                        }
-                    });
-                }
-
-                if (is_numeric($_pid) && $_pid > 0) {
-                    // dd( $_pid);
-                    // Kullanıcının sahip olduğu müşterileri bulmak için gerekli sorguyu oluşturun
+                        });
+                } elseif (is_numeric($_pid) && $_pid > 0) {
                     $q = $this->Clients->find()
                         ->where(['rec_state' => $_pid]);
-                
-                    // Müşterileri paginate edin veya isteğe bağlı olarak döndürün
-                    $clients = $this->paginate($query);
-                
                 }
-                // $userId = $this->Auth->user('id');
-                // $usersTable = TableRegistry::getTableLocator()->get('Users');
-                // $user = $usersTable->get($userId);
-                // dd($lastLoginDate = $user->stat_lastlogin);
+                
+                $recStateOneRecords = $q->count(); // Burada rec_state 2 olan kayıtların sayısını alıyoruz
+                
 
-
-
+                
 
                 // İstemci listesini al
                 $data = $this->paginate($q, ['limit' => 50]);
-
-
             }
 
             // Kategori verilerini al
@@ -591,11 +615,22 @@ class ClientsController extends AppController
 
     public function view($id = null)
     {
+
+
         $rec = $this->Clients->get($id);
+
+
+        // $rec = $this->Clients->find('list', ['keyField' => 'id'])->where(['rec_state' => $id])->toArray();
+        // dd($ids);
+        // dd($rec);
+
+
+
         $this->set(compact('rec'));
     }
 
-    
+
+
     public function save($id = -1)
     {
         $dt = json_decode(file_get_contents('php://input'), true);
@@ -669,6 +704,9 @@ class ClientsController extends AppController
 
             }
 
+            if (empty($dt['rec_state'])) {
+                $rec->rec_state = 1;
+            }
 
         }
 
@@ -1062,23 +1100,23 @@ class ClientsController extends AppController
             'yAxisID' => 'y-axis-2',
         ];
         // dd($starterDate);
-        if ($endDate) { 
-            
-           
+        if ($endDate) {
+
+
             foreach ($userField as $userClient) {
-               
+
                 $userSaleData = $this->getDateUserSaleData($userClient, $starterDate, $endDate);
-                
+
                 $pointDataset2['data'][] = $this->getClientCount($userSaleData);
-                
+
                 $pointDataset1['data'][] = $this->getTotalReservationCount($userSaleData);
-                
+
                 $barDataset['data'][] = $this->getTotalPrice($userSaleData);
-               
+
                 $pointDataset3['data'][] = $this->getTotalBooksCount($userSaleData);
-                
+
                 $barDataset1['data'][] = $this->getTotalComission($userSaleData);
-                
+
             }
         } else {
             foreach ($userField as $userClient) {
@@ -1123,7 +1161,7 @@ class ClientsController extends AppController
             $pointDataset3,
         ];
 
-        
+
         // Veri setlerini birleştir
         $combinedData = array_combine($data['labels'], $data['datasets'][0]['data']);
         // Veri setlerini sırala
@@ -1132,12 +1170,12 @@ class ClientsController extends AppController
 
         // Sıralanmış veri setlerini ve etiketleri ayır
         $sortedDatasets = array_values($combinedData);
-        
+
         $sortedLabels = array_keys($combinedData);
-        
+
         // Yeniden oluşturulmuş veri setini güncelle
         $data['datasets'][0]['data'] = $sortedDatasets;
-        
+
         $data['labels'] = $sortedLabels;
         // "Sold Units" veri seti için sıralama
         $combinedDataSoldUnits = array_combine($data['labels'], $data['datasets'][2]['data']);
@@ -1225,23 +1263,23 @@ class ClientsController extends AppController
             'borderColor' => '#ffddf4',
             'yAxisID' => 'y-axis-2',
         ];
-        if ($endDate) { 
-            
-           
+        if ($endDate) {
+
+
             foreach ($userField as $userClient) {
-               
+
                 $userSaleData = $this->getDateUserSaleData($userClient, $starterDate, $endDate);
-                
+
                 $pointDataset2['data2'][] = $this->getClientCount($userSaleData);
-                
+
                 $pointDataset1['data2'][] = $this->getTotalReservationCount($userSaleData);
-                
+
                 $barDataset['data2'][] = $this->getTotalPrice($userSaleData);
-               
+
                 $pointDataset3['data2'][] = $this->getTotalBooksCount($userSaleData);
-                
+
                 $barDataset1['data2'][] = $this->getTotalComission($userSaleData);
-                
+
             }
         } else {
             foreach ($userField as $userClient) {
@@ -1287,7 +1325,7 @@ class ClientsController extends AppController
             $pointDataset2,
             $pointDataset3,
         ];
-// dd($data2['datasets'][0]);
+        // dd($data2['datasets'][0]);
         // Veri setlerini birleştir
         $combinedData = array_combine($data2['labels'], $data2['datasets'][0]['data2']);
 
@@ -1339,7 +1377,7 @@ class ClientsController extends AppController
             ->where(['user_role IN' => $user_roles])
             ->toArray();
 
-            // dd($userBookrole);
+        // dd($userBookrole);
         $labels = [];
         foreach ($userBookrole as $userRole) {
             $labels[$userRole->id] = $userRole->user_fullname;
@@ -1433,7 +1471,7 @@ class ClientsController extends AppController
             ->group(['source_id'])
             ->toArray();
 
-            // dd($sourceData);
+        // dd($sourceData);
         $labels = [];
         $dataPoints = [];
         $catTable = TableRegistry::getTableLocator()->get('Categories');
@@ -1442,14 +1480,14 @@ class ClientsController extends AppController
         foreach ($sourceData as $source) {
             $categoryId = $source->source_id;
 
-            
+
 
 
             if ($categoryId !== null) {
                 $category = $catTable->get($categoryId, ['fields' => ['id', 'category_name']]);
 
                 $labels[] = $category->category_name;
-                
+
                 // Karşılık gelen client_id'lerin reservations tablosundaki reservation_usdprice toplamını al
                 $totalPrice = $this->Clients->Reservations->find()
                     ->select(['totalPrice' => 'SUM(reservation_usdprice)'])
@@ -1459,10 +1497,10 @@ class ClientsController extends AppController
                             ->where(['source_id' => $categoryId])
                     ])
                     ->first();
-                    
+
                 $dataPoints[] = $totalPrice->totalPrice ?? 0;
-                
-               
+
+
             } else {
                 $labels[] = 'Unknown';
 
@@ -1481,9 +1519,9 @@ class ClientsController extends AppController
             if ($totalSum != 0) {
                 $percentageArray = array_map(function ($value) use ($totalSum) {
                     return '(' . number_format(($value / $totalSum) * 100, 2) . '%)';
-                }, $dataPoints); 
-                
-                
+                }, $dataPoints);
+
+
             } else {
                 // dd(1);
             }
@@ -1497,11 +1535,11 @@ class ClientsController extends AppController
                 return $label . ' ' . $percentage;
             }, $labels, $percentageArray);
 
-            
+
         } else {
             // $percentageArray dizisi boş veya null ise, buna göre bir işlem yapılabilir.
         }
-// dd($dataPoints);
+        // dd($dataPoints);
         $sourceDoughnutData = [
             'labels' => $labels,
             'datasets' => [
@@ -1809,7 +1847,7 @@ class ClientsController extends AppController
                 ->contain(['Project'])
                 ->group(['project_id', 'Project.project_title'])
                 ->toArray();
-                
+
         }
 
 
@@ -1895,46 +1933,46 @@ class ClientsController extends AppController
                 ->toArray();
 
             $totalsoldCount = count($totalClients);
-            
+
 
             $clientBookCounts = $this->Clients->Books->find()->count();
-            
+
             if ($clientBookCounts != 0) {
                 $percentageRate = round(($totalsoldCount / $clientBookCounts) * 100, 1);
-                
+
             } else {
                 $percentageRate = 0;
             }
 
-            
+
             $totalonlineClients = $this->Clients->find()
                 ->where(['rec_state IN' => [14]])
                 ->toArray();
-                
+
             $totalonlineCount = count($totalonlineClients);
 
             $totalcancelClients = $this->Clients->find()
                 ->where(['rec_state IN' => [16]])
                 ->toArray();
             $totalcancelCount = count($totalcancelClients);
-            
+
             $totalUSDPrice = $this->Clients->Reservations->find()
                 ->select(['total_usdprice' => 'SUM(reservation_usdprice)'])
                 ->first()
                 ->total_usdprice;
-                
+
 
             $totalUSDcommission = $this->Clients->Reservations->find()
                 ->select(['total_usdcommission' => 'SUM(reservation_usdcomission)'])
                 ->first()
                 ->total_usdcommission;
-                
+
             $downpaymentCount = $this->Clients->Reservations->find()
                 ->where([
                     'Reservations.rec_state IN' => [13, 14],
                 ])
                 ->count();
-            
+
 
 
         }
@@ -2001,19 +2039,19 @@ class ClientsController extends AppController
                     'rec_state IN' => [13, 14, 15]
                 ])
                 ->toArray();
-                
+
             // $clientResIds bir dizi içinde client_id'leri içeriyor
             $clientIds = array_column($clientResIds, 'client_id');
-           
+
             $recStateClients = $this->Clients->find()
                 ->select(['adrs_country', 'count' => 'COUNT(*)'])
                 ->contain(['Adrscountry'])
                 ->where(['Clients.id IN' => $clientIds])
                 ->group(['Adrscountry.adrs_name'])
                 ->toArray();
-                
+
             $data4 = ['labels' => [], 'datasets' => []];
-           
+
             $addressesTable = $this->getTableLocator()->get('Addresses');
             // dd(array_values(array_column($recStateClients, 'adrs_country')));
             // Get localized category names
@@ -2022,15 +2060,15 @@ class ClientsController extends AppController
                     ->where(['id IN' => array_values(array_column($recStateClients, 'adrs_country'))])
                     ->toArray()
             );
-            
+
             foreach ($recStateClients as $recStateClient) {
                 $adrsCountry = $recStateClient->adrs_country;
                 $adrsCountry = $adrsCountry ?? 'Unknown';
                 $adrsName = isset($pmsaddress[$adrsCountry]) ? $pmsaddress[$adrsCountry] : 'Unknown';
-            
+
                 // Boş değeri kontrol et ve gerekirse 0 olarak ayarla
                 $count = $recStateClient->count ?: 0;
-            
+
                 $datasetsrec[] = [
                     'label' => $adrsName,
                     'type' => 'bar',
@@ -2040,7 +2078,7 @@ class ClientsController extends AppController
                     'maxBarThickness' => 13
                 ];
             }
-            
+
 
             $data4 = [
                 'labels' => [''],  // Initialize labels as an empty array
@@ -2255,14 +2293,14 @@ class ClientsController extends AppController
             'userReservationSaleRatios',
             'userfieldReservationSaleRatios',
         ];
-        
+
         foreach ($keysToCheck as $key) {
             if (empty($$key) || $$key === 'Unknown') {
                 $$key = 0;
             }
         }
-        
-        
+
+
         echo json_encode([
             "status" => "SUCCESS",
             "msg" => __("success"),
@@ -2809,7 +2847,8 @@ class ClientsController extends AppController
         $users = $this->Clients->Users->find('list', [
             'keyField' => 'id',
             'valueField' => 'user_fullname'
-        ])->toArray();
+        ])->where(['user_role' => 'admin.callcenter'])->toArray();
+        
 
         $dateFilter = [
             1 => 'Today',
@@ -2998,23 +3037,23 @@ class ClientsController extends AppController
                     'user_id' => $userId
                 ]);
 
-            // Şimdi `all()` metodu çağırılarak sonuçlar alınıyor
             $clientIds = $clientIdsQuery->all()->extract('client_id')->toArray();
 
             $booksTable = TableRegistry::getTableLocator()->get('Books');
-            
+
             $reminderTable = TableRegistry::getTableLocator()->get('Reminders');
 
             $newClientsCount = $userSaleTable
                 ->find()
                 ->where([
                     'user_id' => $userId,
-                    'stat_created >' => $lastLoginDate
+                    'stat_created <' => $lastLoginDate
                 ])
                 ->count();
 
             $newAssignCount = $newClientsCount;
 
+            
             $newBookedCount = $booksTable
                 ->find()
                 ->where([

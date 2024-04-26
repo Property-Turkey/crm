@@ -35,6 +35,7 @@ class UsersController extends AppController
             }else{
                 
                 $user = $this->Auth->identify();
+                
             }
 
             // if auth fail 

@@ -137,6 +137,12 @@ class ReportsController extends AppController
             $rec = $this->Reports->get($dt['id']);
             // dd($dt);
             $dt = $this->Reports->patchEntity($rec, $dt);
+
+            $rec->property_id = (int) $dt['property'][0]['value'];
+
+            
+
+
         }
 
         // // add mode
@@ -145,6 +151,9 @@ class ReportsController extends AppController
             $dt['stat_created'] = date('Y-m-d H:i:s');
             $dt['user_id'] = $this->authUser['id'];
             $rec = $this->Reports->newEntity($dt);
+
+            
+
         }
 
         if ($this->request->is(['post', 'patch', 'put'])) {

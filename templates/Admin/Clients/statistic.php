@@ -630,7 +630,7 @@ stacked: true
                                     </div>
                                     <div class="col-md-6 mb-3 d-flex">
                                         <div class="white-box-dashboard mb-3"
-                                            style="overflow-x: auto !important;">
+                                            style="overflow-x: auto !important;height: 570px;">
                                             <table  class="table table-bordered custom-table"
                                                 >
                                                 <thead>
@@ -664,7 +664,7 @@ stacked: true
 
                                     <div class="col-md-6 mb-3 d-flex">
                                         <div class="white-box-dashboard mb-3"
-                                            style="overflow-x: auto !important;">
+                                            style="overflow-x: auto !important;height: 570px;">
                                             <table  class="table table-bordered custom-table"
                                                 >
                                                 <thead>

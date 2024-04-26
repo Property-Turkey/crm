@@ -10,7 +10,31 @@ class PmscategoriesController extends AppController
 
     public function index($_pid = null)
     {
-       
+        if (is_numeric($_pid) && $_pid > 0) {
+            $conditions['Categories.parent_id'] = $_pid;
+        }
+
+        $_tags = isset($_GET['tags']) ? $_GET['tags'] : false;
+        $_keyword = isset($_GET['keyword']) ? $_GET['keyword'] : false;
+        $_parent = isset($_GET['parent']) ? $_GET['parent'] : false;
+
+
+        // TAGS search result for tags
+        if (!empty($_tags)) {
+            $tagsCondition = [
+                'parent_id' => $_parent,
+                'category_name LIKE' => '%' . $_keyword . '%'
+            ];
+
+            $data = $this->Pmscategories
+                ->find('all')
+                ->select(['text' => 'category_name', 'value' => 'id'])
+                ->where($tagsCondition);
+
+            echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
+            die();
+        }
+
 
         if ($this->request->is('post')) {
            

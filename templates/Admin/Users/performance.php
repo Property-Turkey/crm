@@ -80,7 +80,7 @@ $actionType = !isset($this->request->getParam('query')['action_type']) ? 0 : $th
                                     <td>
                                         <div>
                                             <a ng-if="cc.actions_today_called.length > 0"
-                                             ng-click="redirectTo(cc.id, 75)
+                                             ng-click="redirectTo(cc.id, 75, 'today')
                                              ">
                                                     {{cc.actions_today_called.length}}
                                             </a>

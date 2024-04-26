@@ -3,7 +3,7 @@
 $admin_menu=[
         ["name"=>"categories",
         "icon"=>"list",
-        "roles"=>["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content"],
+        "roles"=>["admin.root", "admin.supervisor", "admin.admin"],
         "active"=>"/categories/index,/categories/save,/categories/view",
         "sub" => [
                 ["name"=>"All", "url" => ["Categories", "index", ""]],
@@ -18,7 +18,7 @@ $admin_menu=[
        ],
        ["name"=>"users",
         "icon"=>"users",
-        "roles"=>["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content"],
+        "roles"=>["admin.root", "admin.admin"],
         "active"=>"/users/index,/users/save,/users/view",
         "sub" => [
                ["name"=>"all", "url" => ["Users", "index", ""]],
@@ -26,7 +26,7 @@ $admin_menu=[
        ],
        ["name"=>"configs",
         "icon"=>"cogs",
-        "roles"=>["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content"],
+        "roles"=>["admin.root", "admin.supervisor", "admin.admin"],
         "active"=>"/configs/index,/configs/save,/configs/view",
         "sub" => [
                ["name"=>"all", "url" => ["Configs", "index", ""]],
@@ -34,7 +34,7 @@ $admin_menu=[
        ],
        ["name"=>"logs",
         "icon"=>"user-secret",
-        "roles"=>["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content"],
+        "roles"=>["admin.root"],
         "active"=>"/logs/index,/logs/save,/logs/view",
         "sub" => [
                ["name"=>"all", "url" => ["Logs", "index", ""]],
@@ -66,7 +66,7 @@ $admin_menu=[
        ],
        ["name"=>"permissions",
         "icon"=>"user-secret",
-        "roles"=>["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content"],
+        "roles"=>["admin.root"],
         "active"=>"/permissions/index,/permissions/save,/permissions/view",
         "sub" => [
                ["name"=>"all", "url" => ["permissions", "index", ""]],

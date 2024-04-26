@@ -541,7 +541,7 @@
                         _opAlert(res.data.msg || '<?= __("login-success") ?>', "success");
                         
                         $timeout(function(){
-                            window.location.href = res.data.redirect || $scope.app_folder + '/admin/clients/dashboard';
+                            window.location.href = $scope.app_folder + '/admin/clients/dashboard';
                         },2500);
                     } else {
                         if (res.data.status == "NOT_ACTIVE") {
@@ -586,6 +586,7 @@
                 });;
             };
             $scope.logout = function(){
+                
                 $auth.logout();
             }
             $scope.isAuth = function(){
@@ -607,10 +608,13 @@
                 }
                 
                 
-                if (window.location.href.indexOf('login=1') > -1) {
-                    $("#login_mdl")[0].click();
-                    
-                }
+                if (window.location.href.indexOf('clients') > -1) {
+    // URL'de "clients" geçiyorsa "clients" sayfasını aç
+    window.location.href = '/clients'; // istediğiniz sayfanın URL'si
+} else {
+    // Aksi takdirde, varsayılan olarak login modalını aç
+    $("#login_mdl")[0].click();
+}
 
         });
         

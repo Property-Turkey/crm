@@ -225,7 +225,7 @@ class ConfigsController extends AppController
         if( isset( $this->authUser['user_original_role']) ){
             if ($this->request->is(['post', 'patch', 'put', 'delete'])) {
                 if(!$this->_isAuthorized(true, 'read')){
-                    echo json_encode(["status" => "FAIL", "redirect" => $this->app_folder.'/admin/properties']); die();
+                    echo json_encode(["status" => "FAIL", "redirect" => $this->app_folder.'/admin/clients']); die();
                 }
             }
         }

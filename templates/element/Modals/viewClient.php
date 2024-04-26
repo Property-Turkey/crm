@@ -69,7 +69,6 @@
                         doGet('/admin/clients?id='+rec.client.id, 'rec', 'client');
                         doGet('/admin/clients/index?list=1', 'list', 'clients'); 
                         
-                        closeModal('#subModal');
                                         ">
                     </button>
 

@@ -246,22 +246,22 @@ Configure::write('gmapKey', 'AIzaSyD2EC1RqRSh1Rm6NC4_cMt2CHtrZBKzUTE');
 
 Configure::write('roles', [
 	1 => 'admin.root',
-	2 => 'admin.cc',
+	2 => 'admin.callcenter',
 	3 => 'admin.admin',
 	4 => 'admin.field',
-	5 => 'cc',
+	5 => 'callcenter',
 	6 => 'field',
 	7 => 'accountant',
 	8 => 'aftersale'
 ]);
 
 Configure::write('rolesChart', [
-	'cc' => 'cc',
+	'cc' => 'callcenter',
 	'field' => 'field',
 ]);
 Configure::write('AdminRoles', [
 	1 => 'admin.root',
-	2 => 'cc',
+	2 => 'admin.callcenter',
 	3 => 'field',
 
 ]);
@@ -377,17 +377,17 @@ foreach ($DB_ROLES as $role) {
 	];
 }
 
-foreach ($permissionsByRole as &$roleModules) {
-	foreach ($modules as $module) {
-		$roleModules[$module] = $roleModules[$module] ?? [
-			'create' => 0,
-			'read' => 0,
-			'update' => 0,
-			'delete' => 0,
-			'allids' => 0,
-		];
-	}
-}
+// foreach ($permissionsByRole as &$roleModules) {
+// 	foreach ($modules as $module) {
+// 		$roleModules[$module] = $roleModules[$module] ?? [
+// 			'create' => 0,
+// 			'read' => 0,
+// 			'update' => 0,
+// 			'delete' => 0,
+// 			'allids' => 0,
+// 		];
+// 	}
+// }
 
 
 

@@ -154,7 +154,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                     <?php } ?>
 
 
-                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.field', 'admin.cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.field', 'admin.callcenter', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                         <button class="btn btn-warning" ng-click="multiHandle('/admin/clients/delete')">
                             Delete
                         </button>
@@ -221,7 +221,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                 <div class="dash-content">
                     <div class="columns-titles">
                         <div class="row m-1">
-                            <!-- <?php if (!in_array($authUser['user_role'], ['admin.cc', 'cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                            <!-- <?php if (!in_array($authUser['user_role'], ['admin.callcenter',  'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                 <div class="checkbox">
                                     <input type="checkbox" class="all-clients" name="client-checkbox"
                                         ng-click="checkAll(this)" />
@@ -248,7 +248,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                 </div>
                             <?php } ?> -->
 
-                            <?php if (in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.field', 'cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                            <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field',  'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                 <!-- <div class="checkbox">
                                     <input type="checkbox" class="all-clients" name="client-checkbox"
                                         ng-click="checkAll(this)" />
@@ -291,7 +291,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                             </button> -->
 
                                 <div class="row m-1">
-                                    <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.field', 'cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field',  'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
                                             <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                                 name="client-checkbox" />
@@ -450,7 +450,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                             </button> -->
 
                                 <div class="row m-1">
-                                    <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.field', 'cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field',  'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
                                             <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                                 name="client-checkbox" />
@@ -609,7 +609,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                             </button> -->
 
                                 <div class="row m-1">
-                                    <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.field', 'cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.field',  'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
                                             <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                                 name="client-checkbox" />
@@ -1085,7 +1085,6 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                         </div>
                                                     <?php } ?>
 
-
                                                     <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset ($authUser['user_original_role'])) { ?>
                                                         <div class="row">
                                                             <div>
@@ -1106,6 +1105,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                             </div>
 
                                                         </div>
+                                                        
                                                     <?php } ?>
 
 

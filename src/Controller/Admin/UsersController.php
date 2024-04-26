@@ -785,7 +785,7 @@ class UsersController extends AppController
             if (!$user) {
                 echo json_encode(['status' => 'FAIL', 'data' => $user]);
                 die();
-            } else {
+            }else {
 
                 // check if account activated  
                 if ($user['rec_state'] == 0 && !isset($dt['autologin'])) {
@@ -972,7 +972,7 @@ class UsersController extends AppController
 
         if ($this->request->is(['post', 'patch', 'put', 'delete'])) {
             if (!$this->_isAuthorized(true)) {
-                echo json_encode(["status" => "FAIL", "redirect" => $this->app_folder . '/?login=1']);
+                echo json_encode(["status" => "FAIL", "redirect" => $this->app_folder . '/admin/clients']);
                 die();
             }
         }

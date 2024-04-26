@@ -301,7 +301,7 @@ class BooksController extends AppController
 
         if ($this->request->is(['post', 'patch', 'put', 'delete'])) {
             if (!$this->_isAuthorized(true, 'read')) {
-                echo json_encode(["status" => "FAIL", "redirect" => $this->app_folder . '/?login=1']);
+                echo json_encode(["status" => "FAIL", "redirect" => $this->app_folder . '/admin/clients']);
                 die();
             }
         }
