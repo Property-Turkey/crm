@@ -57,7 +57,7 @@ class AppController extends Controller
 
         $this->Auth->deny();
 		
-		$this->Auth->allow(['login', 'register', 'logout', 'display', 'getpassword', 'activate', 'myaccount']);
+		$this->Auth->allow(['index', 'login', 'register', 'logout', 'display', 'getpassword', 'activate', 'myaccount']);
 		
 		if(!empty($this->request->getParam('prefix'))){
             if(empty($this->Auth->User('id'))){

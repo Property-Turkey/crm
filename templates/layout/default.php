@@ -609,12 +609,12 @@
                 
                 
                 if (window.location.href.indexOf('clients') > -1) {
-    // URL'de "clients" geçiyorsa "clients" sayfasını aç
-    window.location.href = '/clients'; // istediğiniz sayfanın URL'si
-} else {
-    // Aksi takdirde, varsayılan olarak login modalını aç
-    $("#login_mdl")[0].click();
-}
+                    // URL'de "clients" geçiyorsa "clients" sayfasını aç
+                    window.location.href = '/crm'; // istediğiniz sayfanın URL'si
+                } else {
+                    // Aksi takdirde, varsayılan olarak login modalını aç
+                    $("#login_mdl")[0].click();
+                }
 
         });
         

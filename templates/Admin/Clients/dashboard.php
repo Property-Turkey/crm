@@ -83,10 +83,10 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
 
 
             <?php if (in_array($authUser['user_role'], ['admin.callcenter']) || isset($authUser['user_original_role'])) { ?>
-                <div class="notifications-boxes">
+                <div class="notifications-boxes" ng-if="!rec.notification == ''">
 
                     <div class="colored-box badge greenBg" ng-if="rec.notification.newAssignCount != 0"
-                        ng-click="dashboardRedirectTo(2)">
+                        ng-click="dashboardRedirectTo('assign')">
                         <span class="notification-badge" format-currency="rec.notification.newAssignCount"></span>
                         <i class="fa fa-user" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"><?= __('assigns') ?>
@@ -104,15 +104,15 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
             <?php } ?>
 
             <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field']) || isset($authUser['user_original_role'])) { ?>
-                <div class="notifications-boxes">
+                <div class="notifications-boxes" ng-if="!rec.notification == ''">
 
-                    <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newClientsCount != 0"
+                    <!-- <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newClientsCount != 0"
                         ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.newClientsCount"></span>
                         <i class="fa fa-user" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('sold_online') ?>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newBookedCount != 0"
                         ng-click="dashboardRedirectTo(2)">

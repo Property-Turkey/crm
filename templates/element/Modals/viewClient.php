@@ -93,7 +93,7 @@
                                 <div class="heading">
                                     <div class="title">Lead</div>
                                     <div class="flex-center flex-gap-5">
-                                        <?php if (!in_array($authUser['user_role'], ['cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                             <button id="modalBtn" class="btn btn-modal"
                                                 ng-click="setZIndex();
                                                     updateModalElement('Lead');
@@ -985,7 +985,7 @@
                                         <div class="title"></div>
                                         <div class="flex-gap-10">
 
-                                            <?php if (!in_array($authUser['user_role'], ['cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                            <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                                 <button class="btn btn-modal" id="modalBtn" ng-click="setZIndex();
                                                 updateModalElement('Assign');
                                                 newEntity('newTag');
@@ -1618,7 +1618,7 @@
                                         <!-- <div class="heading">
                                             <div class="title"></div>
                                             <div class="flex-gap-10">
-                                                <?php if (!in_array($authUser['user_role'], ['cc', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                                <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
                                                     <button class="btn btn-modal" id="modalBtn btn-Booking" ng-click="
                                                     setZIndex();
                                                     doGet('/admin/reservations?id='+deals.id, 'rec', 'reservation');

@@ -165,7 +165,7 @@ class ClientsController extends AppController
 
 
             $_method = !empty($_GET['method']) ? $_GET['method'] : '';
-           
+
 
             $_dir = !empty($_GET['direction']) ? $_GET['direction'] : 'DESC';
             $_col = !empty($_GET['col']) ? $_GET['col'] : 'id';
@@ -438,17 +438,45 @@ class ClientsController extends AppController
                                 return $q->where(['PoolCategories.id' => $selectedPoolId]);
                             });
                         }
+
+                        // Eğer listenilebilecek veri yoksa 0 döndür
+                        $count = $q->count();
+                        if ($count === 0) {
+                            return 0;
+                        }
                     }
                 } elseif ($userRole === 'accountant') {
                     $q->matching('Reservations', function ($q) {
                         return $q
-                        ->where('Reservations.downpayment_paid', 1)
-                        ->where('Reservations.rec_state <>', 17)
-                        ->where('Reservations.client_id = Clients.id');
+                            ->where('Reservations.downpayment_paid', 1)
+                            ->where('Reservations.rec_state <>', 17)
+                            ->where('Reservations.client_id = Clients.id');
+                    });
+                } else if ($userRole === 'aftersale') {
+
+                    $q->matching('Clients', function ($q) {
+                        return $q
+                            ->where('Clients.downpayment_paid ', 14)
+                            ->where('Reservations.rec_state <>', 17)
+                            ->where('Reservations.client_id = Clients.id');
+                    });
+
+
+                    $q->where(function ($exp, $q) {
+                        return $exp->in('rec_state', [14, 15]);
                     });
                 }
-             
-                function getClientIds($query) {
+
+                $usersTable = TableRegistry::getTableLocator()->get('Users');
+
+                // dd($usersTa
+                $userId = $this->authUser['id'];
+                $user = $usersTable->get($userId);
+
+                // dd($user);
+                $lastLoginDate = $user->stat_lastlogin;
+                function getClientIds($query)
+                {
                     $results = $query->toArray();
                     $clientIds = [];
                     foreach ($results as $result) {
@@ -456,7 +484,7 @@ class ClientsController extends AppController
                     }
                     return $clientIds;
                 }
-                
+
                 if ($_pid == 'invoice-not-send') {
                     $thresholdDate = date('Y-m-d H:i:s', strtotime('-15 days'));
                     $reservations = $this->Clients->Reservations->find()
@@ -468,20 +496,21 @@ class ClientsController extends AppController
                         ->distinct();
                     $clientIds = getClientIds($reservations);
                     $q = $this->Clients->find()->where(['id IN' => $clientIds]);
-                } elseif (in_array($_pid, ['new-sold', 'new-reserved'])) {dd(1);
+                } elseif (in_array($_pid, ['new-sold', 'new-reserved'])) {
+                    dd(1);
                     $userId = $this->Auth->user('id');
                     $usersTable = TableRegistry::getTableLocator()->get('Users');
                     $user = $usersTable->get($userId);
                     $lastLoginDate = $user->stat_lastlogin;
-                
+
                     $query = ($_pid == 'new-sold') ?
                         $this->Clients->Reservations->find()->select(['client_id'])->where(['rec_state' => 15, 'stat_created >' => $lastLoginDate]) :
                         $this->Clients->find()->where(['rec_state' => 12, 'stat_created >' => $lastLoginDate]);
-                
+
                     $clientIds = getClientIds($query);
                     $q = $this->Clients->find()->where(['id IN' => $clientIds]);
                 } elseif ($_pid == 'reallocate') {
-                    
+
                     $userclient = $this->Clients->UserClient->find()
                         ->select(['client_id'])
                         ->where([
@@ -490,6 +519,26 @@ class ClientsController extends AppController
                         ->distinct();
                     $clientIds = getClientIds($userclient);
                     $q = $this->Clients->find()->where(['id IN' => $clientIds]);
+                } elseif ($_pid == 'assign') {
+
+                    $newAssignCount = $this->Clients->UserClient
+                        ->find()
+                        ->select(['client_id']) // Sadece client_id sütununu seçiyoruz
+                        ->where([
+                            'user_id' => $userId,
+                            'stat_created <' => $lastLoginDate
+                        ])
+                        ->distinct();
+                    // dd($newAssignCount);
+                    // $userclient = $this->Clients->UserClient->find()
+                    //     ->select(['client_id'])
+                    //     ->where([
+                    //         'rec_state' => 1
+                    //     ])
+                    //     ->distinct();
+                    $clientIds = getClientIds($newAssignCount);
+                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
+
                 } elseif (is_numeric($_pid) && $_pid > 17) {
                     $q = $this->Clients->find()
                         ->distinct()
@@ -502,11 +551,11 @@ class ClientsController extends AppController
                     $q = $this->Clients->find()
                         ->where(['rec_state' => $_pid]);
                 }
-                
-                $recStateOneRecords = $q->count(); // Burada rec_state 2 olan kayıtların sayısını alıyoruz
-                
 
-                
+                $recStateOneRecords = $q->count(); // Burada rec_state 2 olan kayıtların sayısını alıyoruz
+
+
+
 
                 // İstemci listesini al
                 $data = $this->paginate($q, ['limit' => 50]);
@@ -809,10 +858,7 @@ class ClientsController extends AppController
         extract($this->getClientIdsAndUser());
         $isAdmin = $this->authUser['user_role'] === 'admin.admin' || $this->authUser['user_role'] === 'admin.root';
 
-
-
         if (!$isAdmin) {
-
             $firstDate = $this->request->getData('firstDate');
             $finishDate = $this->request->getData('finishDate');
 
@@ -831,7 +877,6 @@ class ClientsController extends AppController
                     $filteredClientIds[] = $clientId->client_id;
                 }
 
-
                 if (empty($filteredClientIds)) {
                     echo json_encode(["status" => "ERROR", "msg" => __("No clients found in the specified date range")]);
                     die();
@@ -843,11 +888,7 @@ class ClientsController extends AppController
             $starterDate = !empty($_GET['startDate']) ? $_GET['startDate'] : '';
             $endDate = !empty($_GET['endDate']) ? $_GET['endDate'] : '';
 
-            // $starterDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
-            // $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
-
             if ($starterDate && $endDate) {
-
                 $clientQuery = $this->Clients->UserClient->find()
                     ->select(['client_id'])
                     ->where([
@@ -868,10 +909,7 @@ class ClientsController extends AppController
                 }
 
                 $clientIds = $filteredClientIds;
-
-
             }
-
         } else {
             $firstDate = $this->request->getData('firstDate');
             $finishDate = $this->request->getData('finishDate');
@@ -893,23 +931,15 @@ class ClientsController extends AppController
                 if (empty($filteredClientIds)) {
                     echo json_encode(["status" => "ERROR", "msg" => __("No clients found in the specified date range")]);
                     die();
-
                 }
 
                 $clientIds = $filteredClientIds;
-
             }
-
-
-
-
 
             $starterDate = !empty($_GET['startDate']) ? $_GET['startDate'] : '';
             $endDate = !empty($_GET['endDate']) ? $_GET['endDate'] : '';
 
-
             if ($starterDate && $endDate) {
-
                 $clientQuery = $this->Clients->find()
                     ->select(['id'])
                     ->where([
@@ -929,10 +959,13 @@ class ClientsController extends AppController
                 }
 
                 $clientIds = $filteredClientIds;
-
-
             }
+        }
 
+        // Eğer $clientIds boş ise, 0 döndür
+        if (empty($clientIds)) {
+            echo json_encode(["status" => "ERROR", "msg" => __("No clients found")]);
+            die();
         }
 
 
@@ -976,13 +1009,6 @@ class ClientsController extends AppController
                 'maxBarThickness' => 12
             ];
 
-            // $recStateData = $this->Clients->find()
-            //     ->select(['rec_state', 'count' => 'COUNT(*)'])
-            //     ->where(['rec_state' => $recStateValue, 'id IN' => $clientIds]) //IN KULLANMA BİR SÜRÜ OLACAK
-            //     ->group(['rec_state'])
-            //     ->toArray();
-
-
             $recStateData = $this->Clients->find()
                 ->select(['rec_state', 'count' => 'COUNT(*)'])
                 ->where(function ($exp) use ($clientIds, $recStateValue) {
@@ -991,7 +1017,6 @@ class ClientsController extends AppController
                 })
                 ->group(['rec_state'])
                 ->toArray();
-
 
             foreach ($labels as $labelKey => $labelValue) {
                 $count = 0;
@@ -1015,8 +1040,6 @@ class ClientsController extends AppController
             $data['datasets'][] = $dataset;
         }
 
-
-        // $jsonData = json_encode($data);
         echo json_encode([
             "status" => "SUCCESS",
             "msg" => __("success"),
@@ -2848,7 +2871,7 @@ class ClientsController extends AppController
             'keyField' => 'id',
             'valueField' => 'user_fullname'
         ])->where(['user_role' => 'admin.callcenter'])->toArray();
-        
+
 
         $dateFilter = [
             1 => 'Today',
@@ -3053,7 +3076,7 @@ class ClientsController extends AppController
 
             $newAssignCount = $newClientsCount;
 
-            
+
             $newBookedCount = $booksTable
                 ->find()
                 ->where([
@@ -3174,6 +3197,19 @@ class ClientsController extends AppController
 
         $user_id = $this->authUser['id'];
 
+        $newClientsCount = $newClientsCount ?? 0;
+        $newAssignCount = $newAssignCount ?? 0;
+        $newBookedCount = $newBookedCount ?? 0;
+        $newSoldCount = $newSoldCount ?? 0;
+        $newCancelledCount = $newCancelledCount ?? 0;
+        $newDownPaymentCount = $newDownPaymentCount ?? 0;
+        $newReservedCount = $newReservedCount ?? 0;
+        $newSoldOnlineCount = $newSoldOnlineCount ?? 0;
+        $newReminderCount = $newReminderCount ?? 0;
+        $invoiceSend = $invoiceSend ?? 0;
+        $commissionCollacted = $commissionCollacted ?? 0;
+        $notProccesing = count($clientsWithoutStatus) ?? 0;
+        $recStateOneRecords = $recStateOneRecords ?? 0;
 
         echo json_encode([
             'status' => 'SUCCESS',

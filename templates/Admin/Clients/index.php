@@ -81,7 +81,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                         ]) ?>
                     </label>
 
-                    <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset ($authUser['user_original_role'])) { ?>
+                    <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
 
                         <label class="">
                             <span class="sm-txt">
@@ -117,7 +117,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                     </label>
 
 
-                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset ($authUser['user_original_role'])) { ?>
+                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
 
                         <label class="">
                             <span class="sm-txt">
@@ -138,7 +138,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 
 
                 <div class="flex-gap-10 mt-3">
-                    <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                    <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
 
                         <button class="btn btn-danger" ng-click="
                             newEntity('client');
@@ -154,7 +154,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                     <?php } ?>
 
 
-                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.field', 'admin.callcenter', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.field', 'admin.callcenter', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                         <button class="btn btn-warning" ng-click="multiHandle('/admin/clients/delete')">
                             Delete
                         </button>
@@ -221,7 +221,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                 <div class="dash-content">
                     <div class="columns-titles">
                         <div class="row m-1">
-                            <!-- <?php if (!in_array($authUser['user_role'], ['admin.callcenter',  'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                            <!-- <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                 <div class="checkbox">
                                     <input type="checkbox" class="all-clients" name="client-checkbox"
                                         ng-click="checkAll(this)" />
@@ -248,7 +248,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                 </div>
                             <?php } ?> -->
 
-                            <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field',  'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                            <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                 <!-- <div class="checkbox">
                                     <input type="checkbox" class="all-clients" name="client-checkbox"
                                         ng-click="checkAll(this)" />
@@ -278,7 +278,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                     </div>
 
                     <!--  -->
-                    <?php if (in_array($authUser['user_role'], ['aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                    <?php if (in_array($authUser['user_role'], ['aftersale']) || isset($authUser['user_original_role'])) { ?>
                         <div class="client" ng-repeat="itm in lists.clients track by $index" ng-if="itm.rec_state == 13">
                             <!-- Client row Start -->
 
@@ -291,7 +291,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                             </button> -->
 
                                 <div class="row m-1">
-                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field',  'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
                                             <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                                 name="client-checkbox" />
@@ -403,7 +403,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     ) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Date</span>{{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[0] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
+                                                        ')[0] }}
                                                     </div>
                                                 </div>
 
@@ -411,7 +412,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     <?= $this->Html->image('/img/clock_regular.svg', ['' => '']) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Time</span> {{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[1] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
+                                                        ')[1] }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -437,20 +439,20 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 
                         </div>
                     <?php } ?>
-                    <?php if (in_array($authUser['user_role'], ['accountant']) || isset ($authUser['user_original_role'])) { ?>
+                    <?php if (in_array($authUser['user_role'], ['accountant']) || isset($authUser['user_original_role'])) { ?>
                         <div class="client" ng-repeat="itm in lists.clients track by $index">
                             <!-- Client row Start -->
 
                             <div class="client-row">
                                 <button type="button" id="client_btn" class="hideIt" ng-click="
                             doGet('/admin/clients/index?list=1', 'list', 'clients');">
-                        </button>
+                                </button>
                                 <!-- <button type="button" id="client_btn" class="hideIt" ng-click="
                                 doGet('/admin/clients/index?list=1', 'list', 'clients');">
                             </button> -->
 
                                 <div class="row m-1">
-                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field',  'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
                                             <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                                 name="client-checkbox" />
@@ -562,7 +564,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     ) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Date</span>{{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[0] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
+                                                        ')[0] }}
                                                     </div>
                                                 </div>
 
@@ -570,7 +573,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     <?= $this->Html->image('/img/clock_regular.svg', ['' => '']) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Time</span> {{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[1] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
+                                                        ')[1] }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -596,7 +600,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 
                         </div>
                     <?php } ?>
-                    <?php if (!in_array($authUser['user_role'], ['aftersale', 'accountant']) || isset ($authUser['user_original_role'])) { ?>
+                    <?php if (!in_array($authUser['user_role'], ['aftersale', 'accountant']) || isset($authUser['user_original_role'])) { ?>
                         <div class="client" ng-repeat="itm in lists.clients track by $index">
                             <!-- Client row Start -->
 
@@ -609,7 +613,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                             </button> -->
 
                                 <div class="row m-1">
-                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.field',  'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
                                             <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                                 name="client-checkbox" />
@@ -780,7 +784,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 
 
                                                 </div>
-                                                <button class="wb-ele sm-txt-indx" type="button" ng-click="
+                                                <button class="wb-ele sm-txt-indx" type="button"
+                                                    ng-click="
                                                         updateModalElement('Notes');
                                                         openModal('#subModal');
                                                         inlineElement('#elementsContainer', 1, 'finance');
@@ -841,7 +846,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 
                                                 </div>
 
-                                                <button class="wb-ele sm-txt-indx" type="button"  ng-click="
+                                                <button class="wb-ele sm-txt-indx" type="button" ng-click="
                                                     setZIndex();
                                                     openModal('#subModal'); 
                                                     updateModalElement('Deals');
@@ -874,7 +879,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                             doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
                                             inlineElement('#elementsContainer', 1, 'reminders')">
                                                     <p ng-if="itm.reminders.length > 0">
-                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[0] }}
+                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
+                                                        ')[0] }}
                                                     </p>
 
                                                 </button>
@@ -887,7 +893,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                             doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
                                             inlineElement('#elementsContainer', 1, 'reminders')">
                                                     <p ng-if="itm.reminders.length > 0">
-                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[1] }}
+                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
+                                                        ')[1] }}
                                                     </p>
                                                 </button>
                                                 <div class="row">
@@ -903,85 +910,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                                 </div>
 
                                                             </div>
-                                                            <!--<div class="col-6">
-                                                                <div class="flex-center text-center">
-                                                                    <label class="switch">
 
-
-                                                                        <input
-                                                                            ng-model="itm.actions[itm.actions.length - 1].action_type"
-                                                                            ng-true-value="75" type="checkbox" />
-                                                                        <span class="slider round"></span>
-                                                                    </label>
-                                                                    <label for="finance-client3">
-                                                                        <?= __('called') ?>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="flex-center text-center">
-                                                                    <label class="switch">
-                                                                        <input
-                                                                            ng-model="itm.actions[itm.actions.length - 1].action_type"
-                                                                            ng-click="
-                                                                                doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
-                                                                                rec.action.client_id = itm.id;
-                                                                                actionSave(itm.id, 76);"
-                                                                            ng-true-value="76" name="invoice"
-                                                                            id="finance-client4" type="checkbox" />
-                                                                        <span class="slider round"></span>
-                                                                    </label>
-                                                                    <label for="finance-client4">
-                                                                        <?= __('spoken') ?>
-                                                                    </label>
-                                                                </div>
-                                                            </div> -->
-
-
-                                                            <!-- <div class="note-flex">
-                                                                <div class="row">
-                                                                    <div class="col-6">
-                                                                        <div class="flex-center text-center"
-                                                                            ng-repeat="act in itm.actions">
-                                                                            <label class="switch"
-                                                                                ng-if="$last && act.action_type == 75">
-                                                                                <input ng-model="act.called"
-                                                                                    ng-change="actionSave(act.client_id, 75)"
-                                                                                    ng-checked="act.action_type == 75"
-                                                                                    ng-disabled="checkDate(act.stat_created)"
-                                                                                    name="invoice" id="finance-client3"
-                                                                                    type="checkbox" />
-                                                                                <span class="slider round"></span>
-                                                                            </label>
-                                                                            <label for="finance-client3"
-                                                                                ng-if="$last && act.action_type == 75">
-                                                                                <?= __('called') ?>
-                                                                            </label>
-
-                                                                            <label class="switch"
-                                                                                ng-if="$last && act.action_type == 76">
-                                                                                <input ng-model="act.spoken"
-                                                                                    ng-change="actionSave(act.client_id, 76)"
-                                                                                    ng-checked="act.action_type == 76"
-                                                                                    ng-disabled="checkDate(act.stat_created)"
-                                                                                    name="invoice4" id="finance-client4"
-                                                                                    type="checkbox" />
-                                                                                <span class="slider round"></span>
-                                                                            </label>
-                                                                            <label for="finance-client4"
-                                                                                ng-if="$last && act.action_type == 76">
-                                                                                <?= __('spoken') ?>
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div> -->
-
-                                                            <!-- {{rec.pool.lastActionType76}}
-                                                            {{rec.pool.lastActionType75}} -->
-                                                            <!-- {{rec.pool.clientAction76[itm.id]}}
-                                                             {{rec.pool.clientAction75[itm.id][0]}}
-                                                            {{rec.pool.clientAction75[itm.id].stat_created}}-->
 
                                                             <div class="note-flex">
                                                                 <div class="row">
@@ -1031,6 +960,23 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                             </div>
                                         </div>
 
+                                        <?php if (in_array($authUser['user_role'], ['admin.callcenter']) || isset($authUser['user_original_role'])) { ?>
+                                            <div class="pe-2 ps-2 col-lg-2 col-12  mt-5 mt-lg-0">
+                                                <div class="col-4 title hideWeb">
+                                                    <?= __('client_current_stage') ?>
+                                                </div>
+
+                                                <div class="col-6 p-0 col-lg-12">
+                                                    <div class="wb-ele">
+                                                        <!-- {{DtSetter('client_current_stageSale', itm.client_current_stage)}} -->
+                                                        {{itm.user_client[itm.user_client.length - 1].user.user_fullname}}
+                                                        <!-- assign.user.user_fullname -->
+                                                        <!-- {{itm}} -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+
                                         <div class="col-lg-2 col-12  info">
                                             <div class="col-4 title hideWeb">
                                                 <?= __('client_current_stage') ?>
@@ -1066,7 +1012,24 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                                 aria-hidden="true"></i>
                                                         </small>{{$index < (itm.user_client.length - 1) ? ',' : '' }} </div>
                                                     </div>
-                                                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset ($authUser['user_original_role'])) { ?>
+                                                    <?php if (in_array($authUser['user_role'], ['admin.callcenter']) || isset($authUser['user_original_role'])) { ?>
+                                                        <div class="pe-2 ps-2 col-lg-2 col-12  mt-5 mt-lg-0">
+                                                            <div class="col-4 title hideWeb">
+                                                                <?= __('client_current_stage') ?>
+                                                            </div>
+
+                                                            <div class="col-6 p-0 col-lg-12">
+                                                                <div class="wb-ele">
+                                                                    <!-- {{DtSetter('client_current_stageSale', itm.client_current_stage)}} -->
+                                                                    {{itm.user_client[itm.user_client.length -
+                                                                    1].user.user_fullname}}
+                                                                    <!-- assign.user.user_fullname -->
+                                                                    <!-- {{itm}} -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
+                                                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                                                         <div class="row" ng-repeat="reallocate in itm.user_client">
                                                             <div ng-if="rec.notification.user_id == reallocate.user_id;">
                                                                 <div class="col-12">
@@ -1085,7 +1048,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                         </div>
                                                     <?php } ?>
 
-                                                    <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset ($authUser['user_original_role'])) { ?>
+                                                    <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                                                         <div class="row">
                                                             <div>
                                                                 <div class="col-12" data-bs-toggle="modal"
@@ -1105,7 +1068,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                             </div>
 
                                                         </div>
-                                                        
+
                                                     <?php } ?>
 
 
