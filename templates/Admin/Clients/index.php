@@ -11,8 +11,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 
 <div id="indxPg" class="right_col" role="main" ng-init="
         doGet('/admin/clients/index/<?= $_pid ?>?list=1', 'list', 'clients');
-        doGet('/admin/clients/pool', 'rec', 'pool');
-        doGet('/admin/clients/notifications', 'rec', 'notification');">
+        doGet('/admin/clients/pool', 'rec', 'pool');">
 
 
     <main>
@@ -669,96 +668,6 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-2 col-12 info mr-24">
-                                            <div class="col-4 title hideWeb">
-                                                <?= __('sales_info') ?>
-                                            </div>
-                                            <div class="col-6 p-0 col-lg-12">
-
-                                                <span class="sm-txt">
-                                                    <?= __('category_id') ?>
-                                                </span>
-                                                <button ng-click="setZIndex();
-                                                updateModalElement('Lead Information');
-                                                doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
-                                                openModal('#subModal');
-                                                inlineElement('#elementsContainer', 1, 'info')"
-                                                    class="wb-ele sm-txt-indx" type="button">
-                                                    <p>
-                                                        {{itm.category.category_name}}
-                                                    </p>
-                                                </button>
-                                                <div class="note-flex">
-
-                                                    <span class="sm-txt">
-                                                        <?= __('budget') ?>
-                                                    </span>
-
-                                                    <div class="mx-2" type="button" my-tooltip="<?= __('set_the_budget') ?>"
-                                                        ng-repeat="notify in rec.notification.clientsWithoutBudget"
-                                                        ng-if="notify.id == itm.id">
-                                                        <i class="fa fa-exclamation-circle redColor" aria-hidden="true">
-                                                            <small class="note-font">
-                                                                <?= __('set_the_budget') ?>
-                                                            </small>
-                                                        </i>
-                                                    </div>
-
-                                                </div>
-
-                                                <button ng-click="setZIndex();
-                                                updateModalElement('Lead Information');
-                                                doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
-                                                openModal('#subModal');
-                                                inlineElement('#elementsContainer', 1, 'info')"
-                                                    class="wb-ele sm-txt-indx" type="button">
-                                                    <p ng-if="!(itm.client_budget == 2000001)">
-                                                        Up to {{nFormat( itm.client_budget,
-                                                        DtSetter('currencies_icons',2))}}
-                                                    </p>
-                                                    <p ng-if="itm.client_budget == 2000001 && itm.client_budget != null">
-                                                        {{nFormat( itm.client_budget,
-                                                        DtSetter('currencies_icons',2))}} +
-                                                    </p>
-                                                    <p ng-if="itm.client_budget == null">
-                                                        -
-                                                    </p>
-                                                </button>
-
-
-
-
-                                                <div class="note-flex">
-                                                    <span class="sm-txt">
-                                                        <?= __('rec_state') ?>
-                                                    </span>
-                                                    <div class="mx-2" type="button" my-tooltip="<?= __('not_proccesing') ?>"
-                                                        ng-repeat="notify in rec.notification.clientsWithoutStatus"
-                                                        ng-if="notify.id == itm.id">
-                                                        <i class="fa fa-exclamation-circle redColor" aria-hidden="true">
-                                                            <small class="note-font">
-                                                                <?= __('set_the_status') ?>
-                                                            </small>
-                                                        </i>
-                                                    </div>
-                                                </div>
-
-                                                <button ng-click="setZIndex();
-                                                updateModalElement('Lead Information');
-                                                
-                                                doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
-                                                openModal('#subModal');
-                                                inlineElement('#elementsContainer', 1, 'info')"
-                                                    class="wb-ele sm-txt-indx" type="button">
-                                                    <p>
-                                                        {{ DtSetter('rec_stateSale',
-                                                        3, itm.rec_state)
-                                                        }}
-                                                    </p>
-                                                </button>
-                                            </div>
-
-                                        </div>
 
                                         <div class="col-lg-2 col-12 info mr-24">
                                             <div class="col-4 title hideWeb">
@@ -791,7 +700,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                         inlineElement('#elementsContainer', 1, 'finance');
                                                         rec.report.tar_id = itm.id;
                                                         doGet('/admin/clients?id='+itm.id, 'rec', 'client');
-                                                        doGet('/admin/reports?id=' + itm.reports[itm.reports.length - 1].id, 'rec', 'report');">
+                                                        newEntity('reservation'); ">
                                                     <p ng-if="itm.reports.length > 0">
                                                         {{ itm.reports[itm.reports.length - 1].report_text }}
                                                     </p>
@@ -851,7 +760,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     openModal('#subModal'); 
                                                     updateModalElement('Deals');
                                                     doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
-                                                    doGet('/admin/reservations?id=' + itm.reservations[itm.reservations.length - 1].id, 'rec', 'reservation');
+                                                    newEntity('reservation'); 
                                                     inlineElement('#elementsContainer', 1, 'indexreser')">
                                                     <p ng-if="itm.reservations.length > 0">
                                                         Sent {{ itm.reservations.length }} Properties
@@ -873,6 +782,14 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                 <span class="sm-txt">
                                                     <?= __('next_call_date') ?>
                                                 </span>
+                                                <div class="mx-2" type="button" my-tooltip="<?= __('set_the_priorty') ?>"
+                                                    ng-if="getCurrentDate() === itm.reminders[itm.reminders.length - 1].reminder_nextcall">
+                                                    <i class="fa fa-clock-o redColor" aria-hidden="true">
+                                                        <small class="note-font">
+                                                            <?= __('set_the_priorty') ?>
+                                                        </small>
+                                                    </i>
+                                                </div>
                                                 <button class="wb-ele sm-txt-indx" type="button" ng-click="setZIndex();
                                             newEntity('reminder'); 
                                             openModal('#subModal'); 

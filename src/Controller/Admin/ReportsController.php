@@ -136,9 +136,14 @@ class ReportsController extends AppController
         if ($this->request->is(['patch', 'put'])) {
             $rec = $this->Reports->get($dt['id']);
             // dd($dt);
+
+            $dt['report_configs']['property_ids'] = '[' . $dt['property'][0]['value'] . ']';
+
+
+            dd($dt['report_configs']['property_ids']);
+
             $dt = $this->Reports->patchEntity($rec, $dt);
 
-            $rec->property_id = (int) $dt['property'][0]['value'];
 
             
 
@@ -150,9 +155,14 @@ class ReportsController extends AppController
             $dt['id'] = null;
             $dt['stat_created'] = date('Y-m-d H:i:s');
             $dt['user_id'] = $this->authUser['id'];
+
+
+            $dt['report_configs']['property_ids'] = '[' . $dt['property'][0]['value'] . ']';
+            
             $rec = $this->Reports->newEntity($dt);
 
-            
+            $rec->report_configs =  $dt['report_configs'];
+
 
         }
 
@@ -160,10 +170,18 @@ class ReportsController extends AppController
 
             $this->autoRender = false;
 
+            $rec->report_configs = json_encode($rec->report_configs, JSON_UNESCAPED_UNICODE);
+// dd($rec->report_configs);
+
+// dd($rec);
             if ($newRec = $this->Reports->save($rec)) {
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
                 die();
             }
+
+
+
+
             // if (!empty($dt['empathy'])) {
 
             //     $empathyData = array_filter($dt['empathy'], function ($empathy) {

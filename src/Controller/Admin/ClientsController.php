@@ -439,7 +439,6 @@ class ClientsController extends AppController
                             });
                         }
 
-                        // Eğer listenilebilecek veri yoksa 0 döndür
                         $count = $q->count();
                         if ($count === 0) {
                             return 0;
@@ -467,14 +466,17 @@ class ClientsController extends AppController
                     });
                 }
 
-                $usersTable = TableRegistry::getTableLocator()->get('Users');
-
-                // dd($usersTa
                 $userId = $this->authUser['id'];
-                $user = $usersTable->get($userId);
 
-                // dd($user);
-                $lastLoginDate = $user->stat_lastlogin;
+                $lastLoginDate = $this->Clients->Users
+                    ->find()
+                    ->select('stat_lastlogin')
+                    ->where([
+                        'id ' => $userId
+                    ]);
+
+                // dd($q);
+
                 function getClientIds($query)
                 {
                     $results = $query->toArray();
@@ -497,11 +499,8 @@ class ClientsController extends AppController
                     $clientIds = getClientIds($reservations);
                     $q = $this->Clients->find()->where(['id IN' => $clientIds]);
                 } elseif (in_array($_pid, ['new-sold', 'new-reserved'])) {
-                    dd(1);
-                    $userId = $this->Auth->user('id');
-                    $usersTable = TableRegistry::getTableLocator()->get('Users');
-                    $user = $usersTable->get($userId);
-                    $lastLoginDate = $user->stat_lastlogin;
+
+
 
                     $query = ($_pid == 'new-sold') ?
                         $this->Clients->Reservations->find()->select(['client_id'])->where(['rec_state' => 15, 'stat_created >' => $lastLoginDate]) :
@@ -529,13 +528,7 @@ class ClientsController extends AppController
                             'stat_created <' => $lastLoginDate
                         ])
                         ->distinct();
-                    // dd($newAssignCount);
-                    // $userclient = $this->Clients->UserClient->find()
-                    //     ->select(['client_id'])
-                    //     ->where([
-                    //         'rec_state' => 1
-                    //     ])
-                    //     ->distinct();
+
                     $clientIds = getClientIds($newAssignCount);
                     $q = $this->Clients->find()->where(['id IN' => $clientIds]);
 
@@ -551,18 +544,43 @@ class ClientsController extends AppController
                     $q = $this->Clients->find()
                         ->where(['rec_state' => $_pid]);
                 }
+                // $previousDateTime = date('Y-m-d H:i:s', strtotime('-24 hours'));
 
-                $recStateOneRecords = $q->count(); // Burada rec_state 2 olan kayıtların sayısını alıyoruz
+                // // İlk sorgu: client_budget IS NULL olan veriler
+                // $q1 = $this->Clients->find()
+                //     ->select(['id', 'client_name'])
+                //     ->where([
+                //         'stat_created <=' => $previousDateTime,
+                //         'client_budget IS NULL',
+                //     ]);
+                
+                // // İkinci sorgu: client_priority IS NULL olan veriler
+                // $q2 = $this->Clients->find()
+                //     ->select(['id', 'client_name'])
+                //     ->where([
+                //         'stat_created <=' => $previousDateTime,
+                //         'client_priority IS NULL',
+                //     ]);
+                
+                // // Üçüncü sorgu: rec_state = 1 olan veriler
+                // $q3 = $this->Clients->find()
+                //     ->select(['id', 'client_name'])
+                //     ->where([
+                //         'stat_created <=' => $previousDateTime,
+                //         'rec_state = 1',
+                //     ]);
+                
+                // // Sonuçları birleştir
+                // $q = $q1->unionAll($q2)->unionAll($q3);
 
-
-
-
-                // İstemci listesini al
                 $data = $this->paginate($q, ['limit' => 50]);
             }
 
             // Kategori verilerini al
             $categoryOptions = $this->Clients->Categories->find('list', ['keyField' => 'id', 'valueField' => 'category_name'])->toArray();
+
+
+
 
 
             echo json_encode(
@@ -583,7 +601,6 @@ class ClientsController extends AppController
 
     public function pool()
     {
-        // Giriş yapan kullanıcının ID'sini alın
         $userId = $this->Auth->user('id');
 
         $poolData = TableRegistry::getTableLocator()->get('UserPool');
@@ -609,33 +626,27 @@ class ClientsController extends AppController
         }
 
 
-        // Son 75 action_type'ı al
         $latestActions75 = $this->Clients->Actions->find()
             ->select(['client_id', 'action_type', 'stat_created'])
             ->where(['action_type' => 75])
             ->order(['id' => 'DESC'])
             ->toArray();
 
-        // Her bir action_type için ait client_id'leri grupla
         $clientAction75 = [];
         foreach ($latestActions75 as $action) {
-            // dd($action->stat_created);
             $clientAction75[$action->client_id][] = $action->action_type;
             $clientAction75[$action->client_id][] = $action->stat_created;
 
         }
 
-        // Son 75 action_type'ı al
         $latestActions76 = $this->Clients->Actions->find()
             ->select(['client_id', 'action_type', 'stat_created', 'id'])
             ->where(['action_type' => 76])
             ->order(['id' => 'DESC'])
             ->toArray();
 
-        // Her bir action_type için ait client_id'leri grupla
         $clientAction76 = [];
         foreach ($latestActions76 as $action) {
-            // dd($action->stat_created);
             $clientAction76[$action->client_id][] = $action->action_type;
             $clientAction76[$action->client_id][] = $action->stat_created;
             $clientAction76[$action->client_id][] = $action->id;
@@ -650,9 +661,6 @@ class ClientsController extends AppController
             'msg' => __('success'),
             'data' => [
                 'categories' => $categories,
-                'latestActions75' => $latestActions75,
-                // 'lastActionType76' => $lastActionType76,
-                // 'clientAction76' => $clientAction76,
                 'clientAction75' => $clientAction75,
                 'clientAction76' => $clientAction76,
             ],
@@ -2912,18 +2920,16 @@ class ClientsController extends AppController
         $this->autoRender = false;
 
 
-        $userId = $this->authUser['id'];
         $isAdmin = $this->authUser['user_role'] === 'admin.admin' || $this->authUser['user_role'] === 'admin.root';
+        $userId = $this->authUser['id'];
 
-        $usersTable = TableRegistry::getTableLocator()->get('Users');
+        $lastLoginDate = $this->Clients->Users
+            ->find()
+            ->select('stat_lastlogin')
+            ->where([
+                'id ' => $userId
+            ]);
 
-        // dd($usersTable);
-        $assignTable = TableRegistry::getTableLocator()->get('UserClient');
-
-        $user = $usersTable->get($userId);
-
-        // dd($user);
-        $lastLoginDate = $user->stat_lastlogin;
 
 
         if ($isAdmin) {
@@ -2934,14 +2940,14 @@ class ClientsController extends AppController
                     'stat_created >' => $lastLoginDate
                 ])
                 ->count();
-            $newAssignCount = $assignTable
+            $newAssignCount = $this->Clients->UserClient
                 ->find()
                 ->where([
                     'stat_created >' => $lastLoginDate
                 ])
                 ->count();
-            $booksTable = TableRegistry::getTableLocator()->get('Books');
-            $newBookedCount = $booksTable
+
+            $newBookedCount = $this->Clients->Books
                 ->find()
                 ->where([
                     'stat_created >' => $lastLoginDate
@@ -2989,8 +2995,7 @@ class ClientsController extends AppController
                 ])
                 ->count();
 
-            $reminderTable = TableRegistry::getTableLocator()->get('Reminders');
-            $newReminderCount = $reminderTable
+            $newReminderCount = $this->Clients->Reminders
                 ->find()
                 ->where([
                     'stat_created >' => $lastLoginDate
@@ -3046,15 +3051,16 @@ class ClientsController extends AppController
 
             $notProccesing = count($clientsWithoutStatus);
 
-            $recStateOneRecords = $assignTable
+            $recStateOneRecords = $this->Clients->UserClient
                 ->find()
                 ->where(['rec_state' => 2])
                 ->count();
 
 
         } else {
-            $userSaleTable = TableRegistry::getTableLocator()->get('UserClient');
-            $clientIdsQuery = $userSaleTable
+
+
+            $clientIdsQuery = $this->Clients->UserClient
                 ->find()
                 ->where([
                     'user_id' => $userId
@@ -3062,11 +3068,7 @@ class ClientsController extends AppController
 
             $clientIds = $clientIdsQuery->all()->extract('client_id')->toArray();
 
-            $booksTable = TableRegistry::getTableLocator()->get('Books');
-
-            $reminderTable = TableRegistry::getTableLocator()->get('Reminders');
-
-            $newClientsCount = $userSaleTable
+            $newClientsCount = $this->Clients->UserClient
                 ->find()
                 ->where([
                     'user_id' => $userId,
@@ -3077,7 +3079,7 @@ class ClientsController extends AppController
             $newAssignCount = $newClientsCount;
 
 
-            $newBookedCount = $booksTable
+            $newBookedCount = $this->Clients->Books
                 ->find()
                 ->where([
                     'client_id IN' => $clientIds,
@@ -3130,7 +3132,7 @@ class ClientsController extends AppController
                 ])
                 ->count();
 
-            $newReminderCount = $reminderTable
+            $newReminderCount = $this->Clients->Reminders
                 ->find()
                 ->where([
                     'user_id' => $userId,
@@ -3189,13 +3191,12 @@ class ClientsController extends AppController
 
             $notProccesing = count($clientsWithoutStatus);
 
-            $recStateOneRecords = $userSaleTable
+            $recStateOneRecords = $this->Clients->UserClient
                 ->find()
                 ->where(['rec_state' => 2])
                 ->count();
         }
 
-        $user_id = $this->authUser['id'];
 
         $newClientsCount = $newClientsCount ?? 0;
         $newAssignCount = $newAssignCount ?? 0;
@@ -3230,7 +3231,7 @@ class ClientsController extends AppController
                 'clientsWithoutPriorty' => $clientsWithoutPriorty,
                 'clientsWithoutStatus' => $clientsWithoutStatus,
                 'recStateOneRecords' => $recStateOneRecords,
-                'user_id' => $user_id,
+                'user_id' => $userId,
                 'notProccesing' => $notProccesing,
             ],
         ]);
