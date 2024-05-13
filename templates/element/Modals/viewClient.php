@@ -93,7 +93,7 @@
                                 <div class="heading">
                                     <div class="title">Lead</div>
                                     <div class="flex-center flex-gap-5">
-                                        <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button id="modalBtn" class="btn btn-modal"
                                                 ng-click="setZIndex();
                                                     updateModalElement('Lead');
@@ -107,7 +107,7 @@
                                         <!-- <button class="sm-btn">
                                             <i class="fas-plus"></i>
                                         </button> -->
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
 
                                             <button class="sm-btn">
                                                 <a class="fas-phone" href="tel:{{rec.client.client_mobile}}"></a>
@@ -195,11 +195,10 @@
                                         </div>
                                     </div>
                                     <div class="heading pb-0 mb-0 mt-3">
-                                        <div class="title leadFont" >Lead Information</div>
+                                        <div class="title leadFont">Lead Information</div>
                                         <div class="flex-gap-10">
-                                            <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
-                                                <button id="modalBtn" class="leadFont btn btn-modal"
-                                                    ng-click="setZIndex();
+                                            <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                                <button id="modalBtn" class="leadFont btn btn-modal" ng-click="setZIndex();
                                                 updateModalElement('Lead Information');
                                                 doGet('/admin/clients?id=' + rec.client.id, 'rec', 'client');
                                                 openModal('#subModal');
@@ -985,7 +984,7 @@
                                         <div class="title"></div>
                                         <div class="flex-gap-10">
 
-                                            <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                            <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                                 <button class="btn btn-modal" id="modalBtn" ng-click="setZIndex();
                                                 updateModalElement('Assign');
                                                 newEntity('newTag');
@@ -996,15 +995,16 @@
                                                     <?= __('add_assign') ?>
                                                 </button>
                                             <?php } ?>
-                                                <button ng-if="rec.search.pool_id" class="btn btn-modal" id="modalBtn" ng-click="setZIndex();
+                                            <button ng-if="rec.search.pool_id" class="btn btn-modal" id="modalBtn"
+                                                ng-click="setZIndex();
                                                 updateModalElement('Assign');
                                                 newEntity('newTag');
                                                 tagList = [];
                                                 openModal('#subModal'); 
                                                 inlineElement('#elementsContainer', 1, 'assign')">
-                                                    <i class="fas-plus"></i>
-                                                    <?= __('self_assign') ?>
-                                                </button>
+                                                <i class="fas-plus"></i>
+                                                <?= __('self_assign') ?>
+                                            </button>
 
 
                                             <!-- <button id="modalBtn" ng-if="rec.client.client_current_stage == 2"
@@ -1102,7 +1102,7 @@
                                     <div class="title">Empathy Mapping</div>
                                     <div class="flex-gap-10">
                                         
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button id="modalBtn" class="btn btn-modal" ng-click="
                                                     setZIndex();
                                                     updateModalElement('Empathy Mapping');
@@ -1149,9 +1149,9 @@
                                 // <!-- Report Notes Section -->
                                 ?>
                                 <div class="heading">
-                                    <div class="title">Notes</div>
+                                    <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" ng-click="
                                             newEntity('report');
                                             setZIndex();
@@ -1181,7 +1181,10 @@
                                                 {{DtSetter('rec_stateSale', clsale.client_current_stage,
                                                 clsale.report_type)}}
                                                 <b>{{ rec.clsale.user.user_fullname }}</b>
-
+                                                <p>
+                                                <i class="fas-home"></i>
+                                                    {{ clsale.property_ids.pmsproperty.property_ref}}
+                                                </p>
                                             </div>
 
 
@@ -1194,7 +1197,7 @@
 
                                             <div class="flex-center flex-gap-10">
                                                 <b> {{ clsale.stat_created.split(' ')[1] }} </b>
-                                                <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                                <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                                     <div class="dropdown">
                                                         <button class="btn" type="button" data-bs-toggle="dropdown"
                                                             aria-expanded="false">
@@ -1254,7 +1257,7 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" ng-click="setZIndex();
                                             newEntity('reminder'); 
                                             updateModalElement('Reminders');
@@ -1362,7 +1365,7 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" ng-click="
                                             setZIndex();
                                             newEntity('offer'); 
@@ -1435,7 +1438,7 @@
                                 <div class="heading" ng-if="!rec.client.book">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" id="modalBtn"
                                                 ng-click="setZIndex();updateModalElement('Books');newEntity('book'); openModal('#subModal'); inlineElement('#elementsContainer', 1, 'booking')">
                                                 <i class="fas-plus"></i> Add
@@ -1448,7 +1451,7 @@
                                 <div class="heading" ng-if="rec.client.book">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" id="modalBtn"
                                                 ng-click="
                                             setZIndex();updateModalElement('Books');
@@ -1467,7 +1470,7 @@
                                     <?= __('no_data') ?>
 
                                 </div>
-                                <div class="white-box" ng-if="rec.client.book" >
+                                <div class="white-box" ng-if="rec.client.book">
                                     <div class="row">
                                         <div class="col-md-6 col-12 col-lg-3" ng-if="!(rec.book.in_turkey == 1)">
                                             <span class="sm-txt">
@@ -1537,8 +1540,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6 col-12 col-lg-3"
-                                            ng-if="rec.client.book.in_turkey == 1">
+                                        <div class="col-md-6 col-12 col-lg-3" ng-if="rec.client.book.in_turkey == 1">
                                             <span class="sm-txt">
                                                 <?= __('in_turkey') ?>
                                             </span>
@@ -1595,15 +1597,15 @@
                                 <div class="heading ">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                            <button class="btn btn-modal" id="modalBtn" ng-click="
+                                        <button class="btn btn-modal" id="modalBtn" ng-click="
                                         setZIndex();
                                         newEntity('reservation');
                                         openModal('#subModal'); 
                                         updateModalElement('Deals');
                                         inlineElement('#elementsContainer', 1, 'reservation')">
-                                                <i class="fas-plus"></i>
-                                                <?= __('add_deal') ?>
-                                            </button>
+                                            <i class="fas-plus"></i>
+                                            <?= __('add_deal') ?>
+                                        </button>
 
                                     </div>
                                 </div>
@@ -1618,7 +1620,7 @@
                                         <!-- <div class="heading">
                                             <div class="title"></div>
                                             <div class="flex-gap-10">
-                                                <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'field', 'accountant', 'aftersale']) || isset ($authUser['user_original_role'])) { ?>
+                                                <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                                     <button class="btn btn-modal" id="modalBtn btn-Booking" ng-click="
                                                     setZIndex();
                                                     doGet('/admin/reservations?id='+deals.id, 'rec', 'reservation');

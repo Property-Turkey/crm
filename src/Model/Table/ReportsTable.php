@@ -39,6 +39,11 @@ class ReportsTable extends Table
             'className' => 'Categories',        
         ]);
 
+        $this->belongsTo('Property', [
+            'foreignKey' => 'property_ids',    
+            'className' => 'Pmsproperties',        
+        ]);
+
         $this->belongsTo('User', [
             'foreignKey' => 'user_id',    
             'className' => 'Users',        

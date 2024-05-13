@@ -203,16 +203,13 @@ class CategoriesController extends AppController
                         }
                     }
 
+                    
                     $deleteResult = $assignTable
                         ->deleteAll(['user_id' => $userId]);
-
-                    if ($deleteResult) {
-                        echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
-                        die();
-                    } else {
-                        echo json_encode(["status" => "FAIL", "data" => "Error deleting UserClient records."]);
-                        die();
-                    }
+// dd($deleteResult);
+                    echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
+                    die();
+                   
                 }
             }
 

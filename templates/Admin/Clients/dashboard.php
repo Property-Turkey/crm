@@ -93,12 +93,12 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         </div>
                     </div>
 
-                    <div class="colored-box badge redBg" ng-if="rec.notification.newReminderCount != 0"
+                    <!-- <div class="colored-box badge redBg" ng-if="rec.notification.newReminderCount != 0"
                         ng-click="dashboardRedirectTo(2)">
                         <span class="notification-badge" format-currency="rec.notification.newReminderCount"></span>
                         <i class="fa fa-book" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"><?= __('reminders') ?></div>
-                    </div>
+                    </div> -->
 
                 </div>
             <?php } ?>
@@ -115,28 +115,28 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                     </div> -->
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newBookedCount != 0"
-                        ng-click="dashboardRedirectTo(2)">
+                        ng-click="dashboardRedirectTo('booked')">
                         <span class="notification-badge" format-currency="rec.notification.newBookedCount"></span>
                         <i class="fa fa-book" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('booked') ?></div>
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newSoldCount != 0"
-                        ng-click="dashboardRedirectTo(2)">
+                        ng-click="dashboardRedirectTo('newsold')">
                         <span class="notification-badge" format-currency="rec.notification.newSoldCount"></span>
                         <i class="fa fa-check" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('sold') ?></div>
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newCancelledCount != 0"
-                        ng-click="dashboardRedirectTo(2)">
+                        ng-click="dashboardRedirectTo('cancelled')">
                         <span class="notification-badge" format-currency="rec.notification.newCancelledCount"></span>
                         <i class="fa fa-times" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('cancelled') ?></div>
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newDownPaymentCount != 0"
-                        ng-click="dashboardRedirectTo(2)">
+                        ng-click="dashboardRedirectTo('downpayment')">
                         <span class="notification-badge" format-currency="rec.notification.newDownPaymentCount"></span>
                         <i class="fa fa-credit-card" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('down_date') ?></div>
@@ -162,7 +162,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                     </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.commissionCollacted != 0"
-                        ng-click="dashboardRedirectTo(2)">
+                        ng-click="dashboardRedirectTo('comission')">
                         <span class="notification-badge" format-currency="rec.notification.commissionCollacted"></span>
                         <i class="fa fa-check-circle-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('commision_collacted') ?></div>
@@ -311,8 +311,8 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                                 <div ng-repeat="(id, data) in rec.numbers.groupedData"
                                     class="mt-3 d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
-                                        <img ng-src="" class="img-fluid rounded-circle"
-                                            style="width: 70px; height: 70px;" />
+                                    <img ng-src="{{ '/img/' + data.adrs_name + '.jpg' }}"
+                                            class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
                                         <span class="ms-2">
                                             {{ data.count }}<br>
                                             <span style="font-size:12px;">{{ data.adrs_name }}</span>
@@ -388,7 +388,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
 
             <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                 <div class="notifications-boxes">
-                    <div class=" colored-box badge redBg" ng-if="rec.notification.recStateOneRecords != 0" 
+                    <div class=" colored-box badge redBg" ng-if="rec.notification.rec != 0" 
                     ng-click="dashboardRedirectTo('reallocate')">
                         <span class="notification-badge" format-currency="rec.notification.recStateOneRecords"></span>
                         <i class="fa fa-times-circle-o" aria-hidden="true"></i>

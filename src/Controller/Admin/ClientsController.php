@@ -267,6 +267,7 @@ class ClientsController extends AppController
                     'contain' => [
                         'Reports',
                         "Reports.TypeCategories",
+                        "Reports.Property" => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
                         "Sources",
                         'Adrscountry' => ['fields' => ['adrs_name', 'id']],
                         "Categories",
@@ -297,7 +298,16 @@ class ClientsController extends AppController
 
                     ]
                 ])->toArray();
+                if (!empty($data['property'])) {
 
+                    $data['property'][] = [
+                        [
+                            "text" => $data["property"]["property_ref"],
+                            "value" => $data["property"]['id']
+                        ]
+                    ];
+    
+                }
 
                 $reservations = [];
                 foreach ($data["reservations"] as $reservation) {
@@ -391,6 +401,7 @@ class ClientsController extends AppController
                         "ClientSpecs",
                         'PoolCategories',
                         "Reports.TypeCategories",
+                        "Reports.Property" => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
                         'TagCategories',
                         'ClientSpecs',
                         'Categories',
@@ -464,16 +475,19 @@ class ClientsController extends AppController
                     $q->where(function ($exp, $q) {
                         return $exp->in('rec_state', [14, 15]);
                     });
+
+
                 }
 
-                $userId = $this->authUser['id'];
+                $lastLoginDate = $this->authUser['stat_lastlogin'];
 
-                $lastLoginDate = $this->Clients->Users
-                    ->find()
-                    ->select('stat_lastlogin')
-                    ->where([
-                        'id ' => $userId
-                    ]);
+                // dd($lastLoginDate);
+                // $lastLoginDate = $this->Clients->Users
+                //     ->find()
+                //     ->select('stat_lastlogin')
+                //     ->where([
+                //         'id ' => $userId
+                //     ]);
 
                 // dd($q);
 
@@ -509,8 +523,9 @@ class ClientsController extends AppController
                     $clientIds = getClientIds($query);
                     $q = $this->Clients->find()->where(['id IN' => $clientIds]);
                 } elseif ($_pid == 'reallocate') {
-
-                    $userclient = $this->Clients->UserClient->find()
+                    
+                    $userclient = $this->Clients->UserClient
+                    ->find()
                         ->select(['client_id'])
                         ->where([
                             'rec_state' => 2
@@ -518,6 +533,8 @@ class ClientsController extends AppController
                         ->distinct();
                     $clientIds = getClientIds($userclient);
                     $q = $this->Clients->find()->where(['id IN' => $clientIds]);
+
+                    
                 } elseif ($_pid == 'assign') {
 
                     $newAssignCount = $this->Clients->UserClient
@@ -532,6 +549,71 @@ class ClientsController extends AppController
                     $clientIds = getClientIds($newAssignCount);
                     $q = $this->Clients->find()->where(['id IN' => $clientIds]);
 
+                } elseif ($_pid == 'downpayment') {
+
+                    $newDownPaymentCount = $this->Clients->Reservations
+                        ->find()
+                        ->where([
+                            'rec_state' => 13,
+                            'stat_created >' => $lastLoginDate
+                        ])
+                        ->distinct();
+
+                    $clientIds = getClientIds($newDownPaymentCount);
+                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
+
+                } elseif ($_pid == 'cancelled') {
+
+                    $newCancelledCount = $this->Clients->Reservations
+                        ->find()
+                        ->where([
+                            'rec_state' => 17,
+                            'stat_created >' => $lastLoginDate
+                        ])
+                        ->distinct();
+
+                    $clientIds = getClientIds($newCancelledCount);
+                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
+
+                } elseif ($_pid == 'newsold') {
+
+                    $newSoldCount = $this->Clients->Reservations
+                        ->find()
+                        ->where([
+                            'rec_state' => 14,
+                            'stat_created >' => $lastLoginDate
+                        ])
+                        ->distinct();
+
+                    $clientIds = getClientIds($newSoldCount);
+                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
+
+                } elseif ($_pid == 'comission') {
+
+                    $commissionCollacted = $this->Clients->Reservations
+                        ->find()
+                        ->where([
+                            'is_commision_collacted' => 1,
+                            'stat_created >' => $lastLoginDate,
+
+                        ])
+                        ->distinct();
+
+                    $clientIds = getClientIds($commissionCollacted);
+                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
+
+                } elseif ($_pid == 'booked') {
+
+                    $newBookedCount = $this->Clients->Books
+                        ->find()
+                        ->where([
+                            'stat_created >' => $lastLoginDate
+                        ])
+                        ->distinct();
+
+                    $clientIds = getClientIds($newBookedCount);
+                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
+
                 } elseif (is_numeric($_pid) && $_pid > 17) {
                     $q = $this->Clients->find()
                         ->distinct()
@@ -544,34 +626,35 @@ class ClientsController extends AppController
                     $q = $this->Clients->find()
                         ->where(['rec_state' => $_pid]);
                 }
+
+
+
                 // $previousDateTime = date('Y-m-d H:i:s', strtotime('-24 hours'));
 
-                // // İlk sorgu: client_budget IS NULL olan veriler
-                // $q1 = $this->Clients->find()
+
+                // $a1 = $this->Clients->find()
                 //     ->select(['id', 'client_name'])
                 //     ->where([
                 //         'stat_created <=' => $previousDateTime,
                 //         'client_budget IS NULL',
                 //     ]);
-                
-                // // İkinci sorgu: client_priority IS NULL olan veriler
-                // $q2 = $this->Clients->find()
+
+
+                // $a2 = $this->Clients->find()
                 //     ->select(['id', 'client_name'])
                 //     ->where([
                 //         'stat_created <=' => $previousDateTime,
                 //         'client_priority IS NULL',
                 //     ]);
-                
-                // // Üçüncü sorgu: rec_state = 1 olan veriler
-                // $q3 = $this->Clients->find()
+
+
+                // $a3 = $this->Clients->find()
                 //     ->select(['id', 'client_name'])
                 //     ->where([
                 //         'stat_created <=' => $previousDateTime,
                 //         'rec_state = 1',
                 //     ]);
-                
-                // // Sonuçları birleştir
-                // $q = $q1->unionAll($q2)->unionAll($q3);
+
 
                 $data = $this->paginate($q, ['limit' => 50]);
             }
@@ -2923,13 +3006,7 @@ class ClientsController extends AppController
         $isAdmin = $this->authUser['user_role'] === 'admin.admin' || $this->authUser['user_role'] === 'admin.root';
         $userId = $this->authUser['id'];
 
-        $lastLoginDate = $this->Clients->Users
-            ->find()
-            ->select('stat_lastlogin')
-            ->where([
-                'id ' => $userId
-            ]);
-
+        $lastLoginDate = $this->authUser['stat_lastlogin'];
 
 
         if ($isAdmin) {
@@ -3025,31 +3102,31 @@ class ClientsController extends AppController
             $previousDateTime = date('Y-m-d H:i:s', strtotime('-24 hours'));
 
 
-            $clientsWithoutBudget = $this->Clients->find()
-                ->select(['id', 'client_name'])
-                ->where([
-                    'stat_created <=' => $previousDateTime,
-                    'client_budget IS NULL',
-                ])
-                ->toArray();
+            // $clientsWithoutBudget = $this->Clients->find()
+            //     ->select(['id', 'client_name'])
+            //     ->where([
+            //         'stat_created <=' => $previousDateTime,
+            //         'client_budget IS NULL',
+            //     ])
+            //     ->toArray();
 
-            $clientsWithoutPriorty = $this->Clients->find()
-                ->select(['id', 'client_name'])
-                ->where([
-                    'stat_created <=' => $previousDateTime,
-                    'client_priority IS NULL',
-                ])
-                ->toArray();
+            // $clientsWithoutPriorty = $this->Clients->find()
+            //     ->select(['id', 'client_name'])
+            //     ->where([
+            //         'stat_created <=' => $previousDateTime,
+            //         'client_priority IS NULL',
+            //     ])
+            //     ->toArray();
 
-            $clientsWithoutStatus = $this->Clients->find()
-                ->select(['id', 'client_name'])
-                ->where([
-                    'stat_created <=' => $previousDateTime,
-                    'rec_state = 1',
-                ])
-                ->toArray();
+            // $clientsWithoutStatus = $this->Clients->find()
+            //     ->select(['id', 'client_name'])
+            //     ->where([
+            //         'stat_created <=' => $previousDateTime,
+            //         'rec_state = 1',
+            //     ])
+            //     ->toArray();
 
-            $notProccesing = count($clientsWithoutStatus);
+            // $notProccesing = count($clientsWithoutStatus);
 
             $recStateOneRecords = $this->Clients->UserClient
                 ->find()
@@ -3164,32 +3241,32 @@ class ClientsController extends AppController
             $previousDateTime = date('Y-m-d H:i:s', strtotime('-24 hours'));
 
             // Clients tablosundaki verileri kontrol et
-            $clientsWithoutBudget = $this->Clients->find()
-                ->select(['id', 'client_name'])
-                ->where([
-                    'stat_created <=' => $previousDateTime,
-                    'client_budget IS NULL',
-                ])
-                ->toArray();
+            // $clientsWithoutBudget = $this->Clients->find()
+            //     ->select(['id', 'client_name'])
+            //     ->where([
+            //         'stat_created <=' => $previousDateTime,
+            //         'client_budget IS NULL',
+            //     ])
+            //     ->toArray();
 
 
-            $clientsWithoutPriorty = $this->Clients->find()
-                ->select(['id', 'client_name'])
-                ->where([
-                    'stat_created <=' => $previousDateTime,
-                    'client_priority IS NULL',
-                ])
-                ->toArray();
+            // $clientsWithoutPriorty = $this->Clients->find()
+            //     ->select(['id', 'client_name'])
+            //     ->where([
+            //         'stat_created <=' => $previousDateTime,
+            //         'client_priority IS NULL',
+            //     ])
+            //     ->toArray();
 
-            $clientsWithoutStatus = $this->Clients->find()
-                ->select(['id', 'client_name'])
-                ->where([
-                    'stat_created <=' => $previousDateTime,
-                    'rec_state = 1',
-                ])
-                ->toArray();
+            // $clientsWithoutStatus = $this->Clients->find()
+            //     ->select(['id', 'client_name'])
+            //     ->where([
+            //         'stat_created <=' => $previousDateTime,
+            //         'rec_state = 1',
+            //     ])
+            //     ->toArray();
 
-            $notProccesing = count($clientsWithoutStatus);
+            // $notProccesing = count($clientsWithoutStatus);
 
             $recStateOneRecords = $this->Clients->UserClient
                 ->find()
@@ -3209,7 +3286,7 @@ class ClientsController extends AppController
         $newReminderCount = $newReminderCount ?? 0;
         $invoiceSend = $invoiceSend ?? 0;
         $commissionCollacted = $commissionCollacted ?? 0;
-        $notProccesing = count($clientsWithoutStatus) ?? 0;
+        // $notProccesing = count($clientsWithoutStatus) ?? 0;
         $recStateOneRecords = $recStateOneRecords ?? 0;
 
         echo json_encode([
@@ -3227,12 +3304,12 @@ class ClientsController extends AppController
                 'newReminderCount' => $newReminderCount,
                 'invoiceSend' => $invoiceSend,
                 'commissionCollacted' => $commissionCollacted,
-                'clientsWithoutBudget' => $clientsWithoutBudget,
-                'clientsWithoutPriorty' => $clientsWithoutPriorty,
-                'clientsWithoutStatus' => $clientsWithoutStatus,
+                // 'clientsWithoutBudget' => $clientsWithoutBudget,
+                // 'clientsWithoutPriorty' => $clientsWithoutPriorty,
+                // 'clientsWithoutStatus' => $clientsWithoutStatus,
                 'recStateOneRecords' => $recStateOneRecords,
                 'user_id' => $userId,
-                'notProccesing' => $notProccesing,
+                // 'notProccesing' => $notProccesing,
             ],
         ]);
         die();

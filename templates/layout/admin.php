@@ -2678,7 +2678,9 @@
                             elementsCreated = $compile(`
                             
                             <!-- Boş olan form -->
-                            <form class="row inlineElement" ng-submit="doSave(rec.report, 'report', 'reports', '#client_btn', '#report_preloader');">
+                            <form class="row inlineElement" ng-submit="
+                            rec.report.tar_tbl = 'Clients';
+                            doSave(rec.report, 'report', 'reports', '#client_btn', '#report_preloader');">
                                 <div class="row">
                                     <label class="col-md-6 col-12 col-lg-3">
                                         <span class="sm-txt"><?= __('report_type') ?></span>
@@ -2700,7 +2702,7 @@
                                             placeholder="<?= __('property_id') ?>" 
                                             display-property="text"
                                             key-property="value"
-                                            ng-disabled="rec.report.property "
+                                            ng-disabled="rec.report.property"
                                             ng-style="{'background-color': rec.report.property ? '#eeeeee' : 'initial'}"
 
                                         >
@@ -2710,7 +2712,7 @@
                                                 max-results-to-show="30" source="loadTags($query, 'pmsproperties', '0')"></auto-complete>
                                         </tags-input>
 
-                                        <span ng-if="rec.report.property_id" ng-click="rec.report.report_configs = ''; rec.report.property_id = '';" class="fa fa-times" style="cursor: pointer; position: absolute; top: 55%; right: 20px; transform: translateY(-50%);"></span>                                        
+                                        <span ng-if="rec.report.property" ng-click="rec.report.property = ''; rec.report.property = '';" class="fa fa-times" style="cursor: pointer; position: absolute; top: 55%; right: 20px; transform: translateY(-50%);"></span>                                        
 
                                     </label>
                                     <label for="" class=" col-12">

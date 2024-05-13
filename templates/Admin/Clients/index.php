@@ -11,7 +11,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 
 <div id="indxPg" class="right_col" role="main" ng-init="
         doGet('/admin/clients/index/<?= $_pid ?>?list=1', 'list', 'clients');
-        doGet('/admin/clients/pool', 'rec', 'pool');">
+        doGet('/admin/clients/pool', 'rec', 'pool');
+        doGet('/admin/clients/notifications', 'rec', 'notification');">
 
 
     <main>
@@ -402,8 +403,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     ) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Date</span>{{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
-                                                        ')[0] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[0] }}
                                                     </div>
                                                 </div>
 
@@ -411,8 +411,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     <?= $this->Html->image('/img/clock_regular.svg', ['' => '']) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Time</span> {{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
-                                                        ')[1] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[1] }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -563,8 +562,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     ) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Date</span>{{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
-                                                        ')[0] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[0] }}
                                                     </div>
                                                 </div>
 
@@ -572,8 +570,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     <?= $this->Html->image('/img/clock_regular.svg', ['' => '']) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Time</span> {{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
-                                                        ')[1] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[1] }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -668,6 +665,96 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                             </div>
                                         </div>
 
+                                        <div class="col-lg-2 col-12 info mr-24">
+                                            <div class="col-4 title hideWeb">
+                                                <?= __('sales_info') ?>
+                                            </div>
+                                            <div class="col-6 p-0 col-lg-12">
+
+                                                <span class="sm-txt">
+                                                    <?= __('category_id') ?>
+                                                </span>
+                                                <button ng-click="setZIndex();
+                                                updateModalElement('Lead Information');
+                                                doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
+                                                openModal('#subModal');
+                                                inlineElement('#elementsContainer', 1, 'info')"
+                                                    class="wb-ele sm-txt-indx" type="button">
+                                                    <p>
+                                                        {{itm.category.category_name}}
+                                                    </p>
+                                                </button>
+                                                <div class="note-flex">
+
+                                                    <span class="sm-txt">
+                                                        <?= __('budget') ?>
+                                                    </span>
+
+                                                    <div class="mx-2" type="button" my-tooltip="<?= __('set_the_budget') ?>"
+                                                        ng-repeat="notify in rec.notification.clientsWithoutBudget"
+                                                        ng-if="notify.id == itm.id">
+                                                        <i class="fa fa-exclamation-circle redColor" aria-hidden="true">
+                                                            <small class="note-font">
+                                                                <?= __('set_the_budget') ?>
+                                                            </small>
+                                                        </i>
+                                                    </div>
+
+                                                </div>
+
+                                                <button ng-click="setZIndex();
+                                                updateModalElement('Lead Information');
+                                                doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
+                                                openModal('#subModal');
+                                                inlineElement('#elementsContainer', 1, 'info')"
+                                                    class="wb-ele sm-txt-indx" type="button">
+                                                    <p ng-if="!(itm.client_budget == 2000001)">
+                                                        Up to {{nFormat( itm.client_budget,
+                                                        DtSetter('currencies_icons',2))}}
+                                                    </p>
+                                                    <p ng-if="itm.client_budget == 2000001 && itm.client_budget != null">
+                                                        {{nFormat( itm.client_budget,
+                                                        DtSetter('currencies_icons',2))}} +
+                                                    </p>
+                                                    <p ng-if="itm.client_budget == null">
+                                                        -
+                                                    </p>
+                                                </button>
+
+
+
+
+                                                <div class="note-flex">
+                                                    <span class="sm-txt">
+                                                        <?= __('rec_state') ?>
+                                                    </span>
+                                                    <div class="mx-2" type="button" my-tooltip="<?= __('not_proccesing') ?>"
+                                                        ng-repeat="notify in rec.notification.clientsWithoutStatus"
+                                                        ng-if="notify.id == itm.id">
+                                                        <i class="fa fa-exclamation-circle redColor" aria-hidden="true">
+                                                            <small class="note-font">
+                                                                <?= __('set_the_status') ?>
+                                                            </small>
+                                                        </i>
+                                                    </div>
+                                                </div>
+
+                                                <button ng-click="setZIndex();
+                                                updateModalElement('Lead Information');
+                                                
+                                                doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
+                                                openModal('#subModal');
+                                                inlineElement('#elementsContainer', 1, 'info')"
+                                                    class="wb-ele sm-txt-indx" type="button">
+                                                    <p>
+                                                        {{ DtSetter('rec_stateSale',
+                                                        3, itm.rec_state)
+                                                        }}
+                                                    </p>
+                                                </button>
+                                            </div>
+
+                                        </div>
 
                                         <div class="col-lg-2 col-12 info mr-24">
                                             <div class="col-4 title hideWeb">
@@ -693,8 +780,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 
 
                                                 </div>
-                                                <button class="wb-ele sm-txt-indx" type="button"
-                                                    ng-click="
+                                                <button class="wb-ele sm-txt-indx" type="button" ng-click="
                                                         updateModalElement('Notes');
                                                         openModal('#subModal');
                                                         inlineElement('#elementsContainer', 1, 'finance');
@@ -796,8 +882,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                             doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
                                             inlineElement('#elementsContainer', 1, 'reminders')">
                                                     <p ng-if="itm.reminders.length > 0">
-                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
-                                                        ')[0] }}
+                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[0] }}
                                                     </p>
 
                                                 </button>
@@ -810,8 +895,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                             doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
                                             inlineElement('#elementsContainer', 1, 'reminders')">
                                                     <p ng-if="itm.reminders.length > 0">
-                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
-                                                        ')[1] }}
+                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[1] }}
                                                     </p>
                                                 </button>
                                                 <div class="row">
@@ -877,22 +961,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                             </div>
                                         </div>
 
-                                        <?php if (in_array($authUser['user_role'], ['admin.callcenter']) || isset($authUser['user_original_role'])) { ?>
-                                            <div class="pe-2 ps-2 col-lg-2 col-12  mt-5 mt-lg-0">
-                                                <div class="col-4 title hideWeb">
-                                                    <?= __('client_current_stage') ?>
-                                                </div>
 
-                                                <div class="col-6 p-0 col-lg-12">
-                                                    <div class="wb-ele">
-                                                        <!-- {{DtSetter('client_current_stageSale', itm.client_current_stage)}} -->
-                                                        {{itm.user_client[itm.user_client.length - 1].user.user_fullname}}
-                                                        <!-- assign.user.user_fullname -->
-                                                        <!-- {{itm}} -->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php } ?>
 
                                         <div class="col-lg-2 col-12  info">
                                             <div class="col-4 title hideWeb">
@@ -914,39 +983,21 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 
                                                 </div>
 
-                                                <div class="wb-ele" type="button" ng-click="setZIndex();
-                                                    updateModalElement('Assign');
-                                                    newEntity('user_client'); 
-                                                    openModal('#subModal'); 
-                                                    doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
-                                                    inlineElement('#elementsContainer', 1, 'assign')">
-                                                    <div ng-repeat="notify in itm.user_client track by $index">
-                                                        {{notify.user.user_fullname}}
-                                                        <small>
-                                                            <i my-tooltip="<?= __('require_reallocation') ?>"
-                                                                ng-if="notify.rec_state == 2"
-                                                                class="fa fa-exclamation-circle redColor"
-                                                                aria-hidden="true"></i>
-                                                        </small>{{$index < (itm.user_client.length - 1) ? ',' : '' }} </div>
-                                                    </div>
-                                                    <?php if (in_array($authUser['user_role'], ['admin.callcenter']) || isset($authUser['user_original_role'])) { ?>
-                                                        <div class="pe-2 ps-2 col-lg-2 col-12  mt-5 mt-lg-0">
-                                                            <div class="col-4 title hideWeb">
-                                                                <?= __('client_current_stage') ?>
-                                                            </div>
 
-                                                            <div class="col-6 p-0 col-lg-12">
-                                                                <div class="wb-ele">
-                                                                    <!-- {{DtSetter('client_current_stageSale', itm.client_current_stage)}} -->
-                                                                    {{itm.user_client[itm.user_client.length -
-                                                                    1].user.user_fullname}}
-                                                                    <!-- assign.user.user_fullname -->
-                                                                    <!-- {{itm}} -->
-                                                                </div>
-                                                            </div>
+
+
+                                                <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
+                                                    <div class="wb-ele">
+                                                        <div ng-repeat="notify in itm.user_client track by $index">
+                                                            {{notify.user.user_fullname}}
+                                                            <small>
+                                                                <i my-tooltip="<?= __('require_reallocation') ?>"
+                                                                    ng-if="notify.rec_state == 2"
+                                                                    class="fa fa-exclamation-circle redColor"
+                                                                    aria-hidden="true"></i>
+                                                            </small>{{$index < (itm.user_client.length - 1) ? ',' : '' }} </div>
                                                         </div>
-                                                    <?php } ?>
-                                                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
+
                                                         <div class="row" ng-repeat="reallocate in itm.user_client">
                                                             <div ng-if="rec.notification.user_id == reallocate.user_id;">
                                                                 <div class="col-12">
@@ -963,9 +1014,38 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    <?php } ?>
 
-                                                    <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
+
+
+
+                                                    </div>
+                                                <?php } ?>
+
+
+
+
+
+
+                                                <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
+                                                    <div class="wb-ele" type="button" ng-click="
+                                                setZIndex();
+                                                    updateModalElement('Assign');
+                                                    newEntity('user_client'); 
+                                                    openModal('#subModal'); 
+                                                    doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
+                                                    inlineElement('#elementsContainer', 1, 'assign')">
+                                                        <div ng-repeat="notify in itm.user_client track by $index">
+                                                            {{notify.user.user_fullname}}
+                                                            <small>
+                                                                <i my-tooltip="<?= __('require_reallocation') ?>"
+                                                                    ng-if="notify.rec_state == 2"
+                                                                    class="fa fa-exclamation-circle redColor"
+                                                                    aria-hidden="true"></i>
+                                                            </small>{{$index < (itm.user_client.length - 1) ? ',' : '' }} </div>
+                                                        </div>
+
+
+
                                                         <div class="row">
                                                             <div>
                                                                 <div class="col-12" data-bs-toggle="modal"
@@ -986,10 +1066,10 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 
                                                         </div>
 
-                                                    <?php } ?>
 
 
-                                                </div>
+
+                                                    </div><?php } ?>
                                             </div>
                                         </div>
                                     </div>
