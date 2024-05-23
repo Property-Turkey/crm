@@ -86,21 +86,21 @@ class ReportsController extends AppController
                 $data = $this->Reports->get($_id, [
                     'contain' => [
                         "TypeCategories",
+                        "User",
                         "Property" => ['fields' => ['param_ownertype', 'property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
                     ]
                 ])->toArray();
 
-                if (!empty($data['property'])) {
+                if (!empty ($data['property'])) {
 
-                    $data['property'][] = [
+                    $data["property"] = [
                         [
                             "text" => $data["property"]["property_ref"],
                             "value" => $data["property"]['id']
                         ]
                     ];
-    
                 }
-            // dd($data['property_ids']);
+            // dd($data['property_id']);
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
                 die();
                 
@@ -113,6 +113,7 @@ class ReportsController extends AppController
                     "conditions" => $conditions,
                     'contain' => [
                         "TypeCategories",
+                        "User",
                         "Property" => ['fields' => ['param_ownertype', 'property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
 
                     ]
@@ -150,17 +151,22 @@ class ReportsController extends AppController
             $rec = $this->Reports->get($dt['id']);
             // dd($dt);
 
-            // $dt['property_ids'] = $dt['property'][0]['value'] ;
+            // $dt['property_id'] = $dt['property'][0]['value'] ;
 
 
-            // dd($dt['report_configs']['property_ids']);
-
+            // dd($dt['report_configs']['property_id']);
+// dd($dt['property']);
+            if (isset ($dt['property'][0]['value'])) {
+                $rec->property_id = (int) $dt['property'][0]['value'];
+            }
+            
             $dt = $this->Reports->patchEntity($rec, $dt);
 
-            if (isset($dt['property_ids'])) {
-                dd($dt['property_ids']);
-                $rec->property_ids = $dt['property'][0]['value'];
-            }
+            // if (isset($dt['property_id'])) {
+            //     // dd($dt['property_id']);
+            //     $rec->property_id = $dt['property'][0]['value'];
+            // }
+            
 
         }
 
@@ -173,8 +179,8 @@ class ReportsController extends AppController
 
             $rec = $this->Reports->newEntity($dt);
 
-            if (isset($dt['property_ids'])) {
-                $rec->property_ids = $dt['property'][0]['value'];
+            if (isset ($dt['property'][0]['value'])) {
+                $rec->property_id = (int) $dt['property'][0]['value'];
             }
         }
 

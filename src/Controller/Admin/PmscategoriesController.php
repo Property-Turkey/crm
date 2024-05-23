@@ -31,7 +31,10 @@ class PmscategoriesController extends AppController
                 ->select(['text' => 'category_name', 'value' => 'id'])
                 ->where($tagsCondition);
 
-            echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
+                // debug($this->Do->convertJson($data), true);
+                // dd($this->Do->lcl($this->Do->convertJson($data), true));
+
+            echo json_encode(["status" => "SUCCESS", "data" => $this->Do->lcl($this->Do->convertJson($data), true)], JSON_UNESCAPED_UNICODE);
             die();
         }
 

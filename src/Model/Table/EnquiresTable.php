@@ -32,7 +32,7 @@ class EnquiresTable extends Table
         ]);
 
         $this->belongsTo('Sources', [
-            'foreignKey' => 'enquiry_clsource',
+            'foreignKey' => 'enquiry_source',
             'className' => 'Categories',
         ]);
 
@@ -74,8 +74,8 @@ class EnquiresTable extends Table
         //     ->allowEmptyString('enquiry_clcountry');
 
         // $validator
-        //     ->integer('enquiry_clsource')
-        //     ->allowEmptyString('enquiry_clsource');
+        //     ->integer('enquiry_source')
+        //     ->allowEmptyString('enquiry_source');
 
         // $validator
         //     ->scalar('enquiry_message')

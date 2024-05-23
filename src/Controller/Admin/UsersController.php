@@ -444,26 +444,20 @@ class UsersController extends AppController
 
 
 
-        // $this->Do->sendEmail(['laralev84@gmail.com'], __('new_account'), [], 'register_tm');
-        // die;
         $_user = isset($_GET['tags']) ? $_GET['tags'] : false;
         $_keyword = isset($_GET['keyword']) ? $_GET['keyword'] : false;
-        $_roleAssign = isset($_GET['role']) ? $_GET['role'] : false;
+        $_rolesAssign = isset($_GET['roles']) ? $_GET['roles'] : false;
 
-
-        // find users by name
         if (!empty($_user)) {
+            $userCondition = [
+                'user_fullname LIKE' => '%' . $_keyword . '%'
+            ];
 
-            if ($_roleAssign == false) {
-                $userCondition = [
-                    'user_fullname LIKE' => '%' . $_keyword . '%'
-                ];
-            } else {
-                $userCondition = [
-                    'user_role' => $_roleAssign,
-                    'user_fullname LIKE' => '%' . $_keyword . '%'
-                ];
+            if ($_rolesAssign !== false) {
+                $roles = explode(',', $_rolesAssign);
+                $userCondition['user_role IN'] = $roles;
             }
+
             $data = $this->Users
                 ->find('all')
                 ->select(['text' => 'user_fullname', 'value' => 'id'])
@@ -765,12 +759,12 @@ class UsersController extends AppController
                     'conditions' => ['id' => $this->Do->CookiesHandler('RMMBRME_ID')]
                 ])->first()->toArray();
 
-                
+
                 if (!$user) {
                     return $this->logout();
                 }
 
-            // login from email AUTOLOGIN for activation and change password
+                // login from email AUTOLOGIN for activation and change password
             } elseif (isset($dt['autologin'])) {
                 $code = base64_decode($dt['autologin']);
                 $id = substr($code, 3, -3);
@@ -785,7 +779,7 @@ class UsersController extends AppController
             if (!$user) {
                 echo json_encode(['status' => 'FAIL', 'data' => $user]);
                 die();
-            }else {
+            } else {
 
                 // check if account activated  
                 if ($user['rec_state'] == 0 && !isset($dt['autologin'])) {

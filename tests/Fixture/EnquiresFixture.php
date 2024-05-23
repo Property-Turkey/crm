@@ -26,7 +26,7 @@ class EnquiresFixture extends TestFixture
                 'enquiry_clemail' => 'Lorem ipsum dolor sit amet',
                 'enquiry_clphone' => 1,
                 'enquiry_clcountry' => 1,
-                'enquiry_clsource' => 1,
+                'enquiry_source' => 1,
                 'enquiry_message' => 'Lorem ipsum dolor sit amet',
                 'enquiry_ipaddress' => 'Lorem ipsum dolor sit amet',
                 'enquiry_lastpage' => 'Lorem ipsum dolor sit amet',

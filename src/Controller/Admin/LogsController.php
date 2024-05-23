@@ -134,7 +134,52 @@ class LogsController extends AppController
 
     }
 
-    
+    public function getClientEmailOrPhoneChanges()
+    {
+        $logs = $this->Logs->find('all')
+            ->where([
+                'log_url LIKE' => '%"Clients","update"%',
+            ])
+            ->order(['stat_created' => 'DESC'])
+            ->toArray();
+
+        $notificationsemailPhone = [];
+
+        foreach ($logs as $log) {
+            $logChanges = json_decode($log->log_changes, true);
+
+            $emailChanged = isset($logChanges['before']['client_email']) && isset($logChanges['after']['client_email']) && $logChanges['before']['client_email'] !== $logChanges['after']['client_email'];
+            $phoneChanged = isset($logChanges['before']['client_phone']) && isset($logChanges['after']['client_phone']) && $logChanges['before']['client_phone'] !== $logChanges['after']['client_phone'];
+
+            if ($emailChanged || $phoneChanged) {
+                $notification = [
+                    'log_id' => $log->id,
+                    'client_id' => $log->log_url[3],
+                    'changes' => []
+                ];
+
+                if ($emailChanged) {
+                    $notification['changes'][] = "Email changed from {$logChanges['before']['client_email']} to {$logChanges['after']['client_email']}";
+                }
+                if ($phoneChanged) {
+                    $notification['changes'][] = "Phone changed from {$logChanges['before']['client_phone']} to {$logChanges['after']['client_phone']}";
+                }
+
+                $notificationsemailPhone[] = $notification;
+            }
+        }
+
+        echo json_encode([
+            "status" => "SUCCESS",
+            "msg" => __("success"),
+            "data" => [
+                'notificationsemailPhone' => $notificationsemailPhone,
+               
+
+            ]
+        ]);
+        die();
+    }
     
     public function view($id = null)
     {

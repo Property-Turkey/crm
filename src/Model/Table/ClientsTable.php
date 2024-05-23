@@ -8,16 +8,42 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Core\Configure;
-
+use Cake\Event\EventInterface;
+use ArrayObject;
+use Cake\ORM\TableRegistry;
 
 class ClientsTable extends Table
 {
+
+
+    public function beforeSave(EventInterface $event, $entity, ArrayObject $options)
+    {
+        if ($entity->isDirty('client_email') || $entity->isDirty('client_phone')) {
+            $logData = [
+                'user_id' => $entity->user_id,
+                'log_url' => json_encode([
+                    "", "", "", "", $_SERVER['REQUEST_URI'], "Clients", "update", $entity->id
+                ]),
+                'log_changes' => json_encode([
+                    'before' => $entity->extractOriginalChanged(['client_email', 'client_phone']),
+                    'after' => $entity->extract(['client_email', 'client_phone'])
+                ]),
+                'rec_state' => 1
+            ];
+
+            $logsTable = TableRegistry::getTableLocator()->get('Logs');
+            $logEntity = $logsTable->newEntity($logData);
+            $logsTable->save($logEntity);
+        }
+    }
     public function initialize(array $config): void
     {
 
         parent::initialize($config);
+
+
         $isLocal = Configure::read('isLocal');
-        $this->setTable($isLocal ? 'ptcrm.clients' :  'ptdev_crm.clients');
+        $this->setTable($isLocal ? 'ptcrm.clients' : 'ptdev_crm.clients');
 
         $this->setTable('clients');
         $this->setDisplayField('client_name');
@@ -25,7 +51,7 @@ class ClientsTable extends Table
 
         $this->addBehavior('Log');
 
-        
+
 
         $this->hasMany('Actions', [
             'foreignKey' => 'client_id',
@@ -45,43 +71,70 @@ class ClientsTable extends Table
         $this->hasMany('Sales', [
             'foreignKey' => 'client_id',
         ]);
-        $this->belongsTo('Sources', [
-            'foreignKey' => 'source_id',
-            'className' => 'Categories',
-        ]);
-        
-        $this->belongsTo('Adrscountry', [
-            'foreignKey' => 'adrs_country',
-            'className' => 'Addresses',
-        ]);
-        
-        $this->belongsTo('City', [
-            'foreignKey' => 'adrs_city',    
-            'className' => 'Categories',        
+        $this->hasMany('Books', [
+            'foreignKey' => 'client_id',
+            'dependent' => true,
+            'cascadeCallbacks' => true
         ]);
 
-        $this->belongsTo('PoolCategories', [
-            'foreignKey' => 'pool_id',    
-            'className' => 'Categories',        
+        $this->hasMany('UserClient', [
+            'foreignKey' => 'client_id',
+            'dependent' => true,
+            'cascadeCallbacks' => true
         ]);
 
-        $this->belongsTo('Region', [
-            'foreignKey' => 'adrs_region',    
-            'className' => 'Categories',        
+        $this->hasMany('EmpathyReports', [
+            'foreignKey' => 'tar_id',
+            'className' => 'Reports',
+            'dependent' => true,
+            'cascadeCallbacks' => true
         ]);
 
-        $this->hasOne('Users', [
-            'foreignKey' => 'user_role',
-			'dependent' => true,
-			'cascadeCallbacks' => true
+        $this->hasMany('ClientSpecs', [
+            'foreignKey' => 'client_id',
+            'dependent' => true,
+            'cascadeCallbacks' => true
         ]);
 
         $this->hasMany('Reports', [
             'foreignKey' => 'tar_id',
             'joinType' => 'INNER',
-			'dependent' => true,
-			'cascadeCallbacks' => true
-        ])->setConditions(['Reports.tar_tbl'=>'Clients']);
+            'dependent' => true,
+            'cascadeCallbacks' => true
+        ])->setConditions(['Reports.tar_tbl' => 'Clients']);
+
+        $this->hasOne('Users', [
+            'foreignKey' => 'user_role',
+            'dependent' => true,
+            'cascadeCallbacks' => true
+        ]);
+
+        $this->belongsTo('Sources', [
+            'foreignKey' => 'source_id',
+            'className' => 'Categories',
+        ]);
+
+        $this->belongsTo('Adrscountry', [
+            'foreignKey' => 'adrs_country',
+            'className' => 'Addresses',
+        ]);
+
+        $this->belongsTo('City', [
+            'foreignKey' => 'adrs_city',
+            'className' => 'Categories',
+        ]);
+
+        $this->belongsTo('PoolCategories', [
+            'foreignKey' => 'pool_id',
+            'className' => 'Categories',
+        ]);
+
+        $this->belongsTo('Region', [
+            'foreignKey' => 'adrs_region',
+            'className' => 'Categories',
+        ]);
+
+
 
         $this->belongsTo('TagCategories', [
             'foreignKey' => 'client_tags',
@@ -93,32 +146,9 @@ class ClientsTable extends Table
             'className' => 'Categories',
         ]);
 
-        $this->hasOne('Books', [
-            'foreignKey' => 'client_id',
-			'dependent' => true,
-			'cascadeCallbacks' => true
-        ]);
 
-        $this->hasMany('UserClient', [
-            'foreignKey' => 'client_id',
-			'dependent' => true,
-			'cascadeCallbacks' => true
-        ]);
 
-        $this->hasMany('EmpathyReports', [
-            'foreignKey' => 'tar_id',
-            'className' => 'Reports',
-            'dependent' => true,
-            'cascadeCallbacks' => true
-        ]);
-        
-        $this->hasMany('ClientSpecs', [
-            'foreignKey' => 'client_id',
-			'dependent' => true,
-			'cascadeCallbacks' => true
-        ]);
 
-        
     }
     public static function defaultConnectionName(): string
     {

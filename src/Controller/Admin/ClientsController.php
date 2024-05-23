@@ -266,6 +266,7 @@ class ClientsController extends AppController
                 $data = $this->Clients->get($_id, [
                     'contain' => [
                         'Reports',
+                        "Reports.User",
                         "Reports.TypeCategories",
                         "Reports.Property" => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
                         "Sources",
@@ -306,7 +307,7 @@ class ClientsController extends AppController
                             "value" => $data["property"]['id']
                         ]
                     ];
-    
+
                 }
 
                 $reservations = [];
@@ -401,6 +402,7 @@ class ClientsController extends AppController
                         "ClientSpecs",
                         'PoolCategories',
                         "Reports.TypeCategories",
+                        "Reports.User",
                         "Reports.Property" => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
                         'TagCategories',
                         'ClientSpecs',
@@ -428,69 +430,9 @@ class ClientsController extends AppController
                     ])
                     ->group('Clients.id');
 
-                if ($userRole != 'admin.root' && $userRole != 'admin.admin' && $userRole != 'accountant') {
-                    $userId = $this->authUser['id'];
-                    $q->matching('UserClient', function ($q) use ($userId) {
-                        return $q->where(['user_id' => $userId]);
-                    });
-                    if (!empty($dt['search']['pool_id'])) {
 
-                        $selectedPoolId = $dt['search']['pool_id'];
-                        // dd($dt['search']['pool_id']);
-                        $q = $this->Clients->find()
-                            ->order(['Clients.' . $_col => $_dir])
-                            ->where([$conditions])
-                            ->contain([
-                            ])
-                            ->group('Clients.id');
-
-                        if ($selectedPoolId) {
-                            $q->matching('PoolCategories', function ($q) use ($selectedPoolId) {
-                                return $q->where(['PoolCategories.id' => $selectedPoolId]);
-                            });
-                        }
-
-                        $count = $q->count();
-                        if ($count === 0) {
-                            return 0;
-                        }
-                    }
-                } elseif ($userRole === 'accountant') {
-                    $q->matching('Reservations', function ($q) {
-                        return $q
-                            ->where('Reservations.downpayment_paid', 1)
-                            ->where('Reservations.rec_state <>', 17)
-                            ->where('Reservations.client_id = Clients.id');
-                    });
-                } else if ($userRole === 'aftersale') {
-
-                    $q->matching('Clients', function ($q) {
-                        return $q
-                            ->where('Clients.downpayment_paid ', 14)
-                            ->where('Reservations.rec_state <>', 17)
-                            ->where('Reservations.client_id = Clients.id');
-                    });
-
-
-                    $q->where(function ($exp, $q) {
-                        return $exp->in('rec_state', [14, 15]);
-                    });
-
-
-                }
 
                 $lastLoginDate = $this->authUser['stat_lastlogin'];
-
-                // dd($lastLoginDate);
-                // $lastLoginDate = $this->Clients->Users
-                //     ->find()
-                //     ->select('stat_lastlogin')
-                //     ->where([
-                //         'id ' => $userId
-                //     ]);
-
-                // dd($q);
-
                 function getClientIds($query)
                 {
                     $results = $query->toArray();
@@ -500,258 +442,274 @@ class ClientsController extends AppController
                     }
                     return $clientIds;
                 }
+                $query = $this->Clients->find()
 
+                    ->order(['Clients.' . $_col => $_dir])
+                    ->where([$conditions])
+                    ->contain([
+                        "ClientSpecs",
+                        'PoolCategories',
+                        "Reports.TypeCategories",
+                        "Reports.User",
+                        "Reports.Property" => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
+                        'TagCategories',
+                        'Categories',
+                        'ClientSpecs.Currency',
+                        'Reminders',
+                        'Reports',
+                        'Sources',
+                        'Reports.Text',
+                        'Users',
+                        "UserClient.Users",
+                        "UserClient",
+                        "Books",
+                        "Offers",
+                        "Offers.PropertyRef" => ['fields' => ['property_title', 'property_ref', 'id']],
+                        "Actions",
+                        "Reservations",
+                        "Reservations.Property" => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
+                        "Reservations.Project" => ['fields' => ['project_ref', 'id']],
+                        "Reservations.Seller" => ['fields' => ['seller_name', 'id']],
+                        "Reservations.Developer" => ['fields' => ['dev_name', 'id']],
+                        "Reservations.Pmscategory" => ['fields' => ['category_name', 'id']],
+                        "Reservations.Payment",
+                        "Reservations.Currency",
+                    ])->group('Clients.id');
+                if ($userRole != 'admin.root' && $userRole != 'admin.admin' && $userRole != 'accountant') {
+                    $userId = $this->authUser['id'];
+                    $query->matching('UserClient', function ($query) use ($userId) {
+                        return $query->where(['user_id' => $userId]);
+                    });
+                    if (!empty($dt['search']['pool_id'])) {
+
+                        $selectedPoolId = $dt['search']['pool_id'];
+                        // dd($dt['search']['pool_id']);
+                        $query = $this->Clients->find()
+                            ->order(['Clients.' . $_col => $_dir])
+                            ->where([$conditions])
+                            ->contain([
+                            ])
+                            ->group('Clients.id');
+
+                        if ($selectedPoolId) {
+                            $query->matching('PoolCategories', function ($query) use ($selectedPoolId) {
+                                return $query->where(['PoolCategories.id' => $selectedPoolId]);
+                            });
+                        }
+
+                        $count = $query->count();
+                        if ($count === 0) {
+                            return 0;
+                        }
+                    }
+                } elseif ($userRole === 'accountant') {
+                    $query->matching('Reservations', function ($query) {
+                        return $query
+                            ->where('Reservations.downpayment_paid', 1)
+                            ->where('Reservations.rec_state <>', 17)
+                            ->where('Reservations.client_id = Clients.id');
+                    });
+                } else if ($userRole === 'aftersale') {
+
+                    $query->matching('Clients', function ($query) {
+                        return $query
+                            ->where('Clients.downpayment_paid ', 14)
+                            ->where('Reservations.rec_state <>', 17)
+                            ->where('Reservations.client_id = Clients.id');
+                    });
+
+
+                    $query->where(function ($exp, $query) {
+                        return $exp->in('rec_state', [14, 15]);
+                    });
+
+
+                }
                 if ($_pid == 'invoice-not-send') {
                     $thresholdDate = date('Y-m-d H:i:s', strtotime('-15 days'));
-                    $reservations = $this->Clients->Reservations->find()
-                        ->select(['client_id'])
-                        ->where([
-                            'stat_created <' => $thresholdDate,
-                            'reservation_isinvoice_sent' => 0,
-                        ])
-                        ->distinct();
-                    $clientIds = getClientIds($reservations);
-                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
+                    $query->where(function ($exp, $q) use ($thresholdDate) {
+                        return $exp->exists(
+                            $this->Clients->Reservations->find()
+                                ->select(['client_id'])
+                                ->where([
+                                    'stat_created <' => $thresholdDate,
+                                    'reservation_isinvoice_sent' => 0,
+                                    'Clients.id = Reservations.client_id'
+                                ])
+                        );
+                    });
                 } elseif (in_array($_pid, ['new-sold', 'new-reserved'])) {
-
-
-
-                    $query = ($_pid == 'new-sold') ?
-                        $this->Clients->Reservations->find()->select(['client_id'])->where(['rec_state' => 15, 'stat_created >' => $lastLoginDate]) :
-                        $this->Clients->find()->where(['rec_state' => 12, 'stat_created >' => $lastLoginDate]);
-
-                    $clientIds = getClientIds($query);
-                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
+                    $recState = ($_pid == 'new-sold') ? 15 : 12;
+                    $query->where(function ($exp, $q) use ($recState, $lastLoginDate) {
+                        return $exp->exists(
+                            $this->Clients->Reservations->find()
+                                ->select(['client_id'])
+                                ->where([
+                                    'rec_state' => $recState,
+                                    'stat_created >' => $lastLoginDate,
+                                    'Clients.id = Reservations.client_id'
+                                ])
+                        );
+                    });
                 } elseif ($_pid == 'reallocate') {
-                    
-                    $userclient = $this->Clients->UserClient
-                    ->find()
-                        ->select(['client_id'])
-                        ->where([
-                            'rec_state' => 2
-                        ])
-                        ->distinct();
-                    $clientIds = getClientIds($userclient);
-                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
-
-                    
+                    $query->where(function ($exp, $q) {
+                        return $exp->exists(
+                            $this->Clients->UserClient->find()
+                                ->select(['client_id'])
+                                ->where([
+                                    'rec_state' => 2,
+                                    'Clients.id = UserClient.client_id'
+                                ])
+                        );
+                    });
                 } elseif ($_pid == 'assign') {
-
-                    $newAssignCount = $this->Clients->UserClient
-                        ->find()
-                        ->select(['client_id']) // Sadece client_id sütununu seçiyoruz
-                        ->where([
-                            'user_id' => $userId,
-                            'stat_created <' => $lastLoginDate
-                        ])
-                        ->distinct();
-
-                    $clientIds = getClientIds($newAssignCount);
-                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
-
+                    $query->where(function ($exp, $q) use ($userId, $lastLoginDate) {
+                        return $exp->exists(
+                            $this->Clients->UserClient->find()
+                                ->select(['client_id'])
+                                ->where([
+                                    'user_id' => $userId,
+                                    'stat_created <' => $lastLoginDate,
+                                    'Clients.id = UserClient.client_id'
+                                ])
+                        );
+                    });
                 } elseif ($_pid == 'downpayment') {
-
-                    $newDownPaymentCount = $this->Clients->Reservations
-                        ->find()
-                        ->where([
-                            'rec_state' => 13,
-                            'stat_created >' => $lastLoginDate
-                        ])
-                        ->distinct();
-
-                    $clientIds = getClientIds($newDownPaymentCount);
-                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
-
+                    $query->where(function ($exp, $q) use ($lastLoginDate) {
+                        return $exp->exists(
+                            $this->Clients->Reservations->find()
+                                ->where([
+                                    'rec_state' => 13,
+                                    'stat_created >' => $lastLoginDate,
+                                    'Clients.id = Reservations.client_id'
+                                ])
+                        );
+                    });
                 } elseif ($_pid == 'cancelled') {
-
-                    $newCancelledCount = $this->Clients->Reservations
-                        ->find()
-                        ->where([
-                            'rec_state' => 17,
-                            'stat_created >' => $lastLoginDate
-                        ])
-                        ->distinct();
-
-                    $clientIds = getClientIds($newCancelledCount);
-                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
-
+                    $query->where(function ($exp, $q) use ($lastLoginDate) {
+                        return $exp->exists(
+                            $this->Clients->Reservations->find()
+                                ->where([
+                                    'rec_state' => 17,
+                                    'stat_created >' => $lastLoginDate,
+                                    'Clients.id = Reservations.client_id'
+                                ])
+                        );
+                    });
                 } elseif ($_pid == 'newsold') {
-
-                    $newSoldCount = $this->Clients->Reservations
-                        ->find()
-                        ->where([
-                            'rec_state' => 14,
-                            'stat_created >' => $lastLoginDate
-                        ])
-                        ->distinct();
-
-                    $clientIds = getClientIds($newSoldCount);
-                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
-
+                    $query->where(function ($exp, $q) use ($lastLoginDate) {
+                        return $exp->exists(
+                            $this->Clients->Reservations->find()
+                                ->where([
+                                    'rec_state' => 14,
+                                    'stat_created >' => $lastLoginDate,
+                                    'Clients.id = Reservations.client_id'
+                                ])
+                        );
+                    });
                 } elseif ($_pid == 'comission') {
-
-                    $commissionCollacted = $this->Clients->Reservations
-                        ->find()
-                        ->where([
-                            'is_commision_collacted' => 1,
-                            'stat_created >' => $lastLoginDate,
-
-                        ])
-                        ->distinct();
-
-                    $clientIds = getClientIds($commissionCollacted);
-                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
-
+                    $query->where(function ($exp, $q) use ($lastLoginDate) {
+                        return $exp->exists(
+                            $this->Clients->Reservations->find()
+                                ->where([
+                                    'is_commision_collacted' => 1,
+                                    'stat_created >' => $lastLoginDate,
+                                    'Clients.id = Reservations.client_id'
+                                ])
+                        );
+                    });
                 } elseif ($_pid == 'booked') {
-
-                    $newBookedCount = $this->Clients->Books
-                        ->find()
-                        ->where([
-                            'stat_created >' => $lastLoginDate
-                        ])
-                        ->distinct();
-
-                    $clientIds = getClientIds($newBookedCount);
-                    $q = $this->Clients->find()->where(['id IN' => $clientIds]);
-
+                    $query->where(function ($exp, $q) use ($lastLoginDate) {
+                        return $exp->exists(
+                            $this->Clients->Books->find()
+                                ->where([
+                                    'stat_created >' => $lastLoginDate,
+                                    'Clients.id = Books.client_id'
+                                ])
+                        );
+                    });
                 } elseif (is_numeric($_pid) && $_pid > 17) {
-                    $q = $this->Clients->find()
-                        ->distinct()
-                        ->innerJoinWith('Actions', function ($q) use ($_pid) {
-                            return $q->where([
-                                'Actions.user_id' => $_pid,
-                            ]);
-                        });
+                    $query->where(function ($exp, $q) use ($_pid) {
+                        return $exp->exists(
+                            $this->Clients->Actions->find()
+                                ->where([
+                                    'user_id' => $_pid,
+                                    'Clients.id = Actions.client_id'
+                                ])
+                        );
+                    });
                 } elseif (is_numeric($_pid) && $_pid > 0) {
-                    $q = $this->Clients->find()
-                        ->where(['rec_state' => $_pid]);
+                    $query->where(['rec_state' => $_pid]);
                 }
 
+                $data = $this->paginate($query, ['limit' => 50]);
 
+                // Kategori verilerini al
+                $categoryOptions = $this->Clients->Categories->find('list', ['keyField' => 'id', 'valueField' => 'category_name'])->toArray();
 
-                // $previousDateTime = date('Y-m-d H:i:s', strtotime('-24 hours'));
-
-
-                // $a1 = $this->Clients->find()
-                //     ->select(['id', 'client_name'])
-                //     ->where([
-                //         'stat_created <=' => $previousDateTime,
-                //         'client_budget IS NULL',
-                //     ]);
-
-
-                // $a2 = $this->Clients->find()
-                //     ->select(['id', 'client_name'])
-                //     ->where([
-                //         'stat_created <=' => $previousDateTime,
-                //         'client_priority IS NULL',
-                //     ]);
-
-
-                // $a3 = $this->Clients->find()
-                //     ->select(['id', 'client_name'])
-                //     ->where([
-                //         'stat_created <=' => $previousDateTime,
-                //         'rec_state = 1',
-                //     ]);
-
-
-                $data = $this->paginate($q, ['limit' => 50]);
-            }
-
-            // Kategori verilerini al
-            $categoryOptions = $this->Clients->Categories->find('list', ['keyField' => 'id', 'valueField' => 'category_name'])->toArray();
-
-
-
-
-
-            echo json_encode(
-                [
-                    "status" => "SUCCESS",
-                    "data" => $this->Do->convertJson($data),
-                    "paging" => $this->request->getAttribute('paging')['Clients'],
-                    "categories" => $categoryOptions
-                ],
-                JSON_UNESCAPED_UNICODE
-            );
-            die();
-
-        }
-
-
-    }
-
-    public function pool()
-    {
-        $userId = $this->Auth->user('id');
-
-        $poolData = TableRegistry::getTableLocator()->get('UserPool');
-
-        $poolIds = $poolData->find()
-            ->select(['pool_id'])
-            ->where(['user_id' => $userId])
-            ->toArray();
-
-        $categories = [];
-        foreach ($poolIds as $poolId) {
-            $category = $this->Clients->Categories->find()
-                ->select(['category_name', 'id'])
-                ->where(['id' => $poolId->pool_id])
-                ->first(); // Use first() to get a single result object
-
-            if ($category) {
-                $categories[] = [
-                    'id' => $category->id,
-                    'category_name' => $category->category_name,
-                ];
+                echo json_encode(
+                    [
+                        "status" => "SUCCESS",
+                        "data" => $this->Do->convertJson($data),
+                        "paging" => $this->request->getAttribute('paging')['Clients'],
+                        "categories" => $categoryOptions
+                    ],
+                    JSON_UNESCAPED_UNICODE
+                );
+                die();
             }
         }
 
-
-        $latestActions75 = $this->Clients->Actions->find()
-            ->select(['client_id', 'action_type', 'stat_created'])
-            ->where(['action_type' => 75])
-            ->order(['id' => 'DESC'])
-            ->toArray();
-
-        $clientAction75 = [];
-        foreach ($latestActions75 as $action) {
-            $clientAction75[$action->client_id][] = $action->action_type;
-            $clientAction75[$action->client_id][] = $action->stat_created;
-
-        }
-
-        $latestActions76 = $this->Clients->Actions->find()
-            ->select(['client_id', 'action_type', 'stat_created', 'id'])
-            ->where(['action_type' => 76])
-            ->order(['id' => 'DESC'])
-            ->toArray();
-
-        $clientAction76 = [];
-        foreach ($latestActions76 as $action) {
-            $clientAction76[$action->client_id][] = $action->action_type;
-            $clientAction76[$action->client_id][] = $action->stat_created;
-            $clientAction76[$action->client_id][] = $action->id;
-
-
-        }
-
-
-
-        echo json_encode([
-            'status' => 'SUCCESS',
-            'msg' => __('success'),
-            'data' => [
-                'categories' => $categories,
-                'clientAction75' => $clientAction75,
-                'clientAction76' => $clientAction76,
-            ],
-        ]);
-        die();
-
     }
 
+    // public function getClientEmailOrPhoneChanges() {
+       
+    //     $logtable = TableRegistry::getTableLocator()->get('Logs');
+    //     $logs = $logtable
+    //         ->find('all')
+    //         ->where([
+    //             'log_url LIKE' => '%"Clients","update"%'
+    //         ])
+    //         ->order(['stat_created' => 'DESC'])
+    //         ->toArray();
+
+    
+    //     $notifications2 = [];
+        
+    //     foreach ($logs as $log) {
+    //         $logChanges = $this->Do->convertJson($log['log_changes'], true);
+    // dd($logChanges);
+            
+    //         $beforeChanges = $logChanges[0];
+    //         $afterChanges = $logChanges[1];
+    
+    //         $emailChanged = isset($beforeChanges['client_email']) && isset($afterChanges['client_email']) && $beforeChanges['client_email'] !== $afterChanges['client_email'];
+    //         $phoneChanged = isset($beforeChanges['client_phone']) && isset($afterChanges['client_phone']) && $beforeChanges['client_phone'] !== $afterChanges['client_phone'];
+    
+    //         if ($emailChanged || $phoneChanged) {
+    //             $notification = [
+    //                 'log_id' => $log['id'],
+    //                 'client_id' => $afterChanges['id'],
+    //                 'client_name' => $afterChanges['client_name'],
+    //                 'changes' => []
+    //             ];
+                
+    //             if ($emailChanged) {
+    //                 $notification['changes'][] = "Email changed from {$beforeChanges['client_email']} to {$afterChanges['client_email']}";
+    //             }
+    //             if ($phoneChanged) {
+    //                 $notification['changes'][] = "Phone changed from {$beforeChanges['client_phone']} to {$afterChanges['client_phone']}";
+    //             }
+                
+    //             $notifications2[] = $notification;
+    //         }
+    //     }
+    
+        
+    //     echo json_encode(["status" => "SUCCESS", "data" => $notifications2], JSON_UNESCAPED_UNICODE);
+    //     die();
+    // }
+    
 
     public function view($id = null)
     {
@@ -3024,6 +2982,13 @@ class ClientsController extends AppController
                 ])
                 ->count();
 
+            $newEnquiresCount = $this->Clients->Enquires
+                ->find()
+                ->where([
+                    'stat_created >' => $lastLoginDate
+                ])
+                ->count();
+
             $newBookedCount = $this->Clients->Books
                 ->find()
                 ->where([
@@ -3155,6 +3120,13 @@ class ClientsController extends AppController
 
             $newAssignCount = $newClientsCount;
 
+            $newEnquiresCount = $this->Clients->Enquires
+                ->find()
+                ->where([
+                    'user_id' => $userId,
+                    'stat_created <' => $lastLoginDate
+                ])
+                ->count();
 
             $newBookedCount = $this->Clients->Books
                 ->find()
@@ -3286,6 +3258,7 @@ class ClientsController extends AppController
         $newReminderCount = $newReminderCount ?? 0;
         $invoiceSend = $invoiceSend ?? 0;
         $commissionCollacted = $commissionCollacted ?? 0;
+        $newEnquiresCount = $newEnquiresCount ?? 0;
         // $notProccesing = count($clientsWithoutStatus) ?? 0;
         $recStateOneRecords = $recStateOneRecords ?? 0;
 
@@ -3309,6 +3282,7 @@ class ClientsController extends AppController
                 // 'clientsWithoutStatus' => $clientsWithoutStatus,
                 'recStateOneRecords' => $recStateOneRecords,
                 'user_id' => $userId,
+                'newEnquiresCount' => $newEnquiresCount,
                 // 'notProccesing' => $notProccesing,
             ],
         ]);

@@ -18,7 +18,7 @@
                     <th><?= $this->Paginator->sort('enquiry_clemail') ?></th>
                     <th><?= $this->Paginator->sort('enquiry_clphone') ?></th>
                     <th><?= $this->Paginator->sort('enquiry_clcountry') ?></th>
-                    <th><?= $this->Paginator->sort('enquiry_clsource') ?></th>
+                    <th><?= $this->Paginator->sort('enquiry_source') ?></th>
                     <th><?= $this->Paginator->sort('enquiry_message') ?></th>
                     <th><?= $this->Paginator->sort('enquiry_ipaddress') ?></th>
                     <th><?= $this->Paginator->sort('enquiry_lastpage') ?></th>
@@ -40,7 +40,7 @@
                     <td><?= h($enquire->enquiry_clemail) ?></td>
                     <td><?= $enquire->enquiry_clphone === null ? '' : $this->Number->format($enquire->enquiry_clphone) ?></td>
                     <td><?= $enquire->enquiry_clcountry === null ? '' : $this->Number->format($enquire->enquiry_clcountry) ?></td>
-                    <td><?= $enquire->enquiry_clsource === null ? '' : $this->Number->format($enquire->enquiry_clsource) ?></td>
+                    <td><?= $enquire->enquiry_source === null ? '' : $this->Number->format($enquire->enquiry_source) ?></td>
                     <td><?= h($enquire->enquiry_message) ?></td>
                     <td><?= h($enquire->enquiry_ipaddress) ?></td>
                     <td><?= h($enquire->enquiry_lastpage) ?></td>

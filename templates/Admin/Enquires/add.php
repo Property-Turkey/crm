@@ -24,7 +24,7 @@
                     echo $this->Form->control('enquiry_clemail');
                     echo $this->Form->control('enquiry_clphone');
                     echo $this->Form->control('enquiry_clcountry');
-                    echo $this->Form->control('enquiry_clsource');
+                    echo $this->Form->control('enquiry_source');
                     echo $this->Form->control('enquiry_message');
                     echo $this->Form->control('enquiry_ipaddress');
                     echo $this->Form->control('enquiry_lastpage');

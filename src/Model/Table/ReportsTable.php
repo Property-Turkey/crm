@@ -40,7 +40,7 @@ class ReportsTable extends Table
         ]);
 
         $this->belongsTo('Property', [
-            'foreignKey' => 'property_ids',    
+            'foreignKey' => 'property_id',    
             'className' => 'Pmsproperties',        
         ]);
 

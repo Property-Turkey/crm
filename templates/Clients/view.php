@@ -164,7 +164,7 @@
                             <td><?= h($enquires->enquiry_clemail) ?></td>
                             <td><?= h($enquires->enquiry_clphone) ?></td>
                             <td><?= h($enquires->enquiry_clcountry) ?></td>
-                            <td><?= h($enquires->enquiry_clsource) ?></td>
+                            <td><?= h($enquires->enquiry_source) ?></td>
                             <td><?= h($enquires->enquiry_message) ?></td>
                             <td><?= h($enquires->enquiry_ipaddress) ?></td>
                             <td><?= h($enquires->enquiry_lastpage) ?></td>

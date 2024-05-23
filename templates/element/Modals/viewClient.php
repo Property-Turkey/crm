@@ -901,7 +901,7 @@
 
                                         <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt"> Messages </span>
-                                            <div class="wb-ele">{{enq. enquiry_message}}</div>
+                                            <div class="wb-ele">{{enq.enquiry_message}}</div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt"> Property Ref </span>
@@ -1151,7 +1151,7 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" ng-click="
                                             newEntity('report');
                                             setZIndex();
@@ -1162,7 +1162,6 @@
                                                 <?= __('add_notes') ?>
                                             </button>
                                         <?php } ?>
-
                                     </div>
                                 </div>
 
@@ -1179,11 +1178,11 @@
                                             <div class="col-lg-2 text-nowrap">
                                                 <i class="fas-sticky-note"></i> {{ clsale.type_category.category_name }}
                                                 {{DtSetter('rec_stateSale', clsale.client_current_stage,
-                                                clsale.report_type)}}
-                                                <b>{{ rec.clsale.user.user_fullname }}</b>
+                                                clsale.report_type)}},
+                                                <b>by {{ clsale.user.user_fullname }}</b>
                                                 <p>
-                                                <i class="fas-home"></i>
-                                                    {{ clsale.property_ids.pmsproperty.property_ref}}
+                                                    <i class="fas-home"></i>
+                                                    {{ clsale.property.property_ref}}
                                                 </p>
                                             </div>
 
@@ -1340,7 +1339,24 @@
                                                     {{ clrem.reminder_desc }}
 
                                                 </div>
+                                                <div class="dropdown">
+                                                    <button class="btn" type="button" data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                        <i class="fas-ellipsis"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li id="delete_preloader">
+                                                            <a class="dropdown-item delete-btn"
+                                                                ng-click="doDelete('/admin/reminders/delete/' + clrem.id);
+                                                                    doSave(rec.reminder, 'reminder', 'reminders', '#client_btn', '#reminder_preloader');"
+                                                                href="#">Delete</a>
+                                                        </li>
+
+
+                                                    </ul>
+                                                </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -1465,12 +1481,14 @@
 
                                     </div>
                                 </div>
-                                <div class="noData" ng-if="!rec.client.book">
+                                <div class="noData" ng-if="!rec.client.books">
 
                                     <?= __('no_data') ?>
 
                                 </div>
-                                <div class="white-box" ng-if="rec.client.book">
+                                <div class="white-box mb-2" ng-if="rec.client.books"
+                                    ng-repeat="clbook in rec.client.books track by $index">
+
                                     <div class="row">
                                         <div class="col-md-6 col-12 col-lg-3" ng-if="!(rec.book.in_turkey == 1)">
                                             <span class="sm-txt">
@@ -1478,7 +1496,7 @@
                                             </span>
                                             <div class="wb-ele">
                                                 <?= $this->Html->image('/img/datepicker.png', ['' => '']) ?>
-                                                {{ rec.client.book.book_arrivedate.split(' ')[0] }}
+                                                {{ clbook.book_arrivedate.split(' ')[0] }}
 
                                             </div>
                                         </div>
@@ -1489,7 +1507,7 @@
                                             </span>
                                             <div class="wb-ele">
                                                 <?= $this->Html->image('/img/datepicker.png', ['' => '']) ?>
-                                                {{ rec.client.book.book_departuredate.split(' ')[0] }}
+                                                {{ clbook.book_departuredate.split(' ')[0] }}
 
                                             </div>
                                         </div>
@@ -1501,8 +1519,8 @@
                                             <div class="wb-ele">
                                                 <?= $this->Html->image('/img/icons_60284.svg', ['' => '']) ?>
                                                 <div class="line-height-10">
-                                                    <!-- {{ rec.client.book.book_meetdate }} -->
-                                                    {{ rec.client.book.book_meetdate.split(' ')[0] }}
+                                                    <!-- {{ clbook.book_meetdate }} -->
+                                                    {{ clbook.book_meetdate.split(' ')[0] }}
                                                 </div>
                                             </div>
                                         </div>
@@ -1513,7 +1531,7 @@
                                             <div class="wb-ele">
                                                 <i class="fa fa-map-o"></i>
                                                 <div class="line-height-10">
-                                                    {{ rec.client.book.book_meetplace }}
+                                                    {{ clbook.book_meetplace }}
                                                 </div>
                                             </div>
                                         </div>
@@ -1524,7 +1542,7 @@
                                             <div class="wb-ele">
                                                 <i class="fa fa-calendar-times-o"></i>
                                                 <div class="line-height-10">
-                                                    {{ rec.client.book.book_meetperiod }}
+                                                    {{ clbook.book_meetperiod }}
                                                 </div>
                                             </div>
                                         </div>
@@ -1535,12 +1553,12 @@
                                             <div class="wb-ele">
                                                 <i class="fa fa-home"></i>
                                                 <div class="line-height-10">
-                                                    {{ rec.client.book.book_current_stay }}
+                                                    {{ clbook.book_current_stay }}
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6 col-12 col-lg-3" ng-if="rec.client.book.in_turkey == 1">
+                                        <div class="col-md-6 col-12 col-lg-3" ng-if="clbook.in_turkey == 1">
                                             <span class="sm-txt">
                                                 <?= __('in_turkey') ?>
                                             </span>
@@ -1550,7 +1568,7 @@
                                         </div>
 
                                         <div class="col-md-6 col-12 col-lg-3"
-                                            ng-if="rec.client.book.in_turkey == 0 || rec.client.book.in_turkey == null">
+                                            ng-if="clbook.in_turkey == 0 || clbook.in_turkey == null">
                                             <span class="sm-txt">
                                                 <?= __('in_turkey') ?>
                                             </span>
@@ -1594,21 +1612,24 @@
 
                         <div id="client1-collapseTwo" class="accordion-collapse collapse ">
                             <div class="accordion-body">
-                                <div class="heading ">
-                                    <div class="title"></div>
-                                    <div class="flex-gap-10">
-                                        <button class="btn btn-modal" id="modalBtn" ng-click="
+                                <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+
+                                    <div class="heading ">
+                                        <div class="title"></div>
+                                        <div class="flex-gap-10">
+                                            <button class="btn btn-modal" id="modalBtn" ng-click="
                                         setZIndex();
                                         newEntity('reservation');
                                         openModal('#subModal'); 
                                         updateModalElement('Deals');
                                         inlineElement('#elementsContainer', 1, 'reservation')">
-                                            <i class="fas-plus"></i>
-                                            <?= __('add_deal') ?>
-                                        </button>
+                                                <i class="fas-plus"></i>
+                                                <?= __('add_deal') ?>
+                                            </button>
 
+                                        </div>
                                     </div>
-                                </div>
+                                <?php } ?>
                                 <div class="noData" ng-if="rec.client.reservations == ''">
 
                                     <?= __('no_data') ?>
@@ -1617,12 +1638,13 @@
                                 <div>
 
                                     <div ng-repeat="deals in rec.client.reservations">
-                                        <!-- <div class="heading">
-                                            <div class="title"></div>
-                                            <div class="flex-gap-10">
-                                                <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                            <div class="heading">
+                                                <div class="title"></div>
+                                                <div class="flex-gap-10">
                                                     <button class="btn btn-modal" id="modalBtn btn-Booking" ng-click="
                                                     setZIndex();
+                                                    updateModalElement('Deals');
                                                     doGet('/admin/reservations?id='+deals.id, 'rec', 'reservation');
                                                     openModal('#subModal'); 
                                                     inlineElement('#elementsContainer', 1, 'reservation')">
@@ -1630,26 +1652,9 @@
                                                         <?= __('edit_deal') ?>
                                                     </button>
                                                 </div>
-                                            <?php } ?>
 
-                                        </div> -->
-
-                                        <div class="heading">
-                                            <div class="title"></div>
-                                            <div class="flex-gap-10">
-                                                <button class="btn btn-modal" id="modalBtn btn-Booking" ng-click="
-                                                    setZIndex();
-                                                    updateModalElement('Deals');
-                                                    doGet('/admin/reservations?id='+deals.id, 'rec', 'reservation');
-                                                    openModal('#subModal'); 
-                                                    inlineElement('#elementsContainer', 1, 'reservation')">
-                                                    <i class="fas-plus"></i>
-                                                    <?= __('edit_deal') ?>
-                                                </button>
                                             </div>
-
-                                        </div>
-
+                                        <?php } ?>
 
                                         <div class="white-box">
                                             <form class="row">
@@ -1660,12 +1665,8 @@
                                                     <div class="input-group">
 
                                                         <div class="wb-ele form-control">
-                                                            <!-- {{deals.currency.category_name}}
-                                                        {{deals.reservation_amount}} -->
-
                                                             {{nFormat( deals.reservation_amount
                                                             ,DtSetter('currencies_icons',deals.reservation_currency))}}
-
                                                         </div>
 
                                                     </div>

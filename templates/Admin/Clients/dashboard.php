@@ -8,7 +8,8 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
     doGet('/admin/clients/numbers', 'rec', 'numbers');
     doGet('/admin/clients/bar', 'rec', 'bar');
     doGet('/admin/clients/doughnut', 'rec', 'doughnut');
-    doGet('/admin/clients/notifications', 'rec', 'notification');">
+    doGet('/admin/clients/notifications', 'rec', 'notification');
+    doGet('/admin/logs/getClientEmailOrPhoneChanges', 'rec', 'getClientEmailOrPhoneChanges');">
 
 
     <!-- {{rec.doughnut.sourceDoughnutData}} -->
@@ -18,7 +19,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
     ?>
 
     <div class="heading ">
-        <div class="title dashoardFont"><?= __('dashboard') ?></div>
+        <div class="title dashoardFont"><?= __('dashboard') ?>{{rec.getClientEmailOrPhoneChanges.notificationsemailPhone}}</div>
     </div>
 
 
@@ -81,38 +82,40 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
 
             </div>
 
-
-            <?php if (in_array($authUser['user_role'], ['admin.callcenter']) || isset($authUser['user_original_role'])) { ?>
-                <div class="notifications-boxes" ng-if="!rec.notification == ''">
-
-                    <div class="colored-box badge greenBg" ng-if="rec.notification.newAssignCount != 0"
-                        ng-click="dashboardRedirectTo('assign')">
-                        <span class="notification-badge" format-currency="rec.notification.newAssignCount"></span>
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block"><?= __('assigns') ?>
-                        </div>
-                    </div>
-
-                    <!-- <div class="colored-box badge redBg" ng-if="rec.notification.newReminderCount != 0"
-                        ng-click="dashboardRedirectTo(2)">
-                        <span class="notification-badge" format-currency="rec.notification.newReminderCount"></span>
-                        <i class="fa fa-book" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block"><?= __('reminders') ?></div>
-                    </div> -->
-
-                </div>
-            <?php } ?>
+            
+            <div ng-if="notifications2.length > 0">
+                <h4>Recent Changes</h4>
+                <ul>
+                    <li ng-repeat="notification in notifications2">
+                        <strong>{{notification.client_name}}</strong><br>
+                        <span ng-repeat="change in notification.changes">
+                            {{change}}<br>
+                        </span>
+                    </li>
+                </ul>
+            </div>
 
             <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field']) || isset($authUser['user_original_role'])) { ?>
                 <div class="notifications-boxes" ng-if="!rec.notification == ''">
 
-                    <!-- <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newClientsCount != 0"
-                        ng-click="dashboardRedirectTo(2)">
-                        <span class="notification-badge" format-currency="rec.notification.newClientsCount"></span>
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block"> <?= __('sold_online') ?>
+                    <?php if (in_array($authUser['user_role'], ['admin.callcenter']) || isset($authUser['user_original_role'])) { ?>
+
+                        <div class="col-1 colored-box badge greenBg" ng-if="rec.notification.newAssignCount != 0"
+                            ng-click="dashboardRedirectTo('assign')">
+                            <span class="notification-badge" format-currency="rec.notification.newAssignCount"></span>
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <div class="m-1 d-none d-lg-block"><?= __('assigns') ?>
+                            </div>
                         </div>
-                    </div> -->
+
+                    <?php } ?>
+
+                    <div class="col-1 colored-box badge greenBg" ng-if="rec.notification.newEnquiresCount != 0">
+                        <span class="notification-badge" format-currency="rec.notification.newEnquiresCount"></span>
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        <div class="m-1 d-none d-lg-block"> <?= __('new_enquires') ?>
+                        </div>
+                    </div>
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newBookedCount != 0"
                         ng-click="dashboardRedirectTo('booked')">
@@ -293,72 +296,72 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                 </div>
                 <?php if (!in_array($authUser['user_role'], ['accountant']) || isset($authUser['user_original_role'])) { ?>
 
-                <div class="col-md-6 mb-3 d-flex">
-                    <div class="white-box-dashboard mb-3 byCountry">
-                        <div class="row m-1">
-                            <div class="col-12">
-                                <div class="row">
-                                    <div class="heading my-1 dashboard-h">
-                                        <div class="title-d">
-                                            <?= __('leads_bycountry') ?>
+                    <div class="col-md-6 mb-3 d-flex">
+                        <div class="white-box-dashboard mb-3 byCountry">
+                            <div class="row m-1">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="heading my-1 dashboard-h">
+                                            <div class="title-d">
+                                                <?= __('leads_bycountry') ?>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="col-12">
+                                    <div ng-repeat="(id, data) in rec.numbers.groupedData"
+                                        class="mt-3 d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img ng-src="{{ '/img/' + data.adrs_name + '.jpg' }}"
+                                                class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
+                                            <span class="ms-2">
+                                                {{ data.count }}<br>
+                                                <span style="font-size:12px;">{{ data.adrs_name }}</span>
+                                            </span>
+                                        </div>
+                                        <div class="text-center text-success">
+                                            {{ (data.count / rec.numbers.clientCount * 100).toFixed(2) }}%
                                         </div>
                                     </div>
-
-                                </div>
-
-                            </div>
-                            <div class="col-12">
-                                <div ng-repeat="(id, data) in rec.numbers.groupedData"
-                                    class="mt-3 d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                    <img ng-src="{{ '/img/' + data.adrs_name + '.jpg' }}"
-                                            class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
-                                        <span class="ms-2">
-                                            {{ data.count }}<br>
-                                            <span style="font-size:12px;">{{ data.adrs_name }}</span>
-                                        </span>
-                                    </div>
-                                    <div class="text-center text-success">
-                                        {{ (data.count / rec.numbers.clientCount * 100).toFixed(2) }}%
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 <?php } ?>
                 <?php if (!in_array($authUser['user_role'], ['accountant']) || isset($authUser['user_original_role'])) { ?>
-                <div class="col-md-6 mb-3 d-flex">
-                    <div class="white-box-dashboard mb-3 byCountry">
+                    <div class="col-md-6 mb-3 d-flex">
+                        <div class="white-box-dashboard mb-3 byCountry">
 
-                        <div class="row m-1">
+                            <div class="row m-1">
 
-                            <div class="col-12">
-                                <div class="row">
-                                    <div class="heading my-1 dashboard-h">
-                                        <div class="title-d"><?= __('calls_by_country') ?></div>
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="heading my-1 dashboard-h">
+                                            <div class="title-d"><?= __('calls_by_country') ?></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-12">
-                                <div ng-repeat="data in rec.numbers.addressData"
-                                    class="mt-3 d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                        <img ng-src="{{ '/img/' + data.adrs_name + '.jpg' }}"
-                                            class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
-                                        <span class="ms-2">
-                                            {{ data.count }}<br>
-                                            <span style="font-size:12px;">{{ data.adrs_name }}</span>
-                                        </span>
-                                    </div>
-                                    <div class="text-center text-success">
-                                        <!-- {{ (data.count / 409) * 100 | number:1 }}% -->
+                                <div class="col-12">
+                                    <div ng-repeat="data in rec.numbers.addressData"
+                                        class="mt-3 d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img ng-src="{{ '/img/' + data.adrs_name + '.jpg' }}"
+                                                class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
+                                            <span class="ms-2">
+                                                {{ data.count }}<br>
+                                                <span style="font-size:12px;">{{ data.adrs_name }}</span>
+                                            </span>
+                                        </div>
+                                        <div class="text-center text-success">
+                                            <!-- {{ (data.count / 409) * 100 | number:1 }}% -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 <?php } ?>
             </div>
 
@@ -388,17 +391,17 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
 
             <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                 <div class="notifications-boxes">
-                    <div class=" colored-box badge redBg" ng-if="rec.notification.rec != 0" 
-                    ng-click="dashboardRedirectTo('reallocate')">
+                    <div class=" colored-box badge redBg" ng-if="rec.notification.rec != 0"
+                        ng-click="dashboardRedirectTo('reallocate')">
                         <span class="notification-badge" format-currency="rec.notification.recStateOneRecords"></span>
                         <i class="fa fa-times-circle-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"><?= __('reallocate_clients') ?></div>
                     </div>
                     <div class=" colored-box badge redBg" ng-if="rec.notification.notProccesing != 0"
-                    ng-click="dashboardRedirectTo(1)">
+                        ng-click="dashboardRedirectTo(1)">
                         <span class="notification-badge" format-currency="rec.notification.notProccesing"></span>
                         <i class="fa fa-stop-circle" aria-hidden="true"></i>
-                        <div class="m-1 d-none d-lg-block"><?=__('not_proccesing')?></div>
+                        <div class="m-1 d-none d-lg-block"><?= __('not_proccesing') ?></div>
                     </div>
                 </div>
             <?php } ?>

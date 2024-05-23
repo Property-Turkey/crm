@@ -64,7 +64,7 @@
                 </tr>
                 <tr>
                     <th><?= __('Enquiry Clsource') ?></th>
-                    <td><?= $enquire->enquiry_clsource === null ? '' : $this->Number->format($enquire->enquiry_clsource) ?></td>
+                    <td><?= $enquire->enquiry_source === null ? '' : $this->Number->format($enquire->enquiry_source) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Seo Host') ?></th>

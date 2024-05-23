@@ -6,7 +6,7 @@ use Cake\Database\Driver\Mysql;
 use Cake\Log\Engine\FileLog;
 use Cake\Mailer\Transport\MailTransport;
 
-$isLocal = env('SERVER_NAME') == 'localhost' ? true : true;
+$isLocal = env('SERVER_NAME') == 'localhost' ? true : false;
 $isDebug = empty($_GET['debug']) ? $isLocal : true;
 
 return [
@@ -391,6 +391,8 @@ return [
             'password' => $isLocal ? '' : '--Password--',
 
             'database' => $isLocal ? 'ptcrm' : 'ptdev_crm',
+
+            
         ],
 
         /*

@@ -15,7 +15,7 @@ use Cake\ORM\Entity;
  * @property string $enquiry_clemail
  * @property int|null $enquiry_clphone
  * @property int|null $enquiry_clcountry
- * @property int|null $enquiry_clsource
+ * @property int|null $enquiry_source
  * @property string $enquiry_message
  * @property string|null $enquiry_ipaddress
  * @property string|null $enquiry_lastpage
@@ -45,7 +45,7 @@ class Enquire extends Entity
         'enquiry_clemail' => true,
         'enquiry_clphone' => true,
         'enquiry_clcountry' => true,
-        'enquiry_clsource' => true,
+        'enquiry_source' => true,
         'enquiry_message' => true,
         'enquiry_ipaddress' => true,
         'enquiry_lastpage' => true,
