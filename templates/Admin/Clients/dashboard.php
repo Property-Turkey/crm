@@ -9,7 +9,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
     doGet('/admin/clients/bar', 'rec', 'bar');
     doGet('/admin/clients/doughnut', 'rec', 'doughnut');
     doGet('/admin/clients/notifications', 'rec', 'notification');
-    doGet('/admin/logs/getClientEmailOrPhoneChanges', 'rec', 'getClientEmailOrPhoneChanges');">
+    doGet('/admin/clients/getClientEmailOrPhoneChanges', 'rec', 'getClientEmailOrPhoneChanges');">
 
 
     <!-- {{rec.doughnut.sourceDoughnutData}} -->
@@ -19,7 +19,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
     ?>
 
     <div class="heading ">
-        <div class="title dashoardFont"><?= __('dashboard') ?>{{rec.getClientEmailOrPhoneChanges.notificationsemailPhone}}</div>
+        <div class="title dashoardFont"><?= __('dashboard') ?></div>
     </div>
 
 
@@ -116,6 +116,8 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         <div class="m-1 d-none d-lg-block"> <?= __('new_enquires') ?>
                         </div>
                     </div>
+
+                    
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newBookedCount != 0"
                         ng-click="dashboardRedirectTo('booked')">
@@ -402,6 +404,13 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         <span class="notification-badge" format-currency="rec.notification.notProccesing"></span>
                         <i class="fa fa-stop-circle" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"><?= __('not_proccesing') ?></div>
+                    </div>
+                    <div class="colored-box badge greenBg" ng-if="rec.getClientEmailOrPhoneChanges.notificationsemailPhoneCount != 0"
+                        ng-click="dashboardRedirectTo('edit')">
+                        <span class="notification-badge" format-currency="rec.getClientEmailOrPhoneChanges.notificationsemailPhoneCount"></span>
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        <div class="m-1 d-none d-lg-block"> <?= __('phone_email_edit') ?>
+                        </div>
                     </div>
                 </div>
             <?php } ?>

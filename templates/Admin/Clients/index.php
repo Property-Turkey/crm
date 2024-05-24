@@ -12,10 +12,12 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 <div id="indxPg" class="right_col" role="main" ng-init="
         doGet('/admin/clients/index/<?= $_pid ?>?list=1', 'list', 'clients');
         doGet('/admin/clients/pool', 'rec', 'pool');
-        doGet('/admin/clients/notifications', 'rec', 'notification');">
+        doGet('/admin/clients/notifications', 'rec', 'notification');
+        doGet('/admin/clients/getClientChanges', 'rec', 'getClientChanges');">
 
 
     <main>
+        
         <section class=" container-fluid">
             <h2 class="client-num">
                 <?= __('clients') ?> ({{paging.count}})
@@ -154,7 +156,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                     <?php } ?>
 
 
-                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.field', 'admin.callcenter', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                         <button class="btn btn-warning" ng-click="multiHandle('/admin/clients/delete')">
                             Delete
                         </button>
@@ -616,7 +618,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                         </div>
                                     <?php } ?>
 
-
+{{rec.getClientChanges}}-------------------------
                                     <div class="col-lg-11 col-12 row">
 
                                         <div class="previewToggle col-lg-3 col-12 row">

@@ -197,7 +197,7 @@
                                     <div class="heading pb-0 mb-0 mt-3">
                                         <div class="title leadFont">Lead Information</div>
                                         <div class="flex-gap-10">
-                                            <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                            <?php if (!in_array($authUser['user_role'], [ 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                                 <button id="modalBtn" class="leadFont btn btn-modal" ng-click="setZIndex();
                                                 updateModalElement('Lead Information');
                                                 doGet('/admin/clients?id=' + rec.client.id, 'rec', 'client');
@@ -1347,8 +1347,7 @@
                                                     <ul class="dropdown-menu">
                                                         <li id="delete_preloader">
                                                             <a class="dropdown-item delete-btn"
-                                                                ng-click="doDelete('/admin/reminders/delete/' + clrem.id);
-                                                                    doSave(rec.reminder, 'reminder', 'reminders', '#client_btn', '#reminder_preloader');"
+                                                                ng-click="multiHandle('/admin/reminders/delete')"
                                                                 href="#">Delete</a>
                                                         </li>
 
@@ -1382,6 +1381,7 @@
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
                                         <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        
                                             <button class="btn btn-modal" ng-click="
                                             setZIndex();
                                             newEntity('offer'); 
@@ -1451,7 +1451,7 @@
                         </h2>
                         <div id="client1-collapseBooking" class="accordion-collapse collapse">
                             <div class="accordion-body">
-                                <div class="heading" ng-if="!rec.client.book">
+                                <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
                                         <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
@@ -1464,29 +1464,12 @@
 
                                     </div>
                                 </div>
-                                <div class="heading" ng-if="rec.client.book">
-                                    <div class="title"></div>
-                                    <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                            <button class="btn btn-modal" id="modalBtn"
-                                                ng-click="
-                                            setZIndex();updateModalElement('Books');
-                                            doGet('/admin/books?id=' +rec.client.book.id, 'rec', 'book'); openModal('#subModal'); inlineElement('#elementsContainer', 1, 'booking')">
-
-                                                <i class="fa fa-pencil"></i>
-                                                <?= __('edit_book') ?>
-                                            </button>
-                                        <?php } ?>
-
-
-                                    </div>
-                                </div>
-                                <div class="noData" ng-if="!rec.client.books">
-
+                                
+                                <div class="noData" ng-if="rec.client.books == ''">
                                     <?= __('no_data') ?>
 
                                 </div>
-                                <div class="white-box mb-2" ng-if="rec.client.books"
+                                <div class="white-box mb-2" ng-if="!rec.client.books == ''"
                                     ng-repeat="clbook in rec.client.books track by $index">
 
                                     <div class="row">
@@ -1542,7 +1525,7 @@
                                             <div class="wb-ele">
                                                 <i class="fa fa-calendar-times-o"></i>
                                                 <div class="line-height-10">
-                                                    {{ clbook.book_meetperiod }}
+                                                    {{ clbook.book_meetperiod }} day
                                                 </div>
                                             </div>
                                         </div>

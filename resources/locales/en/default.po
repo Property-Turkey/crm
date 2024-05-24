@@ -1270,3 +1270,7 @@ msgid "room_8_3"
 msgstr "8+3"
 msgid "room_8_4"
 msgstr "8+4"
+
+
+msgid "phone_email_edit"
+msgstr "Email-Phone changed"
