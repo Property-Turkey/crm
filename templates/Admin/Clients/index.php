@@ -13,7 +13,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
         doGet('/admin/clients/index/<?= $_pid ?>?list=1', 'list', 'clients');
         doGet('/admin/clients/pool', 'rec', 'pool');
         doGet('/admin/clients/notifications', 'rec', 'notification');
-        doGet('/admin/clients/getClientChanges', 'rec', 'getClientChanges');">
+        doGet('/admin/clients/getClientChanges', 'rec', 'getClientChange');">
 
 
     <main>
@@ -618,7 +618,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                         </div>
                                     <?php } ?>
 
-{{rec.getClientChanges}}-------------------------
+
                                     <div class="col-lg-11 col-12 row">
 
                                         <div class="previewToggle col-lg-3 col-12 row">

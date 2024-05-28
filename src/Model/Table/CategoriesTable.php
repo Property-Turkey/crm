@@ -39,6 +39,8 @@ class CategoriesTable extends Table
         $this->hasMany('Reservations', [
             'foreignKey' => 'category_id',
         ]);
+
+        $this->addBehavior('Log');
     }
 
     /**

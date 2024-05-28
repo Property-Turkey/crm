@@ -10,6 +10,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use Cake\ORM\Query;
 
+use Cake\ORM\TableRegistry;
 class LogBehavior extends Behavior {
     
     // public function initialize(array $config): void
@@ -24,6 +25,10 @@ class LogBehavior extends Behavior {
     {
         $this->doLog($entity);
     }
+
+
+    
+
 	public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options) 
     {
         $this->doLog($entity);

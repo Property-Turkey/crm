@@ -10,6 +10,8 @@ use Cake\Validation\Validator;
 
 class BooksTable extends Table
 {
+
+    
   
     public function initialize(array $config): void
     {
@@ -23,6 +25,8 @@ class BooksTable extends Table
             'foreignKey' => 'client_id',
             'joinType' => 'INNER',
         ]);
+
+       
     }
 
  

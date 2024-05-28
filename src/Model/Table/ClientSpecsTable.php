@@ -3,14 +3,45 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\Core\Configure;
+use Cake\Event\EventInterface;
+use ArrayObject;
+use Cake\ORM\TableRegistry;
 
 
 class ClientSpecsTable extends Table
 {
+
+    public function beforeSave(EventInterface $event, $entity, ArrayObject $options)
+    {
+        
+        
+    
+        // Replace encoded slashes to normal slashes
+        $fullUrl = str_replace('\\/', '/', $_SERVER['REQUEST_URI']);
+    
+        $logData = [
+            'user_id' => $entity->user_id,
+            'log_url' => json_encode([
+                "", "", "", "", $fullUrl, "Clients", "update", $entity->id
+            ]),
+            'log_changes' => json_encode([
+                'before' => $entity->getOriginalValues(),
+                'after' => $entity->toArray()
+            ]),
+            'rec_state' => 1
+        ];
+    
+        $logsTable = TableRegistry::getTableLocator()->get('Logs');
+        $logEntity = $logsTable->newEntity($logData);
+        $logsTable->save($logEntity);
+    }
+
     public function initialize(array $config): void
     {
         parent::initialize($config);
@@ -37,14 +68,9 @@ class ClientSpecsTable extends Table
             'foreignKey' => 'clientspec_socialstyle',
             'className' => 'Categories',
         ]);
+        
     }
 
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
     public function validationDefault(Validator $validator): Validator
     {
         $validator
@@ -94,13 +120,7 @@ class ClientSpecsTable extends Table
         return $validator;
     }
 
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
+    
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn('client_id', 'Clients'), ['errorField' => 'client_id']);

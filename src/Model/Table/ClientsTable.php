@@ -15,27 +15,33 @@ use Cake\ORM\TableRegistry;
 class ClientsTable extends Table
 {
 
-
     public function beforeSave(EventInterface $event, $entity, ArrayObject $options)
     {
-        if ($entity->isDirty('client_email') || $entity->isDirty('client_phone')) {
-            $logData = [
-                'user_id' => $entity->user_id,
-                'log_url' => json_encode([
-                    "", "", "", "", $_SERVER['REQUEST_URI'], "Clients", "update", $entity->id
-                ]),
-                'log_changes' => json_encode([
-                    'before' => $entity->extractOriginalChanged(['client_email', 'client_phone']),
-                    'after' => $entity->extract(['client_email', 'client_phone'])
-                ]),
-                'rec_state' => 1
-            ];
-
-            $logsTable = TableRegistry::getTableLocator()->get('Logs');
-            $logEntity = $logsTable->newEntity($logData);
-            $logsTable->save($logEntity);
-        }
+        
+        
+    
+        // Replace encoded slashes to normal slashes
+        $fullUrl = str_replace('\\/', '/', $_SERVER['REQUEST_URI']);
+    
+        $logData = [
+            'user_id' => $entity->user_id,
+            'log_url' => json_encode([
+                "", "", "", "", $fullUrl, "Clients", "update", $entity->id
+            ]),
+            'log_changes' => json_encode([
+                'before' => $entity->getOriginalValues(),
+                'after' => $entity->toArray()
+            ]),
+            'rec_state' => 1
+        ];
+    
+        $logsTable = TableRegistry::getTableLocator()->get('Logs');
+        $logEntity = $logsTable->newEntity($logData);
+        $logsTable->save($logEntity);
     }
+    
+
+
     public function initialize(array $config): void
     {
 

@@ -375,7 +375,7 @@ class ClientsController extends AppController
                     ];
                 }
 
-                
+
 
 
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
@@ -519,7 +519,7 @@ class ClientsController extends AppController
                 }
 
 
-                
+
                 if ($_pid == 'invoice-not-send') {
                     $thresholdDate = date('Y-m-d H:i:s', strtotime('-15 days'));
                     $query->where(function ($exp, $q) use ($thresholdDate) {
@@ -623,20 +623,22 @@ class ClientsController extends AppController
                                 ])
                         );
                     });
-                } elseif ($_pid == 'edit') {
-                    $LogsTable = $this->getTableLocator()->get('Logs');
-        
-                    $query->where(function ($exp, $q) use ($LogsTable, $lastLoginDate) {
-                        return $exp->exists(
-                            $LogsTable->find()
-                                ->select(['id', 'log_url' ])
-                                ->where([
-                                    'log_url LIKE' => '%"Clients","update"%',
-                                    'stat_created >' => $lastLoginDate,
-                                ])
-                        );
-                    });
-                } elseif (is_numeric($_pid) && $_pid > 17) {
+                }
+                //  elseif ($_pid == 'edit') {
+                //     $LogsTable = $this->getTableLocator()->get('Logs');
+
+                //     $query->where(function ($exp, $q) use ($LogsTable, $lastLoginDate) {
+                //         return $exp->exists(
+                //             $LogsTable->find()
+                //                 ->select(['id', 'log_url'])
+                //                 ->where([
+                //                     'log_url LIKE' => '%"Clients","update"%',
+                //                     'stat_created >' => $lastLoginDate,
+                //                 ])
+                //         );
+                //     });
+                // } 
+                elseif (is_numeric($_pid) && $_pid > 17) {
                     $query->where(function ($exp, $q) use ($_pid) {
                         return $exp->exists(
                             $this->Clients->Actions->find()
@@ -652,7 +654,7 @@ class ClientsController extends AppController
 
                 $data = $this->paginate($query, ['limit' => 50]);
 
-               
+
                 $categoryOptions = $this->Clients->Categories->find('list', ['keyField' => 'id', 'valueField' => 'category_name'])->toArray();
 
                 echo json_encode(
@@ -672,7 +674,9 @@ class ClientsController extends AppController
 
     // public function getClientEmailOrPhoneChanges()
     // {
-        
+
+
+
     //     $lastLoginDate = $this->authUser['stat_lastlogin'];
 
     //     $LogsTable = $this->getTableLocator()->get('Logs');
@@ -684,17 +688,22 @@ class ClientsController extends AppController
     //         ])
     //         ->order(['stat_created' => 'DESC'])
     //         ->toArray();
-            
-    
+
+
     //     $notificationsemailPhone = [];
     //     $notificationsemailPhoneCount = 0;
-    
+
     //     foreach ($logs as $log) {
+
+
     //         $logChanges = json_decode($log->log_changes, true);
-    
+    //         dd($logChanges);
+
+
+
     //         $emailChanged = isset($logChanges['before']['client_email']) && isset($logChanges['after']['client_email']) && $logChanges['before']['client_email'] !== $logChanges['after']['client_email'];
     //         $phoneChanged = isset($logChanges['before']['client_phone']) && isset($logChanges['after']['client_phone']) && $logChanges['before']['client_phone'] !== $logChanges['after']['client_phone'];
-    
+
     //         if ($emailChanged || $phoneChanged) {
     //             $notification = [
     //                 'log_id' => $log->id,
@@ -702,19 +711,19 @@ class ClientsController extends AppController
     //                 'stat_created' => $log->stat_created,
     //                 'changes' => []
     //             ];
-    
+
     //             if ($emailChanged) {
     //                 $notification['changes'][] = "Email changed from {$logChanges['before']['client_email']} to {$logChanges['after']['client_email']}";
     //             }
     //             if ($phoneChanged) {
     //                 $notification['changes'][] = "Phone changed from {$logChanges['before']['client_phone']} to {$logChanges['after']['client_phone']}";
     //             }
-    
+
     //             $notificationsemailPhone[] = $notification;
     //             $notificationsemailPhoneCount++;
     //         }
     //     }
-    
+
     //     echo json_encode([
     //         "status" => "SUCCESS",
     //         "msg" => __("success"),
@@ -743,20 +752,20 @@ class ClientsController extends AppController
     //         if ($log->log_changes === null) {
     //             continue; 
     //         }
-        
+
     //         $logChanges = json_decode($log->log_changes, true);
-        
+
     //         if (!is_array($logChanges) || !isset($logChanges['before']) || !isset($logChanges['after'])) {
     //             continue; 
     //         }
-        
+
     //         $changes = [];
     //         foreach ($logChanges['before'] as $field => $beforeValue) {
     //             if (isset($logChanges['after'][$field]) && $logChanges['after'][$field] !== $beforeValue) {
     //                 $changes[] = ucfirst($field) . " changed from {$beforeValue} to {$logChanges['after'][$field]}";
     //             }
     //         }
-        
+
     //         if (!empty($changes)) {
     //             $notification = [
     //                 'log_id' => $log->id,
@@ -764,11 +773,11 @@ class ClientsController extends AppController
     //                 'stat_created' => $log->stat_created,
     //                 'changes' => $changes
     //             ];
-        
+
     //             $notifications33[] = $notification;
     //         }
     //     }
-        
+
 
     //     echo json_encode([
     //         "status" => "SUCCESS",
@@ -779,50 +788,53 @@ class ClientsController extends AppController
     //     ]);
     //     die();
     // }
-
     public function getClientChanges()
 {
     $LogsTable = $this->getTableLocator()->get('Logs');
     $logs = $LogsTable
         ->find()
-        ->where(function (\Cake\Database\Expression\QueryExpression $exp, \Cake\ORM\Query $q) {
-            return $exp->like('log_url', '%"update"%');
-        })
+        ->where([
+            'log_url LIKE' => '%"Clients"%',
+        ])
         ->order(['stat_created' => 'DESC'])
         ->toArray();
 
     $notifications = [];
 
     foreach ($logs as $log) {
-        if ($log->log_changes === null) {
-            continue; // Null ise atla veya uygun bir işlem yap
-        }
-    
         $logChanges = json_decode($log->log_changes, true);
-    
+
         if (!is_array($logChanges) || !isset($logChanges['before']) || !isset($logChanges['after'])) {
-            continue; // Beklenen veri yapısı yoksa atla veya uygun bir işlem yap
+            continue;
         }
-    
+
         $changes = [];
+
         foreach ($logChanges['before'] as $field => $beforeValue) {
             if (isset($logChanges['after'][$field]) && $logChanges['after'][$field] !== $beforeValue) {
-                $changes[] = ucfirst($field) . " changed from {$beforeValue} to {$logChanges['after'][$field]}";
+                // Check if $field is a string before calling ucfirst
+                if (is_string($field)) {
+                    $changes[] = ucfirst($field) . " changed from {$beforeValue} to {$logChanges['after'][$field]}";
+                } else {
+                    // Handle non-string $field appropriately if needed
+                    $changes[] = "Field {$field} changed from {$beforeValue} to {$logChanges['after'][$field]}";
+                }
             }
         }
-    
+
         if (!empty($changes)) {
+            $logArray = json_decode($log->log_url, true);
+
             $notification = [
                 'log_id' => $log->id,
-                'client_id' => isset(json_decode($log->log_url)[3]) ? json_decode($log->log_url)[3] : null,
+                'client_id' => isset($logArray[7]) ? $logArray[7] : '', // Example: Adjust index if needed
                 'stat_created' => $log->stat_created,
                 'changes' => $changes
             ];
-    
+
             $notifications[] = $notification;
         }
     }
-    
 
     echo json_encode([
         "status" => "SUCCESS",
@@ -834,7 +846,8 @@ class ClientsController extends AppController
     die();
 }
 
-    
+
+
 
     public function view($id = null)
     {
@@ -995,6 +1008,8 @@ class ClientsController extends AppController
             unset($rec['source']);
             unset($rec['offers']);
             unset($rec['user_sale']);
+            unset($rec['enquires']);
+            unset($rec['actions']);
             unset($dt['adrscountry']);
 
             // dd($rec['adrscountry']);
@@ -1014,7 +1029,7 @@ class ClientsController extends AppController
 
     public function pool()
     {
-        
+
         $userId = $this->authUser['id'];
 
         $poolData = TableRegistry::getTableLocator()->get('UserPool');

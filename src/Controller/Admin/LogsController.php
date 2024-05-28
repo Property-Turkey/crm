@@ -133,8 +133,6 @@ class LogsController extends AppController
         }
 
     }
-
-
     
     public function view($id = null)
     {
