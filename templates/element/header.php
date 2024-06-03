@@ -53,7 +53,7 @@ $admin_menu = [
     [
         "name" => "configs",
         "icon" => "cogs",
-        "roles" => ["admin.root","admin.admin"],
+        "roles" => ["admin.root", "admin.admin"],
         "active" => "/configs/index,/configs/save,/configs/view",
         "sub" => [
             ["name" => "all", "url" => ["Configs", "index", ""]],
@@ -138,9 +138,7 @@ $urlparse[4] = empty($urlparse[4]) ? '' : $urlparse[4];
         text-decoration: none;
         color: #333;
         font-size: 12px !important;
-        /* Bildirimlerin boyutu */
         border-bottom: 1px solid #ddd;
-        /* Gri çizgi */
     }
 
     .notifications-dropdown a:last-child {
@@ -162,17 +160,31 @@ $urlparse[4] = empty($urlparse[4]) ? '' : $urlparse[4];
             <?= $this->Html->image('/img/pt-header-logo.svg', ['' => '']) ?>
         </a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <?php
+            $currentController = $this->request->getParam('controller');
+            $currentAction = $this->request->getParam('action');
+            ?>
+
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#"></a>
+                    <?= $this->Html->link(
+                        __('clients'),
+                        ['controller' => 'Clients', 'action' => 'index'],
+                        ['escape' => false, 'class' => 'nav-link' . ($currentController == 'Clients' && $currentAction == 'index' ? ' active' : '')]
+                    ) ?>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#"></a>
+                    <?= $this->Html->link(
+                        __('dashboard'),
+                        ['controller' => 'Clients', 'action' => 'dashboard'],
+                        ['escape' => false, 'class' => 'nav-link' . ($currentController == 'Clients' && $currentAction == 'dashboard' ? ' active' : '')]
+                    ) ?>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#"></a>
                 </li>
             </ul>
+
 
             <div class="nav-btns">
 
@@ -182,14 +194,21 @@ $urlparse[4] = empty($urlparse[4]) ? '' : $urlparse[4];
                     </a>
 
                     <div class="notifications-dropdown">
-                        <a ng-if="rec.notification != null" href="#">New Leads ({{rec.notification.newClientsCount}})</a>
-                        <a ng-if="rec.notification != null" href="#">New Booked ({{rec.notification.newBookedCount}})</a>
+                        <a ng-if="rec.notification != null" href="#">New Leads
+                            ({{rec.notification.newClientsCount}})</a>
+                        <a ng-if="rec.notification != null" href="#">New Booked
+                            ({{rec.notification.newBookedCount}})</a>
                         <a ng-if="rec.notification != null" href="#">New Sold ({{rec.notification.newSoldCount}})</a>
-                        <a ng-if="rec.notification != null" href="#">New Cancelled ({{rec.notification.newCancelledCount}})</a>
-                        <a ng-if="rec.notification != null" href="#">New Down Payment ({{rec.notification.newDownPaymentCount}})</a>
-                        <a ng-if="rec.notification != null" href="#">New Reserved ({{rec.notification.newReservedCount}})</a>
-                        <a ng-if="rec.notification != null" href="#">New Sold Online ({{rec.notification.newSoldOnlineCount}})</a>
-                        <a ng-if="rec.notification != null" href="#"><?=__('not_proccesing')?> ({{rec.notification.notProccesing}})</a>
+                        <a ng-if="rec.notification != null" href="#">New Cancelled
+                            ({{rec.notification.newCancelledCount}})</a>
+                        <a ng-if="rec.notification != null" href="#">New Down Payment
+                            ({{rec.notification.newDownPaymentCount}})</a>
+                        <a ng-if="rec.notification != null" href="#">New Reserved
+                            ({{rec.notification.newReservedCount}})</a>
+                        <a ng-if="rec.notification != null" href="#">New Sold Online
+                            ({{rec.notification.newSoldOnlineCount}})</a>
+                        <a ng-if="rec.notification != null" href="#"><?= __('not_proccesing') ?>
+                            ({{rec.notification.notProccesing}})</a>
 
                     </div>
                 </div>
@@ -201,12 +220,12 @@ $urlparse[4] = empty($urlparse[4]) ? '' : $urlparse[4];
                     if (!in_array($authUser["user_role"], $itm["roles"])) {
                         continue;
                     }
-// dd($urlparse[3]);
+
                     if (in_array($urlparse[3], ['dashboard', 'statistic'])) {
                         // dd($itm['name']);
                         $isActive = ($urlparse[3] === 'dashboard') ? 'active' : '';
                     } else {
-                        // Diğer sayfalarda normal kontrol yap
+
                         if ($isCategories) {
                             $isActive = 'active';
                         } else {

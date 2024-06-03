@@ -17,7 +17,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 
 
     <main>
-        
+
         <section class=" container-fluid">
             <h2 class="client-num">
                 <?= __('clients') ?> ({{paging.count}})
@@ -251,10 +251,10 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                             <?php } ?> -->
 
                             <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
-                                <!-- <div class="checkbox">
-                                    <input type="checkbox" class="all-clients" name="client-checkbox"
-                                        ng-click="checkAll(this)" />
-                                </div> -->
+                                <div class="checkbox">
+                                    <!-- <input type="checkbox" class="all-clients" name="client-checkbox"
+                                        ng-click="checkAll(this)" /> -->
+                                </div>
                                 <div class="col-11 hideMob row">
                                     <div class="col-md-3 p-0 title">
                                         <?= __('sales_content') ?>
@@ -295,8 +295,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                 <div class="row m-1">
                                     <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
-                                            <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
-                                                name="client-checkbox" />
+                                            <!-- <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
+                                                name="client-checkbox" />-->
                                         </div>
                                     <?php } ?>
 
@@ -405,7 +405,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     ) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Date</span>{{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[0] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
+                                                        ')[0] }}
                                                     </div>
                                                 </div>
 
@@ -413,7 +414,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     <?= $this->Html->image('/img/clock_regular.svg', ['' => '']) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Time</span> {{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[1] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
+                                                        ')[1] }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -454,8 +456,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                 <div class="row m-1">
                                     <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
-                                            <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
-                                                name="client-checkbox" />
+                                            <!-- <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
+                                                name="client-checkbox" />-->
                                         </div>
                                     <?php } ?>
 
@@ -564,7 +566,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     ) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Date</span>{{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[0] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
+                                                        ')[0] }}
                                                     </div>
                                                 </div>
 
@@ -572,7 +575,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     <?= $this->Html->image('/img/clock_regular.svg', ['' => '']) ?>
                                                     <div class="line-height-10">
                                                         <span class="sm-txt">Next Call Time</span> {{
-                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[1] }}
+                                                        itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
+                                                        ')[1] }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -613,8 +617,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                 <div class="row m-1">
                                     <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
-                                            <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
-                                                name="client-checkbox" />
+                                            <!-- <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
+                                                name="client-checkbox" />-->
                                         </div>
                                     <?php } ?>
 
@@ -673,7 +677,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                             </div>
                                             <div class="col-6 p-0 col-lg-12">
 
-                                                <span class="sm-txt">
+                                                <!-- <span class="sm-txt">
                                                     <?= __('category_id') ?>
                                                 </span>
                                                 <button ng-click="setZIndex();
@@ -685,8 +689,49 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     <p>
                                                         {{itm.category.category_name}}
                                                     </p>
-                                                </button>
+                                                </button> -->
+
+
                                                 <div class="note-flex">
+                                                    <p class="sm-txt">
+                                                        <?= __('category_id') ?>
+                                                    </p>
+                                                    <p>
+                                                        {{itm.category.category_name}}
+                                                    </p>
+
+
+                                                </div>
+
+                                                <div class="note-flex">
+                                                    <p class="sm-txt">
+                                                        <?= __('budget') ?>
+                                                    </p>
+                                                    <div class="mx-2" type="button" my-tooltip="<?= __('set_the_budget') ?>"
+                                                        ng-repeat="notify in rec.notification.clientsWithoutBudget"
+                                                        ng-if="notify.id == itm.id">
+                                                        <i class="fa fa-exclamation-circle redColor" aria-hidden="true">
+                                                            <small class="note-font">
+                                                                <?= __('set_the_budget') ?>
+                                                            </small>
+                                                        </i>
+                                                    </div>
+                                                    <p ng-if="itm.client_budget != 2000001 && itm.client_budget != null">
+                                                        Up to {{nFormat( itm.client_budget,
+                                                        DtSetter('currencies_icons',2))}}
+                                                    </p>
+                                                    <p ng-if="itm.client_budget == 2000001 && itm.client_budget != null">
+                                                        {{nFormat( itm.client_budget,
+                                                        DtSetter('currencies_icons',2))}} +
+                                                    </p>
+                                                    <p ng-if="itm.client_budget == null">
+                                                        -
+                                                    </p>
+
+                                                </div>
+
+
+                                                <!-- <div class="note-flex">
 
                                                     <span class="sm-txt">
                                                         <?= __('budget') ?>
@@ -702,9 +747,9 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                         </i>
                                                     </div>
 
-                                                </div>
+                                                </div> -->
 
-                                                <button ng-click="setZIndex();
+                                                <!-- <button ng-click="setZIndex();
                                                 updateModalElement('Lead Information');
                                                 doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
                                                 openModal('#subModal');
@@ -721,12 +766,31 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     <p ng-if="itm.client_budget == null">
                                                         -
                                                     </p>
-                                                </button>
-
-
+                                                </button> -->
 
 
                                                 <div class="note-flex">
+                                                    <p class="sm-txt">
+                                                        <?= __('rec_state') ?>
+                                                    </p>
+                                                    <div class="mx-2" type="button" my-tooltip="<?= __('not_proccesing') ?>"
+                                                        ng-repeat="notify in rec.notification.clientsWithoutStatus"
+                                                        ng-if="notify.id == itm.id">
+                                                        <i class="fa fa-exclamation-circle redColor" aria-hidden="true">
+                                                            <small class="note-font">
+                                                                <?= __('set_the_status') ?>
+                                                            </small>
+                                                        </i>
+                                                    </div>
+                                                    <p>
+                                                        {{ DtSetter('rec_stateSale',
+                                                        3, itm.rec_state)
+                                                        }}
+                                                    </p>
+
+                                                </div>
+
+                                                <!-- <div class="note-flex">
                                                     <span class="sm-txt">
                                                         <?= __('rec_state') ?>
                                                     </span>
@@ -753,9 +817,16 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                         3, itm.rec_state)
                                                         }}
                                                     </p>
-                                                </button>
+                                                </button> -->
                                             </div>
-
+                                            <a href="#" n ng-click="setZIndex();
+                                                        updateModalElement('Lead Information');
+                                                        doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
+                                                        openModal('#subModal');
+                                                        inlineElement('#elementsContainer', 1, 'info')"
+                                                class="btn-link">
+                                                <?= __('edit_lead_info') ?>
+                                            </a>
                                         </div>
 
                                         <div class="col-lg-2 col-12 info mr-24">
@@ -766,23 +837,25 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 
 
                                                 <div class="note-flex">
-                                                    <span class="sm-txt">
-                                                        <?= __('notes') ?>
-                                                    </span>
-                                                    <!-- <a href="#"
+                                                    <a class="btn-link"
                                                         ng-click="
                                                         openModal('#subModal');
                                                         inlineElement('#elementsContainer', 1, 'finance');
                                                         rec.report.tar_id = itm.id;
                                                         doGet('/admin/clients?id='+itm.id, 'rec', 'client');
-                                                        doGet('/admin/reports?id=' + itm.reports[itm.reports.length - 1].id, 'rec', 'report');"
-                                                        class="btn-link">
-                                                        <?= __('view_allNotes') ?>
-                                                    </a> -->
+                                                        doGet('/admin/reports?id=' + itm.reports[itm.reports.length - 1].id, 'rec', 'report');">
+                                                        <?= __('notes') ?>
+                                                    </a>
 
+                                                    <p ng-if="itm.reports.length > 0">
+                                                        {{ itm.reports[itm.reports.length - 1].report_text }}
+                                                    </p>
+                                                    <p ng-if="itm.reports == 0">
+                                                        -
+                                                    </p>
 
                                                 </div>
-                                                <button class="wb-ele sm-txt-indx" type="button" ng-click="
+                                                <!-- <button class="wb-ele sm-txt-indx" type="button" ng-click="
                                                         updateModalElement('Notes');
                                                         openModal('#subModal');
                                                         inlineElement('#elementsContainer', 1, 'finance');
@@ -795,25 +868,47 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                     <p ng-if="itm.reports == 0">
                                                         -
                                                     </p>
-                                                </button>
+                                                </button> -->
+
 
                                                 <div class="note-flex">
-                                                    <span class="sm-txt">
+                                                    <a class="btn-link" ng-click="
+                                                        openModal('#subModal');
+                                                        inlineElement('#elementsContainer', 1, 'viewOffer');
+                                                        doGet('/admin/clients?id='+itm.id, 'rec', 'client');">
                                                         <?= __('offers') ?>
-                                                    </span>
-                                                    <!-- <a href="#" 
-                                                        ng-click="
+                                                    </a>
+
+                                                    <p ng-if="itm.offers.length > 0">
+                                                        Sent {{ itm.offers.length }} Offers
+                                                    </p>
+                                                    <p ng-if="itm.offers == 0">
+                                                        -
+                                                    </p>
+
+                                                </div>
+
+                                                <!-- <div class="note-flex">
+                                                    <p class="sm-txt">
+                                                        <?= __('offers') ?>
+                                                    </p>
+                                                    <a href="#" ng-click="
                                                         openModal('#subModal');
                                                         inlineElement('#elementsContainer', 1, 'viewOffer');
                                                         doGet('/admin/clients?id='+itm.id, 'rec', 'client');"
                                                         class="btn-link">
                                                         <?= __('view_allOffers') ?>
-                                                    </a> -->
+                                                    </a>
 
+                                                    <p ng-if="itm.offers.length > 0">
+                                                        Sent {{ itm.offers.length }} Offers
+                                                    </p>
+                                                    <p ng-if="itm.offers == 0">
+                                                        -
+                                                    </p>
+                                                </div> -->
 
-                                                </div>
-
-                                                <button class="wb-ele sm-txt-indx" type="button" ng-click="
+                                                <!-- <button class="wb-ele sm-txt-indx" type="button" ng-click="
                                                         setZIndex();
                                                         updateModalElement('Offers');
                                                         newEntity('offer'); 
@@ -827,18 +922,43 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                         -
                                                     </p>
 
-                                                </button>
+                                                </button> -->
 
 
                                                 <div class="note-flex">
-                                                    <span class="sm-txt">
+                                                    <a class="btn-link" ng-click="
+                                                    setZIndex();
+                                                    openModal('#subModal'); 
+                                                    updateModalElement('Deals');
+                                                    doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
+                                                    newEntity('reservation'); 
+                                                    inlineElement('#elementsContainer', 1, 'indexreser')">
                                                         <?= __('deals_properties') ?>
-                                                    </span>
-                                                    <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#viewReservation_mdl"
-                                                        ng-click="doGet('/admin/clients?id='+itm.id, 'rec', 'client');"
+                                                    </a>
+
+                                                    <p ng-if="itm.reservations.length > 0">
+                                                        Sent {{ itm.reservations.length }} Properties
+                                                    </p>
+                                                    <p ng-if="itm.offers == 0">
+                                                        -
+                                                    </p>
+
+                                                </div>
+
+                                                <!-- <div class="note-flex">
+                                                    <p class="sm-txt">
+                                                        <?= __('deals_properties') ?>
+                                                    </p>
+                                                    <a href="#" ng-click="
+                                                    setZIndex();
+                                                    openModal('#subModal'); 
+                                                    updateModalElement('Deals');
+                                                    doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
+                                                    newEntity('reservation'); 
+                                                    inlineElement('#elementsContainer', 1, 'indexreser')"
                                                         class="btn-link">
                                                         <?= __('view_allProperties') ?>
-                                                    </a> -->
+                                                    </a>
 
 
                                                 </div>
@@ -857,7 +977,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                         -
                                                     </p>
 
-                                                </button>
+                                                </button> -->
 
                                             </div>
 
@@ -867,7 +987,26 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                         <div class="col-lg-2 col-12 mr-24 info">
                                             <div class="col-4 title hideWeb">Reminders</div>
                                             <div class="col-6 p-0 col-lg-12">
-                                                <span class="sm-txt">
+
+                                                <div class="note-flex">
+                                                    <p class="sm-txt">
+                                                        <?= __('next_call_date') ?>
+                                                    </p>
+                                                    <p ng-if="itm.reminders.length > 0">
+                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
+                                                        ')[0] }}
+                                                    </p>
+
+
+                                                </div>
+
+
+
+
+
+
+
+                                                <!-- <span class="sm-txt">
                                                     <?= __('next_call_date') ?>
                                                 </span>
                                                 <div class="mx-2" type="button" my-tooltip="<?= __('set_the_priorty') ?>"
@@ -884,11 +1023,27 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                             doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
                                             inlineElement('#elementsContainer', 1, 'reminders')">
                                                     <p ng-if="itm.reminders.length > 0">
-                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[0] }}
+                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
+                                                        ')[0] }}
                                                     </p>
 
-                                                </button>
-                                                <span class="sm-txt">
+                                                </button> -->
+
+
+                                                <div class="note-flex">
+                                                    <p class="sm-txt">
+                                                        <?= __('next_call_time') ?>
+                                                    </p>
+                                                    <p ng-if="itm.reminders.length > 0">
+                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
+                                                        ')[1] }}
+                                                    </p>
+
+                                                </div>
+
+
+
+                                                <!-- <span class="sm-txt">
                                                     <?= __('next_call_time') ?>
                                                 </span>
                                                 <button class="wb-ele sm-txt-indx" type="button" ng-click="setZIndex();
@@ -897,7 +1052,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                             doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
                                             inlineElement('#elementsContainer', 1, 'reminders')">
                                                     <p ng-if="itm.reminders.length > 0">
-                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split(' ')[1] }}
+                                                        {{ itm.reminders[itm.reminders.length - 1].reminder_nextcall.split('
+                                                        ')[1] }}
                                                     </p>
                                                 </button>
                                                 <div class="row">
@@ -959,8 +1115,15 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                         </div>
 
                                                     </div>
-                                                </div>
+                                                </div> -->
                                             </div>
+                                            <a href="#" ng-click="setZIndex();
+                                            newEntity('reminder'); 
+                                            openModal('#subModal'); 
+                                            doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
+                                            inlineElement('#elementsContainer', 1, 'reminders')" class="btn-link">
+                                                <?= __('edit_reminder') ?>
+                                            </a>
                                         </div>
 
 
@@ -972,9 +1135,9 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                             <div class="col-6 p-0 col-lg-12">
                                                 <div class="note-flex">
 
-                                                    <span class="sm-txt">
+                                                    <!-- <span class="sm-txt">
                                                         <?= __('client_current_stage') ?>
-                                                    </span>
+                                                    </span> -->
 
                                                     <div class="mx-2" type="button"
                                                         my-tooltip="<?= __('require_reallocation') ?>"
@@ -989,8 +1152,20 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 
 
                                                 <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
-                                                    <div class="wb-ele">
-                                                        <div ng-repeat="notify in itm.user_client track by $index">
+
+
+
+                                                    <div class="note-flex">
+                                                        <p class="sm-txt" ng-click="
+                                                            setZIndex();
+                                                            updateModalElement('Assign');
+                                                            newEntity('user_client'); 
+                                                            openModal('#subModal'); 
+                                                            doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
+                                                            inlineElement('#elementsContainer', 1, 'assign')">
+                                                            <?= __('client_current_stage') ?>
+                                                        </p>
+                                                        <p ng-repeat="notify in itm.user_client track by $index">
                                                             {{notify.user.user_fullname}}
                                                             <small>
                                                                 <i my-tooltip="<?= __('require_reallocation') ?>"
@@ -998,15 +1173,39 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                                     class="fa fa-exclamation-circle redColor"
                                                                     aria-hidden="true"></i>
                                                             </small>{{$index < (itm.user_client.length - 1) ? ',' : '' }} </div>
-                                                        </div>
+                                                        </p>
 
+                                                    </div>
+
+
+                                                    <div ng-repeat="reallocate in itm.user_client">
+                                                        <div ng-if="rec.notification.user_id == reallocate.user_id;">
+                                                            <div class="col-12">
+                                                                <div class="row">
+                                                                    <div class="col-12 mb-2">
+                                                                        <a class="btn-link mt-1" type="button"
+                                                                            ng-click="confirmAndReallocation(itm.id)"
+                                                                            ng-class="{'linkDisabled': reallocate.rec_state == 2}">
+                                                                            <?= __('request_reallocation') ?>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+                                                <!--
+                                                    <div class="wb-ele">
                                                         <div class="row" ng-repeat="reallocate in itm.user_client">
                                                             <div ng-if="rec.notification.user_id == reallocate.user_id;">
                                                                 <div class="col-12">
                                                                     <div class="row">
                                                                         <div class="col-12 mb-2">
                                                                             <button class="btn mt-1" type="button"
-                                                                                ng-click="confirmAndReallocation(itm.id)"
+                                                                                ng-click="confirmAndLead(itm.id)"
                                                                                 ng-disabled="reallocate.rec_state == 2"
                                                                                 ng-class="{'greenBg': reallocate.rec_state == 1}">
                                                                                 <?= __('request_reallocation') ?>
@@ -1016,20 +1215,52 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    </div> -->
 
 
 
 
-                                                    </div>
-                                                <?php } ?>
+                                            <?php } ?>
 
 
 
 
 
 
-                                                <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
-                                                    <div class="wb-ele" type="button" ng-click="
+                                            <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
+
+                                                <div class="note-flex">
+                                                    <p class="sm-txt" ng-click="
+                                                            setZIndex();
+                                                            updateModalElement('Assign');
+                                                            newEntity('user_client'); 
+                                                            openModal('#subModal'); 
+                                                            doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
+                                                            inlineElement('#elementsContainer', 1, 'assign')">
+                                                        <?= __('client_current_stage') ?>
+                                                    </p>
+                                                    <p ng-repeat="notify in itm.user_client track by $index">
+                                                        {{notify.user.user_fullname}}
+                                                        <small>
+                                                            <i my-tooltip="<?= __('require_reallocation') ?>"
+                                                                ng-if="notify.rec_state == 2"
+                                                                class="fa fa-exclamation-circle redColor"
+                                                                aria-hidden="true"></i>
+                                                        </small>{{$index < (itm.user_client.length - 1) ? ',' : '' }} </div>
+                                                    </p>
+
+                                                </div>
+
+
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#viewReallocate_mdl"
+                                                    ng-click="
+                                                                newEntity('user_client');
+                                                                doGet('/admin/clients?id=' + itm.id, 'rec', 'client');"
+                                                    class="btn-link">
+                                                    <?= __('settings_reallocation') ?>
+                                                </a>
+
+                                                <!-- <div class="wb-ele" type="button" ng-click="
                                                 setZIndex();
                                                     updateModalElement('Assign');
                                                     newEntity('user_client'); 
@@ -1044,49 +1275,49 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                                                     class="fa fa-exclamation-circle redColor"
                                                                     aria-hidden="true"></i>
                                                             </small>{{$index < (itm.user_client.length - 1) ? ',' : '' }} </div>
-                                                        </div>
-
-
-
-                                                        <div class="row">
-                                                            <div>
-                                                                <div class="col-12" data-bs-toggle="modal"
-                                                                    data-bs-target="#viewReallocate_mdl"
-                                                                    ng-click="
+                                                        </div> 
+                                                     <div class="row">
+                                                        <div>
+                                                            <div class="col-12" data-bs-toggle="modal"
+                                                                data-bs-target="#viewReallocate_mdl"
+                                                                ng-click="
                                                                     newEntity('user_client');
                                                                     doGet('/admin/clients?id=' + itm.id, 'rec', 'client');">
-                                                                    <div class="row">
-                                                                        <div class="col-12 mb-2">
-                                                                            <div class="btn darkRedBg mt-1" type="button">
+                                                                <div class="row">
+                                                                    <div class="col-12 mb-2">
+                                                                        <div class="btn darkRedBg mt-1" type="button">
 
-                                                                                <?= __('settings_reallocation') ?>
-                                                                            </div>
+                                                                            <?= __('settings_reallocation') ?>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-
                                                         </div>
 
+                                                    </div> 
 
 
 
-                                                    </div><?php } ?>
-                                            </div>
+
+                                                </div>-->
+
+
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Client row End -->
-
                             </div>
-                        <?php } ?>
-                    </div>
-                    <!-- Dashboard Content End -->
-                    <!-- Dashboard Nav Start -->
-                    <div class="dash-nav flex-center p-2">
-                        <?php echo $this->element('paginator-ng') ?>
-                        <!-- <button>
+
+                            <!-- Client row End -->
+
+                        </div>
+                    <?php } ?>
+                </div>
+                <!-- Dashboard Content End -->
+                <!-- Dashboard Nav Start -->
+                <div class="dash-nav flex-center p-2">
+                    <?php echo $this->element('paginator-ng') ?>
+                    <!-- <button>
                         <i class="fas-angle-double-left"></i>
                     </button>
                     <button>
@@ -1102,9 +1333,9 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                     <button>
                         <i class="fas-angle-double-right"></i>
                     </button> -->
-                    </div>
-                    <!-- Dashboard Nav End -->
                 </div>
+                <!-- Dashboard Nav End -->
+            </div>
         </section>
         <!-- Dashboard End -->
     </main>

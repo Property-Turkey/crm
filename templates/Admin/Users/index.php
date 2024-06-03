@@ -1,4 +1,3 @@
-
 <?php
 $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getParam('pass')[0];
 // dd($_pid);
@@ -61,6 +60,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                     </div>
                 </div>
                 <!-- Dashboard Header End -->
+
                 <!-- Dashboard Content Start -->
                 <div class="dash-content">
                     <div class="columns-titles">
@@ -163,6 +163,25 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                 <i class="fa fa-pencil"></i>
                                                 <?= __('allow_user_access_this_pool') ?>
                                             </button>
+                                            <button id="modalBtn" style="font-size: 13px;" class="btn btn-modal"
+                                                ng-click="setZIndex();
+                                                updateModalElement('Categories');
+                                                doGet('/admin/users?id='+itm.id, 'rec', 'user');
+                                                openModal('#subModal'); inlineElement('#elementsContainer', 1, 'add-team-or-memeber')">
+                                                <i class="fa fa-pencil"></i>
+                                                <?= __('make_team_member') ?>
+                                            </button>
+
+                                            <!-- <button id="modalBtn" style="font-size: 13px;" class="btn btn-modal"
+                                                ng-click="
+                                                    rec.user.team = 0;
+                                                    rec.user.id = itm.id;
+                                                    rec.user.email = itm.email;
+                                                    rec.user.parent_id = 0;
+
+                                                    doSave(rec.user, 'user', 'users', '#user_btn', '#user_preloader');">
+                                                <?= __('make_team_leader') ?>
+                                            </button> -->
                                         </div>
                                     </div>
 

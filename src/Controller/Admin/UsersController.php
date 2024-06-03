@@ -442,20 +442,21 @@ class UsersController extends AppController
     public function index($_pid = [])
     {
 
-
-
         $_user = isset($_GET['tags']) ? $_GET['tags'] : false;
         $_keyword = isset($_GET['keyword']) ? $_GET['keyword'] : false;
         $_rolesAssign = isset($_GET['roles']) ? $_GET['roles'] : false;
+        $_parent = isset($_GET['user_id']) ? $_GET['user_id'] : false;
 
         if (!empty($_user)) {
-            $userCondition = [
-                'user_fullname LIKE' => '%' . $_keyword . '%'
-            ];
+            $userCondition = [];
 
-            if ($_rolesAssign !== false) {
+            if ($_keyword !== '') {
+                $userCondition['user_fullname LIKE'] = '%' . $_keyword . '%';
+            }elseif ($_rolesAssign !== '') {
                 $roles = explode(',', $_rolesAssign);
                 $userCondition['user_role IN'] = $roles;
+            }elseif ($_parent !== '') {
+                $userCondition['parent_id IN'] = $_parent;
             }
 
             $data = $this->Users
@@ -465,7 +466,9 @@ class UsersController extends AppController
 
             echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($data)], JSON_UNESCAPED_UNICODE);
             die();
+
         }
+
 
         if ($this->request->is('post')) {
 
@@ -617,7 +620,12 @@ class UsersController extends AppController
             if (empty($dt['password'])) {
                 unset($dt['password']);
             }
-
+            // if (isset($dt['team'])) {
+            //     $rec->parent_id = $dt['parent_id'];
+            // }
+            if (isset($dt['parent_id'])) {
+                $rec->parent_id = $dt['parent_id'][0]['value'];
+            }
 
         }
 

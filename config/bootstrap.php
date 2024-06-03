@@ -252,7 +252,8 @@ Configure::write('roles', [
 	5 => 'callcenter',
 	6 => 'field',
 	7 => 'accountant',
-	8 => 'aftersale'
+	8 => 'aftersale',
+	9 => 'teamleader'
 ]);
 
 Configure::write('rolesChart', [

@@ -387,7 +387,7 @@ class ClientsController extends AppController
             if (!empty($_list)) {
                 $userRole = $this->authUser['user_role'];
 
-                $q = $this->Clients->find()
+                $query = $this->Clients->find()
                     ->order(['Clients.' . $_col => $_dir])
                     ->where([$conditions])
                     ->contain([
@@ -434,39 +434,7 @@ class ClientsController extends AppController
                     }
                     return $clientIds;
                 }
-                $query = $this->Clients->find()
 
-                    ->order(['Clients.' . $_col => $_dir])
-                    ->where([$conditions])
-                    ->contain([
-                        "ClientSpecs",
-                        'PoolCategories',
-                        "Reports.TypeCategories",
-                        "Reports.User",
-                        "Reports.Property" => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
-                        'TagCategories',
-                        'Categories',
-                        'ClientSpecs.Currency',
-                        'Reminders',
-                        'Reports',
-                        'Sources',
-                        'Reports.Text',
-                        'Users',
-                        "UserClient.Users",
-                        "UserClient",
-                        "Books",
-                        "Offers",
-                        "Offers.PropertyRef" => ['fields' => ['property_title', 'property_ref', 'id']],
-                        "Actions",
-                        "Reservations",
-                        "Reservations.Property" => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
-                        "Reservations.Project" => ['fields' => ['project_ref', 'id']],
-                        "Reservations.Seller" => ['fields' => ['seller_name', 'id']],
-                        "Reservations.Developer" => ['fields' => ['dev_name', 'id']],
-                        "Reservations.Pmscategory" => ['fields' => ['category_name', 'id']],
-                        "Reservations.Payment",
-                        "Reservations.Currency",
-                    ])->group('Clients.id');
                 if ($userRole != 'admin.root' && $userRole != 'admin.admin' && $userRole != 'accountant') {
                     $userId = $this->authUser['id'];
                     $query->matching('UserClient', function ($query) use ($userId) {
@@ -564,7 +532,7 @@ class ClientsController extends AppController
                                 ->select(['client_id'])
                                 ->where([
                                     'user_id' => $userId,
-                                    'stat_created <' => $lastLoginDate,
+                                    'stat_created >' => $lastLoginDate,
                                     'Clients.id = UserClient.client_id'
                                 ])
                         );
@@ -630,7 +598,6 @@ class ClientsController extends AppController
                 //     $query->where(function ($exp, $q) use ($LogsTable, $lastLoginDate) {
                 //         return $exp->exists(
                 //             $LogsTable->find()
-                //                 ->select(['id', 'log_url'])
                 //                 ->where([
                 //                     'log_url LIKE' => '%"Clients","update"%',
                 //                     'stat_created >' => $lastLoginDate,
@@ -638,7 +605,19 @@ class ClientsController extends AppController
                 //         );
                 //     });
                 // } 
-                elseif (is_numeric($_pid) && $_pid > 17) {
+                elseif (is_numeric($_pid) && $_pid > 0) {
+                   
+                    $query->where(function ($exp, $q) use ($_pid) {
+                        return $exp->exists(
+                            $this->Clients->find()
+                                ->where([
+                                    'rec_state' => $_pid
+                                ])
+                        );
+                    });
+
+                } elseif (is_numeric($_pid) && $_pid > 17) {
+                    dd(2);
                     $query->where(function ($exp, $q) use ($_pid) {
                         return $exp->exists(
                             $this->Clients->Actions->find()
@@ -648,8 +627,6 @@ class ClientsController extends AppController
                                 ])
                         );
                     });
-                } elseif (is_numeric($_pid) && $_pid > 0) {
-                    $query->where(['rec_state' => $_pid]);
                 }
 
                 $data = $this->paginate($query, ['limit' => 50]);
@@ -669,71 +646,72 @@ class ClientsController extends AppController
                 die();
             }
         }
-
     }
 
-    // public function getClientEmailOrPhoneChanges()
-    // {
+
+
+    public function getClientEmailOrPhoneChanges()
+    {
 
 
 
-    //     $lastLoginDate = $this->authUser['stat_lastlogin'];
+        $lastLoginDate = $this->authUser['stat_lastlogin'];
 
-    //     $LogsTable = $this->getTableLocator()->get('Logs');
-    //     $logs = $LogsTable
-    //         ->find()
-    //         ->where([
-    //             'log_url LIKE' => '%"Clients","update"%',
-    //             'stat_created >' => $lastLoginDate,
-    //         ])
-    //         ->order(['stat_created' => 'DESC'])
-    //         ->toArray();
-
-
-    //     $notificationsemailPhone = [];
-    //     $notificationsemailPhoneCount = 0;
-
-    //     foreach ($logs as $log) {
+        $LogsTable = $this->getTableLocator()->get('Logs');
+        $logs = $LogsTable
+            ->find()
+            ->where([
+                'log_url LIKE' => '%"Clients","update"%',
+                'stat_created >' => $lastLoginDate,
+            ])
+            ->order(['stat_created' => 'DESC'])
+            ->toArray();
 
 
-    //         $logChanges = json_decode($log->log_changes, true);
-    //         dd($logChanges);
+        $notificationsemailPhone = [];
+        $notificationsemailPhoneCount = 0;
+
+        foreach ($logs as $log) {
+
+
+            $logChanges = json_decode($log->log_changes, true);
 
 
 
-    //         $emailChanged = isset($logChanges['before']['client_email']) && isset($logChanges['after']['client_email']) && $logChanges['before']['client_email'] !== $logChanges['after']['client_email'];
-    //         $phoneChanged = isset($logChanges['before']['client_phone']) && isset($logChanges['after']['client_phone']) && $logChanges['before']['client_phone'] !== $logChanges['after']['client_phone'];
 
-    //         if ($emailChanged || $phoneChanged) {
-    //             $notification = [
-    //                 'log_id' => $log->id,
-    //                 'client_id' => json_decode($log->log_url)[3],
-    //                 'stat_created' => $log->stat_created,
-    //                 'changes' => []
-    //             ];
+            $emailChanged = isset($logChanges['before']['client_email']) && isset($logChanges['after']['client_email']) && $logChanges['before']['client_email'] !== $logChanges['after']['client_email'];
+            $phoneChanged = isset($logChanges['before']['client_phone']) && isset($logChanges['after']['client_phone']) && $logChanges['before']['client_phone'] !== $logChanges['after']['client_phone'];
 
-    //             if ($emailChanged) {
-    //                 $notification['changes'][] = "Email changed from {$logChanges['before']['client_email']} to {$logChanges['after']['client_email']}";
-    //             }
-    //             if ($phoneChanged) {
-    //                 $notification['changes'][] = "Phone changed from {$logChanges['before']['client_phone']} to {$logChanges['after']['client_phone']}";
-    //             }
+            if ($emailChanged || $phoneChanged) {
+                $notification = [
+                    'log_id' => $log->id,
+                    'client_id' => json_decode($log->log_url)[3],
+                    'stat_created' => $log->stat_created,
+                    'changes' => []
+                ];
 
-    //             $notificationsemailPhone[] = $notification;
-    //             $notificationsemailPhoneCount++;
-    //         }
-    //     }
+                if ($emailChanged) {
+                    $notification['changes'][] = "Email changed from {$logChanges['before']['client_email']} to {$logChanges['after']['client_email']}";
+                }
+                if ($phoneChanged) {
+                    $notification['changes'][] = "Phone changed from {$logChanges['before']['client_phone']} to {$logChanges['after']['client_phone']}";
+                }
 
-    //     echo json_encode([
-    //         "status" => "SUCCESS",
-    //         "msg" => __("success"),
-    //         "data" => [
-    //             'notificationsemailPhone' => $notificationsemailPhone,
-    //             'notificationsemailPhoneCount' => $notificationsemailPhoneCount
-    //         ]
-    //     ]);
-    //     die();
-    // }
+                $notificationsemailPhone[] = $notification;
+                $notificationsemailPhoneCount++;
+            }
+        }
+
+        echo json_encode([
+            "status" => "SUCCESS",
+            "msg" => __("success"),
+            "data" => [
+                'notificationsemailPhone' => $notificationsemailPhone,
+                'notificationsemailPhoneCount' => $notificationsemailPhoneCount
+            ]
+        ]);
+        die();
+    }
 
     // public function getClientChanges()
     // {
@@ -788,65 +766,65 @@ class ClientsController extends AppController
     //     ]);
     //     die();
     // }
+
+
     public function getClientChanges()
-{
-    $LogsTable = $this->getTableLocator()->get('Logs');
-    $logs = $LogsTable
-        ->find()
-        ->where([
-            'log_url LIKE' => '%"Clients"%',
-        ])
-        ->order(['stat_created' => 'DESC'])
-        ->toArray();
+    {
+        $LogsTable = $this->getTableLocator()->get('Logs');
+        $logs = $LogsTable
+            ->find()
+            ->where([
+                'log_url LIKE' => '%"Clients"%',
+            ])
+            ->order(['stat_created' => 'DESC'])
+            ->toArray();
 
-    $notifications = [];
+        $notifications = [];
 
-    foreach ($logs as $log) {
-        $logChanges = json_decode($log->log_changes, true);
+        foreach ($logs as $log) {
+            $logChanges = json_decode($log->log_changes, true);
 
-        if (!is_array($logChanges) || !isset($logChanges['before']) || !isset($logChanges['after'])) {
-            continue;
-        }
+            if (!is_array($logChanges) || !isset($logChanges['before']) || !isset($logChanges['after'])) {
+                continue;
+            }
 
-        $changes = [];
+            $changes = [];
 
-        foreach ($logChanges['before'] as $field => $beforeValue) {
-            if (isset($logChanges['after'][$field]) && $logChanges['after'][$field] !== $beforeValue) {
-                // Check if $field is a string before calling ucfirst
-                if (is_string($field)) {
-                    $changes[] = ucfirst($field) . " changed from {$beforeValue} to {$logChanges['after'][$field]}";
-                } else {
-                    // Handle non-string $field appropriately if needed
-                    $changes[] = "Field {$field} changed from {$beforeValue} to {$logChanges['after'][$field]}";
+            foreach ($logChanges['before'] as $field => $beforeValue) {
+                if (isset($logChanges['after'][$field]) && $logChanges['after'][$field] !== $beforeValue) {
+                    // Check if $field is a string before calling ucfirst
+                    if (is_string($field)) {
+                        $changes[] = ucfirst($field) . " changed from {$beforeValue} to {$logChanges['after'][$field]}";
+                    } else {
+                        // Handle non-string $field appropriately if needed
+                        $changes[] = "Field {$field} changed from {$beforeValue} to {$logChanges['after'][$field]}";
+                    }
                 }
+            }
+
+            if (!empty($changes)) {
+                $logArray = json_decode($log->log_url, true);
+
+                $notification = [
+                    'log_id' => $log->id,
+                    'client_id' => isset($logArray[7]) ? $logArray[7] : '', // Example: Adjust index if needed
+                    'stat_created' => $log->stat_created,
+                    'changes' => $changes
+                ];
+
+                $notifications[] = $notification;
             }
         }
 
-        if (!empty($changes)) {
-            $logArray = json_decode($log->log_url, true);
-
-            $notification = [
-                'log_id' => $log->id,
-                'client_id' => isset($logArray[7]) ? $logArray[7] : '', // Example: Adjust index if needed
-                'stat_created' => $log->stat_created,
-                'changes' => $changes
-            ];
-
-            $notifications[] = $notification;
-        }
+        echo json_encode([
+            "status" => "SUCCESS",
+            "msg" => __("success"),
+            "data" => [
+                'notifications' => $notifications,
+            ]
+        ]);
+        die();
     }
-
-    echo json_encode([
-        "status" => "SUCCESS",
-        "msg" => __("success"),
-        "data" => [
-            'notifications' => $notifications,
-        ]
-    ]);
-    die();
-}
-
-
 
 
     public function view($id = null)
@@ -864,8 +842,6 @@ class ClientsController extends AppController
 
         $this->set(compact('rec'));
     }
-
-
 
     public function save($id = -1)
     {
@@ -3302,17 +3278,17 @@ class ClientsController extends AppController
             //     ])
             //     ->toArray();
 
-            // $clientsWithoutStatus = $this->Clients->find()
-            //     ->select(['id', 'client_name'])
-            //     ->where([
-            //         'stat_created <=' => $previousDateTime,
-            //         'rec_state = 1',
-            //     ])
-            //     ->toArray();
+            $clientsWithoutStatus = $this->Clients->find()
+                ->select(['id', 'client_name'])
+                ->where([
+                    'stat_created <=' => $previousDateTime,
+                    'rec_state = 1',
+                ])
+                ->toArray();
 
-            // $notProccesing = count($clientsWithoutStatus);
+            $notProccesing = count($clientsWithoutStatus);
 
-            $recStateOneRecords = $this->Clients->UserClient
+            $reallocationRecords = $this->Clients->UserClient
                 ->find()
                 ->where(['rec_state' => 2])
                 ->count();
@@ -3320,7 +3296,7 @@ class ClientsController extends AppController
 
         } else {
 
-
+            $userId = $this->authUser['id'];
             $clientIdsQuery = $this->Clients->UserClient
                 ->find()
                 ->where([
@@ -3333,7 +3309,7 @@ class ClientsController extends AppController
                 ->find()
                 ->where([
                     'user_id' => $userId,
-                    'stat_created <' => $lastLoginDate
+                    'stat_created >' => $lastLoginDate
                 ])
                 ->count();
 
@@ -3342,8 +3318,8 @@ class ClientsController extends AppController
             $newEnquiresCount = $this->Clients->Enquires
                 ->find()
                 ->where([
-                    'user_id' => $userId,
-                    'stat_created <' => $lastLoginDate
+                    'client_id IN' => $clientIds,
+                    'stat_created >' => $lastLoginDate
                 ])
                 ->count();
 
@@ -3449,17 +3425,17 @@ class ClientsController extends AppController
             //     ])
             //     ->toArray();
 
-            // $clientsWithoutStatus = $this->Clients->find()
-            //     ->select(['id', 'client_name'])
-            //     ->where([
-            //         'stat_created <=' => $previousDateTime,
-            //         'rec_state = 1',
-            //     ])
-            //     ->toArray();
+            $clientsWithoutStatus = $this->Clients->find()
+                ->select(['id', 'client_name'])
+                ->where([
+                    'stat_created <=' => $previousDateTime,
+                    'rec_state = 1',
+                ])
+                ->toArray();
 
-            // $notProccesing = count($clientsWithoutStatus);
+            $notProccesing = count($clientsWithoutStatus);
 
-            $recStateOneRecords = $this->Clients->UserClient
+            $reallocationRecords = $this->Clients->UserClient
                 ->find()
                 ->where(['rec_state' => 2])
                 ->count();
@@ -3479,7 +3455,7 @@ class ClientsController extends AppController
         $commissionCollacted = $commissionCollacted ?? 0;
         $newEnquiresCount = $newEnquiresCount ?? 0;
         // $notProccesing = count($clientsWithoutStatus) ?? 0;
-        $recStateOneRecords = $recStateOneRecords ?? 0;
+        $reallocationRecords = $reallocationRecords ?? 0;
 
         echo json_encode([
             'status' => 'SUCCESS',
@@ -3499,10 +3475,10 @@ class ClientsController extends AppController
                 // 'clientsWithoutBudget' => $clientsWithoutBudget,
                 // 'clientsWithoutPriorty' => $clientsWithoutPriorty,
                 // 'clientsWithoutStatus' => $clientsWithoutStatus,
-                'recStateOneRecords' => $recStateOneRecords,
+                'reallocationRecords' => $reallocationRecords,
                 'user_id' => $userId,
                 'newEnquiresCount' => $newEnquiresCount,
-                // 'notProccesing' => $notProccesing,
+                'notProccesing' => $notProccesing,
             ],
         ]);
         die();

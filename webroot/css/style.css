@@ -686,6 +686,12 @@ a {
 }
 
 /* Inputs And Buttons */
+.linkDisabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    color: grey;
+  }
+  
 .wb-txt-inp {
     width: 100%;
     border: 1px solid #000000;
