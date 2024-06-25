@@ -89,8 +89,11 @@ class UserPoolController extends AppController
         if ($this->request->is(['post'])) {
             $dt['id'] = null;
             $dt['stat_created'] = date('Y-m-d H:i:s');
+
             
-            $rec = $this->UserPool->newEntity($dt);
+
+            $rec = $this->Userpool->newEntity($dt);
+            
             if (isset($dt['pool_id'])) {
                 $rec->pool_id = $dt['pool_id'][0]['value'];
             }
@@ -99,7 +102,7 @@ class UserPoolController extends AppController
         if ($this->request->is(['post', 'patch', 'put'])) {
             
             
-            if ($newRec = $this->UserPool->save($rec)) {
+            if ($newRec = $this->Userpool->save($rec)) {
                 echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
                 die();
             }
@@ -108,11 +111,6 @@ class UserPoolController extends AppController
             die();
         }
     }
-
-    
-    
-
-  
 
     public function delete($id = null)
     {

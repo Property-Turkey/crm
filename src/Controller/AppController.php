@@ -101,6 +101,8 @@ class AppController extends Controller
             $currencyval =  $this->Do->CookiesHandler('currency', 'read');
         }
 		$this->currCurrency = $currencyval ;
+
+        
     }
 
     private function _getAction()
@@ -244,15 +246,15 @@ class AppController extends Controller
             $this->ViewBuilder()->setLayout('Admin');
         }
         
-		if(!empty( $this->request->getQuery('theme')  == '1')){
-            $this->ViewBuilder()->setTheme($this->request->getQuery('theme'));
-            $this->ViewBuilder()->setLayout($this->request->getQuery('theme'));
-        }
+            $this->ViewBuilder()->setTheme('Theme1');
+            // $this->ViewBuilder()->setLayout($this->request->getQuery('theme'));
         
-        // $this->ViewBuilder()->setTheme('Theme1');
-        // $this->ViewBuilder()->setLayout('Theme1');
-            
+        
+        
+        $query_vars =  env('QUERY_STRING');
 
+        // dd()
+        $this->set(compact('query_vars'));
 
         $this->set("_Token", $_Token);
     }

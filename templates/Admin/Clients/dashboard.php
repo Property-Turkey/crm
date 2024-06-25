@@ -395,7 +395,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                 <div class="notifications-boxes">
                     <div class=" colored-box badge redBg" ng-if="rec.notification.rec != 0"
                         ng-click="dashboardRedirectTo('reallocate')">
-                        <span class="notification-badge" format-currency="rec.notification.recStateOneRecords"></span>
+                        <span class="notification-badge" format-currency="rec.notification.reallocationRecords"></span>
                         <i class="fa fa-times-circle-o" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"><?= __('reallocate_clients') ?></div>
                     </div>

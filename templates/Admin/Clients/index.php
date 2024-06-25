@@ -1,19 +1,14 @@
 <?php
 $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getParam('pass')[0];
-$action_type = $this->request->getQuery('action_type') ? $this->request->getQuery('action_type') : '';
-
-
-// dd($_method);
-// $actionType = !isset($this->request->getParam('query')['action_type']) ? 0 : $this->request->getParam('query')['action_type'];
-
-// dd($_pid);
 ?>
 
 <div id="indxPg" class="right_col" role="main" ng-init="
-        doGet('/admin/clients/index/<?= $_pid ?>?list=1', 'list', 'clients');
+        doGet('/admin/clients/index?list=1', 'list', 'clients');
+        
         doGet('/admin/clients/pool', 'rec', 'pool');
-        doGet('/admin/clients/notifications', 'rec', 'notification');
-        doGet('/admin/clients/getClientChanges', 'rec', 'getClientChange');">
+        doGet('/admin/clients/getClientChanges', 'rec', 'getClientChange');
+        doGet('/admin/clients/getTeamMembers', 'rec', 'getTeamMembers');
+        doGet('/admin/clients/getPerformanceData/<?= $_pid ?>?<?= $query_vars ?>', 'rec', 'getPerformanceData');">
 
 
     <main>
@@ -24,31 +19,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
             </h2>
             <form class="dropdowns">
 
-
                 <div class="flex-gap-10 flex-wrap">
 
-                    <!-- <select class="wb-ele">
-                        <option value="All Sales">All Sales</option>
-                        <option value="option">Option</option>
-                        <option value="option">Option</option>
-                    </select>
-
-                    <select class="wb-ele">
-                        <option value="Date">Date</option>
-                        <option value="option">Option</option>
-                        <option value="option">Option</option>
-                    </select> -->
-
-                    <!-- <label for="" class="">
-                        <span class="sm-txt">
-                            <?= __('client_tags') ?>
-                        </span>
-                        <tags-input class="wb-ele-tag" ng-change="doSearch()" ng-model="rec.search.client_tags"
-                            add-from-autocomplete-only="true" display-property="text">
-                            <auto-complete min-length="1" highlightMatchedText="true"
-                                source="loadTags($query, 'categories', 40)"></auto-complete>
-                        </tags-input>
-                    </label> -->
                     <label class="relative">
                         <span class="sm-txt">
                             <?= __('client_tags') ?>
@@ -64,6 +36,40 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
 
                         <span ng-click="doSearch()" class="fa fa-search doSearch"></span>
 
+                    </label>
+
+                    <label class="relative">
+                        <span class="sm-txt">
+                            <?= __('adrs_country') ?>
+                        </span>
+
+                        <tags-input style="padding: 0px;padding-left: 10px;width:161px;" class="wb-txt-inp"
+                            tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}" ng-model="rec.search.adrs_country"
+                            add-from-autocomplete-only="true" max-tags="1" placeholder="<?= __('adrs_country') ?>"
+                            display-property="text" key-property="value">
+                            <auto-complete min-length="1" highlightMatchedText="true"
+                                source="loadTags($query, 'pmscategories', 7)"></auto-complete>
+                        </tags-input>
+
+                        <span ng-click="doSearch();" class="fa fa-search doSearch"></span>
+
+                    </label>
+                    <label for="" class="" ng-if="rec.search.adrs_country">
+                        <span class="sm-txt">
+                            <?= __('Phones') ?>
+                        </span>
+                        <button class="btn btn-danger">
+
+                            <span ng-repeat="tag in rec.search.adrs_country track by $index" 
+                                ng-click="
+                                    setZIndex();
+                                    updateModalElement('phones'); 
+                                    openModal('#subModal'); 
+                                    doGet('/admin/clients/getTeamMembers?adrs_country='+tag.value, 'rec', 'client');
+                                    inlineElement('#elementsContainer', 1, 'view-phones')">
+                                {{ tag.text }}{{$index < (rec.search.adrs_country.length - 1) ? ',' : '' }} </span>
+                                    Phones
+                        </button>
                     </label>
 
                     <!-- <button class="wb-ele"ng-submit="doSearch()"type="submit">Search</button> -->
@@ -131,6 +137,61 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                 </option>
                                 <option ng-repeat="category in rec.pool.categories" value="{{category.id}}">
                                     {{category.category_name}}
+                                </option>
+                            </select>
+                        </label>
+                    <?php } ?>
+
+                    <!-- <?php if (in_array($authUser['user_role'], ['teamleader']) || isset($authUser['user_original_role'])) { ?>
+
+                        <label class="">
+                            <span class="sm-txt">
+                                <?= __('my_members') ?>
+                            </span>
+                            <select class="wb-ele-select col-12" ng-model="rec.search.members" ng-change="doSearch()">
+                                <option value="Select" empty="true">
+                                    <?= __('please_select') ?>
+                                </option>
+                                <option ng-repeat="category in rec.users.members" value="{{category.id}}">
+                                    {{rec.user}}
+                                </option>
+                            </select>
+                        </label>
+                    <?php } ?> -->
+
+
+
+
+                    <!-- <?php if (in_array($authUser['user_role'], ['teamleader']) || isset($authUser['user_original_role'])) { ?>
+                        <label class="">
+                            <span class="sm-txt">
+                                <?= __('my_members') ?>
+                            </span>
+                            <select class="wb-ele-select col-12" ng-model="rec.search.selectedMember" ng-change="onMemberChange() && doSearch()">
+                                <option value="" empty="true">
+                                    <?= __('please_select') ?>
+                                </option>
+                                <option ng-repeat="member in teamMembers" value="{{member.id}}">
+                                
+                                    {{member.user_fullname}}
+                                </option>
+                            </select>
+                        </label>
+                    <?php } ?> -->
+
+
+                    <?php if (in_array($authUser['user_role'], ['teamleader']) || isset($authUser['user_original_role'])) { ?>
+                        <label class="">
+                            <span class="sm-txt">
+                                <?= __('my_members') ?>
+                            </span>
+                            <select class="wb-ele-select col-12" ng-model="rec.search.selectedMember"
+                                ng-change="handleMemberChangeAndSearch()">
+                                <option value="" empty="true">
+                                    <?= __('please_select') ?>
+                                </option>
+                                <option ng-repeat="member in teamMembers" value="{{member.id}}">
+                                    {{member.user_fullname}}
                                 </option>
                             </select>
                         </label>
@@ -605,6 +666,8 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                     <?php if (!in_array($authUser['user_role'], ['aftersale', 'accountant']) || isset($authUser['user_original_role'])) { ?>
                         <div class="client" ng-repeat="itm in lists.clients track by $index">
                             <!-- Client row Start -->
+
+
 
                             <div class="client-row">
                                 <!-- <button type="button" id="client_btn" class="hideIt" ng-click="
@@ -1122,7 +1185,7 @@ $action_type = $this->request->getQuery('action_type') ? $this->request->getQuer
                                             openModal('#subModal'); 
                                             doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
                                             inlineElement('#elementsContainer', 1, 'reminders')" class="btn-link">
-                                                <?= __('edit_reminder') ?>
+                                                <?= __('add_reminder') ?>
                                             </a>
                                         </div>
 

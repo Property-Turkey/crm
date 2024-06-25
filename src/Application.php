@@ -65,7 +65,6 @@ class Application extends BaseApplication
 
         // Load more plugins here
         $this->addPlugin('Theme1');
-        $this->addPlugin('Theme2');
     }
 
     /**

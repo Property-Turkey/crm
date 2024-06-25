@@ -80,7 +80,7 @@ $admin_menu = [
     [
         "name" => "clients",
         "icon" => "user",
-        "roles" => ["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content", "admin.cc", "cc", "field", "accountant", "aftersale", "admin.field"],
+        "roles" => ["admin.root", "admin.portfolio", "teamleader", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content", "admin.cc", "cc", "field", "accountant", "aftersale", "admin.field"],
         "active" => "/clients/index,/clients/save,/clients/view",
         "sub" => [
             ["name" => "all", "url" => ["clients", "index", ""]],

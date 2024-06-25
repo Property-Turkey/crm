@@ -609,10 +609,8 @@
                 
                 
                 if (window.location.href.indexOf('clients') > -1) {
-                    // URL'de "clients" geçiyorsa "clients" sayfasını aç
-                    window.location.href = '/crmre'; // istediğiniz sayfanın URL'si
+                    window.location.href = '/crm'; 
                 } else {
-                    // Aksi takdirde, varsayılan olarak login modalını aç
                     $("#login_mdl")[0].click();
                 }
 

@@ -171,31 +171,31 @@ class UsersController extends AppController
         $ccUsers = $this->Users->find()
             ->contain([
                 'ActionsTodaySpoken' => [
-                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)', 'date' => 'DATE(stat_created)']
                 ],
                 'ActionsTodayCalled' => [
-                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)', 'date' => 'DATE(stat_created)']
                 ],
 
                 'ActionsYesterdayCalled' => [
-                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)', 'date' => 'DATE(stat_created)']
                 ],
                 'ActionsYesterdaySpoken' => [
-                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)', 'date' => 'DATE(stat_created)']
                 ],
 
                 'ActionsBefYesterdayCalled' => [
-                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)', 'date' => 'DATE(stat_created)']
                 ],
                 'ActionsBefYesterdaySpoken' => [
-                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)', 'date' => 'DATE(stat_created)']
                 ],
 
                 'ActionsBefbefYesterdayCalled' => [
-                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)', 'date' => 'DATE(stat_created)']
                 ],
                 'ActionsBefbefYesterdaySpoken' => [
-                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)']
+                    'fields' => ['user_id', 'COUNT' => 'COUNT(*)', 'date' => 'DATE(stat_created)']
                 ],
             ])
             ->where(['user_role' => 'admin.callcenter'])

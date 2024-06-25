@@ -165,7 +165,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                             </button>
                                             <button id="modalBtn" style="font-size: 13px;" class="btn btn-modal"
                                                 ng-click="setZIndex();
-                                                updateModalElement('Categories');
+                                                updateModalElement('Make Team Member');
                                                 doGet('/admin/users?id='+itm.id, 'rec', 'user');
                                                 openModal('#subModal'); inlineElement('#elementsContainer', 1, 'add-team-or-memeber')">
                                                 <i class="fa fa-pencil"></i>

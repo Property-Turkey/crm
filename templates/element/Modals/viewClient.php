@@ -67,9 +67,7 @@
                 <div class="accordion accordion-flush" id="client1">
                     <button type="button" id="client_btn" class="hideIt" ng-click="
                         doGet('/admin/clients?id='+rec.client.id, 'rec', 'client');
-                        doGet('/admin/clients/index?list=1', 'list', 'clients'); 
-                        
-                                        ">
+                        doGet('/admin/clients/index?list=1', 'list', 'clients'); ">
                     </button>
 
 
@@ -166,7 +164,9 @@
                                             <span class="sm-txt">
                                                 <?= __('adrs_country') ?>
                                             </span>
-                                            <div class="wb-ele">{{ rec.client.adrscountry[0].text }}</div>
+                                            
+                                            <div class="wb-ele">
+                                            {{ rec.client.country.category_name }}</div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt">

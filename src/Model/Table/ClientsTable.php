@@ -130,6 +130,12 @@ class ClientsTable extends Table
             'className' => 'Categories',
         ]);
 
+        $this->belongsTo('Country', [
+            'foreignKey' => 'adrs_country',
+            'className' => 'Pmscategories',
+        ]);
+
+
         $this->belongsTo('PoolCategories', [
             'foreignKey' => 'pool_id',
             'className' => 'Categories',
