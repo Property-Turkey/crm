@@ -398,6 +398,8 @@ $urlparse[4] = empty($urlparse[4]) ? '' : $urlparse[4];
                 <button class="hideIt" ng-click="toggleSidebar()"></button>
             </div>
         </div>
+
+        
     </div>
 </nav>
 <!-- Header Ends -->

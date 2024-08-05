@@ -146,100 +146,44 @@ class ReportsController extends AppController
     public function save($id = -1)
     {
         $dt = json_decode(file_get_contents('php://input'), true);
-        // edit mode
+        $this->autoRender = false; // Disable auto rendering
+    
         if ($this->request->is(['patch', 'put'])) {
             $rec = $this->Reports->get($dt['id']);
-            // dd($dt);
-
-            // $dt['property_id'] = $dt['property'][0]['value'] ;
-
-
-            // dd($dt['report_configs']['property_id']);
-// dd($dt['property']);
-            if (isset ($dt['property'][0]['value'])) {
-                $rec->property_id = (int) $dt['property'][0]['value'];
+            
+            if (isset($dt['property'][0]['value'])) {
+                $rec->property_id = (int)$dt['property'][0]['value'];
             }
             
             $dt = $this->Reports->patchEntity($rec, $dt);
-
-            // if (isset($dt['property_id'])) {
-            //     // dd($dt['property_id']);
-            //     $rec->property_id = $dt['property'][0]['value'];
-            // }
-            
-
-        }
-
-        // // add mode
-        if ($this->request->is(['post'])) {
+            // $operationType = 'edit';
+        } elseif ($this->request->is('post')) {
             $dt['id'] = null;
             $dt['stat_created'] = date('Y-m-d H:i:s');
             $dt['user_id'] = $this->authUser['id'];
-
-
+    
+            // dd( $dt['tar_id']);
             $rec = $this->Reports->newEntity($dt);
-
-            if (isset ($dt['property'][0]['value'])) {
-                $rec->property_id = (int) $dt['property'][0]['value'];
-            }
-        }
-
-        if ($this->request->is(['post', 'patch', 'put'])) {
-
-            $this->autoRender = false;
-
-            // $rec->report_configs = json_encode($rec->report_configs, JSON_UNESCAPED_UNICODE);
-// dd($rec->report_configs);
-
-// dd($rec);
-            if ($newRec = $this->Reports->save($rec)) {
-                echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
-                die();
-            }
-
-
-
-
-            // if (!empty($dt['empathy'])) {
-
-            //     $empathyData = array_filter($dt['empathy'], function ($empathy) {
-            //         return !empty($empathy);
-            //     });
-                
-            //     foreach ($empathyData as $k => &$empathy) {
-
-            //         if (!empty($empathy['report_text'])) {
-
-            //             $empathy['report_type'] = $k;
-
-            //             $empathy['tar_tbl'] = 'Clients';
-                        
-            //             $empathy['tar_id'] = $dt['tar_id'];
-
-            //             $empathy['user_id'] = $this->authUser['id'];
-                        
-            //             $empathy['stat_created'] = date('Y-m-d H:i:s');
-            //         }
-                    
-            //     }
-
-
-            //     // $empathyData = array_values($dt['empathy']);
-
-            //     $empathyData = array_values($empathyData);
-
-            //     if ($newRec = $this->Do->adder($empathyData, 'Reports')) {
-            //         echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec)]);
-            //         die();
-            //     }
-            // } else {
-            //     unset($dt['empathy']);
-            //     unset($dt['type_category']);
-            // }
-
             
+            if (isset($dt['property'][0]['value'])) {
+                $rec->property_id = (int)$dt['property'][0]['value'];
+            }
+            
+            // $rec->tar_id = (int)$dt['tar_id'];
+        } else {
+            echo json_encode(["status" => "ERROR", "message" => "Invalid request type"]);
+            die();
         }
+    
+        if ($this->Reports->save($rec)) {
+            echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($rec)]);
+        } else {
+            $errors = $rec->getErrors();
+            echo json_encode(["status" => "ERROR", "message" => "Failed to save the record", "errors" => $errors]);
+        }
+        die();
     }
+    
 
     public function delete($id = null)
     {

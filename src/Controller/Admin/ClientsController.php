@@ -3,6 +3,9 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use DateTime;
+use Cake\Database\Expression\QueryExpression;
+use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use Cake\Core\Configure;
 
@@ -142,7 +145,7 @@ class ClientsController extends AppController
 
         debug($user);
 
-        debug( $action_type);
+        debug($action_type);
 
         dd($date);
 
@@ -158,7 +161,7 @@ class ClientsController extends AppController
                 ])
                 ->toArray();
 
-                dd( $actionResults);
+            dd($actionResults);
 
             $clientIds = [];
             foreach ($actionResults as $action) {
@@ -234,7 +237,7 @@ class ClientsController extends AppController
             $noneSearchable = ['page', 'keyword'];
             $likeFields = ['page', 'keyword'];
             $betweenFields = ['budget_min', 'budget_max', 'keyword', 'page'];
-            $exactFields = ['source_id', 'client_nationality', 'pool_id', 'adrs_city', 'adrs_region', 'client_address'];
+            $exactFields = ['rec_state', 'source_id', 'client_nationality', 'pool_id', 'adrs_city', 'adrs_region', 'client_address', 'id'];
             $otherCtrl = ['client_priority', 'client_current_stage', 'category_id'];
 
 
@@ -266,6 +269,19 @@ class ClientsController extends AppController
                         continue;
                     }
                     if (in_array($col, $exactFields)) {
+                        $conditions['Clients.' . $col] = $val;
+                    } elseif ($col == 'selectedMember') {
+                        $col = "id";
+
+                        $conditions['Clients.UserClient.' . $col. 'IN'] = $val;
+                    } elseif ($col == 'futureId') {
+                        $col = "id";
+                        $conditions['Clients.' . $col] = $val;
+                    } elseif ($col == 'prevId') {
+                        $col = "id";
+                        $conditions['Clients.' . $col] = $val;
+                    } elseif ($col == 'recentId') {
+                        $col = "id";
                         $conditions['Clients.' . $col] = $val;
                     } elseif (in_array($col, $otherCtrl)) {
 
@@ -412,40 +428,47 @@ class ClientsController extends AppController
                 $userRole = $this->authUser['user_role'];
 
                 $query = $this->Clients->find()
-                    ->order(['Clients.' . $_col => $_dir])
-                    ->where([$conditions])
                     ->contain([
                         "ClientSpecs",
-
                         'PoolCategories',
-                        'Reports',
-                        "Reports.TypeCategories",
-                        "Reports.User",
-                        "Reports.Property" => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
+                        'Reports' => [
+                            'TypeCategories',
+                            'User',
+                            'Property' => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']]
+                        ],
                         'TagCategories',
-                        'ClientSpecs',
                         'Categories',
                         'ClientSpecs.Currency',
                         'Reminders',
-                        'Reports',
                         'Sources',
-                        'Reports.Text',
                         'Users',
                         "UserClient.Users",
                         "UserClient",
                         "Books",
-                        "Offers",
-                        "Offers.PropertyRef" => ['fields' => ['property_title', 'property_ref', 'id']],
+                        "Offers" => [
+                            'PropertyRef' => ['fields' => ['property_title', 'property_ref', 'id']]
+                        ],
                         "Actions",
-                        "Reservations",
-                        "Reservations.Property" => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
-                        "Reservations.Project" => ['fields' => ['project_ref', 'id']],
-                        "Reservations.Seller" => ['fields' => ['seller_name', 'id']],
-                        "Reservations.Developer" => ['fields' => ['dev_name', 'id']],
-                        "Reservations.Pmscategory" => ['fields' => ['category_name', 'id']],
-                        "Reservations.Payment",
-                        "Reservations.Currency",
+                        "Reservations" => [
+                            'Property' => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
+                            'Project' => ['fields' => ['project_ref', 'id']],
+                            'Seller' => ['fields' => ['seller_name', 'id']],
+                            'Developer' => ['fields' => ['dev_name', 'id']],
+                            'Pmscategory' => ['fields' => ['category_name', 'id']],
+                            'Payment',
+                            'Currency'
+                        ]
                     ])
+                    ->leftJoinWith('Reminders')
+                    ->leftJoinWith('Reports')
+                    ->order([
+                        'Reminders.reminder_nextcall' => 'ASC',  // today call list
+                        'Clients.client_priority' => 'DESC',      // priority
+                        'Clients.client_budget' => 'DESC',   // budget
+                        'Clients.stat_created' => 'DESC',        // created
+                        'Reports.stat_created' => 'DESC'         // last note date
+                    ])
+                    ->where([$conditions])
                     ->group('Clients.id');
 
                 $lastLoginDate = $this->authUser['stat_lastlogin'];
@@ -462,7 +485,7 @@ class ClientsController extends AppController
                 if ($userRole != 'admin.root' && $userRole != 'admin.admin' && $userRole != 'accountant') {
                     $userId = $this->authUser['id'];
                     $query->matching('UserClient', function ($query) use ($userId) {
-                        return $query->where(['user_id' => $userId]);
+                        return $query->where(['UserClient.user_id' => $userId]);
                     });
                     if (!empty($dt['search']['pool_id'])) {
 
@@ -489,9 +512,11 @@ class ClientsController extends AppController
                 } elseif ($userRole === 'accountant') {
                     $query->matching('Reservations', function ($query) {
                         return $query
-                            ->where('Reservations.downpayment_paid', 1)
-                            ->where('Reservations.rec_state <>', 17)
-                            ->where('Reservations.client_id = Clients.id');
+                            ->where(['Reservations.downpayment_paid' => 1])
+                            ->where(['Reservations.rec_state <>' => 17])
+                            ->where(function (QueryExpression $exp, Query $q) {
+                                return $exp->equalFields('Reservations.client_id', 'Clients.id');
+                            });
                     });
                 } else if ($userRole === 'aftersale') {
 
@@ -669,6 +694,9 @@ class ClientsController extends AppController
 
                 $categoryOptions = $this->Clients->Categories->find('list', ['keyField' => 'id', 'valueField' => 'category_name'])->toArray();
 
+
+
+
                 echo json_encode(
                     [
                         "status" => "SUCCESS",
@@ -739,9 +767,9 @@ class ClientsController extends AppController
             "status" => "SUCCESS",
             "msg" => __("success"),
             "data" => [
-                'notificationsemailPhone' => $notificationsemailPhone,
-                'notificationsemailPhoneCount' => $notificationsemailPhoneCount
-            ]
+                    'notificationsemailPhone' => $notificationsemailPhone,
+                    'notificationsemailPhoneCount' => $notificationsemailPhoneCount
+                ]
         ]);
         die();
     }
@@ -798,8 +826,8 @@ class ClientsController extends AppController
             "status" => "SUCCESS",
             "msg" => __("success"),
             "data" => [
-                'notifications' => $notifications,
-            ]
+                    'notifications' => $notifications,
+                ]
         ]);
         die();
     }
@@ -834,30 +862,30 @@ class ClientsController extends AppController
             ]);
             // dd($dt['client_specs']);
             // debug($dt['adrscountry'][0]['value']);
-            if(isset($dt['client_specs'])){
-                $saleSpecs = $dt['client_specs']; 
-                
+            if (isset($dt['client_specs'])) {
+                $saleSpecs = $dt['client_specs'];
+
                 // debug($dt['adrscountry'][0]['value']);
-            foreach ($saleSpecs as &$saleSpec) {
-                if (isset($saleSpec['clientspec_propertytype'])) {
-                    $saleSpec['clientspec_propertytype'] = json_encode($saleSpec['clientspec_propertytype']);
-                }
-                if (isset($saleSpec['clientspec_beds'])) {
-                    $saleSpec['clientspec_beds'] = json_encode($saleSpec['clientspec_beds']);
-                }
-                if (isset($saleSpec['clientspec_loction_target'])) {
-                    $saleSpec['clientspec_loction_target'] = json_encode($saleSpec['clientspec_loction_target']);
-                }
+                foreach ($saleSpecs as &$saleSpec) {
+                    if (isset($saleSpec['clientspec_propertytype'])) {
+                        $saleSpec['clientspec_propertytype'] = json_encode($saleSpec['clientspec_propertytype']);
+                    }
+                    if (isset($saleSpec['clientspec_beds'])) {
+                        $saleSpec['clientspec_beds'] = json_encode($saleSpec['clientspec_beds']);
+                    }
+                    if (isset($saleSpec['clientspec_loction_target'])) {
+                        $saleSpec['clientspec_loction_target'] = json_encode($saleSpec['clientspec_loction_target']);
+                    }
 
 
 
+                }
+
+                // debug($dt['adrscountry'][0]['value']);
+                $dt['client_specs'] = $saleSpecs;
             }
 
-            // debug($dt['adrscountry'][0]['value']);
-            $dt['client_specs'] = $saleSpecs;
-            }
-            
-          
+
             // debug($dt['adrscountry'][0]['value']);
             //Remove spaces and symbols from the number
             if (isset($dt['client_mobile'])) {
@@ -918,10 +946,9 @@ class ClientsController extends AppController
             $dt['client_priority'] = 1;
             if (!(isset($dt['category_id']))) {
                 $dt['category_id'] = 279;
-
             }
 
-            // //Remove spaces and symbols from the number
+            // Remove spaces and symbols from the number
             if (isset($dt['client_mobile'])) {
                 $clientMobile = preg_replace("/[^0-9]/", "", $dt['client_mobile']);
                 $dt['client_mobile'] = $clientMobile;
@@ -996,29 +1023,27 @@ class ClientsController extends AppController
     public function getTeamMembers()
     {
 
-        $adrs_country = $this->request->getQuery('adrs_country');
+        $userId = $this->authUser['id'];
 
 
-        // $userId = $this->authUser['id'];
 
-        if (isset($adrs_country)) {
+        if (isset($userId)) {
 
-            $phonesAdrs = $this->Clients->find()
-                ->select('client_mobile')
-                ->where(['adrs_country' => $adrs_country])
+            $teamMembers = $this->Clients->Users->find()
+                ->select(['id', 'user_fullname'])
+                ->where(['parent_id' => $userId])
                 ->toArray();
-
 
             echo json_encode([
                 'status' => 'SUCCESS',
-                'data' => $phonesAdrs,
+                'data' => $teamMembers,
                 '_serialize' => ['status', 'data']
             ]);
             die();
         } else {
 
             echo json_encode([
-                'status' => 'SUCCESS',
+                'status' => 'ERROR',
                 'data' => [],
                 '_serialize' => ['status', 'data']
             ]);
@@ -1026,13 +1051,14 @@ class ClientsController extends AppController
         }
     }
 
-    public function pool()
+    public function pools()
     {
+        $this->autoRender = false; // Disable automatic rendering
 
         $userId = $this->authUser['id'];
-
         $poolData = TableRegistry::getTableLocator()->get('UserPool');
 
+        // Fetch pool ids
         $poolIds = $poolData->find()
             ->select(['pool_id'])
             ->where(['user_id' => $userId])
@@ -1053,7 +1079,6 @@ class ClientsController extends AppController
             }
         }
 
-
         $latestActions75 = $this->Clients->Actions->find()
             ->select(['client_id', 'action_type', 'stat_created'])
             ->where(['action_type' => 75])
@@ -1062,10 +1087,8 @@ class ClientsController extends AppController
 
         $clientAction75 = [];
         foreach ($latestActions75 as $action) {
-            // dd($action->stat_created);
             $clientAction75[$action->client_id][] = $action->action_type;
             $clientAction75[$action->client_id][] = $action->stat_created;
-
         }
 
         $latestActions76 = $this->Clients->Actions->find()
@@ -1076,32 +1099,89 @@ class ClientsController extends AppController
 
         $clientAction76 = [];
         foreach ($latestActions76 as $action) {
-
-            // dd($action->stat_created);
-
             $clientAction76[$action->client_id][] = $action->action_type;
             $clientAction76[$action->client_id][] = $action->stat_created;
             $clientAction76[$action->client_id][] = $action->id;
-
         }
 
+        // Previous call list
+        $prevclientResults = [];
+        $lastLoginDate = $this->authUser['stat_lastlogin'];
 
+        $query = $this->Clients->Reminders->find()
+            ->select(['client_id'])
+            ->where([
+                'user_id' => $userId,
+                'reminder_nextcall <' => $lastLoginDate
+            ])
+            ->order(['reminder_nextcall' => 'DESC']);
 
-        echo json_encode([
-            'status' => 'SUCCESS',
-            'msg' => __('success'),
-            'data' => [
-                'categories' => $categories,
-                'latestActions75' => $latestActions75,
-                // 'lastActionType76' => $lastActionType76,
-                // 'clientAction76' => $clientAction76,
-                'clientAction75' => $clientAction75,
-                'clientAction76' => $clientAction76,
-            ],
-        ]);
-        die();
+        $results = $query->all();
+        $clientIds = [];
+        foreach ($results as $result) {
+            $clientIds[] = $result->client_id;
+        }
 
+        if (!empty($clientIds)) {
+            $clientQuery = $this->Clients->find()
+                ->select(['id', 'client_name'])
+                ->where(['Clients.id IN' => $clientIds]);
+
+            $prevclientResults = $clientQuery->all();
+        }
+
+        // Future call list
+        $futureclientResults = [];
+        $query = $this->Clients->Reminders->find()
+            ->select(['client_id'])
+            ->where([
+                'user_id' => $userId,
+                'reminder_nextcall >' => $lastLoginDate
+            ])
+            ->order(['reminder_nextcall' => 'DESC']);
+
+        $results = $query->all();
+        $clientIds = [];
+        foreach ($results as $result) {
+            $clientIds[] = $result->client_id;
+        }
+
+        if (!empty($clientIds)) {
+            $clientQuery = $this->Clients->find()
+                ->select(['id', 'client_name'])
+                ->where(['Clients.id IN' => $clientIds]);
+
+            $futureclientResults = $clientQuery->all();
+        }
+
+        $twoDaysAgo = (new DateTime())->modify('-2 days')->format('Y-m-d H:i:s');
+
+        // Recent clients created in the last two days
+        $recentClientsQuery = $this->Clients->find()
+            ->select(['id', 'client_name', 'stat_created'])
+            ->where(['stat_created >' => $twoDaysAgo]);
+
+        $recentClients = $recentClientsQuery->all();
+
+        // Create and return the response
+        $response = $this->response->withType('application/json')
+            ->withStringBody(json_encode([
+                'status' => 'SUCCESS',
+                'msg' => __('success'),
+                'data' => [
+                        'categories' => $categories,
+                        'latestActions75' => $latestActions75,
+                        'clientAction75' => $clientAction75,
+                        'clientAction76' => $clientAction76,
+                        'prevclientResults' => $prevclientResults,
+                        'futureclientResults' => $futureclientResults,
+                        'recentClients' => $recentClients,
+                    ],
+            ]));
+
+        return $response;
     }
+
     public function dashboard()
     {
 
@@ -1192,8 +1272,11 @@ class ClientsController extends AppController
                     $filteredClientIds[] = $clientId->id;
                 }
 
+                // dd($filteredClientIds);
+
                 if (empty($filteredClientIds)) {
-                    echo json_encode(["status" => "ERROR", "msg" => __("No clients found in the specified date range")]);
+                    $filteredClientIds[] = 0;
+                    // echo json_encode(["status" => "ERROR", "msg" => __("No clients found in the specified date range")]);
                     die();
                 }
 
@@ -1226,9 +1309,9 @@ class ClientsController extends AppController
             }
         }
 
-        // Eğer $clientIds boş ise, 0 döndür
+        // If $clientIds empty return 0
         if (empty($clientIds)) {
-            echo json_encode(["status" => "ERROR", "msg" => __("No clients found")]);
+            echo json_encode(["status" => "ERROR", "msg" => __("No clients found in the specified date range")]);
             die();
         }
 
@@ -1308,8 +1391,8 @@ class ClientsController extends AppController
             "status" => "SUCCESS",
             "msg" => __("success"),
             "data" => [
-                'data' => $data,
-            ]
+                    'data' => $data,
+                ]
         ]);
         die();
 
@@ -2592,37 +2675,37 @@ class ClientsController extends AppController
             "status" => "SUCCESS",
             "msg" => __("success"),
             "data" => [
-                'data' => $data,
-                'data2' => $data2,
-                'data3' => $data3,
-                'data4' => $data4,
-                'sourceDoughnutData' => $sourceDoughnutData,
-                'data6' => $data6,
-                'propertyPieData' => $propertyPieData,
-                'developerTotals' => $developerTotals,
-                'projectTotals' => $projectTotals,
-                'clientBookCounts' => $clientBookCounts,
-                'totalsoldCount' => $totalsoldCount,
-                'totalonlineCount' => $totalonlineCount,
-                'totalcancelCount' => $totalcancelCount,
-                'totalUSDPrice' => $totalUSDPrice,
-                'totalUSDcommission' => $totalUSDcommission,
-                'downpaymentCount' => $downpaymentCount,
-                'percentageRate' => $percentageRate,
-                'ccUsers' => $ccUsers,
-                'userBookCounts' => $userBookCounts,
-                'userReservationCounts' => $userReservationCounts,
-                'userReservationsaleCounts' => $userReservationsaleCounts,
-                'userTotalUSDPriceCounts' => $userTotalUSDPriceCounts,
-                'fieldUsers' => $fieldUsers,
-                'userfieldBookCounts' => $userfieldBookCounts,
-                'userfieldReservationCounts' => $userfieldReservationCounts,
-                'userfieldReservationsaleCounts' => $userfieldReservationsaleCounts,
-                'userfieldTotalUSDPriceCounts' => $userfieldTotalUSDPriceCounts,
-                'userReservationSaleRatios' => $userReservationSaleRatios,
-                'userfieldReservationSaleRatios' => $userfieldReservationSaleRatios,
+                    'data' => $data,
+                    'data2' => $data2,
+                    'data3' => $data3,
+                    'data4' => $data4,
+                    'sourceDoughnutData' => $sourceDoughnutData,
+                    'data6' => $data6,
+                    'propertyPieData' => $propertyPieData,
+                    'developerTotals' => $developerTotals,
+                    'projectTotals' => $projectTotals,
+                    'clientBookCounts' => $clientBookCounts,
+                    'totalsoldCount' => $totalsoldCount,
+                    'totalonlineCount' => $totalonlineCount,
+                    'totalcancelCount' => $totalcancelCount,
+                    'totalUSDPrice' => $totalUSDPrice,
+                    'totalUSDcommission' => $totalUSDcommission,
+                    'downpaymentCount' => $downpaymentCount,
+                    'percentageRate' => $percentageRate,
+                    'ccUsers' => $ccUsers,
+                    'userBookCounts' => $userBookCounts,
+                    'userReservationCounts' => $userReservationCounts,
+                    'userReservationsaleCounts' => $userReservationsaleCounts,
+                    'userTotalUSDPriceCounts' => $userTotalUSDPriceCounts,
+                    'fieldUsers' => $fieldUsers,
+                    'userfieldBookCounts' => $userfieldBookCounts,
+                    'userfieldReservationCounts' => $userfieldReservationCounts,
+                    'userfieldReservationsaleCounts' => $userfieldReservationsaleCounts,
+                    'userfieldTotalUSDPriceCounts' => $userfieldTotalUSDPriceCounts,
+                    'userReservationSaleRatios' => $userReservationSaleRatios,
+                    'userfieldReservationSaleRatios' => $userfieldReservationSaleRatios,
 
-            ]
+                ]
         ]);
         die();
     }
@@ -2838,10 +2921,10 @@ class ClientsController extends AppController
             "status" => "SUCCESS",
             "msg" => __("success"),
             "data" => [
-                'sourceDoughnutData' => $sourceDoughnutData,
-                'users' => $users
+                    'sourceDoughnutData' => $sourceDoughnutData,
+                    'users' => $users
 
-            ]
+                ]
         ]);
         die();
 
@@ -3038,7 +3121,7 @@ class ClientsController extends AppController
         $recState = isset($_GET['recstate']) ? $_GET['recstate'] : '';
         $stateCount = $this->Clients->find()->where(['rec_state' => $recState, 'id IN' => $clientIds])->count();
 
-        // Sıfıra bölme kontrolü
+
         if ($clientCount != 0) {
             $recStateClientsCount = $this->Clients->find()
                 ->where(['rec_state' => $recState, 'id IN' => $clientIds])
@@ -3046,8 +3129,8 @@ class ClientsController extends AppController
 
             $recStateRatio = number_format(($recStateClientsCount / $clientCount) * 100);
         } else {
-            // $clientCount sıfır olduğunda sıfıra bölme hatası oluşmaması için
-            $recStateRatio = 0; // veya başka bir değer
+
+            $recStateRatio = 0;
         }
 
 
@@ -3058,11 +3141,11 @@ class ClientsController extends AppController
 
 
 
-        $addressesTable = TableRegistry::getTableLocator()->get('Addresses');
+        $addressesTable = TableRegistry::getTableLocator()->get('Pmscategories');
 
         $groupedAddresses = $addressesTable->find()
-            ->select(['id', 'adrs_name'])
-            ->where(['parent_id' => 0])
+            ->select(['id', 'category_name'])
+            ->where(['parent_id' => 7])
             ->toArray();
 
         $clientCountries = $this->Clients->find()
@@ -3074,7 +3157,7 @@ class ClientsController extends AppController
 
         foreach ($groupedAddresses as $address) {
             $id = $address['id'];
-            $groupedData[$id]['adrs_name'] = $address['adrs_name'];
+            $groupedData[$id]['category_name'] = $address['category_name'];
             $groupedData[$id]['count'] = 0;
 
             foreach ($clientCountries as $client) {
@@ -3119,12 +3202,12 @@ class ClientsController extends AppController
 
         $addressData = [];
         foreach ($clientCountriesCount as $country => $count) {
-            $address = TableRegistry::getTableLocator()->get('Addresses')->find()->select(['id', 'adrs_name'])->where(['id' => $country])->first();
+            $address = TableRegistry::getTableLocator()->get('Pmscategories')->find()->select(['id', 'category_name'])->where(['id' => $country])->first();
 
-            if ($address && $address->adrs_name) {
+            if ($address && $address->category_name) {
                 $addressData[] = [
                     'adrs_country' => $country,
-                    'adrs_name' => $address->adrs_name,
+                    'category_name' => $address->category_name,
                     'id' => $address->id,
                     'count' => $count,
                 ];
@@ -3138,6 +3221,7 @@ class ClientsController extends AppController
 
 
         $dateFilter = [
+            0 => 'All',
             1 => 'Today',
             2 => 'Weekly',
             3 => 'Monthly',
@@ -3149,23 +3233,23 @@ class ClientsController extends AppController
             "status" => "SUCCESS",
             "msg" => __("success"),
             "data" => [
-                'booksCount' => $booksCount,
-                'pursueCount' => $pursueCount,
-                'actionCount' => $actionCount,
-                'AllactionCount' => $AllactionCount,
-                'reminderCount' => $reminderCount,
-                'clientCount' => $clientCount,
-                'dateFilter' => $dateFilter,
-                'addressData' => $addressData,
-                'groupedData' => $groupedData,
-                'users' => $users,
-                'filterUserData' => $filterUserData,
-                'recStateList' => $recStateList,
-                'recStateRatio' => $recStateRatio,
-                'stateCount' => $stateCount,
-                'selectedRecStateName' => $selectedRecStateName,
+                    'booksCount' => $booksCount,
+                    'pursueCount' => $pursueCount,
+                    'actionCount' => $actionCount,
+                    'AllactionCount' => $AllactionCount,
+                    'reminderCount' => $reminderCount,
+                    'clientCount' => $clientCount,
+                    'dateFilter' => $dateFilter,
+                    'addressData' => $addressData,
+                    'groupedData' => $groupedData,
+                    'users' => $users,
+                    'filterUserData' => $filterUserData,
+                    'recStateList' => $recStateList,
+                    'recStateRatio' => $recStateRatio,
+                    'stateCount' => $stateCount,
+                    'selectedRecStateName' => $selectedRecStateName,
 
-            ]
+                ]
         ]);
         die();
     }
@@ -3462,6 +3546,9 @@ class ClientsController extends AppController
         }
 
 
+
+
+
         $newClientsCount = $newClientsCount ?? 0;
         $newAssignCount = $newAssignCount ?? 0;
         $newBookedCount = $newBookedCount ?? 0;
@@ -3481,25 +3568,25 @@ class ClientsController extends AppController
             'status' => 'SUCCESS',
             'msg' => __('success'),
             'data' => [
-                'newClientsCount' => $newClientsCount,
-                'newBookedCount' => $newBookedCount,
-                'newSoldCount' => $newSoldCount,
-                'newCancelledCount' => $newCancelledCount,
-                'newDownPaymentCount' => $newDownPaymentCount,
-                'newReservedCount' => $newReservedCount,
-                'newSoldOnlineCount' => $newSoldOnlineCount,
-                'newAssignCount' => $newAssignCount,
-                'newReminderCount' => $newReminderCount,
-                'invoiceSend' => $invoiceSend,
-                'commissionCollacted' => $commissionCollacted,
-                // 'clientsWithoutBudget' => $clientsWithoutBudget,
-                // 'clientsWithoutPriorty' => $clientsWithoutPriorty,
-                // 'clientsWithoutStatus' => $clientsWithoutStatus,
-                'reallocationRecords' => $reallocationRecords,
-                'user_id' => $userId,
-                'newEnquiresCount' => $newEnquiresCount,
-                'notProccesing' => $notProccesing,
-            ],
+                    'newClientsCount' => $newClientsCount,
+                    'newBookedCount' => $newBookedCount,
+                    'newSoldCount' => $newSoldCount,
+                    'newCancelledCount' => $newCancelledCount,
+                    'newDownPaymentCount' => $newDownPaymentCount,
+                    'newReservedCount' => $newReservedCount,
+                    'newSoldOnlineCount' => $newSoldOnlineCount,
+                    'newAssignCount' => $newAssignCount,
+                    'newReminderCount' => $newReminderCount,
+                    'invoiceSend' => $invoiceSend,
+                    'commissionCollacted' => $commissionCollacted,
+                    // 'clientsWithoutBudget' => $clientsWithoutBudget,
+                    // 'clientsWithoutPriorty' => $clientsWithoutPriorty,
+                    // 'clientsWithoutStatus' => $clientsWithoutStatus,
+                    'reallocationRecords' => $reallocationRecords,
+                    'user_id' => $userId,
+                    'newEnquiresCount' => $newEnquiresCount,
+                    'notProccesing' => $notProccesing,
+                ],
         ]);
         die();
     }

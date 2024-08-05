@@ -38,12 +38,14 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         <span class="sm-txt">
                             <?= __('date_period') ?>
                         </span>
+                       
                         <select name="category_id" class="wb-ele-dashboard py-1" ng-model="rec.dashboard.dateFilter"
                             ng-change="updateCharts()">
-                            <option value="" selected="selected"><?= __('select_time') ?></option>
-                            <option value="0"> <?= __('all') ?></option>
-                            <option value="{{ dateId }}" ng-repeat="(dateId, dateName) in rec.numbers.dateFilter">{{
-                                dateName }}</option>
+
+                            <option value=""><?=  __('select_time') ?></option>
+                            <option ng-repeat="(dateId, dateName) in rec.numbers.dateFilter" value="{{ dateId }}">
+                                {{ dateName }}
+                            </option>
                         </select>
                     </label>
 
@@ -82,7 +84,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
 
             </div>
 
-            
+
             <div ng-if="notifications2.length > 0">
                 <h4>Recent Changes</h4>
                 <ul>
@@ -117,7 +119,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         </div>
                     </div>
 
-                    
+
 
                     <div class="col-1 colored-box badge redBg" ng-if="rec.notification.newBookedCount != 0"
                         ng-click="dashboardRedirectTo('booked')">
@@ -312,15 +314,33 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                                     </div>
 
                                 </div>
+                                <!-- {{rec.numbers.groupedData}} -->
+                                <!-- <div class="col-12">
+                                    <div ng-repeat="(id, data) in rec.numbers.groupedData"
+                                        class="mt-3 d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img ng-src="{{ '/img/' + data.category_name + '.jpg' }}"
+                                                 ng-alt="{{ '/img/' + data.category_name  }}"class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
+                                            <span class="ms-2">
+                                                {{ data.count }}<br>
+                                                <span style="font-size:12px;">{{ data.category_name }}</span>
+                                            </span>
+                                        </div>
+                                        <div class="text-center text-success">
+                                            {{ (data.count / rec.numbers.clientCount * 100).toFixed(2) }}%
+                                        </div>
+                                    </div>
+                                </div> -->
                                 <div class="col-12">
                                     <div ng-repeat="(id, data) in rec.numbers.groupedData"
                                         class="mt-3 d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <img ng-src="{{ '/img/' + data.adrs_name + '.jpg' }}"
-                                                class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
+                                            <img ng-src="{{'<?= $app_folder ?>/img/png100px/' + countryCodeByName(data.category_name) + '.png' }}"
+                                                ng-alt="{{ data.category_name }}" class="img-fluid rounded-circle"
+                                                style="width: 50px; height: 50px;" />
                                             <span class="ms-2">
                                                 {{ data.count }}<br>
-                                                <span style="font-size:12px;">{{ data.adrs_name }}</span>
+                                                <span style="font-size:12px;">{{ data.category_name }}</span>
                                             </span>
                                         </div>
                                         <div class="text-center text-success">
@@ -328,6 +348,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -349,11 +370,11 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                                     <div ng-repeat="data in rec.numbers.addressData"
                                         class="mt-3 d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <img ng-src="{{ '/img/' + data.adrs_name + '.jpg' }}"
+                                            <img ng-src="{{'<?= $app_folder ?>/img/png100px/' + countryCodeByName(data.category_name) + '.png' }}"
                                                 class="img-fluid rounded-circle" style="width: 50px; height: 50px;" />
                                             <span class="ms-2">
                                                 {{ data.count }}<br>
-                                                <span style="font-size:12px;">{{ data.adrs_name }}</span>
+                                                <span style="font-size:12px;">{{ data.category_name }}</span>
                                             </span>
                                         </div>
                                         <div class="text-center text-success">
@@ -405,9 +426,11 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         <i class="fa fa-stop-circle" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"><?= __('not_proccesing') ?></div>
                     </div>
-                    <div class="colored-box badge greenBg" ng-if="rec.getClientEmailOrPhoneChanges.notificationsemailPhoneCount != 0"
+                    <div class="colored-box badge greenBg"
+                        ng-if="rec.getClientEmailOrPhoneChanges.notificationsemailPhoneCount != 0"
                         ng-click="dashboardRedirectTo('edit')">
-                        <span class="notification-badge" format-currency="rec.getClientEmailOrPhoneChanges.notificationsemailPhoneCount"></span>
+                        <span class="notification-badge"
+                            format-currency="rec.getClientEmailOrPhoneChanges.notificationsemailPhoneCount"></span>
                         <i class="fa fa-user" aria-hidden="true"></i>
                         <div class="m-1 d-none d-lg-block"> <?= __('phone_email_edit') ?>
                         </div>

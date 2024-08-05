@@ -12,7 +12,6 @@
     --gray: #999999;
     --black: #000000;
 
-
     --green2: #28b293eb;
     --blue2: #17a2b8eb;
     --orange2: #e69d3eeb;
@@ -604,7 +603,6 @@ header .logo img {
     border: 1px solid #c7c7c7;
 }
 
-
 /* Currency Select Input */
 .input-group .input {
     width: 28%;
@@ -690,8 +688,8 @@ a {
     cursor: not-allowed;
     pointer-events: none;
     color: grey;
-  }
-  
+}
+
 .wb-txt-inp {
     width: 100%;
     border: 1px solid #000000;
@@ -756,11 +754,10 @@ a {
     text-align: center;
 }
 
-.mr-24{
+.mr-24 {
     margin-right: 34px;
 }
 /* input with span */
-
 
 .wb-ele {
     background-color: white;
@@ -978,6 +975,59 @@ input[type="checkbox"]:checked:after {
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
 }
 
+.filter {
+    width: 400px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: -400px;
+    background-color: #fff;
+    overflow-x: hidden;
+    z-index: 2;
+    transition: all 0.5s;
+}
+
+.filter-bg {
+    width: 0;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: -400px;
+    background-color: rgba(43, 42, 42, 0.466);
+    overflow-x: hidden;
+    z-index: 1;
+    transition: all 0.8s;
+}
+
+.filter.active {
+    width: 400px;
+    left: 0;
+    transition: all 0.6s;
+    z-index: 2;
+}
+
+.filter-bg.active {
+    width: 100%;
+    left: 0;
+    transition: all 0.6s;
+    z-index: 1;
+}
+.filter .btn-exit {
+    width: 100%;
+    background-color: #eee;
+    padding: 13px;
+    font-weight: bold;
+}
+
+.filter .btn-exit img {
+    height: 10px;
+}
+
+.filter .btn-exit button {
+    border: none;
+    background: #eeeeee;
+}
+
 .sidebar {
     width: 400px;
     height: 100%;
@@ -1069,8 +1119,7 @@ input[type="checkbox"]:checked:after {
 .child_menu {
     border-right: 5px solid var(--gentela_darker);
     padding: 0 10px;
-  }
-  
+}
 
 .child_menu li a:hover {
     color: #b93006 !important;
@@ -1079,8 +1128,8 @@ input[type="checkbox"]:checked:after {
 .text-dark {
     width: 30px;
     text-align: center;
-  }
-  
+}
+
 .navbar .menu {
     background-color: var(--color1);
     width: 50px;
@@ -1134,6 +1183,11 @@ input[type="checkbox"]:checked:after {
 
 .navbar .nav-btns .profile {
     font-size: 35px;
+}
+
+.indexNotes {
+    max-height: 300px;
+    overflow-y: scroll;
 }
 
 .navbar .nav-btns .menu {
@@ -1593,7 +1647,7 @@ input[type="checkbox"]:checked:after {
     margin: 0;
 }
 
-.index-note{
+.index-note {
     border-radius: 10px;
     margin: 10px;
     border: 1px solid pink;
@@ -1750,7 +1804,7 @@ tags-input .tags .even.selected {
     font-size: 12px;
     text-align: center;
     overflow: visible;
-     border: 1px solid #ddd;
+    border: 1px solid #ddd;
     cursor: pointer;
     width: auto;
     min-width: 25px;
@@ -1889,7 +1943,7 @@ input:checked + .slider {
     background-color: #3bc14a;
 }
 
-input:checked +  .disabled{
+input:checked + .disabled {
     background-color: #3bc14a;
 }
 
@@ -2086,28 +2140,28 @@ input:checked + .slider:before {
 .blueBg {
     background-color: #7dd8ee;
 }
-.darkRedBg:hover{
+.darkRedBg:hover {
     background-color: #a82b05;
     color: white;
 }
-.darkRedBg{
+.darkRedBg {
     background-color: var(--color1);
     color: white;
 }
-.byCountry{
+.byCountry {
     max-height: 400px;
 }
-.doSearch{
+.doSearch {
     cursor: pointer;
     position: absolute;
-    top: 60%;
-    right: 10px; 
+    bottom: 10%;
+    right: 60%;
     transform: translateY(-50%);
 }
-.relative{
+.relative {
     position: relative;
 }
-.leadFont{
+.leadFont {
     color: #7d7d7d;
 }
 .inline-btn {
@@ -2127,7 +2181,7 @@ input:checked + .slider:before {
     box-shadow: 1px 1px 4px #0009;
     margin: 0 4px 0 0;
 }
-.notifications-dropdown{ 
+.notifications-dropdown {
     z-index: 2 !important;
 }
 .tile_div .tile_div_content {

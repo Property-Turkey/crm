@@ -1073,7 +1073,7 @@
 
                         <div id="client1-collapseTwo" class="accordion-collapse collapse ">
                             <div class="accordion-body">
-                                <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
 
                                     <div class="heading ">
                                         <div class="title"></div>
@@ -1099,7 +1099,7 @@
                                 <div>
 
                                     <div ng-repeat="deals in rec.client.reservations">
-                                        <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <div class="heading">
                                                 <div class="title"></div>
                                                 <div class="flex-gap-10">
