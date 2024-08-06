@@ -1190,6 +1190,7 @@ input[type="checkbox"]:checked:after {
     overflow-y: scroll;
 }
 
+<<<<<<< HEAD
 /* Hide dropdown arrow and style the select box for disabled select elements */
 .disabled-select {
     background-color: #e9ecef; /* Gray background to indicate disabled state */
@@ -1224,6 +1225,8 @@ input[type="checkbox"]:checked:after {
     display: none; /* Hide spinner and calendar picker for datetime-local input in WebKit browsers */
 }
 
+=======
+>>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
 .navbar .nav-btns .menu {
     position: absolute;
     top: 120px;

@@ -1,10 +1,20 @@
 # Define the line ending behavior of the different file extensions
 # Set default behavior, in case users don't have core.autocrlf set.
 * text text=auto eol=lf
+<<<<<<< HEAD
 # Declare files that will always have CRLF line endings on checkout.
 *.bat eol=crlf
 # Declare files that will always have LF line endings on checkout.
 *.pem eol=lf
+=======
+
+# Declare files that will always have CRLF line endings on checkout.
+*.bat eol=crlf
+
+# Declare files that will always have LF line endings on checkout.
+*.pem eol=lf
+
+>>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
 # Denote all files that are truly binary and should not be modified.
 *.png binary
 *.jpg binary
@@ -30,4 +40,7 @@
 *.webm binary
 *.mp4 binary
 *.ogv binary
+<<<<<<< HEAD
 ptpms(1).sql filter=lfs diff=lfs merge=lfs -text
+=======
+>>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8

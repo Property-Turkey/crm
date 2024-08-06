@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
 # CakePHP specific files #
 ##########################
 /config/app_local.php
