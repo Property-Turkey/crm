@@ -630,10 +630,6 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                 <?= __('sales_info') ?>
                                             </div>
                                             <div class="col-6 p-0 col-lg-12">
-<<<<<<< HEAD
-=======
-
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
                                                 <span class="sm-txt">
                                                     <?= __('category_id') ?>
                                                 </span>
@@ -642,7 +638,6 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                     <?= $this->Form->text('category_id', [
                                                         'type' => 'select',
                                                         'options' => $this->Do->cat(37),
-<<<<<<< HEAD
                                                         'class' => 'wb-ele sm-txt-indx col-12' . ($authUser['user_role'] === 'field' ? ' disabled-select' : ''),
                                                         'ng-model' => 'itm.category_id',
                                                         'ng-change' => "doSave({id: itm.id, category_id: itm.category_id}, 'client', 'clients')",
@@ -650,25 +645,11 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                     ]) ?>
                                                 </p>
 
-=======
-                                                        'class' => 'wb-ele sm-txt-indx col-12',
-                                                        'ng-model' => 'itm.category_id',
-                                                        'ng-change' => "doSave({id: itm.id, category_id: itm.category_id}, 'client', 'clients')"
-                                                    ]) ?>
-                                                </p>
-
-
-
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
                                                 <span class="sm-txt">
                                                     <?= __('budget') ?>
                                                 </span>
 
                                                 <p>
-<<<<<<< HEAD
-=======
-
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
                                                     <?= $this->Form->select(
                                                         'client.client_budget',
                                                         [
@@ -687,49 +668,25 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                             '2000001' => 'Dolar 2m +',
                                                         ],
                                                         [
-<<<<<<< HEAD
                                                             'class' => 'wb-ele sm-txt-indx col-12' . ($authUser['user_role'] === 'field' ? ' disabled-select' : ''),
                                                             'label' => false,
                                                             'ng-model' => 'itm.client_budget',
                                                             'ng-change' => "doSave({id: itm.id, client_budget: itm.client_budget}, 'client', 'clients')",
                                                             'disabled' => ($authUser['user_role'] === 'field') ? 'disabled' : false
-=======
-                                                            'class' => 'wb-ele sm-txt-indx col-12',
-                                                            'label' => false,
-                                                            'ng-model' => 'itm.client_budget',
-                                                            'ng-change' => "doSave({id: itm.id, client_budget: itm.client_budget}, 'client', 'clients')"
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
                                                         ]
                                                     ) ?>
                                                 </p>
 
-<<<<<<< HEAD
                                                 <?php if (in_array($authUser['user_role'], ['admin.root', 'admin.admin', 'field']) || isset($authUser['user_original_role'])) { ?>
-=======
-
-
-
-
-
-                                                <?php if (in_array($authUser['user_role'], ['admin.root', 'admin.admin', 'field']) || isset($authUser['user_original_role'])) { ?>
-
-
-
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
                                                     <p class="sm-txt">
                                                         <?= __('rec_state') ?>
                                                     </p>
                                                     <p>
-<<<<<<< HEAD
                                                         <select
                                                             class="wb-ele sm-txt-indx col-12 <?= ($authUser['user_role'] === 'field') ? 'disabled-select' : '' ?>"
                                                             ng-model="itm.rec_state"
                                                             ng-change="doSave({id: itm.id, rec_state: itm.rec_state}, 'client', 'clients')"
                                                             <?= ($authUser['user_role'] === 'field') ? 'disabled' : '' ?>>
-=======
-                                                        <select class="wb-ele sm-txt-indx col-12" ng-model="itm.rec_state"
-                                                            ng-change="doSave({id: itm.id, rec_state: itm.rec_state}, 'client', 'clients')">
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
                                                             <option ng-click="handleButtonClick(recStateId);"
                                                                 ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index"
                                                                 value="{{ recStateId }}"
@@ -738,35 +695,18 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                             </option>
                                                         </select>
                                                     </p>
-<<<<<<< HEAD
                                                 <?php } ?>
 
                                                 <?php if (!in_array($authUser['user_role'], ['admin.root', 'admin.admin', 'field']) || isset($authUser['user_original_role'])) { ?>
-=======
-
-
-                                                <?php } ?>
-
-
-
-                                                <?php if (!in_array($authUser['user_role'], ['admin.root', 'admin.admin', 'field']) || isset($authUser['user_original_role'])) { ?>
-
-
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
                                                     <p class="sm-txt">
                                                         <?= __('rec_state') ?>
                                                     </p>
                                                     <p>
-<<<<<<< HEAD
                                                         <select
                                                             class="wb-ele sm-txt-indx col-12 <?= ($authUser['user_role'] === 'field') ? 'disabled-select' : '' ?>"
                                                             ng-model="itm.rec_state"
                                                             ng-change="doSave({id: itm.id, rec_state: itm.rec_state}, 'client', 'clients')"
                                                             <?= ($authUser['user_role'] === 'field') ? 'disabled' : '' ?>>
-=======
-                                                        <select class="wb-ele sm-txt-indx col-12" ng-model="itm.rec_state"
-                                                            ng-change="doSave({id: itm.id, rec_state: itm.rec_state}, 'client', 'clients')">
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
                                                             <option ng-click="handleButtonClick(recStateId);"
                                                                 ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index"
                                                                 value="{{ recStateId }}"
@@ -776,17 +716,8 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                             </option>
                                                         </select>
                                                     </p>
-<<<<<<< HEAD
                                                 <?php } ?>
                                             </div>
-=======
-
-
-                                                <?php } ?>
-
-                                            </div>
-
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
                                         </div>
 
 
@@ -870,15 +801,10 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                 <input
                                                     ng-change="doSave({client_id: itm.id, reminder_nextcall: itm.reminders[itm.reminders.length - 1].reminder_nextcall}, 'reminder', 'reminders')"
                                                     ng-model="itm.reminders[itm.reminders.length - 1].reminder_nextcall"
-<<<<<<< HEAD
                                                     date-format type="datetime-local"
                                                     class="wb-ele sm-txt-indx <?= ($authUser['user_role'] === 'field') ? 'disabled-input' : '' ?>"
                                                     name="" id="" <?= ($authUser['user_role'] === 'field') ? 'disabled' : '' ?> />
 
-=======
-                                                    date-format type="datetime-local" class="wb-ele sm-txt-indx" name=""
-                                                    id="" />
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
 
 
                                                 <div class="row">
@@ -895,7 +821,6 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
                                                             </div>
 
-<<<<<<< HEAD
                                                             <?php if (!in_array($authUser['user_role'], ['admin.root', 'field', 'teamleader']) || isset($authUser['user_original_role'])) { ?>
                                                                 <div class="note-flex">
                                                                     <div class="row">
@@ -938,49 +863,6 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                                     </div>
                                                                 </div>
                                                             <?php } ?>
-=======
-
-                                                            <div class="note-flex">
-                                                                <div class="row">
-                                                                    <div class="col-6">
-                                                                        <div class="flex-center text-center">
-                                                                            <label class="switch">
-                                                                                <input
-                                                                                    ng-model="rec.pool.clientAction75[itm.id]"
-                                                                                    ng-change="actionSave(itm.id, 75)"
-                                                                                    ng-checked="checkDate(rec.pool.clientAction75[itm.id][1])"
-                                                                                    ng-disabled="checkDate(rec.pool.clientAction75[itm.id][1])"
-                                                                                    name="invoice4" id="finance-client4"
-                                                                                    type="checkbox" />
-                                                                                <span
-                                                                                    ng-class="{ 'slider': true, 'round': true, 'disabled': checkDate(rec.pool.clientAction75[itm.id][1]) }"></span>
-                                                                            </label>
-                                                                            <label for="finance-client3">
-                                                                                <?= __('called') ?>
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-6">
-                                                                        <div class="flex-center text-center">
-                                                                            <label class="switch">
-                                                                                <input
-                                                                                    ng-model="rec.pool.clientAction76[itm.id]"
-                                                                                    ng-change="actionSave(itm.id, 76)"
-                                                                                    ng-checked="checkDate(rec.pool.clientAction76[itm.id][1])"
-                                                                                    ng-disabled="checkDate(rec.pool.clientAction76[itm.id][1])"
-                                                                                    name="invoice4" id="finance-client4"
-                                                                                    type="checkbox" />
-                                                                                <span
-                                                                                    ng-class="{ 'slider': true, 'round': true, 'disabled': checkDate(rec.pool.clientAction76[itm.id][1]) }"></span>
-                                                                            </label>
-                                                                            <label for="finance-client4">
-                                                                                <?= __('spoken') ?>
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
 
                                                         </div>
 
@@ -989,11 +871,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                             </div>
                                         </div>
 
-<<<<<<< HEAD
 {{itm}}
-=======
-
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
 
                                         <div class="col-lg-2 col-12  info">
                                             <div class="col-4 title hideWeb">
@@ -1018,10 +896,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
                                                 <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                                                     <div class="wb-ele">
-<<<<<<< HEAD
                                                       
-=======
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
                                                         <div ng-repeat="notify in itm.user_client track by $index">
                                                             {{notify.user.user_fullname}}
                                                             <small>
