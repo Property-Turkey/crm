@@ -1,0 +1,87 @@
+@font-face {
+  font-family: 'fontello';
+  src: url('../font/fontello.eot?57708677');
+  src: url('../font/fontello.eot?57708677#iefix') format('embedded-opentype'),
+       url('../font/fontello.woff2?57708677') format('woff2'),
+       url('../font/fontello.woff?57708677') format('woff'),
+       url('../font/fontello.ttf?57708677') format('truetype'),
+       url('../font/fontello.svg?57708677#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'fontello';
+    src: url('../font/fontello.svg?57708677#fontello') format('svg');
+  }
+}
+*/
+[class^="fas-"]:before, [class*=" fas-"]:before {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: never;
+
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+
+.fas-home:before { content: '\e800'; } /* '' */
+.fas-clock:before { content: '\e801'; } /* '' */
+.fas-asterisk:before { content: '\e802'; } /* '' */
+.fas-mail:before { content: '\e803'; } /* '' */
+.fas-check:before { content: '\e804'; } /* '' */
+.fas-calendar-outlilne:before { content: '\e805'; } /* '' */
+.fas-close:before { content: '\e806'; } /* '' */
+.fas-phone:before { content: '\e808'; } /* '' */
+.fas-down-open:before { content: '\e809'; } /* '' */
+.fas-left-open:before { content: '\e80a'; } /* '' */
+.fas-right-open:before { content: '\e80b'; } /* '' */
+.fas-up-open:before { content: '\e80c'; } /* '' */
+.fas-left:before { content: '\e80d'; } /* '' */
+.fas-right:before { content: '\e80e'; } /* '' */
+.fas-search:before { content: '\e80f'; } /* '' */
+.fas-cog:before { content: '\e810'; } /* '' */
+.fas-plus:before { content: '\e811'; } /* '' */
+.fas-bell-alt:before { content: '\f0f3'; } /* '' */
+.fas-angle-double-left:before { content: '\f100'; } /* '' */
+.fas-angle-double-right:before { content: '\f101'; } /* '' */
+.fas-angle-left:before { content: '\f104'; } /* '' */
+.fas-angle-right:before { content: '\f105'; } /* '' */
+.fas-flag:before { content: '\f11d'; } /* '' */
+.fas-ellipsis:before { content: '\f141'; } /* '' */
+.fas-ellipsis-vert:before { content: '\f142'; } /* '' */
+.fas-euro:before { content: '\f153'; } /* '' */
+.fas-pound:before { content: '\f154'; } /* '' */
+.fas-dollar:before { content: '\f155'; } /* '' */
+.fas-try:before { content: '\f195'; } /* '' */
+.fas-sticky-note:before { content: '\f249'; } /* '' */
+.fas-user-circle:before { content: '\f2bd'; } /* '' */
