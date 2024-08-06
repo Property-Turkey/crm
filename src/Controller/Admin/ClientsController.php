@@ -497,7 +497,7 @@ class ClientsController extends AppController
                 if ($userRole != 'admin.root' && $userRole != 'admin.admin') {
                     $userId = $this->authUser['id'];
 
-                    // Initialize the query
+                    // Initialize the querygit push
                     $query = $this->Clients->find()
                         ->order(['Clients.' . $_col => $_dir])
                         ->where([$conditions])
