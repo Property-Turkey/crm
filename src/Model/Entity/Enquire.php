@@ -9,23 +9,23 @@ use Cake\ORM\Entity;
  * Enquire Entity
  *
  * @property int $id
- * @property int $client_id
- * @property int $property_id
- * @property string|null $enquiry_clname
- * @property string $enquiry_clemail
- * @property int|null $enquiry_clphone
- * @property int|null $enquiry_clcountry
- * @property int|null $enquiry_source
- * @property string $enquiry_message
+ * @property int|null $client_id
+ * @property int|null $source_id
+ * @property int|null $property_id
+ * @property string|null $enquiry_name
+ * @property string $enquiry_email
+ * @property int|null $enquiry_phone
+ * @property int|null $enquiry_country
+ * @property string|null $enquiry_message
  * @property string|null $enquiry_ipaddress
- * @property string|null $enquiry_lastpage
- * @property string $seo_keywords
- * @property int $seo_host
- * @property int $isindex
- * @property \Cake\I18n\FrozenTime $stat_created
- * @property \Cake\I18n\FrozenTime|null $stat_updated
+ * @property string|null $enquiry_referral
+ * @property string|null $enquiry_host
+ * @property string|null $seo_keywords
+ * @property \Cake\I18n\FrozenTime|null $stat_created
  *
  * @property \App\Model\Entity\Client $client
+ * @property \App\Model\Entity\Category $source
+ * @property \App\Model\Entity\Address $country
  */
 class Enquire extends Entity
 {
@@ -40,20 +40,20 @@ class Enquire extends Entity
      */
     protected $_accessible = [
         'client_id' => true,
+        'source_id' => true,
         'property_id' => true,
-        'enquiry_clname' => true,
-        'enquiry_clemail' => true,
-        'enquiry_clphone' => true,
-        'enquiry_clcountry' => true,
-        'enquiry_source' => true,
+        'enquiry_name' => true,
+        'enquiry_email' => true,
+        'enquiry_phone' => true,
+        'enquiry_country' => true,
         'enquiry_message' => true,
         'enquiry_ipaddress' => true,
-        'enquiry_lastpage' => true,
+        'enquiry_referral' => true,
+        'enquiry_host' => true,
         'seo_keywords' => true,
-        'seo_host' => true,
-        'isindex' => true,
         'stat_created' => true,
-        'stat_updated' => true,
         'client' => true,
+        'source' => true,
+        'country' => true,
     ];
 }

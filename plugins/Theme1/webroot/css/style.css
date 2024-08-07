@@ -802,7 +802,6 @@ a {
     border-radius: 9px;
     padding: 10px 6px;
     font-size: 15px;
-    width: 161px;
     /* white-space: nowrap; */
     overflow: hidden;
 }
@@ -1000,7 +999,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .filter.active {
-    width: 400px;
+    width: 300px;
     left: 0;
     transition: all 0.6s;
     z-index: 2;
@@ -1190,7 +1189,6 @@ input[type="checkbox"]:checked:after {
     overflow-y: scroll;
 }
 
-<<<<<<< HEAD
 /* Hide dropdown arrow and style the select box for disabled select elements */
 .disabled-select {
     background-color: #e9ecef; /* Gray background to indicate disabled state */
@@ -1225,8 +1223,6 @@ input[type="checkbox"]:checked:after {
     display: none; /* Hide spinner and calendar picker for datetime-local input in WebKit browsers */
 }
 
-=======
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
 .navbar .nav-btns .menu {
     position: absolute;
     top: 120px;
@@ -1928,6 +1924,15 @@ tags-input .tags .even.selected {
 
 .lead-preview .down-btns {
     padding-top: 20px;
+    padding-right: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.down-btns {
+    padding-top: 20px;
+    padding-right: 35px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1961,7 +1966,7 @@ tags-input .tags .even.selected {
     right: 0;
     bottom: 0;
     width: 42px;
-    background-color: #7dd8ee;
+    background-color: #15d25f;
     transition: 0.4s;
 }
 
@@ -1977,15 +1982,15 @@ tags-input .tags .even.selected {
 }
 
 input:checked + .slider {
-    background-color: #3bc14a;
+    background-color: #b3b1b1;
 }
 
 input:checked + .disabled {
-    background-color: #3bc14a;
+    background-color: #b3b1b1;
 }
 
 .green-background {
-    background-color: #3bc14a;
+    background-color: #b3b1b1;
 }
 
 .green-background:before {
@@ -2009,7 +2014,7 @@ input:checked + .disabled {
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #3bc14a;
+    box-shadow: 0 0 1px #b3b1b1;
 }
 
 input:checked + .slider:before {
@@ -2192,7 +2197,7 @@ input:checked + .slider:before {
     cursor: pointer;
     position: absolute;
     bottom: 10%;
-    right: 60%;
+    right: 2%;
     transform: translateY(-50%);
 }
 .relative {

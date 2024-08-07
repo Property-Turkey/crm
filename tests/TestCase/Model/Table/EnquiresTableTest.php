@@ -26,6 +26,8 @@ class EnquiresTableTest extends TestCase
     protected $fixtures = [
         'app.Enquires',
         'app.Clients',
+        'app.Sources',
+        'app.Country',
     ];
 
     /**

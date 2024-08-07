@@ -29,12 +29,14 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                         </div>
 
                         <div class="m-2">
+
+                        <h4><b>Filters</b></h4>
                             <label class="relative">
                                 <span class="sm-txt">
                                     <?= __('client_tags') ?>
                                 </span>
 
-                                <tags-input style="padding: 0px;padding-left: 10px;width:161px;" class="wb-txt-inp"
+                                <tags-input style="padding: 0px;padding-left: 10px;" class="wb-txt-inp"
                                     tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
                                     ng-model="rec.search.client_tags" add-from-autocomplete-only="true" max-tags="1"
                                     placeholder="<?= __('client_tags') ?>" display-property="text" key-property="value">
@@ -51,7 +53,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                     <?= __('adrs_country') ?>
                                 </span>
 
-                                <tags-input style="padding: 0px;padding-left: 10px;width:161px;" class="wb-txt-inp"
+                                <tags-input style="padding: 0px;padding-left: 10px;" class="wb-txt-inp"
                                     tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
                                     ng-model="rec.search.adrs_country" add-from-autocomplete-only="true" max-tags="1"
                                     placeholder="<?= __('adrs_country') ?>" display-property="text"
@@ -89,7 +91,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                     <?= __('source_id') ?>
                                 </span>
                                 <?= $this->Form->control('status_id', [
-                                    'class' => 'wb-ele-select',
+                                    'class' => 'wb-ele-select col-12',
                                     'label' => false,
                                     'type' => 'select',
                                     'options' => $this->Do->cat(33),
@@ -127,11 +129,19 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                 <span class="sm-txt">
                                     <?= __('prev_callList') ?>
                                 </span>
-                                <select class="wb-ele-select col-12" ng-model="rec.search.prevId" ng-change="doSearch()"
+                                <!-- <select class="wb-ele-select col-12" ng-model="rec.search.prevId" ng-change="doSearch()"
                                     ng-options="clientId.id as clientId.client_name for clientId in rec.pool.prevclientResults">
                                     <option value=""><?= __('please_select') ?></option>
-                                </select>
+                                </select> -->
+
+                                <button class="wb-ele-select col-12"  ng-model="rec.search.prevId" ng-click="doSearch()">
+                                <?= __('please_select') ?>
+
+                                </button>
                             </label>
+
+
+
 
 
                             <label class="">
@@ -144,6 +154,8 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                     <option value=""><?= __('please_select') ?></option>
                                 </select>
                             </label>
+
+
 
                             <label class="">
                                 <span class="sm-txt">
@@ -640,7 +652,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                         'options' => $this->Do->cat(37),
                                                         'class' => 'wb-ele sm-txt-indx col-12' . ($authUser['user_role'] === 'field' ? ' disabled-select' : ''),
                                                         'ng-model' => 'itm.category_id',
-                                                        'ng-change' => "doSave({id: itm.id, category_id: itm.category_id}, 'client', 'clients')",
+                                                        'ng-change' => "saveFromindexCategory(itm)",
                                                         'disabled' => ($authUser['user_role'] === 'field') ? 'disabled' : false
                                                     ]) ?>
                                                 </p>
@@ -671,7 +683,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                             'class' => 'wb-ele sm-txt-indx col-12' . ($authUser['user_role'] === 'field' ? ' disabled-select' : ''),
                                                             'label' => false,
                                                             'ng-model' => 'itm.client_budget',
-                                                            'ng-change' => "doSave({id: itm.id, client_budget: itm.client_budget}, 'client', 'clients')",
+                                                            'ng-change' => "saveFromindexBudget(itm)",
                                                             'disabled' => ($authUser['user_role'] === 'field') ? 'disabled' : false
                                                         ]
                                                     ) ?>
@@ -685,7 +697,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                         <select
                                                             class="wb-ele sm-txt-indx col-12 <?= ($authUser['user_role'] === 'field') ? 'disabled-select' : '' ?>"
                                                             ng-model="itm.rec_state"
-                                                            ng-change="doSave({id: itm.id, rec_state: itm.rec_state}, 'client', 'clients')"
+                                                            ng-change="saveFromindexStatus(itm)"
                                                             <?= ($authUser['user_role'] === 'field') ? 'disabled' : '' ?>>
                                                             <option ng-click="handleButtonClick(recStateId);"
                                                                 ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index"
@@ -705,7 +717,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                         <select
                                                             class="wb-ele sm-txt-indx col-12 <?= ($authUser['user_role'] === 'field') ? 'disabled-select' : '' ?>"
                                                             ng-model="itm.rec_state"
-                                                            ng-change="doSave({id: itm.id, rec_state: itm.rec_state}, 'client', 'clients')"
+                                                            ng-change="saveFromindexStatus(itm)"
                                                             <?= ($authUser['user_role'] === 'field') ? 'disabled' : '' ?>>
                                                             <option ng-click="handleButtonClick(recStateId);"
                                                                 ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index"
@@ -806,22 +818,22 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                     name="" id="" <?= ($authUser['user_role'] === 'field') ? 'disabled' : '' ?> />
 
 
-
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <div class="row">
-                                                            <div class="col-12 mb-2">
-                                                                <div class="btn darkRedBg mt-1" type="button" ng-click="setZIndex();
+                                                <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'callcenter']) || isset($authUser['user_original_role'])) { ?>
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="row">
+                                                                <div class="col-12 mb-2">
+                                                                    <div class="btn darkRedBg mt-1" type="button" ng-click="setZIndex();
                                                                 newEntity('reminder'); 
                                                                 openModal('#subModal'); 
                                                                 doGet('/admin/clients?id=' + itm.id, 'rec', 'client');
                                                                 inlineElement('#elementsContainer', 1, 'reminders')">
-                                                                    <?= __('snooze') ?>
+                                                                        <?= __('snooze') ?>
+                                                                    </div>
+
                                                                 </div>
 
-                                                            </div>
 
-                                                            <?php if (!in_array($authUser['user_role'], ['admin.root', 'field', 'teamleader']) || isset($authUser['user_original_role'])) { ?>
                                                                 <div class="note-flex">
                                                                     <div class="row">
                                                                         <div class="col-6">
@@ -862,16 +874,16 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            <?php } ?>
+
+
+                                                            </div>
 
                                                         </div>
-
-                                                    </div>
-                                                </div>
+                                                    </div><?php } ?>
                                             </div>
                                         </div>
 
-{{itm}}
+
 
                                         <div class="col-lg-2 col-12  info">
                                             <div class="col-4 title hideWeb">
@@ -896,7 +908,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
                                                 <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                                                     <div class="wb-ele">
-                                                      
+
                                                         <div ng-repeat="notify in itm.user_client track by $index">
                                                             {{notify.user.user_fullname}}
                                                             <small>
@@ -986,9 +998,9 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
                                 <div id="{{itm.id}}" class="accordion-collapse collapse "
                                     style="background-color: #f7f0e2;">
-                                    <div class="mx-4">
+                                    <div class="mx-4 py-5">
 
-                                        <div class="accordion mt-5" id="accordionNotesForm">
+                                        <div class="accordion" id="accordionNotesForm">
                                             <div class="accordion-item mb-2">
                                                 <h2 class="accordion-header" id="headingTwo">
                                                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -997,28 +1009,16 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                         <?= __('add_notes') ?>
                                                     </button>
                                                 </h2>
-<<<<<<< HEAD
 
                                                 <div id="collapseForm{{itm.id}}" class="accordion-collapse collapse p-3"
                                                     aria-labelledby="headingTwo">
 
-=======
-                                               
-                                                <div id="collapseForm{{itm.id}}" class="accordion-collapse collapse p-3"
-                                                    aria-labelledby="headingTwo">
-                                                    
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
                                                     <form class="row inlineElement"
                                                         ng-submit="
                                                                 rec.report.tar_tbl = 'Clients'; 
                                                                 rec.report.tar_id = itm.id;  
                                                                 doSave(rec.report, 'report', 'reports', '#client_btn', '#report_preloader');">
                                                         <div class="row">
-<<<<<<< HEAD
-
-=======
-                                                        
->>>>>>> c7e8557681b3707446f8217e6b727b4f0de47db8
                                                             <label class="col-md-6 col-12 col-lg-3">
                                                                 <span class="sm-txt"><?= __('report_type') ?></span>
                                                                 <?= $this->Form->control('report_type', [
@@ -1069,7 +1069,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
 
 
-                                        <div class="accordion mt-5" id="accordionNotes">
+                                        <div class="accordion" id="accordionNotes">
                                             <div class="accordion-item mb-2">
                                                 <h2 class="accordion-header" id="headingOne">
                                                     <button class="accordion-button" type="button" data-bs-toggle="collapse"

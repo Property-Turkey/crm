@@ -89,8 +89,13 @@ class UserClientController extends AppController
 
         // add mode
         if ($this->request->is(['post'])) {
+             
+             
             $dt['stat_created'] = date('Y-m-d H:i:s');
             $client_id = $dt['client_id'];
+            
+            
+            
             if (isset($dt['recState'])) {
 
                 $dt['user_id'] = $this->authUser['id'];
@@ -106,13 +111,22 @@ class UserClientController extends AppController
 
                 $dt['user_id'] = $dt['user'][0]['value'];
                 // dd($dt['user_id']);
+            } elseif (isset($dt['type'])) {
+               
+                $dt['user_id'] = $this->authUser['id'];
             } else {
 
-                $user_id = $dt['user'][0]['value'];
+                if(isset($dt['user'])){
+                    $user_id = $dt['user'][0]['value'];
+                }else{
+                    $dt['user_id'] = $this->authUser['id'];
+                    $user_id = $dt['user_id'];
+                }
+                
                 $UserClientTable = $this->getTableLocator()->get('UserClient');
                 $ClientTable = $this->getTableLocator()->get('UserClient')->Clients->get($client_id);
 
-
+// dd($dt);
                 if ($ClientTable->client_current_stage == 2) {
 
                     $ClientTable->client_current_stage = 3;

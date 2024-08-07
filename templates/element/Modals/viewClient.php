@@ -164,9 +164,9 @@
                                             <span class="sm-txt">
                                                 <?= __('adrs_country') ?>
                                             </span>
-                                            
+
                                             <div class="wb-ele">
-                                            {{ rec.client.country.category_name }}</div>
+                                                {{ rec.client.country.category_name }}</div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt">
@@ -197,7 +197,7 @@
                                     <div class="heading pb-0 mb-0 mt-3">
                                         <div class="title leadFont">Lead Information</div>
                                         <div class="flex-gap-10">
-                                            <?php if (!in_array($authUser['user_role'], ['accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                            <?php if (!in_array($authUser['user_role'], ['accountant', 'aftersale', 'field']) || isset($authUser['user_original_role'])) { ?>
                                                 <button id="modalBtn" class="leadFont btn btn-modal" ng-click="setZIndex();
                                                 updateModalElement('Lead Information');
                                                 doGet('/admin/clients?id=' + rec.client.id, 'rec', 'client');
@@ -344,54 +344,57 @@
                                                 }}</div>
                                         </div>
 
-                                        <div class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt">
-                                                <?= __('actions') ?>
-                                            </span>
-                                            <div class="note-flex">
+                                        <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'callcenter']) || isset($authUser['user_original_role'])) { ?>
 
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt">
+                                                    <?= __('actions') ?>
+                                                </span>
                                                 <div class="note-flex">
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <div class="flex-center text-center">
-                                                                <label class="switch">
-                                                                    <input
-                                                                        ng-model="rec.pool.clientAction75[rec.client.id]"
-                                                                        ng-change="actionSave(rec.client.id, 75)"
-                                                                        ng-checked="checkDate(rec.pool.clientAction75[rec.client.id][1])"
-                                                                        ng-disabled="checkDate(rec.pool.clientAction75[rec.client.id][1])"
-                                                                        name="invoice4" id="finance-client4"
-                                                                        type="checkbox" />
-                                                                    <span class="slider round"></span>
-                                                                </label>
-                                                                <label for="finance-client3">
-                                                                    <?= __('called') ?>
-                                                                </label>
+
+                                                    <div class="note-flex">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <div class="flex-center text-center">
+                                                                    <label class="switch">
+                                                                        <input
+                                                                            ng-model="rec.pool.clientAction75[rec.client.id]"
+                                                                            ng-change="actionSave(rec.client.id, 75)"
+                                                                            ng-checked="checkDate(rec.pool.clientAction75[rec.client.id][1])"
+                                                                            ng-disabled="checkDate(rec.pool.clientAction75[rec.client.id][1])"
+                                                                            name="invoice4" id="finance-client4"
+                                                                            type="checkbox" />
+                                                                        <span class="slider round"></span>
+                                                                    </label>
+                                                                    <label for="finance-client3">
+                                                                        <?= __('called') ?>
+                                                                    </label>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="flex-center text-center">
-                                                                <label class="switch">
-                                                                    <input
-                                                                        ng-model="rec.pool.clientAction76[rec.client.id]"
-                                                                        ng-change="actionSave(rec.client.id, 76)"
-                                                                        ng-checked="checkDate(rec.pool.clientAction76[rec.client.id][1])"
-                                                                        ng-disabled="checkDate(rec.pool.clientAction76[rec.client.id][1])"
-                                                                        name="invoice4" id="finance-client4"
-                                                                        type="checkbox" />
-                                                                    <span class="slider round"></span>
-                                                                </label>
-                                                                <label for="finance-client4">
-                                                                    <?= __('spoken') ?>
-                                                                </label>
+                                                            <div class="col-6">
+                                                                <div class="flex-center text-center">
+                                                                    <label class="switch">
+                                                                        <input
+                                                                            ng-model="rec.pool.clientAction76[rec.client.id]"
+                                                                            ng-change="actionSave(rec.client.id, 76)"
+                                                                            ng-checked="checkDate(rec.pool.clientAction76[rec.client.id][1])"
+                                                                            ng-disabled="checkDate(rec.pool.clientAction76[rec.client.id][1])"
+                                                                            name="invoice4" id="finance-client4"
+                                                                            type="checkbox" />
+                                                                        <span class="slider round"></span>
+                                                                    </label>
+                                                                    <label for="finance-client4">
+                                                                        <?= __('spoken') ?>
+                                                                    </label>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                 </div>
 
                                             </div>
-
-                                        </div>
+                                        <?php } ?>
 
 
 
@@ -498,12 +501,11 @@
                                                 </button>
                                             <?php } ?>
                                             <button ng-if="rec.search.pool_id" class="btn btn-modal" id="modalBtn"
-                                                ng-click="setZIndex();
-                                                updateModalElement('Assign');
-                                                newEntity('newTag');
-                                                tagList = [];
-                                                openModal('#subModal'); 
-                                                inlineElement('#elementsContainer', 1, 'assign')">
+                                                ng-click="
+                                                    rec.user_client.type = 2;
+                                                    rec.user_client.client_id = rec.client.id;
+
+                                                    doSave(rec.user_client, 'user_client', 'userclient', '#client_btn', '#deneme');">
                                                 <i class="fas-plus"></i>
                                                 <?= __('self_assign') ?>
                                             </button>
@@ -629,7 +631,7 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['accountant', 'aftersale', 'field']) || isset($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" ng-click="
                                             newEntity('report');
                                             setZIndex();
@@ -937,6 +939,7 @@
                                                 ng-click="setZIndex();updateModalElement('Books');newEntity('book'); openModal('#subModal'); inlineElement('#elementsContainer', 1, 'booking')">
                                                 <i class="fas-plus"></i> Add
                                             </button>
+
                                         <?php } ?>
 
 
@@ -947,97 +950,107 @@
                                     <?= __('no_data') ?>
 
                                 </div>
-                                <div class="white-box mb-2" ng-if="!rec.client.books == ''"
-                                    ng-repeat="clbook in rec.client.books track by $index">
 
-                                    <div class="row">
-                                        <div class="col-md-6 col-12 col-lg-3" ng-if="!(rec.book.in_turkey == 1)">
-                                            <span class="sm-txt">
-                                                <?= __('booking_date') ?>
-                                            </span>
-                                            <div class="wb-ele">
-                                                <?= $this->Html->image('/img/datepicker.png', ['' => '']) ?>
-                                                {{ clbook.book_arrivedate.split(' ')[0] }}
+                                <div ng-repeat="clbook in rec.client.books track by $index">
+                                    <button id="modalBtn" class="btn btn-modal"
+                                        ng-click="setZIndex();
+                                            updateModalElement('Book');
+                                            doGet('/admin/books?id='+ clbook.id, 'rec', 'book');
+                                            openModal('#subModal'); inlineElement('#elementsContainer', 1, 'booking')">
+                                        <i class="fa fa-pencil"></i>
+                                        <?= __('edit_book') ?>
+                                    </button>
+                                    <div class="white-box mb-2" ng-if="!rec.client.books == ''">
 
-                                            </div>
-                                        </div>
 
-                                        <div class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt">
-                                                <?= __('booking_departuredate') ?>
-                                            </span>
-                                            <div class="wb-ele">
-                                                <?= $this->Html->image('/img/datepicker.png', ['' => '']) ?>
-                                                {{ clbook.book_departuredate.split(' ')[0] }}
+                                        <div class="row">
+                                            <div class="col-md-6 col-12 col-lg-3" ng-if="!(rec.book.in_turkey == 1)">
+                                                <span class="sm-txt">
+                                                    <?= __('booking_date') ?>
+                                                </span>
+                                                <div class="wb-ele">
+                                                    <?= $this->Html->image('/img/datepicker.png', ['' => '']) ?>
+                                                    {{ clbook.book_arrivedate.split(' ')[0] }}
 
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt">
-                                                <?= __('booking_time') ?>
-                                            </span>
-                                            <div class="wb-ele">
-                                                <?= $this->Html->image('/img/icons_60284.svg', ['' => '']) ?>
-                                                <div class="line-height-10">
-                                                    <!-- {{ clbook.book_meetdate }} -->
-                                                    {{ clbook.book_meetdate.split(' ')[0] }}
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt">
-                                                <?= __('current_location') ?>
-                                            </span>
-                                            <div class="wb-ele">
-                                                <i class="fa fa-map-o"></i>
-                                                <div class="line-height-10">
-                                                    {{ clbook.book_meetplace }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt">
-                                                <?= __('meet_period') ?>
-                                            </span>
-                                            <div class="wb-ele">
-                                                <i class="fa fa-calendar-times-o"></i>
-                                                <div class="line-height-10">
-                                                    {{ clbook.book_meetperiod }} day
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12 col-lg-3">
-                                            <span class="sm-txt">
-                                                <?= __('meet_place') ?>
-                                            </span>
-                                            <div class="wb-ele">
-                                                <i class="fa fa-home"></i>
-                                                <div class="line-height-10">
-                                                    {{ clbook.book_current_stay }}
-                                                </div>
-                                            </div>
-                                        </div>
 
-                                        <div class="col-md-6 col-12 col-lg-3" ng-if="clbook.in_turkey == 1">
-                                            <span class="sm-txt">
-                                                <?= __('in_turkey') ?>
-                                            </span>
-                                            <div class="wb-ele">
-                                                <i class="fa fa-check-circle-o greenText"></i>
-                                            </div>
-                                        </div>
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt">
+                                                    <?= __('booking_departuredate') ?>
+                                                </span>
+                                                <div class="wb-ele">
+                                                    <?= $this->Html->image('/img/datepicker.png', ['' => '']) ?>
+                                                    {{ clbook.book_departuredate.split(' ')[0] }}
 
-                                        <div class="col-md-6 col-12 col-lg-3"
-                                            ng-if="clbook.in_turkey == 0 || clbook.in_turkey == null">
-                                            <span class="sm-txt">
-                                                <?= __('in_turkey') ?>
-                                            </span>
-                                            <div class="wb-ele">
-                                                <i class="fa fa-check-circle-o redText"></i>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- <div class="dropdown">
+
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt">
+                                                    <?= __('booking_time') ?>
+                                                </span>
+                                                <div class="wb-ele">
+                                                    <?= $this->Html->image('/img/icons_60284.svg', ['' => '']) ?>
+                                                    <div class="line-height-10">
+                                                        <!-- {{ clbook.book_meetdate }} -->
+                                                        {{ clbook.book_meetdate.split(' ')[0] }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt">
+                                                    <?= __('current_location') ?>
+                                                </span>
+                                                <div class="wb-ele">
+                                                    <i class="fa fa-map-o"></i>
+                                                    <div class="line-height-10">
+                                                        {{ clbook.book_meetplace }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt">
+                                                    <?= __('meet_period') ?>
+                                                </span>
+                                                <div class="wb-ele">
+                                                    <i class="fa fa-calendar-times-o"></i>
+                                                    <div class="line-height-10">
+                                                        {{ clbook.book_meetperiod }} day
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt">
+                                                    <?= __('meet_place') ?>
+                                                </span>
+                                                <div class="wb-ele">
+                                                    <i class="fa fa-home"></i>
+                                                    <div class="line-height-10">
+                                                        {{ clbook.book_current_stay }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-12 col-lg-3" ng-if="clbook.in_turkey == 1">
+                                                <span class="sm-txt">
+                                                    <?= __('in_turkey') ?>
+                                                </span>
+                                                <div class="wb-ele">
+                                                    <i class="fa fa-check-circle-o greenText"></i>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-12 col-lg-3"
+                                                ng-if="clbook.in_turkey == 0 || clbook.in_turkey == null">
+                                                <span class="sm-txt">
+                                                    <?= __('in_turkey') ?>
+                                                </span>
+                                                <div class="wb-ele">
+                                                    <i class="fa fa-check-circle-o redText"></i>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="dropdown">
                                             <button class="sm-btn float" type="button" data-bs-toggle="dropdown"
                                                 aria-expanded="false">
                                                 <i class="fas-ellipsis"></i>
@@ -1051,8 +1064,11 @@
                                                 </li>
                                             </ul>
                                         </div> -->
+                                        </div>
                                     </div>
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
@@ -1404,7 +1420,7 @@
                             <div class="heading">
                                 <div class="title">History</div>
                                 <div class="flex-gap-10">
-                                    
+
 
                                 </div>
                             </div>
@@ -1416,13 +1432,14 @@
                                 <?= __('no_data') ?>
 
                             </div>
-                            <div ng-repeat="clrem in rec.getClientChange.notifications track by $index" ng-if="clrem.client_id == rec.client.id">
-                        
-                            {{}}
+                            <div ng-repeat="clrem in rec.getClientChange.notifications track by $index"
+                                ng-if="clrem.client_id == rec.client.id">
+
+                                {{}}
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                       
+
                                     </div>
                                 </div>
                                 <div class="white-box mt-2">
@@ -1433,29 +1450,29 @@
                                                 <?= __('history') ?>
                                             </span>
                                             <div class="wb-ele">
-                                            <i class="fas-clock"></i>
+                                                <i class="fas-clock"></i>
                                                 <div class="line-height-10" ng-bind="clrem.changes[0]">
-                                                
+
                                                 </div>
                                             </div>
                                         </div>
 
-                                        
-                                        </div>
 
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
-        </div>
 
+
+
+        </div>
     </div>
+
+</div>
 </div>
 
 

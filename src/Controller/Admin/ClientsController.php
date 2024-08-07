@@ -288,6 +288,38 @@ class ClientsController extends AppController
                         $col = "id";
                         $conditions['Clients.' . $col] = $val;
                     } elseif ($col == 'prevId') {
+
+                        dd(1);
+                        $userId = $this->authUser['id'];
+                        // Previous call list
+                        $prevclientResults = [];
+                        $lastLoginDate = $this->authUser['stat_lastlogin'];
+
+                        $query = $this->Clients->Reminders->find()
+                            ->select(['client_id'])
+                            ->where([
+                                'user_id' => $userId,
+                                'reminder_nextcall <' => $lastLoginDate
+                            ])
+                            ->order(['reminder_nextcall' => 'DESC']);
+
+                        $results = $query->all();
+                        $clientIds = [];
+                        foreach ($results as $result) {
+                            $clientIds[] = $result->client_id;
+                        }
+
+                        if (!empty($clientIds)) {
+                            $clientQuery = $this->Clients->find()
+                                ->select(['id', 'client_name'])
+                                ->where(['Clients.id IN' => $clientIds]);
+
+                            $val = $clientQuery->all();
+                        }
+
+
+                        $conditions['Clients.id IN'] = $val;
+
                         $col = "id";
                         $conditions['Clients.' . $col] = $val;
                     } elseif ($col == 'recentId') {
@@ -433,6 +465,161 @@ class ClientsController extends AppController
             }
 
 
+            // // LIST
+            // if (!empty($_list)) {
+            //     $userRole = $this->authUser['user_role'];
+
+            //     $query = $this->Clients->find()
+            //         ->contain([
+            //             "ClientSpecs",
+            //             'PoolCategories',
+            //             'Reports' => [
+            //                 'TypeCategories',
+            //                 'User',
+            //                 'Property' => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']]
+            //             ],
+            //             'TagCategories',
+            //             'Categories',
+            //             'Offers',
+            //             'ClientSpecs.Currency',
+            //             'Reminders',
+            //             'Sources',
+            //             'Users',
+            //             "UserClient.Users" => ['fields' => ['user_fullname', 'id']],
+            //             "UserClient",
+            //             "Books",
+            //             "Offers" => [
+            //                 'PropertyRef' => ['fields' => ['property_title', 'property_ref', 'id']]
+            //             ],
+            //             "Actions",
+            //             "Reservations" => [
+            //                 'Property' => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
+            //                 'Project' => ['fields' => ['project_ref', 'id']],
+            //                 'Seller' => ['fields' => ['seller_name', 'id']],
+            //                 'Developer' => ['fields' => ['dev_name', 'id']],
+            //                 'Pmscategory' => ['fields' => ['category_name', 'id']],
+            //                 'Payment',
+            //                 'Currency'
+            //             ]
+            //         ])
+            //         ->leftJoinWith('Reminders')
+            //         ->leftJoinWith('Reports')
+            //         // ->leftJoinWith('UserClient')
+            //         ->order([
+            //             'Reminders.reminder_nextcall' => 'ASC',  // today call list
+            //             'Clients.client_priority' => 'DESC',      // priority
+            //             'Clients.client_budget' => 'DESC',   // budget
+            //             'Clients.stat_created' => 'DESC',        // created
+            //             'Reports.stat_created' => 'DESC'         // last note date
+            //         ])
+            //         ->where([$conditions])
+            //         ->group('Clients.id');
+
+            //     $lastLoginDate = $this->authUser['stat_lastlogin'];
+            //     function getClientIds($query)
+            //     {
+            //         $results = $query->toArray();
+            //         $clientIds = [];
+            //         foreach ($results as $result) {
+            //             $clientIds[] = $result->client_id ?? $result->id;
+            //         }
+            //         return $clientIds;
+            //     }
+
+            //     if ($userRole != 'admin.root' && $userRole != 'admin.admin') {
+            //         $userId = $this->authUser['id'];
+
+            //         // Initialize the querygit push
+            //         $query = $this->Clients->find()
+            //             ->order(['Clients.' . $_col => $_dir])
+            //             ->where([$conditions])
+            //             ->contain([
+            //                 // Add necessary associations if needed
+            //             ])
+            //             ->group('Clients.id');
+
+            //         // Filter by pool_id if provided
+            //         if (!empty($dt['search']['pool_id'])) {
+            //             $selectedPoolId = $dt['search']['pool_id'];
+            //             $query->matching('PoolCategories', function ($query) use ($selectedPoolId) {
+            //                 return $query->where(['PoolCategories.id' => $selectedPoolId]);
+            //             });
+            //         }
+
+
+
+            //         // if ($userRole === 'teamleader') {
+
+            //         //     $teamleaderId = $this->authUser['id'];
+            //         //     $teamleaderClientIds = $this->Clients->UserClient->find()
+            //         //         ->select(['client_id'])
+            //         //         ->where(['user_id' => $teamleaderId])
+            //         //         ->extract('client_id')
+            //         //         ->toArray();
+
+            //         //     // If selectedMember is provided, get their client IDs
+            //         //     if (isset($dt['search']['selectedMember']) && !empty($dt['search']['selectedMember'])) {
+            //         //         $selectedMemberId = $dt['search']['selectedMember'];
+            //         //         $selectedMemberClientIds = $this->Clients->UserClient->find()
+            //         //             ->select(['client_id'])
+            //         //             ->where(['user_id' => $selectedMemberId])
+            //         //             ->extract('client_id')
+            //         //             ->toArray();
+
+            //         //         // Use client IDs of selectedMember if provided
+            //         //         $clientIds = $selectedMemberClientIds;
+            //         //     } else {
+            //         //         // Use teamleader's client IDs
+            //         //         $clientIds = $teamleaderClientIds;
+            //         //     }
+
+            //         //     // Ensure $clientIds is not empty before applying the condition
+            //         //     if (!empty($clientIds)) {
+            //         //         $query->where(['Clients.id IN' => $clientIds]);
+            //         //     } else {
+            //         //         // Handle the case where there are no client IDs
+            //         //         $query->where(['Clients.id' => null]); // This will return no results
+            //         //     }
+            //         // }
+            //         elseif ($userRole === 'accountant') {
+            //             $query->matching('Reservations', function ($query) {
+            //                 return $query
+            //                     ->where(['Reservations.downpayment_paid' => 1])
+            //                     ->where(['Reservations.rec_state <>' => 17])
+            //                     ->where(function (QueryExpression $exp, Query $q) {
+            //                         return $exp->equalFields('Reservations.client_id', 'Clients.id');
+            //                     });
+            //             });
+            //         } elseif ($userRole === 'aftersale') {
+            //             $query->matching('Clients', function ($query) {
+            //                 return $query
+            //                     ->where(['Clients.downpayment_paid' => 14])
+            //                     ->where(['Reservations.rec_state <>' => 17])
+            //                     ->where(['Reservations.client_id = Clients.id']);
+            //             });
+
+            //             $query->where(function ($exp, $query) {
+            //                 return $exp->in('rec_state', [14, 15]);
+            //             });
+            //         }
+
+            //     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             // LIST
             if (!empty($_list)) {
                 $userRole = $this->authUser['user_role'];
@@ -472,7 +659,6 @@ class ClientsController extends AppController
                     ])
                     ->leftJoinWith('Reminders')
                     ->leftJoinWith('Reports')
-                    // ->leftJoinWith('UserClient')
                     ->order([
                         'Reminders.reminder_nextcall' => 'ASC',  // today call list
                         'Clients.client_priority' => 'DESC',      // priority
@@ -484,6 +670,7 @@ class ClientsController extends AppController
                     ->group('Clients.id');
 
                 $lastLoginDate = $this->authUser['stat_lastlogin'];
+
                 function getClientIds($query)
                 {
                     $results = $query->toArray();
@@ -497,82 +684,58 @@ class ClientsController extends AppController
                 if ($userRole != 'admin.root' && $userRole != 'admin.admin') {
                     $userId = $this->authUser['id'];
 
-                    // Initialize the querygit push
-                    $query = $this->Clients->find()
-                        ->order(['Clients.' . $_col => $_dir])
-                        ->where([$conditions])
-                        ->contain([
-                            // Add necessary associations if needed
-                        ])
-                        ->group('Clients.id');
-
                     // Filter by pool_id if provided
                     if (!empty($dt['search']['pool_id'])) {
+                        // $selectedPoolId = $dt['search']['pool_id'];
+                        // $query->matching('PoolCategories', function ($query) use ($selectedPoolId) {
+                        //     return $query->where(['PoolCategories.id' => $selectedPoolId]);
+                        // });
+
+
+
+
+
                         $selectedPoolId = $dt['search']['pool_id'];
-                        $query->matching('PoolCategories', function ($query) use ($selectedPoolId) {
-                            return $query->where(['PoolCategories.id' => $selectedPoolId]);
-                        });
+                        // dd($selectedPoolId);
+                        $selectedPoolIds = $this->Clients->find()
+                            ->select(['id'])
+                            ->where(['pool_id' => $selectedPoolId])
+                            ->extract('id')
+                            ->toArray();
+
+                        // dd($selectedPoolIds);
+                        // Use client IDs of selectedMember if provided
+                        $query->where(['Clients.id IN' => $selectedPoolIds]);
                     }
 
-                    if ($userRole === 'teamleader') {
-                        
-                        $teamleaderId = $this->authUser['id'];
-                        $teamleaderClientIds = $this->Clients->UserClient->find()
+
+                    // If selectedMember is provided, get their client IDs
+                    elseif (isset($dt['search']['selectedMember']) && !empty($dt['search']['selectedMember'])) {
+                        $selectedMemberId = $dt['search']['selectedMember'];
+                        $selectedMemberClientIds = $this->Clients->UserClient->find()
                             ->select(['client_id'])
-                            ->where(['user_id' => $teamleaderId])
+                            ->where(['user_id' => $selectedMemberId])
                             ->extract('client_id')
                             ->toArray();
 
-                        // If selectedMember is provided, get their client IDs
-                        if (isset($dt['search']['selectedMember']) && !empty($dt['search']['selectedMember'])) {
-                            $selectedMemberId = $dt['search']['selectedMember'];
-                            $selectedMemberClientIds = $this->Clients->UserClient->find()
-                                ->select(['client_id'])
-                                ->where(['user_id' => $selectedMemberId])
-                                ->extract('client_id')
-                                ->toArray();
+                        // Use client IDs of selectedMember if provided
+                        $query->where(['Clients.id IN' => $selectedMemberClientIds]);
+                    } else {
 
-                            // Use client IDs of selectedMember if provided
-                            $clientIds = $selectedMemberClientIds;
-                        } else {
-                            // Use teamleader's client IDs
-                            $clientIds = $teamleaderClientIds;
-                        }
+                        $clientIdsQuery = $this->Clients->UserClient->find()
+                            ->select(['client_id'])
+                            ->where(['user_id' => $userId])
+                            ->extract('client_id')
+                            ->toArray();
 
-                        // Ensure $clientIds is not empty before applying the condition
-                        if (!empty($clientIds)) {
-                            $query->where(['Clients.id IN' => $clientIds]);
+                        if (!empty($clientIdsQuery)) {
+                            $query->where(['Clients.id IN' => $clientIdsQuery]);
                         } else {
-                            // Handle the case where there are no client IDs
+                            // Handle case where there are no client IDs
                             $query->where(['Clients.id' => null]); // This will return no results
                         }
-                    } elseif ($userRole === 'accountant') {
-                        $query->matching('Reservations', function ($query) {
-                            return $query
-                                ->where(['Reservations.downpayment_paid' => 1])
-                                ->where(['Reservations.rec_state <>' => 17])
-                                ->where(function (QueryExpression $exp, Query $q) {
-                                    return $exp->equalFields('Reservations.client_id', 'Clients.id');
-                                });
-                        });
-                    } elseif ($userRole === 'aftersale') {
-                        $query->matching('Clients', function ($query) {
-                            return $query
-                                ->where(['Clients.downpayment_paid' => 14])
-                                ->where(['Reservations.rec_state <>' => 17])
-                                ->where(['Reservations.client_id = Clients.id']);
-                        });
-
-                        $query->where(function ($exp, $query) {
-                            return $exp->in('rec_state', [14, 15]);
-                        });
                     }
 
-                    
-                    $clients = $query->all();
-                    
-                } else {
-                    // Logic for admin roles or other roles
                 }
 
 
@@ -1001,30 +1164,43 @@ class ClientsController extends AppController
                 $dt['client_phone'] = $clientPhone;
             }
 
-            $existingClient = $this->Clients->find()
-                ->where(['client_email' => $dt['client_email']])
-                ->first();
-
-            if ($existingClient) {
-                echo json_encode(["status" => "EMAIL_EXISTS", "client_id" => $existingClient->id]);
-                die();
-            }
-
-
-
-            // if (isset($dt['enquires'][0]['property'][0]['value'])) {
-            //     $rec->property_id = $dt['enquires'][0]['property'][0]['value'];
-            // }
-
-
-            // dd($dt['enquires'][0]['property'][0]['value']);
             unset($dt['country']);
             $rec = $this->Clients->newEntity($dt);
             if (isset($dt['adrscountry'])) {
                 $rec->adrs_country = $dt['adrscountry'][0]['value'];
             }
-            // dd($rec);
-            // debug($dt['adrscountry']);
+
+            $existingClient = $this->Clients->find()
+                ->where(['client_email' => $dt['client_email']])
+                ->first();
+
+
+            if ($existingClient) {
+                $EnquiresTable = $this->getTableLocator()->get('Enquires');
+                $enquireData = [
+                    'client_id' => $existingClient->id,
+                    'enquiry_name' => $existingClient->client_name,
+                    'enquiry_email' => $existingClient->client_email,
+                    'enquiry_phone' => $existingClient->client_mobile,
+                    'enquiry_country' => $rec->adrs_country,
+                    'enquiry_ipaddress' => $this->request->clientIp(),
+                    'stat_created' => date('Y-m-d H:i:s')
+                ];
+
+                $enquireEntity = $EnquiresTable->newEntity($enquireData);
+
+
+
+                if ($EnquiresTable->save($enquireEntity)) {
+                    echo json_encode(["status" => "EMAIL_EXISTS", "enquire_id" => $enquireEntity->id]);
+                    die();
+                } else {
+                    echo json_encode(["status" => "FAIL", "data" => $enquireEntity->getErrors()]);
+                    die();
+                }
+            }
+
+
         }
 
 
