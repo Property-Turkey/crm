@@ -30,7 +30,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
                         <div class="m-2">
 
-                        <h4><b>Filters</b></h4>
+                            <h4><b>Filters</b></h4>
                             <label class="relative">
                                 <span class="sm-txt">
                                     <?= __('client_tags') ?>
@@ -80,8 +80,8 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                     doGet('/admin/clients/getTeamMembers?adrs_country='+tag.value, 'rec', 'client');
                                     inlineElement('#elementsContainer', 1, 'view-phones')">
                                         {{ tag.text }}{{ $index < (rec.search.adrs_country.length - 1) ? ',' : '' }}
-                                            </span>
-                                            Phones
+                                    </span>
+                                    Phones
                                 </button>
                             </label>
 
@@ -134,10 +134,10 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                     <option value=""><?= __('please_select') ?></option>
                                 </select> -->
 
-                                <button class="wb-ele-select col-12"  ng-model="rec.search.prevId" ng-click="doSearch()">
+                                <!-- <button class="wb-ele-select col-12"  ng-model="rec.search.prevId" ng-click="doSearch()">
                                 <?= __('please_select') ?>
 
-                                </button>
+                                </button> -->
                             </label>
 
 
@@ -906,7 +906,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                 </div>
 
 
-                                                <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
+                                                <!-- <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                                                     <div class="wb-ele">
 
                                                         <div ng-repeat="notify in itm.user_client track by $index">
@@ -936,7 +936,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                             </div>
                                                         </div>
                                                     </div>
-                                                <?php } ?>
+                                                <?php } ?>-->
 
 
 
@@ -958,12 +958,13 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                                     ng-if="notify.rec_state == 2"
                                                                     class="fa fa-exclamation-circle redColor"
                                                                     aria-hidden="true"></i>
-                                                            </small>{{$index < (itm.user_client.length - 1) ? ',' : '' }} </div>
+                                                            </small>{{$index < (itm.user_client.length - 1) ? ',' : '' }}
                                                         </div>
+                                                    </div>
 
 
 
-                                                        <div class="row">
+                                                    <!-- <div class="row">
                                                             <div>
                                                                 <div class="col-12" data-bs-toggle="modal"
                                                                     data-bs-target="#viewReallocate_mdl"
@@ -981,171 +982,269 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                                 </div>
                                                             </div>
 
+                                                        </div> -->
+
+
+                                                    <div class="row" ng-repeat="(recStateId, recStateName) in itm.user_client track by (recStateName.id + recStateName.user.user_fullname)">
+
+                                                        <div class="noData mt-3" ng-if=" recStateName.rec_state != 2">
+                                                            <?= __('no_request') ?> for {{recStateName.user.user_fullname}}
                                                         </div>
 
 
 
+                                                        <div class="heading mb-2" ng-if="recStateName.rec_state == 2">
+                                                            <div class="title" style="color: #7d7d7d;">{{recStateName.user.user_fullname}}</div>
+                                                        </div>
 
+                                                        <div class="row" ng-if="recStateName.rec_state == 2" style="display: flex; justify-content: space-between; align-items: center;">
+                                                            <div class="col-6" style="flex: 0 0 45%; margin: 0 5%;">
+                                                                <div class="btn btn-gray mt-1" type="button" ng-click="
+            rec.user_client.accept = 2;
+            rec.user_client.client_id = recStateName.client_id;
+            rec.user_client.user_id = recStateName.user.id;
+            doSave(rec.user_client, 'user_client', 'userclient', '#client_btn', '#deneme');
+            doGet('/admin/userclient?client_id=' + itm.id, 'rec', 'client');">
+                                                                    Accept
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6" style="flex: 0 0 45%; margin: 0 5%;">
+                                                                <div class="btn btn-gray mt-1" type="button" ng-click="
+            rec.user_client.reject = 2;
+            rec.user_client.client_id = recStateName.client_id;
+            rec.user_client.user_id = recStateName.user.id;
+            doSave(rec.user_client, 'user_client', 'userclient', '#client_btn', '#deneme');
+            doGet('/admin/userclient?client_id=' + itm.id, 'rec', 'client');">
+                                                                    Reject
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        <form class="row col-12 inlineElement" ng-if="recStateName.rec_state == 2"
+                                                            ng-submit="
+                                    rec.user_client.client_id = recStateName.client_id;
+                                    rec.user_client.reallocate = 2;
+                                    rec.user_client.userclient_id = recStateName.id;
+
+                                    doSave(rec.user_client, 'user_client', 'userclient', '#client_btn', '#userclient_preloader');">
+
+                                                            <label for="" class="col-6 col-sm-12">
+                                                                <span class="sm-txt">
+                                                                    <?= __('client_current_stage') ?>
+                                                                </span>
+                                                                <tags-input style="padding: 0px;padding-left: 10px;" ng-model="rec.user_client.user"
+                                                                    add-from-autocomplete-only="true"
+                                                                    placeholder="Select <?= __('client_current_stage') ?>"
+                                                                    display-property="text" key-property="value" class="wb-txt-inp"
+                                                                    tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
+                                                                    <auto-complete min-length="0" load-on-focus="true" load-on-empty="true"
+                                                                        max-results-to-show="30" source="loadTags($query, 'users', '', 'admin.callcenter')">
+                                                                    </auto-complete>
+                                                                </tags-input>
+                                                            </label>
+
+                                                            <div class="down-btns mt-1 d-flex justify-content-start">
+                                                                <div class="flex-gap-10 ">
+                                                                    <button class="btn btn-danger" id="userclient_preloader" type="submit" style="white-space: nowrap;">
+                                                                        <?= __('change_advisor') ?>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+
+                                                        <form class="row col-12 inlineElement" ng-if="recStateName.rec_state == 2" id="client_form"
+                                                            ng-submit="
+                                                                rec.client.client_id = recStateName.client_id;
+                                                                rec.client.user_id = recStateName.user_id;
+                                                                doSave(rec.client, 'client', 'clients', '#client_btn', '#userpool_preloader');">
+
+                                                            <label class="col-md-6 col-12 col-lg-12">
+                                                                <span class="sm-txt">
+                                                                    <?= __('pool_name') ?>
+                                                                </span>
+                                                                <tags-input placeholder="Add This Client to Pool"
+                                                                    style="padding: 0px;padding-left: 10px;" ng-model="rec.client.pool"
+                                                                    class="wb-txt-inp"
+                                                                    tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}">
+                                                                    <auto-complete min-length="0" load-on-focus="true" load-on-empty="true"
+                                                                        max-results-to-show="30" source="loadTags($query, 'categories', 28)">
+                                                                    </auto-complete>
+                                                                </tags-input>
+                                                            </label>
+
+                                                            <div class="down-btns mt-1 d-flex justify-content-start">
+                                                                <div class="flex-gap-10 ">
+                                                                    <button type="submit" class="btn btn-danger" id="userpool_preloader">
+                                                                        <?= __('change_pool') ?>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
                                                     </div>
-                                                <?php } ?>
+
+
                                             </div>
+                                        <?php } ?>
                                         </div>
-
-
                                     </div>
+
 
                                 </div>
 
-                                <div id="{{itm.id}}" class="accordion-collapse collapse "
-                                    style="background-color: #f7f0e2;">
-                                    <div class="mx-4 py-5">
+                            </div>
 
-                                        <div class="accordion" id="accordionNotesForm">
-                                            <div class="accordion-item mb-2">
-                                                <h2 class="accordion-header" id="headingTwo">
-                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                        data-bs-target="#collapseForm{{itm.id}}" aria-expanded="false"
-                                                        aria-controls="collapseForm{{itm.id}}">
-                                                        <?= __('add_notes') ?>
-                                                    </button>
-                                                </h2>
+                            <div id="{{itm.id}}" class="accordion-collapse collapse "
+                                style="background-color: #f7f0e2;">
+                                <div class="mx-4 py-5">
 
-                                                <div id="collapseForm{{itm.id}}" class="accordion-collapse collapse p-3"
-                                                    aria-labelledby="headingTwo">
+                                    <div class="accordion" id="accordionNotesForm">
+                                        <div class="accordion-item mb-2">
+                                            <h2 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseForm{{itm.id}}" aria-expanded="false"
+                                                    aria-controls="collapseForm{{itm.id}}">
+                                                    <?= __('add_notes') ?>
+                                                </button>
+                                            </h2>
 
-                                                    <form class="row inlineElement"
-                                                        ng-submit="
+                                            <div id="collapseForm{{itm.id}}" class="accordion-collapse collapse p-3"
+                                                aria-labelledby="headingTwo">
+
+                                                <form class="row inlineElement"
+                                                    ng-submit="
                                                                 rec.report.tar_tbl = 'Clients'; 
                                                                 rec.report.tar_id = itm.id;  
                                                                 doSave(rec.report, 'report', 'reports', '#client_btn', '#report_preloader');">
-                                                        <div class="row">
-                                                            <label class="col-md-6 col-12 col-lg-3">
-                                                                <span class="sm-txt"><?= __('report_type') ?></span>
-                                                                <?= $this->Form->control('report_type', [
-                                                                    'type' => 'select',
-                                                                    'options' => $this->Do->cat(53),
-                                                                    'class' => 'wb-ele-select-modal col-12',
-                                                                    'ng-model' => 'rec.report.report_type'
-                                                                ]) ?>
-                                                            </label>
-                                                            <label class="col-md-6 col-12 col-lg-3"
-                                                                style="position: relative;">
-                                                                <span class="sm-txt"> <?= __('property_id') ?> </span>
-                                                                <tags-input style="padding: 0px;padding-left: 10px;"
-                                                                    class="wb-txt-inp"
-                                                                    tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
-                                                                    ng-model="rec.report.property"
-                                                                    add-from-autocomplete-only="true" max-tags="1"
-                                                                    placeholder="<?= __('property_id') ?>"
-                                                                    display-property="text" key-property="value"
-                                                                    ng-disabled="rec.report.property"
-                                                                    ng-style="{'background-color': rec.report.property ? '#eeeeee' : 'initial'}">
-                                                                    <auto-complete min-length="0" load-on-focus="true"
-                                                                        load-on-empty="true" max-results-to-show="30"
-                                                                        source="loadTags($query, 'pmsproperties', '0')"></auto-complete>
-                                                                </tags-input>
-                                                                <span ng-if="rec.report.property_id"
-                                                                    ng-click="rec.report.property = ''; rec.report.property_id = '';"
-                                                                    class="fa fa-times"
-                                                                    style="cursor: pointer; position: absolute; top: 55%; right: 20px; transform: translateY(-50%);"></span>
-                                                            </label>
-                                                            <label for="" class="col-12">
-                                                                <span class="sm-txt"> Note </span>
-                                                                <textarea ng-model="rec.report.report_text"
-                                                                    class="wb-txt-inp" name="" id="" cols="30" rows="3"
-                                                                    placeholder="The Note"></textarea>
-                                                            </label>
+                                                    <div class="row">
+                                                        <label class="col-md-6 col-12 col-lg-3">
+                                                            <span class="sm-txt"><?= __('report_type') ?></span>
+                                                            <?= $this->Form->control('report_type', [
+                                                                'type' => 'select',
+                                                                'options' => $this->Do->cat(53),
+                                                                'class' => 'wb-ele-select-modal col-12',
+                                                                'ng-model' => 'rec.report.report_type'
+                                                            ]) ?>
+                                                        </label>
+                                                        <label class="col-md-6 col-12 col-lg-3"
+                                                            style="position: relative;">
+                                                            <span class="sm-txt"> <?= __('property_id') ?> </span>
+                                                            <tags-input style="padding: 0px;padding-left: 10px;"
+                                                                class="wb-txt-inp"
+                                                                tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
+                                                                ng-model="rec.report.property"
+                                                                add-from-autocomplete-only="true" max-tags="1"
+                                                                placeholder="<?= __('property_id') ?>"
+                                                                display-property="text" key-property="value"
+                                                                ng-disabled="rec.report.property"
+                                                                ng-style="{'background-color': rec.report.property ? '#eeeeee' : 'initial'}">
+                                                                <auto-complete min-length="0" load-on-focus="true"
+                                                                    load-on-empty="true" max-results-to-show="30"
+                                                                    source="loadTags($query, 'pmsproperties', '0')"></auto-complete>
+                                                            </tags-input>
+                                                            <span ng-if="rec.report.property_id"
+                                                                ng-click="rec.report.property = ''; rec.report.property_id = '';"
+                                                                class="fa fa-times"
+                                                                style="cursor: pointer; position: absolute; top: 55%; right: 20px; transform: translateY(-50%);"></span>
+                                                        </label>
+                                                        <label for="" class="col-12">
+                                                            <span class="sm-txt"> Note </span>
+                                                            <textarea ng-model="rec.report.report_text"
+                                                                class="wb-txt-inp" name="" id="" cols="30" rows="3"
+                                                                placeholder="The Note"></textarea>
+                                                        </label>
+                                                    </div>
+                                                    <div class="down-btns mt-4 d-flex justify-content-end">
+                                                        <div class="flex-gap-10">
+                                                            <button class="btn btn-danger" id="report_preloader"
+                                                                type="submit"><?= __('save_changes') ?></button>
                                                         </div>
-                                                        <div class="down-btns mt-4 d-flex justify-content-end">
-                                                            <div class="flex-gap-10">
-                                                                <button class="btn btn-danger" id="report_preloader"
-                                                                    type="submit"><?= __('save_changes') ?></button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
+                                    </div>
 
 
 
-                                        <div class="accordion" id="accordionNotes">
-                                            <div class="accordion-item mb-2">
-                                                <h2 class="accordion-header" id="headingOne">
-                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                        data-bs-target="#{{itm.id}}2" aria-expanded="false"
-                                                        aria-controls="{{itm.id}}2">
-                                                        <?= __('view_allNotes') ?>
-                                                    </button>
-                                                </h2>
-                                                <div class="indexNotes">
-                                                    <div id="{{itm.id}}2" ng-repeat="clsale in itm.reports track by $index"
-                                                        class="accordion-collapse collapse show"
-                                                        aria-labelledby="headingOne">
+                                    <div class="accordion" id="accordionNotes">
+                                        <div class="accordion-item mb-2">
+                                            <h2 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#{{itm.id}}2" aria-expanded="false"
+                                                    aria-controls="{{itm.id}}2">
+                                                    <?= __('view_allNotes') ?>
+                                                </button>
+                                            </h2>
+                                            <div class="indexNotes">
+                                                <div id="{{itm.id}}2" ng-repeat="clsale in itm.reports track by $index"
+                                                    class="accordion-collapse collapse show"
+                                                    aria-labelledby="headingOne">
 
-                                                        <div ng-click="fillReportForm(clsale)">
+                                                    <div ng-click="fillReportForm(clsale)">
 
-                                                            <div class="grid">
-                                                                <div class="heading">
-                                                                    <div class="title"></div>
-                                                                </div>
-                                                                <div class="noData" ng-if="itm.reports == ''">
-                                                                    <?= __('no_data') ?>
-                                                                </div>
-                                                                <div class="note index-note">
-                                                                    <div class="box-heading d-flex">
-                                                                        <div class="col-lg-2 text-nowrap">
-                                                                            <i class="fas-sticky-note"></i>
-                                                                            {{ clsale.type_category.category_name }}
-                                                                            {{DtSetter('rec_stateSale',
+                                                        <div class="grid">
+                                                            <div class="heading">
+                                                                <div class="title"></div>
+                                                            </div>
+                                                            <div class="noData" ng-if="itm.reports == ''">
+                                                                <?= __('no_data') ?>
+                                                            </div>
+                                                            <div class="note index-note">
+                                                                <div class="box-heading d-flex">
+                                                                    <div class="col-lg-2 text-nowrap">
+                                                                        <i class="fas-sticky-note"></i>
+                                                                        {{ clsale.type_category.category_name }}
+                                                                        {{DtSetter('rec_stateSale',
                                                                             clsale.client_current_stage,
                                                                             clsale.report_type)}}
-                                                                            ,<b> {{ clsale.user.user_fullname }}</b>
-                                                                            <p>
-                                                                                <i class="fas-home"></i>
-                                                                                {{ clsale.property.property_ref}}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="col-lg-8 text p-2">
-                                                                            <p>{{ clsale.report_text }}</p>
-                                                                        </div>
-                                                                        <div class="flex-center flex-gap-10">
-                                                                            <b> {{ clsale.stat_created.split(' ')[1]}} </b>
-                                                                        </div>
+                                                                        ,<b> {{ clsale.user.user_fullname }}</b>
+                                                                        <p>
+                                                                            <i class="fas-home"></i>
+                                                                            {{ clsale.property.property_ref}}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="col-lg-8 text p-2">
+                                                                        <p>{{ clsale.report_text }}</p>
+                                                                    </div>
+                                                                    <div class="flex-center flex-gap-10">
+                                                                        <b> {{ clsale.stat_created.split(' ')[1]}} </b>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </div>
+
                                         </div>
                                     </div>
-
                                 </div>
 
                             </div>
 
-                            <!-- Client row End -->
-
                         </div>
-                    <?php } ?>
+
+                        <!-- Client row End -->
+
                 </div>
-                <!-- Dashboard Content End -->
-
-
-
-
-                <!-- Dashboard Nav Start -->
-                <div class="dash-nav flex-center p-2">
-                    <?php echo $this->element('paginator-ng') ?>
-                </div>
-                <!-- Dashboard Nav End -->
+            <?php } ?>
             </div>
-        </section>
-        <!-- Dashboard End -->
-    </main>
+            <!-- Dashboard Content End -->
+
+
+
+
+            <!-- Dashboard Nav Start -->
+            <div class="dash-nav flex-center p-2">
+                <?php echo $this->element('paginator-ng') ?>
+            </div>
+            <!-- Dashboard Nav End -->
+</div>
+</section>
+<!-- Dashboard End -->
+</main>
 
 </div>
 
