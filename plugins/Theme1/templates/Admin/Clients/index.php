@@ -1024,11 +1024,11 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
                                                         <form class="row col-12 inlineElement" ng-if="recStateName.rec_state == 2"
                                                             ng-submit="
-                                    rec.user_client.client_id = recStateName.client_id;
-                                    rec.user_client.reallocate = 2;
-                                    rec.user_client.userclient_id = recStateName.id;
+                                                                    rec.user_client.client_id = recStateName.client_id;
+                                                                    rec.user_client.reallocate = 2;
+                                                                    rec.user_client.userclient_id = recStateName.id;
 
-                                    doSave(rec.user_client, 'user_client', 'userclient', '#client_btn', '#userclient_preloader');">
+                                                                    doSave(rec.user_client, 'user_client', 'userclient', '#client_btn', '#userclient_preloader');">
 
                                                             <label for="" class="col-6 col-sm-12">
                                                                 <span class="sm-txt">
