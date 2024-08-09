@@ -1274,3 +1274,12 @@ msgstr "8+4"
 
 msgid "phone_email_edit"
 msgstr "Email-Phone changed"
+
+msgid "future_callList"
+msgstr "Future Calls List"
+
+msgid "prev_callList"
+msgstr "Previous Calls List"
+
+msgid "fresh_clients"
+msgstr "Fresh Clients List"

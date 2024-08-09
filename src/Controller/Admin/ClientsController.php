@@ -285,46 +285,107 @@ class ClientsController extends AppController
                         $conditions['Clients.id IN'] = $val;
 
                     } elseif ($col == 'futureId') {
-                        $col = "id";
-                        $conditions['Clients.' . $col] = $val;
-                    } elseif ($col == 'prevId') {
 
-                        dd(1);
                         $userId = $this->authUser['id'];
-                        // Previous call list
-                        $prevclientResults = [];
-                        $lastLoginDate = $this->authUser['stat_lastlogin'];
-
+                        $twelveHoursLater = (new DateTime())->modify('+12 hours')->format('Y-m-d H:i:s');
+                        // future call list
                         $query = $this->Clients->Reminders->find()
                             ->select(['client_id'])
                             ->where([
                                 'user_id' => $userId,
-                                'reminder_nextcall <' => $lastLoginDate
-                            ])
-                            ->order(['reminder_nextcall' => 'DESC']);
+                                'reminder_nextcall >' => $twelveHoursLater
+                            ]);
 
                         $results = $query->all();
                         $clientIds = [];
+
                         foreach ($results as $result) {
                             $clientIds[] = $result->client_id;
                         }
 
                         if (!empty($clientIds)) {
                             $clientQuery = $this->Clients->find()
-                                ->select(['id', 'client_name'])
+                                ->select(['id'])
                                 ->where(['Clients.id IN' => $clientIds]);
 
-                            $val = $clientQuery->all();
+                            
+                            $val = $clientQuery->extract('id')->toArray();
+                        }
+
+                        if (!empty($val)) {
+                            $conditions['Clients.id IN'] = (array) $val;
+                        }
+                        
+                    } elseif ($col == 'prevId') {
+
+                        $userId = $this->authUser['id'];
+                        $twelveHoursAgo = (new DateTime())->modify('-12 hours')->format('Y-m-d H:i:s');
+
+                        // Previous call list
+                        $query = $this->Clients->Reminders->find()
+                            ->select(['client_id'])
+                            ->where([
+                                'user_id' => $userId,
+                                'reminder_nextcall <' => $twelveHoursAgo
+                            ]);
+
+                        $results = $query->all();
+                        $clientIds = [];
+
+                        foreach ($results as $result) {
+                            $clientIds[] = $result->client_id;
+                        }
+
+                        if (!empty($clientIds)) {
+                            $clientQuery = $this->Clients->find()
+                                ->select(['id'])
+                                ->where(['Clients.id IN' => $clientIds]);
+
+                            
+                            $val = $clientQuery->extract('id')->toArray();
+                        }
+
+                        if (!empty($val)) {
+                            $conditions['Clients.id IN'] = $val;
+                        }
+                    } elseif ($col == 'recentId') {
+
+                        $twoDaysAgo = (new DateTime())->modify('-2 days')->format('Y-m-d H:i:s');
+
+                        $query = $this->Clients->find()
+                            ->select(['id'])
+                            ->where([
+                                'stat_created >' => $twoDaysAgo
+                            ])
+                            ->order(['stat_created' => 'DESC']);
+
+
+                        $results = $query->all();
+
+
+                        // dd($results);
+                        $clientIds = [];
+
+                        foreach ($results as $result) {
+                            $clientIds[] = $result->id;
                         }
 
 
-                        $conditions['Clients.id IN'] = $val;
+                        // dd($clientIds);
 
-                        $col = "id";
-                        $conditions['Clients.' . $col] = $val;
-                    } elseif ($col == 'recentId') {
-                        $col = "id";
-                        $conditions['Clients.' . $col] = $val;
+                        if (!empty($clientIds)) {
+                            $clientQuery = $this->Clients->find()
+                                ->select(['id'])
+                                ->where(['Clients.id IN' => $clientIds]);
+
+                            
+                            $val = $clientQuery->extract('id')->toArray();
+                        }
+
+                        if (!empty($val)) {
+                            $conditions['Clients.id IN'] = $val;
+                        }
+
                     } elseif (in_array($col, $otherCtrl)) {
 
                         $conditions['' . $col] = $val;
@@ -604,14 +665,6 @@ class ClientsController extends AppController
             //         }
 
             //     }
-
-
-
-
-
-
-
-
 
 
 
@@ -1372,12 +1425,13 @@ class ClientsController extends AppController
             $futureclientResults = $clientQuery->all();
         }
 
-        $twoDaysAgo = (new DateTime())->modify('-2 days')->format('Y-m-d H:i:s');
+        // $twoDaysAgo = (new DateTime())->modify('-2 days')->format('Y-m-d H:i:s');
+        $lastLoginDate = $this->authUser['stat_lastlogin'];
 
         // Recent clients created in the last two days
         $recentClientsQuery = $this->Clients->find()
             ->select(['id', 'client_name', 'stat_created'])
-            ->where(['stat_created >' => $twoDaysAgo]);
+            ->where(['stat_created >' => $lastLoginDate]);
 
         $recentClients = $recentClientsQuery->all();
 
@@ -3432,14 +3486,14 @@ class ClientsController extends AppController
             }
         }
 
-        $users = $this->Clients->Users->find('list', [
+        $usersCC = $this->Clients->Users->find('list', [
             'keyField' => 'id',
             'valueField' => 'user_fullname'
         ])->where(['user_role' => 'admin.callcenter'])->toArray();
 
 
         $dateFilter = [
-            0 => 'All',
+            0 => 'All Time',
             1 => 'Today',
             2 => 'Weekly',
             3 => 'Monthly',
@@ -3460,7 +3514,7 @@ class ClientsController extends AppController
                 'dateFilter' => $dateFilter,
                 'addressData' => $addressData,
                 'groupedData' => $groupedData,
-                'users' => $users,
+                'usersCC' => $usersCC,
                 'filterUserData' => $filterUserData,
                 'recStateList' => $recStateList,
                 'recStateRatio' => $recStateRatio,
@@ -3567,6 +3621,7 @@ class ClientsController extends AppController
             $invoiceSend = $this->Clients->Reservations->find()
                 ->where([
                     'stat_created <' => $thresholdDate,
+                    'stat_created >' => $lastLoginDate,
                     'reservation_isinvoice_sent' => 0,
                 ])
                 ->count();

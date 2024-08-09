@@ -683,6 +683,12 @@ a {
     color: #e63e3e;
 }
 
+#msgHolder .success {
+    background: var(--light_green);
+}
+.success {
+    background: var(--light_green);
+}
 /* Inputs And Buttons */
 .linkDisabled {
     cursor: not-allowed;
@@ -697,6 +703,7 @@ a {
     color: #000;
     padding: 6px;
     position: relative;
+    background-color: white;
 }
 
 .place_1 {
@@ -804,6 +811,8 @@ a {
     font-size: 15px;
     /* white-space: nowrap; */
     overflow: hidden;
+    width: -moz-available;
+
 }
 .wb-ele-dashboard {
     background-color: white;
@@ -1222,6 +1231,21 @@ input[type="checkbox"]:checked:after {
 .disabled-input::-webkit-calendar-picker-indicator {
     display: none; /* Hide spinner and calendar picker for datetime-local input in WebKit browsers */
 }
+
+/* Style for disabled inputs */
+.disabled-accoridon {
+    background-color: #e9ecef00; /* Gray background to indicate disabled state */
+    color: #ffffff00; /* Text color for disabled state */
+    cursor: not-allowed; /* Change cursor to indicate it's disabled */
+    pointer-events: none; /* Disable all pointer events to prevent interaction */
+}
+
+/* Remove accoridon arrow and styling for datetime-local accoridon */
+.disabled-accoridon::-webkit-inner-spin-button,
+.disabled-accoridon::-webkit-calendar-picker-indicator {
+    display: none; /* Hide spinner and calendar picker for datetime-local input in WebKit browsers */
+}
+
 
 .navbar .nav-btns .menu {
     position: absolute;

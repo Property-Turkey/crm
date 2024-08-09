@@ -403,7 +403,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                                 ng-change="updateCharts()">
                                 <option value="" selected="selected">Select User</option>
                                 <option value="0">All</option>
-                                <option value="{{ userId }}" ng-repeat="(userId, userName) in rec.numbers.users">{{ userName
+                                <option value="{{ userId }}" ng-repeat="(userId, userName) in rec.numbers.usersCC">{{ userName
                                     }}</option>
                             </select>
                         </label>

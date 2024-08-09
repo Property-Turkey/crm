@@ -413,7 +413,7 @@
                     !color ? color = 'default' : color;
                     $('#flash').html(`
                         <div class='message ` + color + `' onclick="closeHolder('flash');"> 
-                            <span><h3><?= __('system_message') ?></h3> 
+                            <span><h3><?= __('system_messagexsfsdf') ?></h3> 
                             <i class='fas fa-times'></i> ` + msg + `</span>
                         </div>`);
                     $timeout(function () {

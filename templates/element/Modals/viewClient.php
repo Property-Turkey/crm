@@ -631,7 +631,7 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['accountant', 'aftersale', 'field']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['aftersale', 'accountant']) || isset($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" ng-click="
                                             newEntity('report');
                                             setZIndex();
@@ -952,14 +952,23 @@
                                 </div>
 
                                 <div ng-repeat="clbook in rec.client.books track by $index">
-                                    <button id="modalBtn" class="btn btn-modal"
-                                        ng-click="setZIndex();
-                                            updateModalElement('Book');
-                                            doGet('/admin/books?id='+ clbook.id, 'rec', 'book');
-                                            openModal('#subModal'); inlineElement('#elementsContainer', 1, 'booking')">
-                                        <i class="fa fa-pencil"></i>
-                                        <?= __('edit_book') ?>
-                                    </button>
+                                    
+
+                                    <div class="heading">
+                                        <div class="title"></div>
+                                        <div class="flex-gap-10">
+                                            <button class="btn btn-modal" id="modalBtn btn-Booking" ng-click="
+                                                    setZIndex();
+                                                    updateModalElement('Book');
+                                                    doGet('/admin/books?id='+ clbook.id, 'rec', 'book');
+                                                    openModal('#subModal'); 
+                                                    inlineElement('#elementsContainer', 1, 'booking')">
+                                                <i class="fas-plus"></i>
+                                                <?= __('edit_book') ?>
+                                            </button>
+                                        </div>
+
+                                    </div>
                                     <div class="white-box mb-2" ng-if="!rec.client.books == ''">
 
 
@@ -1089,7 +1098,7 @@
 
                         <div id="client1-collapseTwo" class="accordion-collapse collapse ">
                             <div class="accordion-body">
-                                <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                <?php if (in_array($authUser['user_role'], ['admin.field', 'field']) || isset($authUser['user_original_role'])) { ?>
 
                                     <div class="heading ">
                                         <div class="title"></div>
@@ -1115,7 +1124,7 @@
                                 <div>
 
                                     <div ng-repeat="deals in rec.client.reservations">
-                                        <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (in_array($authUser['user_role'], ['admin.field', 'field', 'callcenter', 'accountant']) || isset($authUser['user_original_role'])) { ?>
                                             <div class="heading">
                                                 <div class="title"></div>
                                                 <div class="flex-gap-10">

@@ -189,7 +189,30 @@ class BooksController extends AppController
                 if ($dt['in_turkey'] == true) {
                     $rec->in_turkey = $dt['in_turkey'] = 1;
                 }
+
+                $rec->book_arrivedate = null;
             }
+
+            if(empty($dt['book_departuredate']) || $dt['book_departuredate'] == null || $dt['book_departuredate'] == '1970-01-01 02:00:00')
+            {
+
+                $rec->book_departuredate = null;
+                
+            }
+            if(empty($dt['book_arrivedate']) || $dt['book_arrivedate'] == null || $dt['book_arrivedate'] == '1970-01-01 02:00:00')
+            {
+
+                $rec->book_arrivedate = null;
+                
+            }
+            if(empty($dt['book_meetdate']) || $dt['book_meetdate'] == null || $dt['book_meetdate'] == '1970-01-01 02:00:00')
+            {
+
+                $rec->book_meetdate = null;
+                
+            }
+
+
             $newRec = $this->Books->save($rec);
 
             $ddrec = $this->Books->Clients->get($dt['client_id']);

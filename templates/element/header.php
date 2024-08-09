@@ -3,7 +3,7 @@ $admin_menu = [
     [
         "name" => "Categories",
         "icon" => "list",
-        "roles" => ["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content"],
+        "roles" => ["admin.root", "admin.admin", "admin.content"],
         "active" => "/categories/index,/categories/save,/categories/view",
         "sub" => [
             ["name" => "Source", "icon" => "sitemap", "url" => ["Categories", "index", "33"]],
