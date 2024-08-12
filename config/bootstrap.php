@@ -246,14 +246,14 @@ Configure::write('gmapKey', 'AIzaSyD2EC1RqRSh1Rm6NC4_cMt2CHtrZBKzUTE');
 
 Configure::write('roles', [
 	1 => 'admin.root',
-	2 => 'admin.callcenter',
+	2 => 'admin.supervisorcc',
 	3 => 'admin.admin',
-	4 => 'admin.field',
-	5 => 'callcenter',
-	6 => 'field',
-	7 => 'accountant',
-	8 => 'aftersale',
-	9 => 'teamleader'
+	4 => 'admin.supervisorfield',
+	5 => 'admin.callcenter',
+	6 => 'admin.portfolio',
+	7 => 'admin.accountant',
+	8 => 'admin.aftersale',
+	9 => 'admin.teamleader'
 ]);
 
 Configure::write('rolesChart', [

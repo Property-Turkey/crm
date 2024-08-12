@@ -180,7 +180,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                     <?php } ?> -->
 
 
-                    <?php if (in_array($authUser['user_role'], ['teamleader']) || isset($authUser['user_original_role'])) { ?>
+                    <?php if (in_array($authUser['user_role'], ['admin.teamleader']) || isset($authUser['user_original_role'])) { ?>
                         <label class="">
                             <span class="sm-txt">
                                 <?= __('my_members') ?>
@@ -311,7 +311,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                 </div>
                             <?php } ?> -->
 
-                            <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                            <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.portfolio', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                 <div class="checkbox">
                                     <!-- <input type="checkbox" class="all-clients" name="client-checkbox"
                                         ng-click="checkAll(this)" /> -->
@@ -354,7 +354,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             </button> -->
 
                                 <div class="row m-1">
-                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.portfolio', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
                                             <!-- <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                                 name="client-checkbox" />-->
@@ -515,7 +515,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             </button> -->
 
                                 <div class="row m-1">
-                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.portfolio', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
                                             <!-- <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                                 name="client-checkbox" />-->
@@ -678,7 +678,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             </button> -->
 
                                 <div class="row m-1">
-                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.portfolio', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
                                             <!-- <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                                 name="client-checkbox" />-->

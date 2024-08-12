@@ -451,11 +451,17 @@ class UsersController extends AppController
             $userCondition = [];
 
             if ($_keyword !== '') {
-                $userCondition['user_fullname LIKE'] = '%' . $_keyword . '%';
-            }elseif ($_rolesAssign !== '') {
+                if ($_rolesAssign !== '') {
+                    // dd(2);
+                    $roles = explode(',', $_rolesAssign);
+                    $userCondition['user_role IN'] = $roles;
+                    $userCondition['user_fullname LIKE'] = '%' . $_keyword . '%';
+                }
+            } elseif ($_rolesAssign !== '') {
+                // dd(1);
                 $roles = explode(',', $_rolesAssign);
                 $userCondition['user_role IN'] = $roles;
-            }elseif ($_parent !== '') {
+            } elseif ($_parent !== '') {
                 $userCondition['parent_id IN'] = $_parent;
             }
 

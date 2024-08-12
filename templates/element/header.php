@@ -24,7 +24,7 @@ $admin_menu = [
     [
         "name" => "dashboard",
         "icon" => "tachometer",
-        "roles" => ["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content", "admin.cc", "cc", "field", "accountant", "aftersale", "admin.field"],
+        "roles" => ["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content", "admin.cc", "cc", "field", "accountant", "aftersale", "admin.portfolio"],
         "active" => "/clients/dashboard",
         "sub" => [
             ["name" => "all", "url" => ["clients", "dashboard", ""]],
@@ -80,7 +80,7 @@ $admin_menu = [
     [
         "name" => "clients",
         "icon" => "user",
-        "roles" => ["admin.root", "admin.portfolio", "teamleader", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content", "admin.cc", "cc", "field", "accountant", "aftersale", "admin.field"],
+        "roles" => ["admin.root", "admin.portfolio", "admin.teamleader", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content", "admin.cc", "cc", "field", "accountant", "aftersale", "admin.portfolio"],
         "active" => "/clients/index,/clients/save,/clients/view",
         "sub" => [
             ["name" => "all", "url" => ["clients", "index", ""]],
@@ -94,7 +94,7 @@ $non_admin_menu = [
     [
         "name" => "my_account",
         "icon" => "user",
-        "roles" => ["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content", "admin.cc", "cc", "field", "accountant", "aftersale", "admin.field"],
+        "roles" => ["admin.root", "admin.portfolio", "admin.callcenter", "admin.supervisor", "admin.admin", "admin.content", "admin.cc", "cc", "field", "accountant", "aftersale", "admin.portfolio"],
         "active" => "/users/index,/users/save,/users/view",
         "sub" => [
             ["name" => "all", "url" => ["users", "myaccount", ""]],

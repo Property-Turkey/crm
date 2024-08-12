@@ -757,6 +757,7 @@
 
                 $scope.updateCharts = function () {
                     var user_id = $scope.rec.dashboard.user_id;
+                    alert(user_id)
                     var dateFilter = $scope.rec.dashboard.dateFilter;
 
                     $scope.calculateDateRange(dateFilter);
@@ -1812,6 +1813,117 @@
                                 </div>
                             </form>
                     `)($scope);
+                        } else if (element === "assign") {
+                            elementsCreated = $compile(`
+                            <form class="row inlineElement" 
+                            ng-submit="
+                                rec.user_client.client_id = rec.client.id;
+                                doSave(rec.user_client, 'user_client', 'userclient', '#client_btn', '#userclient_preloader');
+                                closeModal('#subModal');">
+                                
+                                
+                          
+
+
+                                <label for="" class="col-6 col-sm-12">
+                                    <span class="sm-txt"> Advisor </span>
+                                    <tags-input  style="padding: 0px;padding-left: 10px;"
+                                        ng-model="rec.user_client.user" 
+                                        add-from-autocomplete-only="true" 
+                                        placeholder="<?= __('user') ?>" 
+                                        display-property="text"
+                                        key-property="value"
+                                        class="wb-txt-inp"
+                                        tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
+                                    >
+                                        <auto-complete min-length="0"
+                                                load-on-focus="true"
+                                                load-on-empty="true"
+                                                max-results-to-show="30"  source="loadTags($query, 'users', '', 'admin.callcenter,field')"></auto-complete>
+                                    </tags-input>
+                                </label>
+
+                                <div class="down-btns mt-4 d-flex justify-content-end">
+                                    <div class="flex-gap-10 ">
+                                        <button class="btn btn-danger" id="userclient_preloader" type="submit"><?= __('save_changes') ?></button>
+                                    </div>
+                                </div>
+                            </form>
+                    `)($scope);
+                } else if (element === "fieldassign") {
+                            elementsCreated = $compile(`
+                            <form class="row inlineElement" 
+                            ng-submit="
+                                rec.user_client.client_id = rec.client.id;
+                                doSave(rec.user_client, 'user_client', 'userclient', '#client_btn', '#userclient_preloader');
+                                closeModal('#subModal');">
+                                
+                                
+                          
+
+
+                                <label for="" class="col-6 col-sm-12">
+                                    <span class="sm-txt"> Advisor </span>
+                                    <tags-input  style="padding: 0px;padding-left: 10px;"
+                                        ng-model="rec.user_client.user" 
+                                        add-from-autocomplete-only="true" 
+                                        placeholder="<?= __('user') ?>" 
+                                        display-property="text"
+                                        key-property="value"
+                                        class="wb-txt-inp"
+                                        tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
+                                    >
+                                        <auto-complete min-length="0"
+                                                load-on-focus="true"
+                                                load-on-empty="true"
+                                                max-results-to-show="30"  source="loadTags($query, 'users', '', 'field')"></auto-complete>
+                                    </tags-input>
+                                </label>
+
+                                <div class="down-btns mt-4 d-flex justify-content-end">
+                                    <div class="flex-gap-10 ">
+                                        <button class="btn btn-danger" id="userclient_preloader" type="submit"><?= __('save_changes') ?></button>
+                                    </div>
+                                </div>
+                            </form>
+                    `)($scope);
+                        } else if (element === "ccassign") {
+                            elementsCreated = $compile(`
+                            <form class="row inlineElement" 
+                            ng-submit="
+                                rec.user_client.client_id = rec.client.id;
+                                doSave(rec.user_client, 'user_client', 'userclient', '#client_btn', '#userclient_preloader');
+                                closeModal('#subModal');">
+                                
+                                
+                          
+
+
+                                <label for="" class="col-6 col-sm-12">
+                                    <span class="sm-txt"> Advisor </span>
+                                    <tags-input  style="padding: 0px;padding-left: 10px;"
+                                        ng-model="rec.user_client.user" 
+                                        add-from-autocomplete-only="true" 
+                                        placeholder="<?= __('user') ?>" 
+                                        display-property="text"
+                                        key-property="value"
+                                        class="wb-txt-inp"
+                                        tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
+                                    >
+                                        <auto-complete min-length="0"
+                                                load-on-focus="true"
+                                                load-on-empty="true"
+                                                max-results-to-show="30"  source="loadTags($query, 'users', '', 'admin.callcenter')"></auto-complete>
+                                    </tags-input>
+                                </label>
+
+                                <div class="down-btns mt-4 d-flex justify-content-end">
+                                    <div class="flex-gap-10 ">
+                                        <button class="btn btn-danger" id="userclient_preloader" type="submit"><?= __('save_changes') ?></button>
+                                    </div>
+                                </div>
+                            </form>
+                    `)($scope);
                         } else if (element === "reallocate") {
                             elementsCreated = $compile(`
                              <div class="noData mt-3" ng-if="rec.client.user_client == ''">
@@ -2663,248 +2775,248 @@
                                 '#reservations_preloader');">
                                 <?php if (!(in_array($authUser['user_role'], ['accountant'])) || isset($authUser['user_original_role'])) { ?>
 
-                                                                                                                                                        <div class="col-md-6 col-12 col-lg-3">
-                                                                                                                                                            <span class="sm-txt"> <?= __('reservation_amount') ?> </span>
-                                                                                                                                                            <div class="input-group">
-                                                                                                                                                            <?= $this->Form->control('', [
-                                                                                                                                                                'class' => 'wb-ele-select-cur cur-inp',
-                                                                                                                                                                'empty' => '$',
-                                                                                                                                                                'label' => false,
-                                                                                                                                                                'type' => 'select',
-                                                                                                                                                                'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
-                                                                                                                                                                'ng-model' => 'rec.reservation.reservation_currency',
-                                                                                                                                                            ]) ?> 
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?= __('reservation_amount') ?> </span>
+                                            <div class="input-group">
+                                            <?= $this->Form->control('', [
+                                                'class' => 'wb-ele-select-cur cur-inp',
+                                                'empty' => '$',
+                                                'label' => false,
+                                                'type' => 'select',
+                                                'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
+                                                'ng-model' => 'rec.reservation.reservation_currency',
+                                            ]) ?> 
 
-                                                                                                                                                                <input n-format ng-model="rec.reservation.reservation_amount" class="form-control wb-txt-inp" value="400k" type="text" />
-                                                                                                                                                            </div>
-                                                                                                                                                        </div>
-                                                                                                                                                        <div class="col-md-6 col-12 col-lg-3">
-                                                                                                                                                            <span class="sm-txt"> <?= __('reservation_price') ?> </span>
-                                                                                                                                                            <div class="input-group">
-                                                                                                                                                            <?= $this->Form->control('', [
-                                                                                                                                                                'class' => 'wb-ele-select-cur cur-inp',
-                                                                                                                                                                'label' => false,
-                                                                                                                                                                'type' => 'select',
-                                                                                                                                                                'empty' => '$',
-                                                                                                                                                                'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
-                                                                                                                                                                'ng-model' => 'rec.reservation.reservation_currency',
-                                                                                                                                                            ]) ?> 
+                                                <input n-format ng-model="rec.reservation.reservation_amount" class="form-control wb-txt-inp" value="400k" type="text" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?= __('reservation_price') ?> </span>
+                                            <div class="input-group">
+                                            <?= $this->Form->control('', [
+                                                'class' => 'wb-ele-select-cur cur-inp',
+                                                'label' => false,
+                                                'type' => 'select',
+                                                'empty' => '$',
+                                                'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
+                                                'ng-model' => 'rec.reservation.reservation_currency',
+                                            ]) ?> 
 
-                                                                                                                                                                <input n-format ng-model="rec.reservation.reservation_price" class="form-control wb-txt-inp" value="400k" type="text" />
-                                                                                                                                                            </div>
-                                                                                                                                                        </div>
-
-
-                                                                                                                                                        <label  class="col-md-6 col-12 col-lg-3">
-                                                                                                                                                            <span class="sm-txt"><?= __('pay_type') ?></span>
-                                                                                                                                                            <?= $this->Form->text('pay_type', [
-                                                                                                                                                                'type' => 'select',
-                                                                                                                                                                'options' => $this->Do->cat(198),
-                                                                                                                                                                'class' => 'wb-ele-select-modal col-12',
-                                                                                                                                                                'ng-model' => 'rec.reservation.reservation_paytype'
-                                                                                                                                                            ]) ?>
-                                                                                                                                                        </label>
+                                                <input n-format ng-model="rec.reservation.reservation_price" class="form-control wb-txt-inp" value="400k" type="text" />
+                                            </div>
+                                        </div>
 
 
-                                                                                                                                                        <div class="col-md-6 col-12 col-lg-3">
-                                                                                                                                                            <span class="sm-txt"> <?= __('commission') ?> </span>
-                                                                                                                                                            <div class="input-group">
-                                                                                                                                                            <?= $this->Form->control('', [
-                                                                                                                                                                'class' => 'wb-ele-select-cur cur-inp',
-                                                                                                                                                                'label' => false,
-                                                                                                                                                                'type' => 'select',
-                                                                                                                                                                'empty' => '$',
-                                                                                                                                                                'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
-                                                                                                                                                                'ng-model' => 'rec.reservation.reservation_currency',
-                                                                                                                                                            ]) ?> 
-
-                                                                                                                                                                <input n-format ng-model="rec.reservation.reservation_comission" class="form-control wb-txt-inp" value="400k" type="text" />
-                                                                                                                                                            </div>
-                                                                                                                                                        </div>
+                                        <label  class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"><?= __('pay_type') ?></span>
+                                            <?= $this->Form->text('pay_type', [
+                                                'type' => 'select',
+                                                'options' => $this->Do->cat(198),
+                                                'class' => 'wb-ele-select-modal col-12',
+                                                'ng-model' => 'rec.reservation.reservation_paytype'
+                                            ]) ?>
+                                        </label>
 
 
-                                   
-                                                                                                                                                        <div class="col-md-6 col-12 col-lg-3">
-                                                                                                                                                            <span class="sm-txt"> <?= __('down_pay') ?> </span>
-                                                                                                                                                            <div class="input-group">
-                                                                                                                                                            <?= $this->Form->control('', [
-                                                                                                                                                                'class' => 'wb-ele-select-cur cur-inp',
-                                                                                                                                                                'label' => false,
-                                                                                                                                                                'type' => 'select',
-                                                                                                                                                                'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
-                                                                                                                                                                'empty' => '$',
-                                                                                                                                                                'ng-model' => 'rec.reservation.reservation_currency',
-                                                                                                                                                            ]) ?> 
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?= __('commission') ?> </span>
+                                            <div class="input-group">
+                                            <?= $this->Form->control('', [
+                                                'class' => 'wb-ele-select-cur cur-inp',
+                                                'label' => false,
+                                                'type' => 'select',
+                                                'empty' => '$',
+                                                'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
+                                                'ng-model' => 'rec.reservation.reservation_currency',
+                                            ]) ?> 
 
-                                                                                                                                                                <input n-format ng-model="rec.reservation.reservation_downpayment" class="form-control wb-txt-inp" value="400k" type="text" />
-                                                                                                                                                            </div>
-                                                                                                                                                        </div>
-
-                                                                                                                                                        <div class="col-md-6 col-12 col-lg-3">
-                                                                                                                                                            <span class="sm-txt"> <?= __('down_paydate') ?> </span>
-                                                                                                                                                            <input type="date" date-format ng-model="rec.reservation.reservation_downpayment_date" class="wb-txt-inp"></input>
-                                                                                                                                                        </div>
+                                                <input n-format ng-model="rec.reservation.reservation_comission" class="form-control wb-txt-inp" value="400k" type="text" />
+                                            </div>
+                                        </div>
 
 
 
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?= __('down_pay') ?> </span>
+                                            <div class="input-group">
+                                            <?= $this->Form->control('', [
+                                                'class' => 'wb-ele-select-cur cur-inp',
+                                                'label' => false,
+                                                'type' => 'select',
+                                                'options' => $this->Do->lcl($this->Do->get('currencies_icons')),
+                                                'empty' => '$',
+                                                'ng-model' => 'rec.reservation.reservation_currency',
+                                            ]) ?> 
 
-                                                                                                                                                        <label class="col-md-6 col-12 col-lg-3" style="position: relative;">
-                                                                                                                                                            <span class="sm-txt"> <?= __('property_id') ?> </span>
-                                                                                                                                                            <tags-input  style="padding: 0px;padding-left: 10px;"
-                                                                                                                                                                class="wb-txt-inp" 
-                                                                                                                                                                tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
-                                                                                                                                                                ng-model="rec.reservation.property" 
-                                                                                                                                                                add-from-autocomplete-only="true" 
-                                                                                                                                                                max-tags="1" 
-                                                                                                                                                                placeholder="<?= __('property_id') ?>" 
-                                                                                                                                                                display-property="text"
-                                                                                                                                                                key-property="value"
-                                                                                                                                                                ng-disabled="rec.reservation.property "
-                                                                                                                                                                ng-style="{'background-color': rec.reservation.property ? '#eeeeee' : 'initial'}"
+                                                <input n-format ng-model="rec.reservation.reservation_downpayment" class="form-control wb-txt-inp" value="400k" type="text" />
+                                            </div>
+                                        </div>
 
-                                                                                                                                                            >
-                                                                                                                                                                <auto-complete min-length="0"
-                                                                                                                                                                    load-on-focus="true"
-                                                                                                                                                                    load-on-empty="true"
-                                                                                                                                                                    max-results-to-show="30" source="loadTags($query, 'pmsproperties', '0')"></auto-complete>
-                                                                                                                                                            </tags-input>
-
-                                                                                                                                                            <span ng-if="rec.reservation.property_id" ng-click="rec.reservation.property = ''; rec.reservation.property_id = '';" class="fa fa-times" style="cursor: pointer; position: absolute; top: 55%; right: 20px; transform: translateY(-50%);"></span>                                        
-
-                                                                                                                                                        </label>
-
-                                                                                                                                                        <label class="col-md-6 col-12 col-lg-3">
-                                                                                                                                                            <span class="sm-txt"><?= __('unit_info') ?></span>
-                                                                                                                                                            <?= $this->Form->control('unit_info', [
-                                                                                                                                                                'class' => 'p-2 wb-ele-select-modal ',
-                                                                                                                                                                'label' => false,
-                                                                                                                                                                'type' => 'textarea',
-                                                                                                                                                                'ng-model' => 'rec.reservation.reservation_details',
-                                                                                                                                                                'cols' => '30',
-                                                                                                                                                                'rows' => '1',
-                                                                                                                                                                'placeholder' => 'Unit Information...',
-                                                                                                                                                            ]) ?>
-                                                                                                                                                        </label>
-
-
-                                                                                                                                                        <!--<label class="col-md-6 col-12 col-lg-3" ng-if="rec.reservation.reservation_downpayment == null && (rec.reservation.rec_state != 14 || rec.reservation.rec_state != 13 || rec.reservation.rec_state != 15)">
-                                                                                                                                                            <span class="sm-txt"> <?= __('rec_state') ?> </span>
-                                                                                                                                                            <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
-                                                                                                                                                                <option ng-click="handleButtonClick(recStateId);" 
-                                                                                                                                                                        ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
-                                                                                                                                                                        value="{{ recStateId }}" 
-                                                                                                                                                                        ng-selected="recStateId === rec.reservation.rec_state"
-                                                                                                                                                                        ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15 || recStateId == 17">
-                                                                                                                                                                    {{ recStateName }}
-                                                                                                                                                                </option>
-                                                                                                                                                            </select>
-                                                                                                                                                        </label>
-
-
-                                                                                                                                                        <label class="col-md-6 col-12 col-lg-3" ng-if="rec.reservation.reservation_downpayment != null && (rec.reservation.rec_state == 14 || rec.reservation.rec_state == 13 || rec.reservation.rec_state == 15)">
-                                                                                                                                                            <span class="sm-txt"> <?= __('rec_state') ?> </span>
-                                                                                                                                                            <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
-                                                                                                                                                                <option ng-click="handleButtonClick(recStateId);" 
-                                                                                                                                                                        ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
-                                                                                                                                                                        value="{{ recStateId }}" 
-                                                                                                                                                                        ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15">
-                                                                                                                                                                    {{ recStateName }}
-                                                                                                                                                                </option>
-                                                                                                                                                            </select>
-                                                                                                                                                        </label>-->
-
-                                                                                                                                                        <label class="col-md-6 col-12 col-lg-3" ng-if="
-                                                                                                                                                                                        (rec.reservation.rec_state != 14 && rec.reservation.rec_state != 15 && rec.reservation.rec_state != 17)">
-                                                                                                                                                            <span class="sm-txt"> <?= __('rec_state') ?> </span>
-                                                                                                                                                            <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
-                                                                                                                                                                <option ng-click="handleButtonClick(recStateId);" 
-                                                                                                                                                                        ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
-                                                                                                                                                                        value="{{ recStateId }}" 
-                                                                                                                                                                        ng-selected="recStateId === rec.reservation.rec_state"
-                                                                                                                                                                        ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15 || recStateId == 17">
-                                                                                                                                                                    {{ recStateName }}
-                                                                                                                                                                </option>
-                                                                                                                                                            </select>
-                                                                                                                                                        </label>
-
-                                                                                                                                                        <label class="col-md-6 col-12 col-lg-3" ng-if="
-                                                                                                                                                                                        (rec.reservation.rec_state == 14 || rec.reservation.rec_state == 15)">
-                                                                                                                                                            <span class="sm-txt"> <?= __('rec_state') ?> </span>
-                                                                                                                                                            <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
-                                                                                                                                                                <option ng-click="handleButtonClick(recStateId);" 
-                                                                                                                                                                        ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
-                                                                                                                                                                        value="{{ recStateId }}" 
-                                                                                                                                                                        ng-selected="recStateId === rec.reservation.rec_state"
-                                                                                                                                                                        ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15">
-                                                                                                                                                                    {{ recStateName }}
-                                                                                                                                                                </option>
-                                                                                                                                                            </select>
-                                                                                                                                                        </label>
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"> <?= __('down_paydate') ?> </span>
+                                            <input type="date" date-format ng-model="rec.reservation.reservation_downpayment_date" class="wb-txt-inp"></input>
+                                        </div>
 
 
 
-                                                                                                                                                        <div class="col-md-6 col-12 col-lg-3 mt-3">
-                                                                                                                                                            <div class="flex-center text-center">
-                                                                                                                                                                <label class="switch">
-                                                                                                                                                                    <input 
-                                                                                                                                                                    ng-model="rec.reservation.downpayment_paid" 
-                                                                                                                                                                    ng-true-value = "'1'" 
-                                                                                                                                                                    ng-false-value = "'0'" 
-                                                                                                                                                                    ng-checked="rec.reservation.downpayment_paid == 1"
-                                                                                                                                                                    name="invoice" 
-                                                                                                                                                                    id="finance-client3" 
-                                                                                                                                                                    type="checkbox" />
-                                                                                                                                                                    <span class="slider round"></span>
-                                                                                                                                                                </label>
-                                                                                                                                                                <label for="finance-client3"> <?= __('downpayment_paid') ?> </label>
-                                                                                                                                                            </div>
-                                                                                                                                                        </div>
+
+                                        <label class="col-md-6 col-12 col-lg-3" style="position: relative;">
+                                            <span class="sm-txt"> <?= __('property_id') ?> </span>
+                                            <tags-input  style="padding: 0px;padding-left: 10px;"
+                                                class="wb-txt-inp" 
+                                                tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
+                                                ng-model="rec.reservation.property" 
+                                                add-from-autocomplete-only="true" 
+                                                max-tags="1" 
+                                                placeholder="<?= __('property_id') ?>" 
+                                                display-property="text"
+                                                key-property="value"
+                                                ng-disabled="rec.reservation.property "
+                                                ng-style="{'background-color': rec.reservation.property ? '#eeeeee' : 'initial'}"
+
+                                            >
+                                                <auto-complete min-length="0"
+                                                    load-on-focus="true"
+                                                    load-on-empty="true"
+                                                    max-results-to-show="30" source="loadTags($query, 'pmsproperties', '0')"></auto-complete>
+                                            </tags-input>
+
+                                            <span ng-if="rec.reservation.property_id" ng-click="rec.reservation.property = ''; rec.reservation.property_id = '';" class="fa fa-times" style="cursor: pointer; position: absolute; top: 55%; right: 20px; transform: translateY(-50%);"></span>                                        
+
+                                        </label>
+
+                                        <label class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt"><?= __('unit_info') ?></span>
+                                            <?= $this->Form->control('unit_info', [
+                                                'class' => 'p-2 wb-ele-select-modal ',
+                                                'label' => false,
+                                                'type' => 'textarea',
+                                                'ng-model' => 'rec.reservation.reservation_details',
+                                                'cols' => '30',
+                                                'rows' => '1',
+                                                'placeholder' => 'Unit Information...',
+                                            ]) ?>
+                                        </label>
+
+
+                                        <!--<label class="col-md-6 col-12 col-lg-3" ng-if="rec.reservation.reservation_downpayment == null && (rec.reservation.rec_state != 14 || rec.reservation.rec_state != 13 || rec.reservation.rec_state != 15)">
+                                            <span class="sm-txt"> <?= __('rec_state') ?> </span>
+                                            <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
+                                                <option ng-click="handleButtonClick(recStateId);" 
+                                                        ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
+                                                        value="{{ recStateId }}" 
+                                                        ng-selected="recStateId === rec.reservation.rec_state"
+                                                        ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15 || recStateId == 17">
+                                                    {{ recStateName }}
+                                                </option>
+                                            </select>
+                                        </label>
+
+
+                                        <label class="col-md-6 col-12 col-lg-3" ng-if="rec.reservation.reservation_downpayment != null && (rec.reservation.rec_state == 14 || rec.reservation.rec_state == 13 || rec.reservation.rec_state == 15)">
+                                            <span class="sm-txt"> <?= __('rec_state') ?> </span>
+                                            <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
+                                                <option ng-click="handleButtonClick(recStateId);" 
+                                                        ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
+                                                        value="{{ recStateId }}" 
+                                                        ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15">
+                                                    {{ recStateName }}
+                                                </option>
+                                            </select>
+                                        </label>-->
+
+                                        <label class="col-md-6 col-12 col-lg-3" ng-if="
+                                                                        (rec.reservation.rec_state != 14 && rec.reservation.rec_state != 15 && rec.reservation.rec_state != 17)">
+                                            <span class="sm-txt"> <?= __('rec_state') ?> </span>
+                                            <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
+                                                <option ng-click="handleButtonClick(recStateId);" 
+                                                        ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
+                                                        value="{{ recStateId }}" 
+                                                        ng-selected="recStateId === rec.reservation.rec_state"
+                                                        ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15 || recStateId == 17">
+                                                    {{ recStateName }}
+                                                </option>
+                                            </select>
+                                        </label>
+
+                                        <label class="col-md-6 col-12 col-lg-3" ng-if="
+                                                                        (rec.reservation.rec_state == 14 || rec.reservation.rec_state == 15)">
+                                            <span class="sm-txt"> <?= __('rec_state') ?> </span>
+                                            <select class="wb-ele-select-modal col-12" ng-model="rec.reservation.rec_state">
+                                                <option ng-click="handleButtonClick(recStateId);" 
+                                                        ng-repeat="(recStateId, recStateName) in DtSetter('rec_stateStage', 3) track by $index" 
+                                                        value="{{ recStateId }}" 
+                                                        ng-selected="recStateId === rec.reservation.rec_state"
+                                                        ng-if="recStateId == 13 || recStateId == 14 || recStateId == 15">
+                                                    {{ recStateName }}
+                                                </option>
+                                            </select>
+                                        </label>
+
+
+
+                                        <div class="col-md-6 col-12 col-lg-3 mt-3">
+                                            <div class="flex-center text-center">
+                                                <label class="switch">
+                                                    <input 
+                                                    ng-model="rec.reservation.downpayment_paid" 
+                                                    ng-true-value = "'1'" 
+                                                    ng-false-value = "'0'" 
+                                                    ng-checked="rec.reservation.downpayment_paid == 1"
+                                                    name="invoice" 
+                                                    id="finance-client3" 
+                                                    type="checkbox" />
+                                                    <span class="slider round"></span>
+                                                </label>
+                                                <label for="finance-client3"> <?= __('downpayment_paid') ?> </label>
+                                            </div>
+                                        </div>
                                     <?php } ?>
 
                                     
                                     <?php if (in_array($authUser['user_role'], ['accountant']) || isset($authUser['user_original_role'])) { ?>
                                         
                                         
-                                                                                                                                                        <div class="col-md-6 col-12 col-lg-3">
-                                                                                                                                                            <span class="sm-txt"> <?= __('invoice_date') ?> </span>
-                                                                                                                                                            <input type="date" date-format ng-model="rec.reservation.reservation_invoice_date" class="wb-txt-inp" ></input>
-                                                                                                                                                        </div>
-                                        
-                                        
-                                                                                                                                                        <div class="col-md-6 col-12 col-lg-3 mt-3">
-                                                                                                                                                            <div class="flex-center text-center">
-                                                                                                                                                                <label class="switch">
-                                                                                                                                                                    <input 
-                                                                                                                                                                    ng-model="rec.reservation.reservation_isinvoice_sent" 
-                                                                                                                                                                    ng-true-value = "'1'" 
-                                                                                                                                                                    ng-false-value = "'0'" 
-                                                                                                                                                                    ng-checked="rec.reservation.reservation_isinvoice_sent == 1"
-                                                                                                                                                                    name="invoice" 
-                                                                                                                                                                    id="finance-client4" 
-                                                                                                                                                                    type="checkbox" />
-                                                                                                                                                                    <span class="slider round"></span>
-                                                                                                                                                                </label>
-                                                                                                                                                                <label for="finance-client4"> <?= __('is_invoice_sent') ?> </label>
-                                                                                                                                                            </div>
-                                                                                                                                                        </div>
+                                            <div class="col-md-6 col-12 col-lg-3">
+                                                <span class="sm-txt"> <?= __('invoice_date') ?> </span>
+                                                <input type="date" date-format ng-model="rec.reservation.reservation_invoice_date" class="wb-txt-inp" ></input>
+                                            </div>
 
 
-                                                                                                                                                        <div class="col-md-6 col-12 col-lg-3 mt-3">
-                                                                                                                                                            <div class="flex-center text-center">
-                                                                                                                                                                <label class="switch">
-                                                                                                                                                                    <input 
-                                                                                                                                                                    ng-model="rec.reservation.is_commision_collacted" 
-                                                                                                                                                                    ng-true-value = "'1'" 
-                                                                                                                                                                    ng-false-value = "'0'" 
-                                                                                                                                                                    ng-checked="rec.reservation.is_commision_collacted == 1"
-                                                                                                                                                                    name="invoice" 
-                                                                                                                                                                    id="finance-client2" 
-                                                                                                                                                                    type="checkbox" />
-                                                                                                                                                                    <span class="slider round"></span>
-                                                                                                                                                                </label>
-                                                                                                                                                                <label for="finance-client2"> <?= __('is_commision_collacted') ?> </label>
-                                                                                                                                                            </div>
-                                                                                                                                                        </div>
+                                            <div class="col-md-6 col-12 col-lg-3 mt-3">
+                                                <div class="flex-center text-center">
+                                                    <label class="switch">
+                                                        <input 
+                                                        ng-model="rec.reservation.reservation_isinvoice_sent" 
+                                                        ng-true-value = "'1'" 
+                                                        ng-false-value = "'0'" 
+                                                        ng-checked="rec.reservation.reservation_isinvoice_sent == 1"
+                                                        name="invoice" 
+                                                        id="finance-client4" 
+                                                        type="checkbox" />
+                                                        <span class="slider round"></span>
+                                                    </label>
+                                                    <label for="finance-client4"> <?= __('is_invoice_sent') ?> </label>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-6 col-12 col-lg-3 mt-3">
+                                                <div class="flex-center text-center">
+                                                    <label class="switch">
+                                                        <input 
+                                                        ng-model="rec.reservation.is_commision_collacted" 
+                                                        ng-true-value = "'1'" 
+                                                        ng-false-value = "'0'" 
+                                                        ng-checked="rec.reservation.is_commision_collacted == 1"
+                                                        name="invoice" 
+                                                        id="finance-client2" 
+                                                        type="checkbox" />
+                                                        <span class="slider round"></span>
+                                                    </label>
+                                                    <label for="finance-client2"> <?= __('is_commision_collacted') ?> </label>
+                                                </div>
+                                            </div>
                                     <?php } ?>
                                     <div class="down-btns mt-4 d-flex justify-content-end">
                                         <div class="flex-gap-10 ">

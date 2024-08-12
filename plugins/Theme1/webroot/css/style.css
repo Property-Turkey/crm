@@ -1954,6 +1954,15 @@ tags-input .tags .even.selected {
     justify-content: space-between;
 }
 
+.reminderCols{
+    width: 325px;
+}
+
+.reminderDrop{
+    display: flex;
+    align-items: end;
+    justify-content: center;
+}
 .down-btns {
     padding-top: 20px;
     padding-right: 35px;
@@ -1990,7 +1999,7 @@ tags-input .tags .even.selected {
     right: 0;
     bottom: 0;
     width: 42px;
-    background-color: #15d25f;
+    background-color: #b3b1b1;
     transition: 0.4s;
 }
 
@@ -2006,15 +2015,63 @@ tags-input .tags .even.selected {
 }
 
 input:checked + .slider {
-    background-color: #b3b1b1;
+    background-color: #15d25f;
 }
 
-input:checked + .disabled {
+
+
+
+
+
+
+.switch-actions {
+    position: relative;
+    display: inline-block;
+    width: 45px;
+    height: 23px;
+    padding-left: 32px;
+}
+
+.switch-actions input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.actionSlider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 42px;
     background-color: #b3b1b1;
+    transition: 0.4s;
+}
+
+.actionSlider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+}
+
+input:checked + .actionSlider {
+    background-color: #15d25f;
+}
+
+
+input:checked + .disabled {
+    background-color: #15d25f;
 }
 
 .green-background {
-    background-color: #b3b1b1;
+    background-color: #15d25f;
 }
 
 .green-background:before {
@@ -2401,7 +2458,7 @@ input:checked + .slider:before {
     margin-top: 1.5rem;
 }
 
-.preloader {
+/* .preloader {
     display: none;
     position: absolute;
     text-align: center;
@@ -2416,6 +2473,34 @@ input:checked + .slider:before {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+} */
+
+
+.preloader {
+    display: none; /* Initially hidden */
+    position: fixed; /* Fixed position to cover the viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 9999; /* Ensure it is above all other elements */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* Centering content */
+    display: flex; /* Flexbox for centering */
+    text-align: center;
+}
+
+/* Optional: Add styles for the spinner or loader inside */
+.preloader .spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1); /* Light border */
+    border-left-color: #3498db; /* Color of the spinner */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
 }
 
 .tab-buttons {

@@ -38,11 +38,11 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         <span class="sm-txt">
                             <?= __('date_period') ?>
                         </span>
-                       
+
                         <select name="category_id" class="wb-ele-dashboard py-1" ng-model="rec.dashboard.dateFilter"
                             ng-change="updateCharts()">
 
-                            <option value=""><?=  __('select_time') ?></option>
+                            <option value=""><?= __('select_time') ?></option>
                             <option ng-repeat="(dateId, dateName) in rec.numbers.dateFilter" value="{{ dateId }}">
                                 {{ dateName }}
                             </option>
@@ -97,7 +97,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                 </ul>
             </div>
 
-            <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field']) || isset($authUser['user_original_role'])) { ?>
+            <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.portfolio']) || isset($authUser['user_original_role'])) { ?>
                 <div class="notifications-boxes" ng-if="!rec.notification == ''">
 
                     <?php if (in_array($authUser['user_role'], ['admin.callcenter']) || isset($authUser['user_original_role'])) { ?>
@@ -395,7 +395,9 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                 <div class="panel panel-default mb-3" ng-class="{ 'custom-style': showFilters }">
                     <div class="filter-row">
                         <!-- Advisor Select -->
-                        <label for="" class="filter-label">
+
+
+                        <label for="" >
                             <span class="sm-txt">
                                 <?= __('client_current_stage') ?>
                             </span>
@@ -403,10 +405,33 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                                 ng-change="updateCharts()">
                                 <option value="" selected="selected">Select User</option>
                                 <option value="0">All</option>
-                                <option value="{{ userId }}" ng-repeat="(userId, userName) in rec.numbers.usersCC">{{ userName
+                                <option value="{{ userId }}" ng-repeat="(userId, userName) in rec.numbers.usersCC">{{
+                                    userName
                                     }}</option>
                             </select>
                         </label>
+
+                        <label class="filter-label relative">
+                            <span class="sm-txt">
+                                <?= __('client_tags') ?>
+                            </span>
+
+                            <tags-input class="wb-ele-dashboard py-1"
+                                tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}" ng-model="rec.dashboard.user_id[0].value"
+                                add-from-autocomplete-only="true" max-tags="1" placeholder="<?= __('client_tags') ?>"
+                                display-property="text" key-property="value">
+                                <auto-complete min-length="1" highlightMatchedText="true"
+                                    source="loadTags($query, 'users', '', 'admin.callcenter')"></auto-complete>
+                            </tags-input>
+
+                            <span ng-click="updateCharts()" class="fa fa-search doSearch"></span>
+
+                        </label>
+                        {{rec.dashboard.user_id}}----------
+                        {{ rec.dashboard.user_id[0].value }}------
+
+
+
                     </div>
                 </div>
             <?php } ?>

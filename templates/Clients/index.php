@@ -135,7 +135,7 @@ doGet('/admin/users/index/<?= $_pid ?>?action_type=<?=$actionType?>?list=1', 'li
                     <?php } ?>
 
 
-                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.field', 'admin.root', 'admin.cc', 'field', 'accountant', 'aftersale', 'cc']) || isset($authUser['user_original_role'])) { ?>
+                    <?php if (!in_array($authUser['user_role'], ['admin.admin', 'admin.portfolio', 'admin.root', 'admin.cc', 'field', 'accountant', 'aftersale', 'cc']) || isset($authUser['user_original_role'])) { ?>
                         <button class="btn btn-warning" ng-click="multiHandle('/clients/delete')">
                             Delete
                         </button>
@@ -229,7 +229,7 @@ doGet('/admin/users/index/<?= $_pid ?>?action_type=<?=$actionType?>?list=1', 'li
                                 </div>
                             <?php } ?> -->
 
-                            <?php if (in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.field',  'cc', 'field', 'accountant', 'aftersale', 'cc']) || isset($authUser['user_original_role'])) { ?>
+                            <?php if (in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.portfolio',  'cc', 'field', 'accountant', 'aftersale', 'cc']) || isset($authUser['user_original_role'])) { ?>
                                 <div class="col-11 hideMob row">
                                     <div class="col-md-2 p-0 title">
                                         <?= __('sales_content') ?>
@@ -269,7 +269,7 @@ doGet('/admin/users/index/<?= $_pid ?>?action_type=<?=$actionType?>?list=1', 'li
                             </button> -->
 
                             <div class="row m-1">
-                                <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.field',  'cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.portfolio',  'cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                     <div class="checkbox col-1">
                                         <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                             name="client-checkbox" />
@@ -429,7 +429,7 @@ doGet('/admin/users/index/<?= $_pid ?>?action_type=<?=$actionType?>?list=1', 'li
                             </button> -->
 
                             <div class="row m-1">
-                                <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.field',  'cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.root', 'admin.portfolio',  'cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                     <div class="checkbox col-1">
                                         <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                             name="client-checkbox" />
@@ -589,7 +589,7 @@ doGet('/admin/users/index/<?= $_pid ?>?action_type=<?=$actionType?>?list=1', 'li
                             </button> -->
 
                             <div class="row m-1">
-                                <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.field',  'cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                <?php if (!in_array($authUser['user_role'], ['admin.cc', 'admin.admin', 'admin.portfolio',  'cc', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                     <div class="checkbox col-1">
                                         <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                             name="client-checkbox" />

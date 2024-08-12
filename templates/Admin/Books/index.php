@@ -27,7 +27,7 @@
                 <div class="x_panel">
 
                     <div id="main_preloader" class="preloader">
-                        <div>
+                        <div class="spinner">
                             <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
                         </div>
                         <div><?=__('please_wait')?></div>

@@ -91,7 +91,7 @@
                                 <div class="heading">
                                     <div class="title">Lead</div>
                                     <div class="flex-center flex-gap-5">
-                                        <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button id="modalBtn" class="btn btn-modal"
                                                 ng-click="setZIndex();
                                                     updateModalElement('Lead');
@@ -105,7 +105,7 @@
                                         <!-- <button class="sm-btn">
                                             <i class="fas-plus"></i>
                                         </button> -->
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
 
                                             <button class="sm-btn">
                                                 <a class="fas-phone" href="tel:{{rec.client.client_mobile}}"></a>
@@ -197,7 +197,7 @@
                                     <div class="heading pb-0 mb-0 mt-3">
                                         <div class="title leadFont">Lead Information</div>
                                         <div class="flex-gap-10">
-                                            <?php if (!in_array($authUser['user_role'], ['accountant', 'aftersale', 'field']) || isset($authUser['user_original_role'])) { ?>
+                                            <?php if (!in_array($authUser['user_role'], ['accountant', 'aftersale', 'admin.portfolio']) || isset($authUser['user_original_role'])) { ?>
                                                 <button id="modalBtn" class="leadFont btn btn-modal" ng-click="setZIndex();
                                                 updateModalElement('Lead Information');
                                                 doGet('/admin/clients?id=' + rec.client.id, 'rec', 'client');
@@ -344,54 +344,52 @@
                                                 }}</div>
                                         </div>
 
-                                        <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'callcenter']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.callcenter', 'admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
 
                                             <div class="col-md-6 col-12 col-lg-3">
                                                 <span class="sm-txt">
                                                     <?= __('actions') ?>
                                                 </span>
-                                                <div class="note-flex">
 
-                                                    <div class="note-flex">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="flex-center text-center">
-                                                                    <label class="switch">
-                                                                        <input
-                                                                            ng-model="rec.pool.clientAction75[rec.client.id]"
-                                                                            ng-change="actionSave(rec.client.id, 75)"
-                                                                            ng-checked="checkDate(rec.pool.clientAction75[rec.client.id][1])"
-                                                                            ng-disabled="checkDate(rec.pool.clientAction75[rec.client.id][1])"
-                                                                            name="invoice4" id="finance-client4"
-                                                                            type="checkbox" />
-                                                                        <span class="slider round"></span>
-                                                                    </label>
-                                                                    <label for="finance-client3">
-                                                                        <?= __('called') ?>
-                                                                    </label>
-                                                                </div>
+                                                <div class="note-flex">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <div class="flex-center text-center">
+                                                                <label class="switch">
+                                                                    <input ng-model="rec.pool.clientAction75[rec.client.id]"
+                                                                        ng-change="actionSave(rec.client.id, 75)"
+                                                                        ng-checked="checkDate(rec.pool.clientAction75[rec.client.id][1])"
+                                                                        ng-disabled="checkDate(rec.pool.clientAction75[rec.client.id][1])"
+                                                                        name="invoice4" id="finance-client4"
+                                                                        type="checkbox" />
+                                                                    <span
+                                                                        ng-class="{ 'slider': true, 'round': true, 'disabled': checkDate(rec.pool.clientAction75[rec.client.id][1]) }"></span>
+                                                                </label>
+                                                                <label for="finance-client3">
+                                                                    <?= __('called') ?>
+                                                                </label>
                                                             </div>
-                                                            <div class="col-6">
-                                                                <div class="flex-center text-center">
-                                                                    <label class="switch">
-                                                                        <input
-                                                                            ng-model="rec.pool.clientAction76[rec.client.id]"
-                                                                            ng-change="actionSave(rec.client.id, 76)"
-                                                                            ng-checked="checkDate(rec.pool.clientAction76[rec.client.id][1])"
-                                                                            ng-disabled="checkDate(rec.pool.clientAction76[rec.client.id][1])"
-                                                                            name="invoice4" id="finance-client4"
-                                                                            type="checkbox" />
-                                                                        <span class="slider round"></span>
-                                                                    </label>
-                                                                    <label for="finance-client4">
-                                                                        <?= __('spoken') ?>
-                                                                    </label>
-                                                                </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="flex-center text-center">
+                                                                <label class="switch">
+                                                                    <input ng-model="rec.pool.clientAction76[rec.client.id]"
+                                                                        ng-change="actionSave(rec.client.id, 76)"
+                                                                        ng-checked="checkDate(rec.pool.clientAction76[rec.client.id][1])"
+                                                                        ng-disabled="checkDate(rec.pool.clientAction76[rec.client.id][1])"
+                                                                        name="invoice4" id="finance-client4"
+                                                                        type="checkbox" />
+                                                                    <span
+                                                                        ng-class="{ 'slider': true, 'round': true, 'disabled': checkDate(rec.pool.clientAction76[rec.client.id][1]) }"></span>
+                                                                </label>
+                                                                <label for="finance-client4">
+                                                                    <?= __('spoken') ?>
+                                                                </label>
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
+
 
                                             </div>
                                         <?php } ?>
@@ -489,22 +487,32 @@
                                         <div class="title"></div>
                                         <div class="flex-gap-10">
 
-                                            <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                            <?php if (in_array($authUser['user_role'], ['admin.supervisorcc', 'admin.admin', 'admin.root', 'admin.supervisorfield']) || isset($authUser['user_original_role'])) { ?>
                                                 <button class="btn btn-modal" id="modalBtn" ng-click="setZIndex();
                                                 updateModalElement('Assign');
                                                 newEntity('newTag');
                                                 tagList = [];
                                                 openModal('#subModal'); 
-                                                inlineElement('#elementsContainer', 1, 'assign')">
+                                                inlineElement('#elementsContainer', 1, 'fieldassign')">
                                                     <i class="fas-plus"></i>
-                                                    <?= __('add_assign') ?>
+                                                    <?= __('field_assign') ?>
+                                                </button>
+                                            <?php } ?>
+                                            <?php if (in_array($authUser['user_role'], ['admin.supervisorcc', 'admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
+                                                <button class="btn btn-modal" id="modalBtn" ng-click="setZIndex();
+                                                updateModalElement('Assign');
+                                                newEntity('newTag');
+                                                tagList = [];
+                                                openModal('#subModal'); 
+                                                inlineElement('#elementsContainer', 1, 'ccassign')">
+                                                    <i class="fas-plus"></i>
+                                                    <?= __('cc_assign') ?>
                                                 </button>
                                             <?php } ?>
                                             <button ng-if="rec.search.pool_id" class="btn btn-modal" id="modalBtn"
                                                 ng-click="
                                                     rec.user_client.type = 2;
                                                     rec.user_client.client_id = rec.client.id;
-
                                                     doSave(rec.user_client, 'user_client', 'userclient', '#client_btn', '#deneme');">
                                                 <i class="fas-plus"></i>
                                                 <?= __('self_assign') ?>
@@ -582,7 +590,7 @@
                                     <div class="title">Empathy Mapping</div>
                                     <div class="flex-gap-10">
                                         
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button id="modalBtn" class="btn btn-modal" ng-click="
                                                     setZIndex();
                                                     updateModalElement('Empathy Mapping');
@@ -676,7 +684,7 @@
 
                                             <div class="flex-center flex-gap-10">
                                                 <b> {{ clsale.stat_created.split(' ')[1] }} </b>
-                                                <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                                <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                                     <div class="dropdown">
                                                         <button class="btn" type="button" data-bs-toggle="dropdown"
                                                             aria-expanded="false">
@@ -736,7 +744,7 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" ng-click="setZIndex();
                                             newEntity('reminder'); 
                                             updateModalElement('Reminders');
@@ -775,20 +783,13 @@
                                     <div class="white-box mt-2">
                                         <div class="row">
 
-                                            <div class="col">
+                                            <div class="reminderCols">
                                                 <span class="sm-txt">
                                                     <?= __('next_call_date') ?>
                                                 </span>
                                                 <div class="wb-ele">
                                                     <?= $this->Html->image(
-                                                        '/img/datepicker.png',
-                                                        [
-                                                            "ng-click" => "
-                                                        doGet('/admin/reminders?id=' + clrem.reminders[clrem.reminders.length - 1].id, 'rec', 'reminder');
-                                                        openModal('#subModal');
-                                                        updateModalElement('Reminder');
-                                                        inlineElement('#elementsContainer', 1, 'reminders')"
-                                                        ]
+                                                        '/img/datepicker.png'
                                                     ) ?>
                                                     <div class="line-height-10">
                                                         <!-- <span class="sm-txt">Next Call Date</span> -->
@@ -797,7 +798,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col">
+                                            <div class="reminderCols">
                                                 <span class="sm-txt">
                                                     <?= __('next_call_time') ?>
                                                 </span>
@@ -810,7 +811,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col">
+                                            <div class="reminderCols">
                                                 <span class="sm-txt">
                                                     <?= __('Description') ?>
                                                 </span>
@@ -819,23 +820,23 @@
                                                     {{ clrem.reminder_desc }}
 
                                                 </div>
-                                                <div class="dropdown">
+
+                                            </div>
+                                            <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                                <div class="dropdown col-1 reminderDrop">
                                                     <button class="btn" type="button" data-bs-toggle="dropdown"
                                                         aria-expanded="false">
                                                         <i class="fas-ellipsis"></i>
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li id="delete_preloader">
-                                                            <a class="dropdown-item delete-btn"
-                                                                ng-click="multiHandle('/admin/reminders/delete')"
+                                                            <a class="dropdown-item delete-btn" ng-click="
+                                                                doDelete('/admin/reminders/delete/' +clrem.id);"
                                                                 href="#">Delete</a>
                                                         </li>
-
-
                                                     </ul>
                                                 </div>
-                                            </div>
-
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
@@ -860,7 +861,7 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
 
                                             <button class="btn btn-modal" ng-click="
                                             setZIndex();
@@ -934,7 +935,7 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" id="modalBtn"
                                                 ng-click="setZIndex();updateModalElement('Books');newEntity('book'); openModal('#subModal'); inlineElement('#elementsContainer', 1, 'booking')">
                                                 <i class="fas-plus"></i> Add
@@ -952,7 +953,7 @@
                                 </div>
 
                                 <div ng-repeat="clbook in rec.client.books track by $index">
-                                    
+
 
                                     <div class="heading">
                                         <div class="title"></div>
@@ -1056,7 +1057,7 @@
                                                     <?= __('in_turkey') ?>
                                                 </span>
                                                 <div class="wb-ele">
-                                                    <i class="fa fa-check-circle-o redText"></i>
+                                                    <i class="fa fa-times-circle-o redText"></i>
                                                 </div>
                                             </div>
                                             <!-- <div class="dropdown">
@@ -1098,7 +1099,7 @@
 
                         <div id="client1-collapseTwo" class="accordion-collapse collapse ">
                             <div class="accordion-body">
-                                <?php if (in_array($authUser['user_role'], ['admin.field', 'field']) || isset($authUser['user_original_role'])) { ?>
+                                <?php if (in_array($authUser['user_role'], ['admin.portfolio', 'admin.supervisorfield']) || isset($authUser['user_original_role'])) { ?>
 
                                     <div class="heading ">
                                         <div class="title"></div>
@@ -1124,7 +1125,7 @@
                                 <div>
 
                                     <div ng-repeat="deals in rec.client.reservations">
-                                        <?php if (in_array($authUser['user_role'], ['admin.field', 'field', 'callcenter', 'accountant']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (in_array($authUser['user_role'], ['admin.supervisorfield', 'admin.portfolio', 'admin.callcenter', 'accountant']) || isset($authUser['user_original_role'])) { ?>
                                             <div class="heading">
                                                 <div class="title"></div>
                                                 <div class="flex-gap-10">
@@ -1355,7 +1356,7 @@
                                                         <?= __('is_invoice_sent') ?>
                                                     </span>
                                                     <div class="wb-ele">
-                                                        <i class="fa fa-check-circle-o redText"></i>
+                                                        <i class="fa fa-times-circle-o redText"></i>
                                                     </div>
                                                 </div>
 
@@ -1375,7 +1376,7 @@
                                                         <?= __('is_commision_collacted') ?>
                                                     </span>
                                                     <div class="wb-ele">
-                                                        <i class="fa fa-check-circle-o redText"></i>
+                                                        <i class="fa fa-times-circle-o redText"></i>
                                                     </div>
                                                 </div>
 
@@ -1395,7 +1396,7 @@
                                                         <?= __('downpayment_paid') ?>
                                                     </span>
                                                     <div class="wb-ele">
-                                                        <i class="fa fa-check-circle-o redText"></i>
+                                                        <i class="fa fa-times-circle-o redText"></i>
                                                     </div>
                                                 </div>
 

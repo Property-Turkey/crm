@@ -713,7 +713,7 @@ class ClientsController extends AppController
                     ->leftJoinWith('Reminders')
                     ->leftJoinWith('Reports')
                     ->order([
-                        'Reminders.reminder_nextcall' => 'ASC',  // today call list
+                        // 'Reminders.reminder_nextcall' => 'ASC',  // today call list
                         'Clients.client_priority' => 'DESC',      // priority
                         'Clients.client_budget' => 'DESC',   // budget
                         'Clients.stat_created' => 'DESC',        // created
@@ -1349,6 +1349,7 @@ class ClientsController extends AppController
                 ];
             }
         }
+        
 
         $latestActions75 = $this->Clients->Actions->find()
             ->select(['client_id', 'action_type', 'stat_created'])
@@ -3218,6 +3219,7 @@ class ClientsController extends AppController
 
         $filterUserData = $this->request->getData('user_id');
 
+        // dd($filterUserData);
         $filterUserData = $filterUserData ?? '';
 
 

@@ -136,7 +136,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                     <i class="fa fa-history "></i> <?= __('prev_callList') ?>
                                 </button>
 
-                                
+
                                 <!-- Future Call List Button -->
                                 <button class="btn btn-success  text-dark"
                                     ng-click="rec.search.futureId = 'futureId'; doSearch();">
@@ -217,7 +217,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                 </label>
                             <?php } ?>
 
-                            <?php if (in_array($authUser['user_role'], ['teamleader']) || isset($authUser['user_original_role'])) { ?>
+                            <?php if (in_array($authUser['user_role'], ['admin.teamleader']) || isset($authUser['user_original_role'])) { ?>
                                 <label class="">
                                     <span class="sm-txt">
                                         <?= __('my_members') ?>
@@ -297,7 +297,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                     <div class="columns-titles">
                         <div class="row m-1">
 
-                            <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                            <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.portfolio', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                 <div class="checkbox">
 
                                 </div>
@@ -333,7 +333,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             <div class="client-row">
 
                                 <div class="row m-1">
-                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.root', 'admin.portfolio', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
 
                                         </div>
@@ -465,7 +465,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             <div class="client-row">
 
                                 <div class="row m-1">
-                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.field', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                    <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.portfolio', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                         <div class="checkbox col-1">
                                             <input type="checkbox" ng-model="selected[itm.id]" id="client-1"
                                                 name="client-checkbox" />
@@ -633,15 +633,15 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                 </span>
 
 
-                                                <div class="<?= (in_array($authUser['user_role'], [ 'accountant']) ? 'disabled-accoridon' : 'accordion-button') ?>"
+                                                <div class="<?= (in_array($authUser['user_role'], ['accountant']) ? 'disabled-accoridon' : 'accordion-button') ?>"
                                                     type="button" data-bs-toggle="collapse" data-bs-target="#{{itm.id}}"
                                                     aria-expanded="true" aria-controls="{{itm.id}}">
                                                     <p ng-if="itm.reports.length > 0"
-                                                        class="wb-ele sm-txt-indx <?= (in_array($authUser['user_role'], [ 'accountant']) ? 'disabled-input' : '') ?>">
+                                                        class="wb-ele sm-txt-indx <?= (in_array($authUser['user_role'], ['accountant']) ? 'disabled-input' : '') ?>">
                                                         {{ itm.reports[itm.reports.length - 1].report_text }}
                                                     </p>
                                                     <p ng-if="itm.reports == 0"
-                                                        class="wb-ele sm-txt-indx <?= (in_array($authUser['user_role'], [ 'accountant']) ? 'disabled-input' : '') ?>">
+                                                        class="wb-ele sm-txt-indx <?= (in_array($authUser['user_role'], ['accountant']) ? 'disabled-input' : '') ?>">
                                                         -
                                                     </p>
                                                 </div>
@@ -675,7 +675,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                 <p ng-if="itm.reservations.length > 0" class="wb-ele sm-txt-indx">
                                                     Sent {{ itm.reservations.length }} Properties
                                                 </p>
-                                                <p ng-if="itm.offers == 0" class="wb-ele sm-txt-indx">
+                                                <p ng-if="itm.reservations == 0" class="wb-ele sm-txt-indx">
                                                     -
                                                 </p>
 
@@ -705,7 +705,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                     name="" id="" <?= ($authUser['user_role'] === 'field') ? 'disabled' : '' ?> />
 
 
-                                                <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'callcenter']) || isset($authUser['user_original_role'])) { ?>
+                                                <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'callcenter', 'admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <div class="row">
@@ -1096,6 +1096,10 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                     </button>
                                                 </h2>
 
+
+
+
+
                                                 <div id="collapseForm{{itm.id}}" class="accordion-collapse collapse p-3"
                                                     aria-labelledby="headingTwo">
 
@@ -1165,6 +1169,57 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                         <?= __('view_allNotes') ?>
                                                     </button>
                                                 </h2>
+                                                <!-- <div class=" indexNotes box-heading d-flex ">
+                                                    <div class="col-lg-2 text-nowrap">
+                                                        <i class="fas-sticky-note"></i> {{
+                                                        clsale.type_category.category_name }}
+                                                        {{DtSetter('rec_stateSale', clsale.client_current_stage,
+                                                        clsale.report_type)}},
+                                                        <b>by {{ clsale.user.user_fullname }}</b>
+                                                        <p>
+                                                            <i class="fas-home"></i>
+                                                            {{ clsale.property.property_ref}}
+                                                        </p>
+                                                    </div>
+
+
+                                                    <div class="col-lg-8 text p-2">
+                                                        <p>
+                                                            {{ clsale.report_text }}
+                                                        </p>
+                                                    </div>
+
+
+                                                    <div class="flex-center flex-gap-10">
+                                                        <b> {{ clsale.stat_created.split(' ')[1] }} </b>
+                                                        <?php if (in_array($authUser['user_role'], ['field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                                            <div class="dropdown">
+                                                                <button class="btn" type="button" data-bs-toggle="dropdown"
+                                                                    aria-expanded="false">
+                                                                    <i class="fas-ellipsis"></i>
+                                                                </button>
+                                                                <ul class="dropdown-menu">
+                                                                    
+                                                                    <li id="delete_preloader">
+                                                                        <a class="dropdown-item delete-btn" ng-click="
+                                                                    updateModalElement('Notes');
+                                                                    openModal('#subModal'); 
+                                                                    setZIndex();
+
+                                                                    doGet('/admin/reports?id=' + clsale.id, 'rec', 'report');
+                                                                    inlineElement('#elementsContainer', 1, 'notes');"
+                                                                            href="#">
+                                                                            <?= __('edit') ?>
+                                                                        </a>
+                                                                    </li>
+
+                                                                </ul>
+                                                            </div>
+                                                        <?php } ?>
+
+
+                                                    </div>
+                                                </div> -->
                                                 <div class="indexNotes">
                                                     <div id="{{itm.id}}2" ng-repeat="clsale in itm.reports track by $index"
                                                         class="accordion-collapse collapse show"
@@ -1198,6 +1253,36 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                                         </div>
                                                                         <div class="flex-center flex-gap-10">
                                                                             <b> {{ clsale.stat_created.split(' ')[1]}} </b>
+
+                                                                            <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'admin.accountant', 'admin.portfolio', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                                                                <div class="dropdown">
+                                                                                    <button class="btn" type="button" data-bs-toggle="dropdown"
+                                                                                        aria-expanded="false">
+                                                                                        <i class="fas-ellipsis"></i>
+                                                                                    </button>
+                                                                                    <ul class="dropdown-menu">
+                                                                                        <!-- <li id="delete_preloader">
+                                                                                    <a class="dropdown-item delete-btn"
+                                                                                        ng-click="doDelete('/admin/reports/delete/' + clsale.id);
+                                                                                        doSave(rec.report, 'report', 'reports', '#client_btn', '#report_preloader');"
+                                                                                        href="#">Delete</a>
+                                                                                </li> -->
+                                                                                        <li id="delete_preloader">
+                                                                                            <a class="dropdown-item delete-btn" ng-click="
+                                                                                        updateModalElement('Notes');
+                                                                                        openModal('#subModal'); 
+                                                                                        setZIndex();
+
+                                                                                        doGet('/admin/reports?id=' + clsale.id, 'rec', 'report');
+                                                                                        inlineElement('#elementsContainer', 1, 'notes');"
+                                                                                                href="#">
+                                                                                                <?= __('edit') ?>
+                                                                                            </a>
+                                                                                        </li>
+
+                                                                                    </ul>
+                                                                                </div>
+                                                                            <?php } ?>
                                                                         </div>
                                                                     </div>
                                                                 </div>
