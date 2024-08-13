@@ -350,43 +350,42 @@ class ClientsController extends AppController
                         }
                     } elseif ($col == 'recentId') {
 
-                        $twoDaysAgo = (new DateTime())->modify('-2 days')->format('Y-m-d H:i:s');
-
+                        // $twoDaysAgo = (new DateTime())->modify('-2 days')->format('Y-m-d H:i:s');
+                        $fiveHoursLater = (new DateTime())->modify('-5 hours')->format('Y-m-d H:i:s');
                         $query = $this->Clients->find()
                             ->select(['id'])
                             ->where([
-                                'stat_created >' => $twoDaysAgo
+                                'stat_created >' => $fiveHoursLater
                             ])
                             ->order(['stat_created' => 'DESC']);
-
-
+                    
                         $results = $query->all();
-
-
-                        // dd($results);
+                    
                         $clientIds = [];
-
                         foreach ($results as $result) {
-                            $clientIds[] = $result->id;
+                            $clientIds[] = (int)$result->id;  
                         }
-
-
-                        // dd($clientIds);
-
+                    
                         if (!empty($clientIds)) {
                             $clientQuery = $this->Clients->find()
                                 ->select(['id'])
                                 ->where(['Clients.id IN' => $clientIds]);
-
-                            
+                    
                             $val = $clientQuery->extract('id')->toArray();
                         }
-
+                    
                         if (!empty($val)) {
-                            $conditions['Clients.id IN'] = $val;
+                           
+                            if (!is_array($val)) {
+                                $val = [$val];
+                            }
+                    
+                            
+                            $conditions['Clients.id IN'] = array_map('intval', $val);
                         }
-
-                    } elseif (in_array($col, $otherCtrl)) {
+                    }
+                    
+                    elseif (in_array($col, $otherCtrl)) {
 
                         $conditions['' . $col] = $val;
                     } elseif ($col == 'client_mobile') {
@@ -395,7 +394,26 @@ class ClientsController extends AppController
                         foreach ($val as $tag) {
                             $conditions['AND'][] = ['client_tags LIKE ' => '%"' . $tag['value'] . '"%'];
                         }
-                    } elseif ($col == 'adrs_country') {
+                    }elseif ($col == 'user_id') {
+                        // Fetch users with the role 'admin.callcenter'
+                        $callcenterUsers = $this->Clients->Users->find()
+                            ->select(['id'])
+                            ->where(['user_role' => 'admin.callcenter'])
+                            ->toArray();
+                    
+                            dd($callcenterUsers);
+                        // Extract user IDs
+                        $callcenterUserIds = [];
+                        foreach ($callcenterUsers as $user) {
+                            $callcenterUserIds[] = $user->id;
+                        }
+                    
+                        // Include users with role 'admin.callcenter'
+                        if (!empty($callcenterUserIds)) {
+                            $conditions['AND'][] = ['Clients.user_id IN' => $callcenterUserIds];
+                        }
+                    }
+                    elseif ($col == 'adrs_country') {
                         $countryIds = array_map(function ($tag) {
                             return (int) $tag['value'];
                         }, $val);

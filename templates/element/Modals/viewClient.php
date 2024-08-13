@@ -684,7 +684,7 @@
 
                                             <div class="flex-center flex-gap-10">
                                                 <b> {{ clsale.stat_created.split(' ')[1] }} </b>
-                                                <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                                <?php if (in_array($authUser['user_role'], ['admin.admin' , 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                                                     <div class="dropdown">
                                                         <button class="btn" type="button" data-bs-toggle="dropdown"
                                                             aria-expanded="false">

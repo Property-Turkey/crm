@@ -180,7 +180,7 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
             <?php } ?>
 
 
-            <div class="white-box-dashboard mb-3 sales_funnelDashboard">
+            <!-- <div class="white-box-dashboard mb-3 sales_funnelDashboard">
                 <div class="row col-md-2">
                     <div class="heading my-1 dashboard-h">
                         <div class="title-d">
@@ -195,7 +195,29 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                     </div>
                 </div>
 
+            </div> -->
+
+            <div class="white-box-dashboard mb-3 sales_funnelDashboard">
+                <div class="row col-md-2">
+                    <div class="heading my-1 dashboard-h">
+                        <div class="title-d">
+                            <?= __('sales_funnel') ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="chart-container" ng-if="rec.bar.data">
+                        <canvas chart-directive chart-type="bar" data="rec.bar.data"></canvas>
+                    </div>
+                    <div class="chart-container text-center" ng-if="!rec.bar.data || rec.bar.data=== 0">
+                        <div class="no-data-box">
+                            <?= __('no_data') ?>
+                        </div>
+                    </div>
+                </div>
             </div>
+
 
             <div class="row">
 
@@ -213,6 +235,12 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         <div class="chart-container">
                             <canvas chart-directive chart-type="doughnut"
                                 data="rec.doughnut.sourceDoughnutData"></canvas>
+                        </div>
+                        <!-- {{rec.doughnut.sourceDoughnutData.labels}} -->
+                        <div class="chart-container text-center" ng-if="rec.doughnut.sourceDoughnutData === null || rec.doughnut.sourceDoughnutData === 0 || !rec.doughnut.sourceDoughnutData">
+                            <div class="no-data-box">
+                                <?= __('no_data') ?>
+                            </div>
                         </div>
 
                     </div>
@@ -397,29 +425,29 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                         <!-- Advisor Select -->
 
 
-                        <label for="" >
+                        <!-- <label for="">
                             <span class="sm-txt">
                                 <?= __('client_current_stage') ?>
                             </span>
                             <select name="category_id" class="wb-ele-dashboard py-1" ng-model="rec.dashboard.user_id"
                                 ng-change="updateCharts()">
-                                <option value="" selected="selected">Select User</option>
+                                <option value="" selected="selected"><?= __('select_user') ?></option>
                                 <option value="0">All</option>
                                 <option value="{{ userId }}" ng-repeat="(userId, userName) in rec.numbers.usersCC">{{
                                     userName
                                     }}</option>
                             </select>
-                        </label>
+                        </label> -->
 
                         <label class="filter-label relative">
                             <span class="sm-txt">
-                                <?= __('client_tags') ?>
+                                <?= __('client_current_stage') ?>
                             </span>
 
                             <tags-input class="wb-ele-dashboard py-1"
-                                tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}" ng-model="rec.dashboard.user_id[0].value"
-                                add-from-autocomplete-only="true" max-tags="1" placeholder="<?= __('client_tags') ?>"
-                                display-property="text" key-property="value">
+                                tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
+                                ng-model="rec.dashboard.user_id" add-from-autocomplete-only="true" max-tags="1"
+                                placeholder="<?= __('select_user') ?>" display-property="text" key-property="value">
                                 <auto-complete min-length="1" highlightMatchedText="true"
                                     source="loadTags($query, 'users', '', 'admin.callcenter')"></auto-complete>
                             </tags-input>
@@ -427,8 +455,8 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                             <span ng-click="updateCharts()" class="fa fa-search doSearch"></span>
 
                         </label>
-                        {{rec.dashboard.user_id}}----------
-                        {{ rec.dashboard.user_id[0].value }}------
+                        <!-- {{rec.dashboard.user_id}}----------
+                        {{ rec.dashboard.user_id[0].value }}------ -->
 
 
 

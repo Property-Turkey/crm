@@ -31,6 +31,29 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                         <div class="m-2">
 
 
+                            <label class="mt-3">
+                                <!-- <span class="sm-txt">
+                                    <?= __('Call Lists') ?>
+                                </span> -->
+
+                                <!-- Previous Call List Button -->
+                                <button class="drpbtn" ng-click="rec.search.prevId = 'prevId'; doSearch();">
+                                    <i class="fa fa-history "></i> <?= __('prev_callList') ?>
+                                </button>
+
+
+                                <!-- Future Call List Button -->
+                                <button class="drpbtn " ng-click="rec.search.futureId = 'futureId'; doSearch();">
+                                    <i class="fa fa-clock-o"></i> <?= __('future_callList') ?>
+                                </button>
+
+                                <!-- Recent Clients Button -->
+                                <button class="drpbtn " ng-click="rec.search.recentId = 'recentId'; doSearch();">
+                                    <i class="fa fa-user-plus "></i> <?= __('fresh_clients') ?>
+                                </button>
+                            </label>
+
+
                             <label class="relative">
                                 <span class="sm-txt">
                                     <?= __('client_tags') ?>
@@ -123,63 +146,6 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             <?php } ?>
 
 
-
-
-                            <label class="">
-                                <span class="sm-txt">
-                                    <?= __('Call Lists') ?>
-                                </span>
-
-                                <!-- Previous Call List Button -->
-                                <button class="btn btn-primary  text-dark"
-                                    ng-click="rec.search.prevId = 'prevId'; doSearch();">
-                                    <i class="fa fa-history "></i> <?= __('prev_callList') ?>
-                                </button>
-
-
-                                <!-- Future Call List Button -->
-                                <button class="btn btn-success  text-dark"
-                                    ng-click="rec.search.futureId = 'futureId'; doSearch();">
-                                    <i class="fa fa-clock "></i> <?= __('future_callList') ?>
-                                </button>
-
-                                <!-- Recent Clients Button -->
-                                <button class="btn btn-info  text-dark"
-                                    ng-click="rec.search.recentId = 'recentId'; doSearch();">
-                                    <i class="fa fa-user-plus "></i> <?= __('fresh_clients') ?>
-                                </button>
-                            </label>
-
-
-
-
-
-                            <!-- 
-                            <label class="">
-                                <span class="sm-txt">
-                                    <?= __('future_callList') ?>
-                                </span>
-
-                                <button class="wb-ele-select col-12"
-                                    ng-click="rec.search.futureId = 'futureId'; doSearch();">
-                                    <?= __('future_callList') ?>
-                                </button>
-
-
-                            </label>
-
-
-
-                            <label class="">
-                                <span class="sm-txt">
-                                    <?= __('recent_clients') ?>
-                                </span>
-
-                                <button class="wb-ele-select col-12"
-                                    ng-click="rec.search.recentId = 'recentId'; doSearch();">
-                                    <?= __('fresh_clients') ?>
-                                </button>
-                            </label> -->
 
 
 
@@ -320,7 +286,6 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                     </div>
                                 </div>
                             <?php } ?>
-
 
                         </div>
                     </div>
@@ -513,6 +478,8 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
                                                     {{itm.client_mobile }}
                                                 </p>
+                                                <!-- <p><i class="fas-phone"></i> {{ itm.client_mobile | phoneFormat }}</p> -->
+
                                                 <p><i class="fas-flag"></i> {{ itm.client_nationality }}</p>
 
                                                 <p>
@@ -550,6 +517,16 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                 </span>
 
                                                 <p>
+                                                <div class="mx-2" type="button"
+                                                        my-tooltip="<?= __('set_the_priorty') ?>"
+                                                        ng-repeat="notify in rec.notification.clientsWithoutBudget"
+                                                        ng-if="notify.id == itm.id">
+                                                        <i class="fa fa-exclamation-circle redColor" aria-hidden="true">
+                                                            <small class="note-font">
+                                                                <?= __('set_the_budget') ?>
+                                                            </small>
+                                                        </i>
+                                                    </div>
                                                     <?= $this->Form->select(
                                                         'client.client_budget',
                                                         [
@@ -1254,9 +1231,10 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                                         <div class="flex-center flex-gap-10">
                                                                             <b> {{ clsale.stat_created.split(' ')[1]}} </b>
 
-                                                                            <?php if (!in_array($authUser['user_role'], ['field', 'accountant', 'admin.accountant', 'admin.portfolio', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                                                            <?php if (in_array($authUser['user_role'], ['admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
                                                                                 <div class="dropdown">
-                                                                                    <button class="btn" type="button" data-bs-toggle="dropdown"
+                                                                                    <button class="btn" type="button"
+                                                                                        data-bs-toggle="dropdown"
                                                                                         aria-expanded="false">
                                                                                         <i class="fas-ellipsis"></i>
                                                                                     </button>
@@ -1268,7 +1246,8 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                                                                         href="#">Delete</a>
                                                                                 </li> -->
                                                                                         <li id="delete_preloader">
-                                                                                            <a class="dropdown-item delete-btn" ng-click="
+                                                                                            <a class="dropdown-item delete-btn"
+                                                                                                ng-click="
                                                                                         updateModalElement('Notes');
                                                                                         openModal('#subModal'); 
                                                                                         setZIndex();

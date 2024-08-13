@@ -1283,3 +1283,12 @@ msgstr "Previous Calls List"
 
 msgid "fresh_clients"
 msgstr "Fresh Clients List"
+
+
+msgid "alermsg1"
+msgstr "Please select both start and end dates."
+
+msgid "select_user"
+msgstr "Select User"
+
+

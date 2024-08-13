@@ -812,7 +812,6 @@ a {
     /* white-space: nowrap; */
     overflow: hidden;
     width: -moz-available;
-
 }
 .wb-ele-dashboard {
     background-color: white;
@@ -1245,7 +1244,6 @@ input[type="checkbox"]:checked:after {
 .disabled-accoridon::-webkit-calendar-picker-indicator {
     display: none; /* Hide spinner and calendar picker for datetime-local input in WebKit browsers */
 }
-
 
 .navbar .nav-btns .menu {
     position: absolute;
@@ -1954,11 +1952,11 @@ tags-input .tags .even.selected {
     justify-content: space-between;
 }
 
-.reminderCols{
+.reminderCols {
     width: 325px;
 }
 
-.reminderDrop{
+.reminderDrop {
     display: flex;
     align-items: end;
     justify-content: center;
@@ -2018,12 +2016,6 @@ input:checked + .slider {
     background-color: #15d25f;
 }
 
-
-
-
-
-
-
 .switch-actions {
     position: relative;
     display: inline-block;
@@ -2065,7 +2057,6 @@ input:checked + .actionSlider {
     background-color: #15d25f;
 }
 
-
 input:checked + .disabled {
     background-color: #15d25f;
 }
@@ -2086,6 +2077,43 @@ input:checked + .disabled {
     transition: 0.4s;
 }
 
+.no-data-box {
+    display: inline-block;
+    padding: 36px 50px;
+    background-color: #b93006;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    animation: pulse 2.5s infinite;
+    text-transform: uppercase;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 5px #b93006;
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px #b93006;
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 5px #b93006;
+    }
+}
+
+.drpbtn {
+    width: 90px;
+    height: 90px;
+    background-color: #b93006;
+    color: white;
+    border: 1px solid #b93006;
+    border-radius: 5px;
+    /* padding: 10px; */
+    font-size: 14px;
+}
 .noData {
     font-size: 14px;
     color: #d73b35;
@@ -2250,6 +2278,9 @@ input:checked + .slider:before {
     position: relative;
     height: 500px;
     min-width: 800px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .redBg {
     background-color: var(--red2);
@@ -2474,7 +2505,6 @@ input:checked + .slider:before {
     align-items: center;
     flex-direction: column;
 } */
-
 
 .preloader {
     display: none; /* Initially hidden */

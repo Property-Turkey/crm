@@ -94,14 +94,9 @@ class UserClientController extends AppController
             $dt['stat_created'] = date('Y-m-d H:i:s');
             $client_id = $dt['client_id'];
             
-            if (isset($dt['type'])) {
-               
-                $dt['user_id'] = $this->authUser['id'];
-                $user_id = $dt['user_id'];
-
-            }
             
-            elseif (isset($dt['recState'])) {
+            
+            if (isset($dt['recState'])) {
 
                 $dt['user_id'] = $this->authUser['id'];
 
@@ -121,8 +116,12 @@ class UserClientController extends AppController
                 $dt['user_id'] = $this->authUser['id'];
             } else {
 
+                if(isset($dt['user'])){
                     $user_id = $dt['user'][0]['value'];
-                
+                }else{
+                    $dt['user_id'] = $this->authUser['id'];
+                    $user_id = $dt['user_id'];
+                }
                 
                 $UserClientTable = $this->getTableLocator()->get('UserClient');
                 $ClientTable = $this->getTableLocator()->get('UserClient')->Clients->get($client_id);
@@ -143,18 +142,12 @@ class UserClientController extends AppController
         if (!isset($dt['recState']) && !isset($dt['accept']) && !isset($dt['reject']) && !isset($dt['reallocate'])) {
 
             if (!$this->isUserAlreadyAssigned($client_id, $user_id)) {
-                $UserClientTable = $this->getTableLocator()->get('UserClient');
-                
-
-                
+                $dt['user_id'] = $user_id;
                 unset($dt['user']);
-                // unset($dt['id']); 
-                // dd($user_id);
-                
-                // dd($dt);
+                unset($dt['id']);
                 $rec = $UserClientTable->newEntity($dt);
 
-                // $rec->client_id = $client_id;
+                $rec->client_id = $client_id;
                 if ($newddRec = $this->getTableLocator()->get('UserClient')->Clients->save($ClientTable) && $newRec = $UserClientTable->save($rec)) {
                     echo json_encode(["status" => "SUCCESS", "data" => $this->Do->convertJson($newRec, $newddRec)]);
                     die();
