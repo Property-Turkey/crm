@@ -524,7 +524,11 @@
             return defines[tar][val];
         }
 
+        var activeUserText = "<?= __('active_user') ?>";
+        var inactiveUserText = "<?= __('inactive_user') ?>";
 
+
+        
         var setZIndex = function () {
             var viewClientModal = $("#viewClient_mdl");
             viewClientModal.css("z-index", 9);
@@ -4042,7 +4046,6 @@
                                             </button>
                                         </div>
                                     </div>
-
 
                                 </form>
 

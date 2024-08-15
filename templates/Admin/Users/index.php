@@ -53,9 +53,18 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             <input type="text" ng-change="doSearch()" ng-model="rec.search.user_fullname"
                                 placeholder="Search Users" />
                         </form>
-
+                        <div class="priority">
+                            <div class="low">
+                            </div><?= __('active_user') ?>
+                        </div>
+                        <div class="priority">
+                            <div class="high">
+                            </div><?= __('inactive_user') ?>
+                        </div>
                     </div>
+
                     <div class="dash-nav">
+
                         <?php echo $this->element('paginator-ng') ?>
                     </div>
                 </div>
@@ -71,13 +80,13 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             </div>
 
                             <div class="col-11 hideMob row">
-                                <div class="col-md-5 p-0 title">
+                                <div class="col-md-2 p-0 title">
                                     <?= __('user') ?>
                                 </div>
-                                <div class="col-md-5 p-0 title">
+                                <div class="col-md-4 p-0 title">
                                     <?= __('user_info') ?>
                                 </div>
-                                <div class="col-md-2 p-0 title">
+                                <div class="col-md-6 p-0 title">
                                     <?= __('action') ?>
                                 </div>
 
@@ -96,13 +105,24 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
                                 <div class="col-lg-11 col-12 row">
 
-                                    <div class="previewToggle col-lg-5 col-12 row">
+                                    <div class="previewToggle col-lg-2 col-12 row">
                                         <div class="col-4 title hideWeb">
                                             <?= __('user') ?>
                                         </div>
                                         <div class="col-6 col-lg-12">
+                                            <!-- <div class="mx-2" type="button" my-tooltip="<?= __('set_the_priorty') ?>"
+                                                ng-repeat="notify in rec.notification.clientsWithoutPriorty"
+                                                ng-if="notify.id == itm.id">
+                                                <i class="fa fa-exclamation-circle redColor" aria-hidden="true">
+                                                    <small class="note-font">
+                                                        <?= __('set_the_priorty') ?>
+                                                    </small>
+                                                </i>
+                                            </div> -->
                                             <div class="priority">
-                                                <div ng-class="{'low': itm.rec_state == 1, 'high': itm.rec_state == 0}">
+
+                                                <div ng-if="itm.rec_state == 1" class="low" my-tooltip="<?=__('active_user')?>"></div>
+                                                <div ng-if="itm.rec_state == 0" class="high" my-tooltip="<?=__('inactive_user')?>">
                                                 </div>{{itm.id}}
                                             </div>
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#viewUser_mdl"
@@ -114,7 +134,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-5 col-12 pr-5 mr-5 info">
+                                    <div class="col-lg-4 col-12 pr-5 mr-5 info">
                                         <div class="col-4 title hideWeb">
                                             <?= __('user_info') ?>
                                         </div>
@@ -129,7 +149,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-2 col-12 pr-5 mr-5 info">
+                                    <div class="col-lg-6 col-12 pr-5 mr-5 info">
                                         <div class="col-4 title hideWeb">
                                             <?= __('user_info') ?>
                                         </div>

@@ -1045,10 +1045,10 @@ msgid "downpayment_paid"
 msgstr "Downpayment Paid?"
 
 msgid "allow_user_access_this_pool"
-msgstr "Allow User to Access This Pool"
+msgstr "Allow Pool Access"
 
 msgid "move_user_to_own_pool"
-msgstr "Move User to Own Pool"
+msgstr "Move to Pool"
 
 msgid "view_allNotes"
 msgstr "View All Notes"
@@ -1291,4 +1291,15 @@ msgstr "Please select both start and end dates."
 msgid "select_user"
 msgstr "Select User"
 
+
+msgid "active_user"
+msgstr "Active User"
+
+
+msgid "inactive_user"
+msgstr "Inactive User"
+
+
+msgid "make_team_member"
+msgstr "Make Team Member"
 

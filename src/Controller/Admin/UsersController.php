@@ -629,9 +629,15 @@ class UsersController extends AppController
             // if (isset($dt['team'])) {
             //     $rec->parent_id = $dt['parent_id'];
             // }
-            if (isset($dt['parent_id'])) {
+
+            // dd($dt['parent_id']);
+            if (isset($dt['parent_id']) && is_array($dt['parent_id']) && isset($dt['parent_id'][0]['value'])) {
                 $rec->parent_id = $dt['parent_id'][0]['value'];
+            } else {
+                // Handle the case where parent_id is null or not an array
+                $rec->parent_id = null; // or any default value you prefer
             }
+            
 
         }
 

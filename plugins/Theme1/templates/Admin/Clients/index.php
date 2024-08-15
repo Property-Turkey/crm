@@ -4,7 +4,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
 <div id="indxPg" class="right_col" role="main" ng-init="
         doGet('/admin/clients/index/<?= $_pid ?>?list=1', 'list', 'clients');
-        doGet('/admin/clients/pools', 'rec', 'pool');
+       
         doGet('/admin/clients/getClientChanges', 'rec', 'getClientChange');
         doGet('/admin/clients/notifications', 'rec', 'notification');
         doGet('/admin/clients/getTeamMembers', 'rec', 'getTeamMember');
@@ -427,7 +427,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                         <div class="client accordion-item" ng-repeat="itm in lists.clients track by $index">
                             <!-- Client row Start -->
 
-                            <div class="client-row">
+                            <div class="client-row" >
 
                                 <div class="row m-1">
                                     <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.admin', 'admin.portfolio', 'field', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
@@ -440,7 +440,7 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
                                     <div class="col-lg-11 col-12 row">
 
-
+                                    
                                         <div class="previewToggle col-lg-3 col-12 row">
                                             <div class="col-4 title hideWeb">
                                                 <?= __('sales_content') ?>

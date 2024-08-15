@@ -2085,7 +2085,7 @@ input:checked + .disabled {
     font-size: 18px;
     font-weight: bold;
     border-radius: 5px;
-    animation: pulse 2.5s infinite;
+    /* animation: pulse 2.5s infinite; */
     text-transform: uppercase;
 }
 
