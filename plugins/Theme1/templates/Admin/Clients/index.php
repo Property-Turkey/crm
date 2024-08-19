@@ -250,6 +250,21 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
                             <input type="text" ng-change="doSearch()" ng-model="rec.search.client_name"
                                 placeholder="Search Clients" />
                         </form>
+                        <form class="search-leads-form">
+                            <i class="fas-search"></i>
+                            <input type="text" ng-change="doSearch()" ng-model="rec.search.client_mobile"
+                                placeholder="Search Clients Mobile" />
+                        </form>
+                        <form class="search-leads-form">
+                            <i class="fas-search"></i>
+                            <input type="text" ng-change="doSearch()" ng-model="rec.search.client_email"
+                                placeholder="Search Clients Email" />
+                        </form>
+                        <form class="search-leads-form">
+                            <i class="fas-search"></i>
+                            <input type="text" ng-change="doSearch()" ng-model="rec.search.id"
+                                placeholder="Search Clients ID" />
+                        </form>
 
                     </div>
                     <div class="dash-nav">
