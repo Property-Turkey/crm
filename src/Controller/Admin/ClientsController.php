@@ -136,60 +136,53 @@ class ClientsController extends AppController
     }
 
 
-    public function getPerformanceData()
-    {
+    // public function getPerformanceData()
+    // {
 
-        $user = $this->request->getParam('_pid');
-        $action_type = $this->request->getQuery('action_type');
-        $date = $this->request->getQuery('date') ? $this->request->getQuery('date') : 0;
+    //     $user = $this->request->getParam('_pid');
+    //     $action_type = $this->request->getQuery('action_type');
+    //     $date = $this->request->getQuery('date') ? $this->request->getQuery('date') : 0;
 
-        // debug($user);
+    //     if ($user && $action_type && $date) {
+    //         $ActionsTable = $this->getTableLocator()->get('Actions');
+    //         $actionResults = $ActionsTable->find()
+    //             ->select(['client_id'])
+    //             ->where([
+    //                 'user_id' => $user,
+    //                 'action_type' => $action_type,
+    //                 'DATE(stat_created)' => $date
+    //             ])
+    //             ->toArray();
 
-        // debug($action_type);
+    //         dd($actionResults);
 
-        // dd($date);
+    //         $clientIds = [];
+    //         foreach ($actionResults as $action) {
+    //             $clientIds[] = $action->client_id;
+    //         }
 
-        // dd($action_type);
-        if ($user && $action_type && $date) {
-            $ActionsTable = $this->getTableLocator()->get('Actions');
-            $actionResults = $ActionsTable->find()
-                ->select(['client_id'])
-                ->where([
-                    'user_id' => $user,
-                    'action_type' => $action_type,
-                    'DATE(stat_created)' => $date
-                ])
-                ->toArray();
+    //         // if (!empty($clientIds)) {
+    //         //     $query->where(['Clients.id IN' => $clientIds]);
+    //         // }
 
-            dd($actionResults);
+    //         echo json_encode([
+    //             'status' => 'SUCCESS',
+    //             'data' => $clientIds,
+    //             '_serialize' => ['status', 'data']
+    //         ]);
+    //         die();
+    //     } else {
 
-            $clientIds = [];
-            foreach ($actionResults as $action) {
-                $clientIds[] = $action->client_id;
-            }
-
-            // if (!empty($clientIds)) {
-            //     $query->where(['Clients.id IN' => $clientIds]);
-            // }
-
-            echo json_encode([
-                'status' => 'SUCCESS',
-                'data' => $clientIds,
-                '_serialize' => ['status', 'data']
-            ]);
-            die();
-        } else {
-
-            echo json_encode([
-                'status' => 'SUCCESS',
-                'data' => [],
-                '_serialize' => ['status', 'data']
-            ]);
-            die();
-        }
+    //         echo json_encode([
+    //             'status' => 'SUCCESS',
+    //             'data' => [],
+    //             '_serialize' => ['status', 'data']
+    //         ]);
+    //         die();
+    //     }
 
 
-    }
+    // }
 
 
     public function index($_pid = null)
@@ -1053,63 +1046,63 @@ class ClientsController extends AppController
         die();
     }
 
-    public function getClientChanges()
-    {
-        $LogsTable = $this->getTableLocator()->get('Logs');
-        $logs = $LogsTable
-            ->find()
-            ->where([
-                'log_url LIKE' => '%"Clients"%',
-            ])
-            ->order(['stat_created' => 'DESC'])
-            ->toArray();
+    // public function getClientChanges()
+    // {
+    //     $LogsTable = $this->getTableLocator()->get('Logs');
+    //     $logs = $LogsTable
+    //         ->find()
+    //         ->where([
+    //             'log_url LIKE' => '%"Clients"%',
+    //         ])
+    //         ->order(['stat_created' => 'DESC'])
+    //         ->toArray();
 
-        $notifications = [];
+    //     $notifications = [];
 
-        foreach ($logs as $log) {
-            $logChanges = json_decode($log->log_changes, true);
+    //     foreach ($logs as $log) {
+    //         $logChanges = json_decode($log->log_changes, true);
 
-            if (!is_array($logChanges) || !isset($logChanges['before']) || !isset($logChanges['after'])) {
-                continue;
-            }
+    //         if (!is_array($logChanges) || !isset($logChanges['before']) || !isset($logChanges['after'])) {
+    //             continue;
+    //         }
 
-            $changes = [];
+    //         $changes = [];
 
-            foreach ($logChanges['before'] as $field => $beforeValue) {
-                if (isset($logChanges['after'][$field]) && $logChanges['after'][$field] !== $beforeValue) {
-                    // Check if $field is a string before calling ucfirst
-                    if (is_string($field)) {
-                        $changes[] = ucfirst($field) . " changed from {$beforeValue} to {$logChanges['after'][$field]}";
-                    } else {
-                        // Handle non-string $field appropriately if needed
-                        $changes[] = "Field {$field} changed from {$beforeValue} to {$logChanges['after'][$field]}";
-                    }
-                }
-            }
+    //         foreach ($logChanges['before'] as $field => $beforeValue) {
+    //             if (isset($logChanges['after'][$field]) && $logChanges['after'][$field] !== $beforeValue) {
+    //                 // Check if $field is a string before calling ucfirst
+    //                 if (is_string($field)) {
+    //                     $changes[] = ucfirst($field) . " changed from {$beforeValue} to {$logChanges['after'][$field]}";
+    //                 } else {
+    //                     // Handle non-string $field appropriately if needed
+    //                     $changes[] = "Field {$field} changed from {$beforeValue} to {$logChanges['after'][$field]}";
+    //                 }
+    //             }
+    //         }
 
-            if (!empty($changes)) {
-                $logArray = json_decode($log->log_url, true);
+    //         if (!empty($changes)) {
+    //             $logArray = json_decode($log->log_url, true);
 
-                $notification = [
-                    'log_id' => $log->id,
-                    'client_id' => isset($logArray[7]) ? $logArray[7] : '',
-                    'stat_created' => $log->stat_created,
-                    'changes' => $changes
-                ];
+    //             $notification = [
+    //                 'log_id' => $log->id,
+    //                 'client_id' => isset($logArray[7]) ? $logArray[7] : '',
+    //                 'stat_created' => $log->stat_created,
+    //                 'changes' => $changes
+    //             ];
 
-                $notifications[] = $notification;
-            }
-        }
+    //             $notifications[] = $notification;
+    //         }
+    //     }
 
-        echo json_encode([
-            "status" => "SUCCESS",
-            "msg" => __("success"),
-            "data" => [
-                'notifications' => $notifications,
-            ]
-        ]);
-        die();
-    }
+    //     echo json_encode([
+    //         "status" => "SUCCESS",
+    //         "msg" => __("success"),
+    //         "data" => [
+    //             'notifications' => $notifications,
+    //         ]
+    //     ]);
+    //     die();
+    // } this is for later, this is for getting client history
 
 
     public function view($id = null)

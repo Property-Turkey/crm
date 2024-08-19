@@ -166,6 +166,20 @@ class UsersTable extends Table
         return $validator;
     }
 
+    // public function getTeamMembers(int $userId): array
+    // {
+    //     $teamMembers = [];
+
+    //     if ($userId) {
+    //         $teamMembers = $this->find()
+    //             ->select(['id', 'user_fullname'])
+    //             ->where(['parent_id' => $userId])
+    //             ->toArray();
+    //     }
+
+    //     return $teamMembers;
+    // }
+
     /**
      * Returns a rules checker object that will be used for validating
      * application integrity.

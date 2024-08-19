@@ -269,6 +269,20 @@ class ClientsTable extends Table
         return $validator;
     }
 
+    // public function getTeamMembers(int $userId): array
+    // {
+    //     $teamMembers = [];
+
+    //     if ($userId) {
+    //         $usersTable = TableRegistry::getTableLocator()->get('Users');
+    //         $teamMembers = $usersTable->find()
+    //             ->select(['id', 'user_fullname'])
+    //             ->where(['parent_id' => $userId])
+    //             ->toArray();
+    //     }
+
+    //     return $teamMembers;
+    // }
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn('category_id', 'Categories'), ['errorField' => 'category_id']);
