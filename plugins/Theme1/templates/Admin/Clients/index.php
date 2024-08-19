@@ -4,7 +4,8 @@ $_pid = !isset($this->request->getParam('pass')[0]) ? 0 : $this->request->getPar
 
 <div id="indxPg" class="right_col" role="main" ng-init="
         doGet('/admin/clients/index/<?= $_pid ?>?list=1', 'list', 'clients');
-        doGet('/admin/clients/getTeamMembers', 'rec', 'getTeamMember');">
+        doGet('/admin/clients/getTeamMembers', 'rec', 'getTeamMember');
+        doGet('/admin/clients/pools', 'rec', 'pool');">
 
 
     <main>

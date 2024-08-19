@@ -1336,138 +1336,138 @@ class ClientsController extends AppController
         }
     }
 
-    // public function pools()
-    // {
-    //     $this->autoRender = false; // Disable automatic rendering
+    public function pools()
+    {
+        $this->autoRender = false; // Disable automatic rendering
 
-    //     $userId = $this->authUser['id'];
-    //     $poolData = TableRegistry::getTableLocator()->get('UserPool');
+        $userId = $this->authUser['id'];
+        $poolData = TableRegistry::getTableLocator()->get('UserPool');
 
-    //     // Fetch pool ids
-    //     $poolIds = $poolData->find()
-    //         ->select(['pool_id'])
-    //         ->where(['user_id' => $userId])
-    //         ->toArray();
+        // Fetch pool ids
+        $poolIds = $poolData->find()
+            ->select(['pool_id'])
+            ->where(['user_id' => $userId])
+            ->toArray();
 
-    //     $categories = [];
-    //     foreach ($poolIds as $poolId) {
-    //         $category = $this->Clients->Categories->find()
-    //             ->select(['category_name', 'id'])
-    //             ->where(['id' => $poolId->pool_id])
-    //             ->first();
+        $categories = [];
+        foreach ($poolIds as $poolId) {
+            $category = $this->Clients->Categories->find()
+                ->select(['category_name', 'id'])
+                ->where(['id' => $poolId->pool_id])
+                ->first();
 
-    //         if ($category) {
-    //             $categories[] = [
-    //                 'id' => $category->id,
-    //                 'category_name' => $category->category_name,
-    //             ];
-    //         }
-    //     }
+            if ($category) {
+                $categories[] = [
+                    'id' => $category->id,
+                    'category_name' => $category->category_name,
+                ];
+            }
+        }
 
 
-    //     $latestActions75 = $this->Clients->Actions->find()
-    //         ->select(['client_id', 'action_type', 'stat_created'])
-    //         ->where(['action_type' => 75])
-    //         ->order(['id' => 'DESC'])
-    //         ->toArray();
+        // $latestActions75 = $this->Clients->Actions->find()
+        //     ->select(['client_id', 'action_type', 'stat_created'])
+        //     ->where(['action_type' => 75])
+        //     ->order(['id' => 'DESC'])
+        //     ->toArray();
 
-    //     $clientAction75 = [];
-    //     foreach ($latestActions75 as $action) {
-    //         $clientAction75[$action->client_id][] = $action->action_type;
-    //         $clientAction75[$action->client_id][] = $action->stat_created;
-    //     }
+        // $clientAction75 = [];
+        // foreach ($latestActions75 as $action) {
+        //     $clientAction75[$action->client_id][] = $action->action_type;
+        //     $clientAction75[$action->client_id][] = $action->stat_created;
+        // }
 
-    //     $latestActions76 = $this->Clients->Actions->find()
-    //         ->select(['client_id', 'action_type', 'stat_created', 'id'])
-    //         ->where(['action_type' => 76])
-    //         ->order(['id' => 'DESC'])
-    //         ->toArray();
+        // $latestActions76 = $this->Clients->Actions->find()
+        //     ->select(['client_id', 'action_type', 'stat_created', 'id'])
+        //     ->where(['action_type' => 76])
+        //     ->order(['id' => 'DESC'])
+        //     ->toArray();
 
-    //     $clientAction76 = [];
-    //     foreach ($latestActions76 as $action) {
-    //         $clientAction76[$action->client_id][] = $action->action_type;
-    //         $clientAction76[$action->client_id][] = $action->stat_created;
-    //         $clientAction76[$action->client_id][] = $action->id;
-    //     }
+        // $clientAction76 = [];
+        // foreach ($latestActions76 as $action) {
+        //     $clientAction76[$action->client_id][] = $action->action_type;
+        //     $clientAction76[$action->client_id][] = $action->stat_created;
+        //     $clientAction76[$action->client_id][] = $action->id;
+        // }
 
-    //     // Previous call list
-    //     $prevclientResults = [];
-    //     $lastLoginDate = $this->authUser['stat_lastlogin'];
+        // // Previous call list
+        // $prevclientResults = [];
+        // $lastLoginDate = $this->authUser['stat_lastlogin'];
 
-    //     $query = $this->Clients->Reminders->find()
-    //         ->select(['client_id'])
-    //         ->where([
-    //             'user_id' => $userId,
-    //             'reminder_nextcall <' => $lastLoginDate
-    //         ])
-    //         ->order(['reminder_nextcall' => 'DESC']);
+        // $query = $this->Clients->Reminders->find()
+        //     ->select(['client_id'])
+        //     ->where([
+        //         'user_id' => $userId,
+        //         'reminder_nextcall <' => $lastLoginDate
+        //     ])
+        //     ->order(['reminder_nextcall' => 'DESC']);
 
-    //     $results = $query->all();
-    //     $clientIds = [];
-    //     foreach ($results as $result) {
-    //         $clientIds[] = $result->client_id;
-    //     }
+        // $results = $query->all();
+        // $clientIds = [];
+        // foreach ($results as $result) {
+        //     $clientIds[] = $result->client_id;
+        // }
 
-    //     if (!empty($clientIds)) {
-    //         $clientQuery = $this->Clients->find()
-    //             ->select(['id', 'client_name'])
-    //             ->where(['Clients.id IN' => $clientIds]);
+        // if (!empty($clientIds)) {
+        //     $clientQuery = $this->Clients->find()
+        //         ->select(['id', 'client_name'])
+        //         ->where(['Clients.id IN' => $clientIds]);
 
-    //         $prevclientResults = $clientQuery->all();
-    //     }
+        //     $prevclientResults = $clientQuery->all();
+        // }
 
-    //     // Future call list
-    //     $futureclientResults = [];
-    //     $query = $this->Clients->Reminders->find()
-    //         ->select(['client_id'])
-    //         ->where([
-    //             'user_id' => $userId,
-    //             'reminder_nextcall >' => $lastLoginDate
-    //         ])
-    //         ->order(['reminder_nextcall' => 'DESC']);
+        // // Future call list
+        // $futureclientResults = [];
+        // $query = $this->Clients->Reminders->find()
+        //     ->select(['client_id'])
+        //     ->where([
+        //         'user_id' => $userId,
+        //         'reminder_nextcall >' => $lastLoginDate
+        //     ])
+        //     ->order(['reminder_nextcall' => 'DESC']);
 
-    //     $results = $query->all();
-    //     $clientIds = [];
-    //     foreach ($results as $result) {
-    //         $clientIds[] = $result->client_id;
-    //     }
+        // $results = $query->all();
+        // $clientIds = [];
+        // foreach ($results as $result) {
+        //     $clientIds[] = $result->client_id;
+        // }
 
-    //     if (!empty($clientIds)) {
-    //         $clientQuery = $this->Clients->find()
-    //             ->select(['id', 'client_name'])
-    //             ->where(['Clients.id IN' => $clientIds]);
+        // if (!empty($clientIds)) {
+        //     $clientQuery = $this->Clients->find()
+        //         ->select(['id', 'client_name'])
+        //         ->where(['Clients.id IN' => $clientIds]);
 
-    //         $futureclientResults = $clientQuery->all();
-    //     }
+        //     $futureclientResults = $clientQuery->all();
+        // }
 
-    //     // $twoDaysAgo = (new DateTime())->modify('-2 days')->format('Y-m-d H:i:s');
-    //     $lastLoginDate = $this->authUser['stat_lastlogin'];
+        // // $twoDaysAgo = (new DateTime())->modify('-2 days')->format('Y-m-d H:i:s');
+        // $lastLoginDate = $this->authUser['stat_lastlogin'];
 
-    //     // Recent clients created in the last two days
-    //     $recentClientsQuery = $this->Clients->find()
-    //         ->select(['id', 'client_name', 'stat_created'])
-    //         ->where(['stat_created >' => $lastLoginDate]);
+        // // Recent clients created in the last two days
+        // $recentClientsQuery = $this->Clients->find()
+        //     ->select(['id', 'client_name', 'stat_created'])
+        //     ->where(['stat_created >' => $lastLoginDate]);
 
-    //     $recentClients = $recentClientsQuery->all();
+        // $recentClients = $recentClientsQuery->all();
 
-    //     // Create and return the response
-    //     $response = $this->response->withType('application/json')
-    //         ->withStringBody(json_encode([
-    //             'status' => 'SUCCESS',
-    //             'msg' => __('success'),
-    //             'data' => [
-    //                 'categories' => $categories,
-    //                 'latestActions75' => $latestActions75,
-    //                 'clientAction75' => $clientAction75,
-    //                 'clientAction76' => $clientAction76,
-    //                 'prevclientResults' => $prevclientResults,
-    //                 'futureclientResults' => $futureclientResults,
-    //                 'recentClients' => $recentClients,
-    //             ],
-    //         ]));
+        // Create and return the response
+        $response = $this->response->withType('application/json')
+            ->withStringBody(json_encode([
+                'status' => 'SUCCESS',
+                'msg' => __('success'),
+                'data' => [
+                    'categories' => $categories,
+                    // 'latestActions75' => $latestActions75,
+                    // 'clientAction75' => $clientAction75,
+                    // 'clientAction76' => $clientAction76,
+                    // 'prevclientResults' => $prevclientResults,
+                    // 'futureclientResults' => $futureclientResults,
+                    // 'recentClients' => $recentClients,
+                ],
+            ]));
 
-    //     return $response;
-    // }
+        return $response;
+    }
 
     public function dashboard()
     {
