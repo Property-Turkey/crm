@@ -26,9 +26,6 @@ class ClientSpecsTableTest extends TestCase
     protected $fixtures = [
         'app.ClientSpecs',
         'app.Clients',
-        'app.Currency',
-        'app.Persona',
-        'app.Style',
     ];
 
     /**
@@ -53,5 +50,27 @@ class ClientSpecsTableTest extends TestCase
         unset($this->ClientSpecs);
 
         parent::tearDown();
+    }
+
+    /**
+     * Test validationDefault method
+     *
+     * @return void
+     * @uses \App\Model\Table\ClientSpecsTable::validationDefault()
+     */
+    public function testValidationDefault(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     * @uses \App\Model\Table\ClientSpecsTable::buildRules()
+     */
+    public function testBuildRules(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
     }
 }

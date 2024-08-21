@@ -302,14 +302,14 @@ class ClientsController extends AppController
                                 ->select(['id'])
                                 ->where(['Clients.id IN' => $clientIds]);
 
-                            
+
                             $val = $clientQuery->extract('id')->toArray();
                         }
 
                         if (!empty($val)) {
                             $conditions['Clients.id IN'] = (array) $val;
                         }
-                        
+
                     } elseif ($col == 'prevId') {
 
                         $userId = $this->authUser['id'];
@@ -335,7 +335,7 @@ class ClientsController extends AppController
                                 ->select(['id'])
                                 ->where(['Clients.id IN' => $clientIds]);
 
-                            
+
                             $val = $clientQuery->extract('id')->toArray();
                         }
 
@@ -352,34 +352,32 @@ class ClientsController extends AppController
                                 'stat_created >' => $fiveHoursLater
                             ])
                             ->order(['stat_created' => 'DESC']);
-                    
+
                         $results = $query->all();
-                    
+
                         $clientIds = [];
                         foreach ($results as $result) {
-                            $clientIds[] = (int)$result->id;  
+                            $clientIds[] = (int) $result->id;
                         }
-                    
+
                         if (!empty($clientIds)) {
                             $clientQuery = $this->Clients->find()
                                 ->select(['id'])
                                 ->where(['Clients.id IN' => $clientIds]);
-                    
+
                             $val = $clientQuery->extract('id')->toArray();
                         }
-                    
+
                         if (!empty($val)) {
-                           
+
                             if (!is_array($val)) {
                                 $val = [$val];
                             }
-                    
-                            
+
+
                             $conditions['Clients.id IN'] = array_map('intval', $val);
                         }
-                    }
-                    
-                    elseif (in_array($col, $otherCtrl)) {
+                    } elseif (in_array($col, $otherCtrl)) {
 
                         $conditions['' . $col] = $val;
                     } elseif ($col == 'client_mobile') {
@@ -388,26 +386,25 @@ class ClientsController extends AppController
                         foreach ($val as $tag) {
                             $conditions['AND'][] = ['client_tags LIKE ' => '%"' . $tag['value'] . '"%'];
                         }
-                    }elseif ($col == 'user_id') {
+                    } elseif ($col == 'user_id') {
                         // Fetch users with the role 'admin.callcenter'
                         $callcenterUsers = $this->Clients->Users->find()
                             ->select(['id'])
                             ->where(['user_role' => 'admin.callcenter'])
                             ->toArray();
-                    
-                            dd($callcenterUsers);
+
+                        dd($callcenterUsers);
                         // Extract user IDs
                         $callcenterUserIds = [];
                         foreach ($callcenterUsers as $user) {
                             $callcenterUserIds[] = $user->id;
                         }
-                    
+
                         // Include users with role 'admin.callcenter'
                         if (!empty($callcenterUserIds)) {
                             $conditions['AND'][] = ['Clients.user_id IN' => $callcenterUserIds];
                         }
-                    }
-                    elseif ($col == 'adrs_country') {
+                    } elseif ($col == 'adrs_country') {
                         $countryIds = array_map(function ($tag) {
                             return (int) $tag['value'];
                         }, $val);
@@ -712,8 +709,8 @@ class ClientsController extends AppController
                         "UserClient",
                         "Books",
                         "Offers" => [
-                            'PropertyRef' => ['fields' => ['property_title', 'property_ref', 'id']]
-                        ],
+                                'PropertyRef' => ['fields' => ['property_title', 'property_ref', 'id']]
+                            ],
                         "Actions",
                         "Reservations" => [
                             'Property' => ['fields' => ['property_title', 'property_ref', 'developer_id', 'seller_id', 'project_id', 'id']],
@@ -754,13 +751,6 @@ class ClientsController extends AppController
 
                     // Filter by pool_id if provided
                     if (!empty($dt['search']['pool_id'])) {
-                        // $selectedPoolId = $dt['search']['pool_id'];
-                        // $query->matching('PoolCategories', function ($query) use ($selectedPoolId) {
-                        //     return $query->where(['PoolCategories.id' => $selectedPoolId]);
-                        // });
-
-
-
 
 
                         $selectedPoolId = $dt['search']['pool_id'];
@@ -788,6 +778,26 @@ class ClientsController extends AppController
 
                         // Use client IDs of selectedMember if provided
                         $query->where(['Clients.id IN' => $selectedMemberClientIds]);
+                    } elseif ($userRole === 'admin.accountant') {
+                        $query->matching('Reservations', function ($query) {
+                            return $query
+                                ->where(['Reservations.downpayment_paid' => 1])
+                                ->where(['Reservations.rec_state <>' => 17])
+                                ->where(function (QueryExpression $exp, Query $q) {
+                                    return $exp->equalFields('Reservations.client_id', 'Clients.id');
+                                });
+                        });
+                    } elseif ($userRole === 'admin.aftersale') {
+                        $query->matching('Clients', function ($query) {
+                            return $query
+                                ->where(['Clients.downpayment_paid' => 14])
+                                ->where(['Reservations.rec_state <>' => 17])
+                                ->where(['Reservations.client_id = Clients.id']);
+                        });
+
+                        $query->where(function ($exp, $query) {
+                            return $exp->in('rec_state', [14, 15]);
+                        });
                     } else {
 
                         $clientIdsQuery = $this->Clients->UserClient->find()
@@ -1137,6 +1147,7 @@ class ClientsController extends AppController
             if (isset($dt['client_specs'])) {
                 $saleSpecs = $dt['client_specs'];
 
+               
                 // debug($dt['adrscountry'][0]['value']);
                 foreach ($saleSpecs as &$saleSpec) {
                     if (isset($saleSpec['clientspec_propertytype'])) {
@@ -1145,16 +1156,31 @@ class ClientsController extends AppController
                     if (isset($saleSpec['clientspec_beds'])) {
                         $saleSpec['clientspec_beds'] = json_encode($saleSpec['clientspec_beds']);
                     }
-                    if (isset($saleSpec['clientspec_loction_target'])) {
-                        $saleSpec['clientspec_loction_target'] = json_encode($saleSpec['clientspec_loction_target']);
-                    }
+                    // if (isset($saleSpec['clientspec_loction_target'])) {
+                    //     $saleSpec['clientspec_loction_target'] = json_encode($saleSpec['clientspec_loction_target']);
+                    // }
 
+                    // debug($saleSpecs);
+                    if (isset($saleSpec['clientspec_target_city'])) {
+                        $saleSpec['clientspec_target_city'] = json_encode($saleSpec['clientspec_target_city']);
+                    } 
+                    
+                    // dd($saleSpec['clientspec_target_country']);
+                    if (isset($saleSpec['clientspec_target_country'])) {
+                        $saleSpec['clientspec_target_country'] = json_encode($saleSpec['clientspec_target_country']);
+                    }
+                    if (isset($saleSpec['clientspec_target_region'])) {
+                        $saleSpec['clientspec_target_region'] = json_encode($saleSpec['clientspec_target_region']);
+                    }
+                    // targetCountry
 
 
                 }
 
                 // debug($dt['adrscountry'][0]['value']);
                 $dt['client_specs'] = $saleSpecs;
+
+                // dd($dt['client_specs'] );
             }
 
 
@@ -1365,90 +1391,90 @@ class ClientsController extends AppController
         }
 
 
-        // $latestActions75 = $this->Clients->Actions->find()
-        //     ->select(['client_id', 'action_type', 'stat_created'])
-        //     ->where(['action_type' => 75])
-        //     ->order(['id' => 'DESC'])
-        //     ->toArray();
+        $latestActions75 = $this->Clients->Actions->find()
+            ->select(['client_id', 'action_type', 'stat_created'])
+            ->where(['action_type' => 75])
+            ->order(['id' => 'DESC'])
+            ->toArray();
 
-        // $clientAction75 = [];
-        // foreach ($latestActions75 as $action) {
-        //     $clientAction75[$action->client_id][] = $action->action_type;
-        //     $clientAction75[$action->client_id][] = $action->stat_created;
-        // }
+        $clientAction75 = [];
+        foreach ($latestActions75 as $action) {
+            $clientAction75[$action->client_id][] = $action->action_type;
+            $clientAction75[$action->client_id][] = $action->stat_created;
+        }
 
-        // $latestActions76 = $this->Clients->Actions->find()
-        //     ->select(['client_id', 'action_type', 'stat_created', 'id'])
-        //     ->where(['action_type' => 76])
-        //     ->order(['id' => 'DESC'])
-        //     ->toArray();
+        $latestActions76 = $this->Clients->Actions->find()
+            ->select(['client_id', 'action_type', 'stat_created', 'id'])
+            ->where(['action_type' => 76])
+            ->order(['id' => 'DESC'])
+            ->toArray();
 
-        // $clientAction76 = [];
-        // foreach ($latestActions76 as $action) {
-        //     $clientAction76[$action->client_id][] = $action->action_type;
-        //     $clientAction76[$action->client_id][] = $action->stat_created;
-        //     $clientAction76[$action->client_id][] = $action->id;
-        // }
+        $clientAction76 = [];
+        foreach ($latestActions76 as $action) {
+            $clientAction76[$action->client_id][] = $action->action_type;
+            $clientAction76[$action->client_id][] = $action->stat_created;
+            $clientAction76[$action->client_id][] = $action->id;
+        }
 
-        // // Previous call list
-        // $prevclientResults = [];
-        // $lastLoginDate = $this->authUser['stat_lastlogin'];
+        // Previous call list
+        $prevclientResults = [];
+        $lastLoginDate = $this->authUser['stat_lastlogin'];
 
-        // $query = $this->Clients->Reminders->find()
-        //     ->select(['client_id'])
-        //     ->where([
-        //         'user_id' => $userId,
-        //         'reminder_nextcall <' => $lastLoginDate
-        //     ])
-        //     ->order(['reminder_nextcall' => 'DESC']);
+        $query = $this->Clients->Reminders->find()
+            ->select(['client_id'])
+            ->where([
+                'user_id' => $userId,
+                'reminder_nextcall <' => $lastLoginDate
+            ])
+            ->order(['reminder_nextcall' => 'DESC']);
 
-        // $results = $query->all();
-        // $clientIds = [];
-        // foreach ($results as $result) {
-        //     $clientIds[] = $result->client_id;
-        // }
+        $results = $query->all();
+        $clientIds = [];
+        foreach ($results as $result) {
+            $clientIds[] = $result->client_id;
+        }
 
-        // if (!empty($clientIds)) {
-        //     $clientQuery = $this->Clients->find()
-        //         ->select(['id', 'client_name'])
-        //         ->where(['Clients.id IN' => $clientIds]);
+        if (!empty($clientIds)) {
+            $clientQuery = $this->Clients->find()
+                ->select(['id', 'client_name'])
+                ->where(['Clients.id IN' => $clientIds]);
 
-        //     $prevclientResults = $clientQuery->all();
-        // }
+            $prevclientResults = $clientQuery->all();
+        }
 
-        // // Future call list
-        // $futureclientResults = [];
-        // $query = $this->Clients->Reminders->find()
-        //     ->select(['client_id'])
-        //     ->where([
-        //         'user_id' => $userId,
-        //         'reminder_nextcall >' => $lastLoginDate
-        //     ])
-        //     ->order(['reminder_nextcall' => 'DESC']);
+        // Future call list
+        $futureclientResults = [];
+        $query = $this->Clients->Reminders->find()
+            ->select(['client_id'])
+            ->where([
+                'user_id' => $userId,
+                'reminder_nextcall >' => $lastLoginDate
+            ])
+            ->order(['reminder_nextcall' => 'DESC']);
 
-        // $results = $query->all();
-        // $clientIds = [];
-        // foreach ($results as $result) {
-        //     $clientIds[] = $result->client_id;
-        // }
+        $results = $query->all();
+        $clientIds = [];
+        foreach ($results as $result) {
+            $clientIds[] = $result->client_id;
+        }
 
-        // if (!empty($clientIds)) {
-        //     $clientQuery = $this->Clients->find()
-        //         ->select(['id', 'client_name'])
-        //         ->where(['Clients.id IN' => $clientIds]);
+        if (!empty($clientIds)) {
+            $clientQuery = $this->Clients->find()
+                ->select(['id', 'client_name'])
+                ->where(['Clients.id IN' => $clientIds]);
 
-        //     $futureclientResults = $clientQuery->all();
-        // }
+            $futureclientResults = $clientQuery->all();
+        }
 
-        // // $twoDaysAgo = (new DateTime())->modify('-2 days')->format('Y-m-d H:i:s');
-        // $lastLoginDate = $this->authUser['stat_lastlogin'];
+        // $twoDaysAgo = (new DateTime())->modify('-2 days')->format('Y-m-d H:i:s');
+        $lastLoginDate = $this->authUser['stat_lastlogin'];
 
-        // // Recent clients created in the last two days
-        // $recentClientsQuery = $this->Clients->find()
-        //     ->select(['id', 'client_name', 'stat_created'])
-        //     ->where(['stat_created >' => $lastLoginDate]);
+        // Recent clients created in the last two days
+        $recentClientsQuery = $this->Clients->find()
+            ->select(['id', 'client_name', 'stat_created'])
+            ->where(['stat_created >' => $lastLoginDate]);
 
-        // $recentClients = $recentClientsQuery->all();
+        $recentClients = $recentClientsQuery->all();
 
         // Create and return the response
         $response = $this->response->withType('application/json')
@@ -1457,12 +1483,12 @@ class ClientsController extends AppController
                 'msg' => __('success'),
                 'data' => [
                     'categories' => $categories,
-                    // 'latestActions75' => $latestActions75,
-                    // 'clientAction75' => $clientAction75,
-                    // 'clientAction76' => $clientAction76,
-                    // 'prevclientResults' => $prevclientResults,
-                    // 'futureclientResults' => $futureclientResults,
-                    // 'recentClients' => $recentClients,
+                    'latestActions75' => $latestActions75,
+                    'clientAction75' => $clientAction75,
+                    'clientAction76' => $clientAction76,
+                    'prevclientResults' => $prevclientResults,
+                    'futureclientResults' => $futureclientResults,
+                    'recentClients' => $recentClients,
                 ],
             ]));
 
@@ -3231,13 +3257,18 @@ class ClientsController extends AppController
             ->select(['id', 'user_fullname'])
             ->toArray();
 
-        $filterUserData = $this->request->getData('user_id');
+        $userDataFilter = $this->request->getData('user_id');
 
-        // dd($filterUserData);
-        $filterUserData = $filterUserData ?? '';
+ 
 
 
-        if ($isAdmin && $filterUserData) {
+        if ($isAdmin && $userDataFilter) {
+            // dd($userDataFilter);
+            $filterUserData =  $userDataFilter[0]['value'];
+            // dd($filterUserData[0]['value']);
+            // $filterUserData = $filterUserData ?? '';
+
+            // dd($filterUserData[0]['value']);
             $userSaleData = $this->Clients->UserClient->find()
                 ->select(['client_id'])
                 ->where(['UserClient.user_id' => $filterUserData])
@@ -3531,7 +3562,7 @@ class ClientsController extends AppController
                 'addressData' => $addressData,
                 'groupedData' => $groupedData,
                 'usersCC' => $usersCC,
-                'filterUserData' => $filterUserData,
+                'filterUserData' => $userDataFilter,
                 'recStateList' => $recStateList,
                 'recStateRatio' => $recStateRatio,
                 'stateCount' => $stateCount,

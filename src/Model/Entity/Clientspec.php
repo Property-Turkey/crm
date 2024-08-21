@@ -16,15 +16,15 @@ use Cake\ORM\Entity;
  * @property int|null $clientspec_socialstyle
  * @property string|null $clientspec_beds
  * @property string|null $clientspec_loction_target
+ * @property string|null $clientspec_target_country
+ * @property string|null $clientspec_target_city
+ * @property string|null $clientspec_target_region
  * @property int $clientspec_isowner
  * @property int $clientspec_isready
  * @property int|null $clientspec_saved
  * @property string|null $clientspec_configs
  *
  * @property \App\Model\Entity\Client $client
- * @property \App\Model\Entity\Category $currency
- * @property \App\Model\Entity\Category $persona
- * @property \App\Model\Entity\Category $style
  */
 class ClientSpec extends Entity
 {
@@ -45,13 +45,13 @@ class ClientSpec extends Entity
         'clientspec_socialstyle' => true,
         'clientspec_beds' => true,
         'clientspec_loction_target' => true,
+        'clientspec_target_country' => true,
+        'clientspec_target_city' => true,
+        'clientspec_target_region' => true,
         'clientspec_isowner' => true,
         'clientspec_isready' => true,
         'clientspec_saved' => true,
         'clientspec_configs' => true,
         'client' => true,
-        'currency' => true,
-        'persona' => true,
-        'style' => true,
     ];
 }

@@ -24,9 +24,6 @@ class ClientSpecsControllerTest extends TestCase
     protected $fixtures = [
         'app.ClientSpecs',
         'app.Clients',
-        'app.Currency',
-        'app.Persona',
-        'app.Style',
     ];
 
     /**

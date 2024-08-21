@@ -91,7 +91,7 @@
                                 <div class="heading">
                                     <div class="title">Lead</div>
                                     <div class="flex-center flex-gap-5">
-                                        <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.callcenter', 'admin.portfolio', 'admin.teamleader', 'admin.accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button id="modalBtn" class="btn btn-modal"
                                                 ng-click="setZIndex();
                                                     updateModalElement('Lead');
@@ -105,7 +105,7 @@
                                         <!-- <button class="sm-btn">
                                             <i class="fas-plus"></i>
                                         </button> -->
-                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'admin.accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
 
                                             <button class="sm-btn">
                                                 <a class="fas-phone" href="tel:{{rec.client.client_mobile}}"></a>
@@ -197,7 +197,7 @@
                                     <div class="heading pb-0 mb-0 mt-3">
                                         <div class="title leadFont">Lead Information</div>
                                         <div class="flex-gap-10">
-                                            <?php if (!in_array($authUser['user_role'], ['accountant', 'aftersale', 'admin.portfolio']) || isset($authUser['user_original_role'])) { ?>
+                                            <?php if (!in_array($authUser['user_role'], ['admin.accountant', 'aftersale', 'admin.portfolio']) || isset($authUser['user_original_role'])) { ?>
                                                 <button id="modalBtn" class="leadFont btn btn-modal" ng-click="setZIndex();
                                                 updateModalElement('Lead Information');
                                                 doGet('/admin/clients?id=' + rec.client.id, 'rec', 'client');
@@ -283,7 +283,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6 col-12 col-lg-3">
+                                        <!-- <div class="col-md-6 col-12 col-lg-3">
                                             <span class="sm-txt">
                                                 <?= __('target_location') ?>
                                             </span>
@@ -292,7 +292,50 @@
                                                     ng-repeat="tag in rec.client.client_specs[0].clientspec_loction_target track by $index">
                                                     {{ tag.text }}{{$index < (
                                                         rec.client.client_specs[0].clientspec_loction_target.length - 1)
-                                                        ? ',' : '' }}</span>
+                                                        ? ',' : '' }}
+                                                </span>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt">
+                                                <?= __('target_country') ?>
+                                            </span>
+                                            <div class="wb-ele">
+                                                <span
+                                                    ng-repeat="tag in rec.client.client_specs[0].clientspec_target_country track by $index">
+                                                    {{ tag.text }}{{$index < (
+                                                        rec.client.client_specs[0].clientspec_target_country.length - 1)
+                                                        ? ',' : '' }}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt">
+                                                <?= __('target_city') ?>
+                                            </span>
+                                            <div class="wb-ele">
+                                                <span
+                                                    ng-repeat="tag in rec.client.client_specs[0].clientspec_target_city track by $index">
+                                                    {{ tag }}{{$index < (
+                                                        rec.client.client_specs[0].clientspec_target_city.length - 1)
+                                                        ? ',' : '' }}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-12 col-lg-3">
+                                            <span class="sm-txt">
+                                                <?= __('target_region') ?>
+                                            </span>
+                                            <div class="wb-ele">
+                                                <span
+                                                    ng-repeat="tag in rec.client.client_specs[0].clientspec_target_region track by $index">
+                                                    {{ tag.text }}{{$index < (
+                                                        rec.client.client_specs[0].clientspec_target_region.length - 1)
+                                                        ? ',' : '' }}
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12 col-lg-3">
@@ -344,7 +387,7 @@
                                                 }}</div>
                                         </div>
 
-                                        <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.callcenter', 'admin.admin', 'admin.root']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (in_array($authUser['user_role'], ['admin.callcenter', 'admin.callcenter', 'admin.admin', 'admin.root', 'admin.teamleader']) || isset($authUser['user_original_role'])) { ?>
 
                                             <div class="col-md-6 col-12 col-lg-3">
                                                 <span class="sm-txt">
@@ -509,6 +552,8 @@
                                                     <?= __('cc_assign') ?>
                                                 </button>
                                             <?php } ?>
+
+                                            <?php if (in_array($authUser['user_role'], ['admin.supervisorcc', 'admin.callcenter']) || isset($authUser['user_original_role'])) { ?>
                                             <button ng-if="rec.search.pool_id" class="btn btn-modal" id="modalBtn"
                                                 ng-click="
                                                     rec.user_client.type = 2;
@@ -517,7 +562,7 @@
                                                 <i class="fas-plus"></i>
                                                 <?= __('self_assign') ?>
                                             </button>
-
+                                            <?php } ?>
 
                                         </div>
                                     </div>
@@ -590,7 +635,7 @@
                                     <div class="title">Empathy Mapping</div>
                                     <div class="flex-gap-10">
                                         
-                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'admin.accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button id="modalBtn" class="btn btn-modal" ng-click="
                                                     setZIndex();
                                                     updateModalElement('Empathy Mapping');
@@ -639,7 +684,7 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['aftersale', 'accountant']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['aftersale', 'admin.accountant']) || isset($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" ng-click="
                                             newEntity('report');
                                             setZIndex();
@@ -744,7 +789,7 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'admin.accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" ng-click="setZIndex();
                                             newEntity('reminder'); 
                                             updateModalElement('Reminders');
@@ -822,7 +867,7 @@
                                                 </div>
 
                                             </div>
-                                            <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                            <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'admin.accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                                 <div class="dropdown col-1 reminderDrop">
                                                     <button class="btn" type="button" data-bs-toggle="dropdown"
                                                         aria-expanded="false">
@@ -861,7 +906,7 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'admin.accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
 
                                             <button class="btn btn-modal" ng-click="
                                             setZIndex();
@@ -935,7 +980,7 @@
                                 <div class="heading">
                                     <div class="title"></div>
                                     <div class="flex-gap-10">
-                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'admin.accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                             <button class="btn btn-modal" id="modalBtn"
                                                 ng-click="setZIndex();updateModalElement('Books');newEntity('book'); openModal('#subModal'); inlineElement('#elementsContainer', 1, 'booking')">
                                                 <i class="fas-plus"></i> Add
@@ -954,7 +999,7 @@
 
                                 <div ng-repeat="clbook in rec.client.books track by $index">
 
-
+                                <?php if (!in_array($authUser['user_role'], ['admin.portfolio', 'admin.accountant', 'aftersale']) || isset($authUser['user_original_role'])) { ?>
                                     <div class="heading">
                                         <div class="title"></div>
                                         <div class="flex-gap-10">
@@ -970,6 +1015,7 @@
                                         </div>
 
                                     </div>
+                                    <?php } ?>
                                     <div class="white-box mb-2" ng-if="!rec.client.books == ''">
 
 
@@ -1125,7 +1171,7 @@
                                 <div>
 
                                     <div ng-repeat="deals in rec.client.reservations">
-                                        <?php if (in_array($authUser['user_role'], ['admin.supervisorfield', 'admin.portfolio', 'admin.callcenter', 'accountant']) || isset($authUser['user_original_role'])) { ?>
+                                        <?php if (in_array($authUser['user_role'], ['admin.supervisorfield', 'admin.portfolio', 'admin.callcenter', 'admin.accountant']) || isset($authUser['user_original_role'])) { ?>
                                             <div class="heading">
                                                 <div class="title"></div>
                                                 <div class="flex-gap-10">
@@ -1421,7 +1467,7 @@
                             data-bs-target="#client1-collapseHistory" aria-expanded="true"
                             aria-controls="client1-collapseHistory">
                             <div class="flex-gap-10">
-                                <button class="btn btn-gray" type="button">View History</button>
+                                <!-- <button class="btn btn-gray" type="button">View History</button> -->
                             </div>
                         </div>
                     </h2>

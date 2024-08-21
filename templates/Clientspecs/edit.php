@@ -3,9 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\ClientSpec $clientSpec
  * @var string[]|\Cake\Collection\CollectionInterface $clients
- * @var string[]|\Cake\Collection\CollectionInterface $currency
- * @var string[]|\Cake\Collection\CollectionInterface $persona
- * @var string[]|\Cake\Collection\CollectionInterface $style
  */
 ?>
 <div class="row">
@@ -28,11 +25,14 @@
                 <?php
                     echo $this->Form->control('client_id', ['options' => $clients]);
                     echo $this->Form->control('clientspec_propertytype');
-                    echo $this->Form->control('clientspec_currency', ['options' => $currency, 'empty' => true]);
-                    echo $this->Form->control('clientspec_buyerpersona', ['options' => $persona, 'empty' => true]);
-                    echo $this->Form->control('clientspec_socialstyle', ['options' => $style, 'empty' => true]);
+                    echo $this->Form->control('clientspec_currency');
+                    echo $this->Form->control('clientspec_buyerpersona');
+                    echo $this->Form->control('clientspec_socialstyle');
                     echo $this->Form->control('clientspec_beds');
                     echo $this->Form->control('clientspec_loction_target');
+                    echo $this->Form->control('clientspec_target_country');
+                    echo $this->Form->control('clientspec_target_city');
+                    echo $this->Form->control('clientspec_target_region');
                     echo $this->Form->control('clientspec_isowner');
                     echo $this->Form->control('clientspec_isready');
                     echo $this->Form->control('clientspec_saved');

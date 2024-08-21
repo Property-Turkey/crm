@@ -1041,6 +1041,9 @@ msgid "is_commision_collacted"
 msgstr "Commission Collacted?"
 
 
+msgid "self_assign"
+msgstr "Self Assign"
+
 msgid "downpayment_paid"
 msgstr "Downpayment Paid?"
 

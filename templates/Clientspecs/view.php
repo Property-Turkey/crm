@@ -27,18 +27,6 @@
                     <td><?= h($clientSpec->clientspec_propertytype) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Currency') ?></th>
-                    <td><?= $clientSpec->has('currency') ? $this->Html->link($clientSpec->currency->category_name, ['controller' => 'Categories', 'action' => 'view', $clientSpec->currency->id]) : '' ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Persona') ?></th>
-                    <td><?= $clientSpec->has('persona') ? $this->Html->link($clientSpec->persona->category_name, ['controller' => 'Categories', 'action' => 'view', $clientSpec->persona->id]) : '' ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Style') ?></th>
-                    <td><?= $clientSpec->has('style') ? $this->Html->link($clientSpec->style->category_name, ['controller' => 'Categories', 'action' => 'view', $clientSpec->style->id]) : '' ?></td>
-                </tr>
-                <tr>
                     <th><?= __('Clientspec Beds') ?></th>
                     <td><?= h($clientSpec->clientspec_beds) ?></td>
                 </tr>
@@ -47,8 +35,32 @@
                     <td><?= h($clientSpec->clientspec_loction_target) ?></td>
                 </tr>
                 <tr>
+                    <th><?= __('Clientspec Target Country') ?></th>
+                    <td><?= h($clientSpec->clientspec_target_country) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Clientspec Target City') ?></th>
+                    <td><?= h($clientSpec->clientspec_target_city) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Clientspec Target Region') ?></th>
+                    <td><?= h($clientSpec->clientspec_target_region) ?></td>
+                </tr>
+                <tr>
                     <th><?= __('Id') ?></th>
                     <td><?= $this->Number->format($clientSpec->id) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Clientspec Currency') ?></th>
+                    <td><?= $clientSpec->clientspec_currency === null ? '' : $this->Number->format($clientSpec->clientspec_currency) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Clientspec Buyerpersona') ?></th>
+                    <td><?= $clientSpec->clientspec_buyerpersona === null ? '' : $this->Number->format($clientSpec->clientspec_buyerpersona) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Clientspec Socialstyle') ?></th>
+                    <td><?= $clientSpec->clientspec_socialstyle === null ? '' : $this->Number->format($clientSpec->clientspec_socialstyle) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Clientspec Isowner') ?></th>

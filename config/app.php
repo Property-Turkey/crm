@@ -6,7 +6,7 @@ use Cake\Database\Driver\Mysql;
 use Cake\Log\Engine\FileLog;
 use Cake\Mailer\Transport\MailTransport;
 
-$isLocal = env('SERVER_NAME') == 'localhost' ? true : false;
+$isLocal = env('SERVER_NAME') == 'localhost' ? true : true;
 $isDebug = empty($_GET['debug']) ? $isLocal : true;
 
 return [

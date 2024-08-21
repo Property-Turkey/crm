@@ -19,6 +19,9 @@
                     <th><?= $this->Paginator->sort('clientspec_socialstyle') ?></th>
                     <th><?= $this->Paginator->sort('clientspec_beds') ?></th>
                     <th><?= $this->Paginator->sort('clientspec_loction_target') ?></th>
+                    <th><?= $this->Paginator->sort('clientspec_target_country') ?></th>
+                    <th><?= $this->Paginator->sort('clientspec_target_city') ?></th>
+                    <th><?= $this->Paginator->sort('clientspec_target_region') ?></th>
                     <th><?= $this->Paginator->sort('clientspec_isowner') ?></th>
                     <th><?= $this->Paginator->sort('clientspec_isready') ?></th>
                     <th><?= $this->Paginator->sort('clientspec_saved') ?></th>
@@ -31,11 +34,14 @@
                     <td><?= $this->Number->format($clientSpec->id) ?></td>
                     <td><?= $clientSpec->has('client') ? $this->Html->link($clientSpec->client->client_name, ['controller' => 'Clients', 'action' => 'view', $clientSpec->client->id]) : '' ?></td>
                     <td><?= h($clientSpec->clientspec_propertytype) ?></td>
-                    <td><?= $clientSpec->has('currency') ? $this->Html->link($clientSpec->currency->category_name, ['controller' => 'Categories', 'action' => 'view', $clientSpec->currency->id]) : '' ?></td>
-                    <td><?= $clientSpec->has('persona') ? $this->Html->link($clientSpec->persona->category_name, ['controller' => 'Categories', 'action' => 'view', $clientSpec->persona->id]) : '' ?></td>
-                    <td><?= $clientSpec->has('style') ? $this->Html->link($clientSpec->style->category_name, ['controller' => 'Categories', 'action' => 'view', $clientSpec->style->id]) : '' ?></td>
+                    <td><?= $clientSpec->clientspec_currency === null ? '' : $this->Number->format($clientSpec->clientspec_currency) ?></td>
+                    <td><?= $clientSpec->clientspec_buyerpersona === null ? '' : $this->Number->format($clientSpec->clientspec_buyerpersona) ?></td>
+                    <td><?= $clientSpec->clientspec_socialstyle === null ? '' : $this->Number->format($clientSpec->clientspec_socialstyle) ?></td>
                     <td><?= h($clientSpec->clientspec_beds) ?></td>
                     <td><?= h($clientSpec->clientspec_loction_target) ?></td>
+                    <td><?= h($clientSpec->clientspec_target_country) ?></td>
+                    <td><?= h($clientSpec->clientspec_target_city) ?></td>
+                    <td><?= h($clientSpec->clientspec_target_region) ?></td>
                     <td><?= $this->Number->format($clientSpec->clientspec_isowner) ?></td>
                     <td><?= $this->Number->format($clientSpec->clientspec_isready) ?></td>
                     <td><?= $clientSpec->clientspec_saved === null ? '' : $this->Number->format($clientSpec->clientspec_saved) ?></td>

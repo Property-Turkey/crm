@@ -448,8 +448,8 @@ $endDate = !isset($_GET['endDate']) ? date('Y-m-d') : $_GET['endDate'];
                                 tag-class="{even: $index % 2 == 0, odd: $index % 2 != 0}"
                                 ng-model="rec.dashboard.user_id" add-from-autocomplete-only="true" max-tags="1"
                                 placeholder="<?= __('select_user') ?>" display-property="text" key-property="value">
-                                <auto-complete min-length="1" highlightMatchedText="true"
-                                    source="loadTags($query, 'users', '', 'admin.callcenter')"></auto-complete>
+                                <auto-complete style="width: 188px;position: fixed;z-index: 999;"min-length="1" highlightMatchedText="true"
+                                    source="loadTags($query, 'users', '', 'admin.callcenter,admin.teamleader')"></auto-complete>
                             </tags-input>
 
                             <span ng-click="updateCharts()" class="fa fa-search doSearch"></span>
