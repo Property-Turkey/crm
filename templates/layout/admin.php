@@ -3695,7 +3695,7 @@
                                 
                                 doSave(rec.client, 'client', 'clients', '#client_btn', 
                                 '#clients_preloader');">
-                                <?php if (!(in_array($authUser['user_role'], ['admin.accountant', 'admin.portfolio'])) || isset($authUser['user_original_role'])) { ?>
+                                <?php if (!in_array($authUser['user_role'], ['admin.accountant', 'admin.portfolio']) || isset($authUser['user_original_role'])) { ?>
                                     
                                                 <label  class="col-md-6 col-12 col-lg-3">
                                                     <span class="sm-txt"><?= __('category_id') ?></span>
@@ -3876,7 +3876,7 @@
                                                 </label>
                                         
                         <?php } ?>
-                            <?php if (in_array($authUser['user_role'], ['admin.root', 'admin.admin', 'admin.portfolio']) || isset($authUser['user_original_role'])) { ?>
+                            <?php if (in_array($authUser['user_role'], ['admin.root', 'admin.admin']) || isset($authUser['user_original_role'])) { ?>
                                                 <label class="col-md-6 col-12 col-lg-3" >
                                                     <span class="sm-txt"> <?= __('rec_state') ?> </span>
                                                     <select class="wb-ele-select-modal col-12" ng-model="rec.client.rec_state">
@@ -3892,7 +3892,7 @@
                                     
 
 
-                            <?php if (!in_array($authUser['user_role'], ['admin.root', 'admin.admin', 'admin.portfolio']) || isset($authUser['user_original_role'])) { ?>
+                            <?php if (!in_array($authUser['user_role'], ['admin.root', 'admin.admin']) || isset($authUser['user_original_role'])) { ?>
 
                                                 <label class="col-md-6 col-12 col-lg-3" ng-if="!(rec.client.rec_state == 13 || rec.client.rec_state == 14 || rec.client.rec_state == 15)" >
                                                     <span class="sm-txt"> <?= __('rec_state') ?> </span>

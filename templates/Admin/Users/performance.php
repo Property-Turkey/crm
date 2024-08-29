@@ -65,7 +65,7 @@ $actionType = !isset($this->request->getParam('query')['action_type']) ? 0 : $th
                                 <!-- {{rec.performancedata.ccUsers}} -->
                                 <tr ng-repeat="cc in rec.performancedata.ccUsers track by $index" >
                               
-                                    <td>{{cc.actions_today_called}}
+                                    <td>
                                         <div>
                                             
                                         {{cc.id}}

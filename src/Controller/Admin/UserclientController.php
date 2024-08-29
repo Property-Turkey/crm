@@ -230,6 +230,22 @@ class UserClientController extends AppController
             echo json_encode(["status" => "SUCCESS", "msg" => "Request Rejected."]);
             die();
         }
+        
+        if (isset($dt['selfassign'])) {
+
+            if ($this->request->is(['post', 'patch', 'put'])) {
+                $this->autoRender = false;
+                $UserClientTable = $this->getTableLocator()->get('UserClient');
+
+                $UserClientTable->updateAll(
+                    ['user_id' => $dt['user_id'], 'rec_state' => 1],
+                    ['client_id' => $dt['client_id'], 'id' => $dt['userclient_id']]
+                );
+
+            }
+            echo json_encode(["status" => "SUCCESS", "msg" => "Request Rejected."]);
+            die();
+        }
 
     }
 

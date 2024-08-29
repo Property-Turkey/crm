@@ -318,7 +318,7 @@
                                             <div class="wb-ele">
                                                 <span
                                                     ng-repeat="tag in rec.client.client_specs[0].clientspec_target_city track by $index">
-                                                    {{ tag }}{{$index < (
+                                                    {{ tag.text }}{{$index < (
                                                         rec.client.client_specs[0].clientspec_target_city.length - 1)
                                                         ? ',' : '' }}
                                                 </span>
@@ -556,7 +556,7 @@
                                             <?php if (in_array($authUser['user_role'], ['admin.supervisorcc', 'admin.callcenter']) || isset($authUser['user_original_role'])) { ?>
                                             <button ng-if="rec.search.pool_id" class="btn btn-modal" id="modalBtn"
                                                 ng-click="
-                                                    rec.user_client.type = 2;
+                                                    rec.user_client.selfassign = 1;
                                                     rec.user_client.client_id = rec.client.id;
                                                     doSave(rec.user_client, 'user_client', 'userclient', '#client_btn', '#deneme');">
                                                 <i class="fas-plus"></i>
@@ -940,15 +940,26 @@
 
                                             <div class="d-flex">
                                                 <div class="h-line hideMob"></div>
-                                                <label class="switch">
+                                                <!-- <label class="switch">
                                                     <span disabled class="slider round" ng-model="itm.isinterested"
                                                         ng-class="{'green-background': itm.isinterested == 1}">
                                                     </span>
-                                                </label>
+                                                </label> -->
+                                                <div class="wb-ele" ng-if="itm.isinterested == 1">
+                                                    <i class="fa fa-check-circle-o greenText"></i>
+                                                </div>
+                                                <div class="wb-ele" ng-if="itm.isinterested != 1">
+                                                    <i class="fa fa-times-circle-o redText" ></i>
+                                                </div>
                                                 <label for="interested-client1" class="ps-md-5 ps-3 pe-3 pe-md-5">
                                                     <?= __('interest_property') ?>
                                                 </label>
+                                                
                                             </div>
+
+                                            
+
+
                                         </div>
                                         <!-- <span class="sm-txt">
                                             <?= __('desc_property') ?>

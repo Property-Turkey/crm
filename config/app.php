@@ -387,10 +387,10 @@ return [
              */
             //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
             
-            'username' => $isLocal ? 'root' : 'ptdev_crm',
-            'password' => $isLocal ? '' : '--Password--',
+            'username' =>  'root',
+            'password' =>  '' ,
 
-            'database' => $isLocal ? 'ptcrm' : 'ptdev_crm',
+            'database' => 'ptcrm',
 
             
         ],

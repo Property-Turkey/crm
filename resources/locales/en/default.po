@@ -1303,6 +1303,11 @@ msgid "inactive_user"
 msgstr "Inactive User"
 
 
-msgid "make_team_member"
-msgstr "Make Team Member"
+msgid "target_country"
+msgstr "Buyer Target Country"
 
+msgid "target_city"
+msgstr "Buyer Target City"
+
+msgid "target_region"
+msgstr "Buyer Target Region"
